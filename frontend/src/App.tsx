@@ -1,8 +1,11 @@
+import DummyComponent from "./components/DummyComponent";
+
 function App() {
   return (
-    <div className="App">
-      
-    </div>
+    <DummyComponent
+      counterCaption="Increment counter"
+      deleteCaption="Delete something"
+    />
   );
 }
 
