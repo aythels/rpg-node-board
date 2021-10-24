@@ -38,6 +38,29 @@ interface User {
 }
 
 // Hardcoded variables go here:
+const global_subnodes = [
+  {
+    id: 1,
+    node_id: 1,
+    editors: [2],
+    type: 'description',
+    content: '',
+  },
+  {
+    id: 2,
+    node_id: 1,
+    editors: [2],
+    type: 'event',
+    content: '',
+  },
+  {
+    id: 3,
+    node_id: 1,
+    editors: [2],
+    type: 'notes',
+    content: '',
+  },
+];
 
 const global_nodes = [
   {
