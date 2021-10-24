@@ -1,4 +1,4 @@
-import './styles.css';
+import './subnode.css';
 import { Component } from 'react';
 import ReactQuill from 'react-quill';
 
