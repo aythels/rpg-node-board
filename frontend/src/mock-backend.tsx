@@ -72,10 +72,10 @@ export const GETnodeById = (id: number): Node => {
   return globalNodes.filter((node) => node.id == id)[0];
 };
 
-export const GET_user_by_id = (id: number): User => {
+export const GETuserById = (id: number): User => {
   return globalUsers.filter((user) => user.id == id)[0];
 };
 
-export const GET_subnodes_by_node_id = (node_id: number): Subnode[] => {
+export const GETsubnodesByNodeId = (node_id: number): Subnode[] => {
   return globalSubnodes.filter((subnode) => subnode.node_id == node_id);
 };
