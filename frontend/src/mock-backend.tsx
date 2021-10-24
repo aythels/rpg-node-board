@@ -3,7 +3,7 @@
 
 // Interfaces go here:
 
-interface Node {
+export interface Node {
   id: number;
   name: string;
   image: string;
@@ -13,7 +13,7 @@ interface Node {
   type: string;
 }
 
-interface Subnode {
+export interface Subnode {
   id: number;
   // access_level: number;
   editors: Array<number>;
@@ -21,7 +21,7 @@ interface Subnode {
   content: unknown;
 }
 
-interface Game {
+export interface Game {
   nodes: Array<number>;
   players: Array<number>;
   gms: Array<number>;
@@ -29,7 +29,7 @@ interface Game {
   settings: Record<string, unknown>;
 }
 
-interface User {
+export interface User {
   id: number;
   username: string;
   password: string; // FOR NOW
@@ -101,10 +101,8 @@ const game_1 = {
 
 // Functions mocking backend behaviour go here:
 
-const GET_node_by_id = (id: number): Node => {
+export const GET_node_by_id = (id: number): Node => {
   return global_nodes.filter((node) => {
     node.id == id;
   })[0];
 };
-
-export { GET_node_by_id };
