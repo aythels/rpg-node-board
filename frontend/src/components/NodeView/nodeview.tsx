@@ -3,7 +3,8 @@ import { Component } from 'react';
 // import ReactQuill from 'react-quill';
 import SubnodeView from '../SubnodeView/subnodeview';
 import { uid } from 'react-uid';
-import { GET_node_by_id, GET_user_by_id, Node, User, Subnode, GET_subnodes_by_node_id } from '../../mock-backend';
+import { GETnodeById, GETsubnodesByNodeId, GETuserById } from '../../mock-backend';
+import { Node, Subnode, User } from '../../types';
 
 // MUI Components
 import { ButtonGroup, Button } from '@mui/material';
@@ -27,9 +28,9 @@ interface State {
 export default class NodeView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const node = GET_node_by_id(props.node_id);
-    const user = GET_user_by_id(props.user_id);
-    const subnodes = GET_subnodes_by_node_id(props.node_id);
+    const node = GETnodeById(props.node_id);
+    const user = GETuserById(props.user_id);
+    const subnodes = GETsubnodesByNodeId(props.node_id);
     this.state = {
       node: node,
       user: user,

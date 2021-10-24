@@ -11,21 +11,21 @@ const globalSubnodes = [
     node_id: 1,
     editors: [2],
     type: 'description',
-    content: '',
+    content: 'A vast beautiful skyscape.',
   },
   {
     id: 2,
     node_id: 1,
     editors: [2],
     type: 'event',
-    content: '',
+    content: 'The sky is falling!',
   },
   {
     id: 3,
     node_id: 1,
     editors: [2],
     type: 'notes',
-    content: '',
+    content: 'wow sure looks cool',
   },
 ];
 
@@ -78,4 +78,9 @@ export const GETuserById = (id: number): User => {
 
 export const GETsubnodesByNodeId = (node_id: number): Subnode[] => {
   return globalSubnodes.filter((subnode) => subnode.node_id == node_id);
+};
+
+export const POSTsubnodeContent = (id: number, newContent: string): void => {
+  const subnode = globalSubnodes.filter((subnode) => subnode.id == id)[0];
+  subnode.content = newContent;
 };

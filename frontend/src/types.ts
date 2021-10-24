@@ -18,7 +18,7 @@ export interface Subnode {
   // access_level: number;
   editors: number[];
   type: string;
-  content: unknown;
+  content: string;
 }
 
 export interface Game {
