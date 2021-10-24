@@ -3,6 +3,7 @@ import { Component } from 'react';
 // import ReactQuill from 'react-quill';
 import Subnode from '../Subnode/subnode';
 import { uid } from 'react-uid';
+import { GET_node_by_id } from '../../mock-backend';
 
 // MUI Components
 import { ButtonGroup, Button } from '@mui/material';
@@ -13,29 +14,25 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 interface Props {
-  node_id: null;
-  user: string;
+  node_id: number;
+  user: number;
 }
 
 interface State {
-  node_id: null;
-  image: string;
-  name: string;
-  subnodes: Array<string>; // TODO: replace with Array<Subnode>
+  node: Node;
   user: string;
 }
 
 export default class NodeView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const node = GET_node_by_id(props.node_id);
     this.state = {
-      node_id: props.node_id,
-      image: '/images/sky.jpg',
-      name: 'The Soaring Skies',
-      subnodes: ['Description', 'Events', 'Player Notes'],
-      user: props.user,
+      node: node,
     };
   }
+
+  componentDidMount = (): void => {};
 
   renderSubnodes = (): JSX.Element => {
     const subnodes = this.state.subnodes;
