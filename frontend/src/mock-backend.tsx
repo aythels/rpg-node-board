@@ -18,7 +18,7 @@ export interface Subnode {
   // access_level: number;
   editors: Array<number>;
   type: string;
-  content: unknown;
+  content: string;
 }
 
 export interface Game {
@@ -66,7 +66,7 @@ const global_nodes = [
   {
     id: 1,
     name: 'The Soaring Skies',
-    image: '',
+    image: '/images/sky.jpg',
     image_alt: '',
     subnodes: [],
     editors: [],
@@ -102,7 +102,13 @@ const game_1 = {
 // Functions mocking backend behaviour go here:
 
 export const GET_node_by_id = (id: number): Node => {
-  return global_nodes.filter((node) => {
-    node.id == id;
-  })[0];
+  return global_nodes.filter((node) => node.id == id)[0];
+};
+
+export const GET_user_by_id = (id: number): User => {
+  return global_users.filter((user) => user.id == id)[0];
+};
+
+export const GET_subnodes_by_node_id = (node_id: number): Array<Subnode> => {
+  return global_subnodes.filter((subnode) => subnode.node_id == node_id);
 };

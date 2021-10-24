@@ -1,9 +1,9 @@
 import './nodeview.css';
 import { Component } from 'react';
 // import ReactQuill from 'react-quill';
-import Subnode from '../Subnode/subnode';
+import SubnodeView from '../SubnodeView/subnodeview';
 import { uid } from 'react-uid';
-import { GET_node_by_id } from '../../mock-backend';
+import { GET_node_by_id, GET_user_by_id, Node, User, Subnode, GET_subnodes_by_node_id } from '../../mock-backend';
 
 // MUI Components
 import { ButtonGroup, Button } from '@mui/material';
@@ -15,43 +15,49 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 interface Props {
   node_id: number;
-  user: number;
+  user_id: number;
 }
 
 interface State {
   node: Node;
-  user: string;
+  user: User;
+  subnodes: Array<Subnode>;
 }
 
 export default class NodeView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const node = GET_node_by_id(props.node_id);
+    console.log(node);
+    const user = GET_user_by_id(props.user_id);
+    const subnodes = GET_subnodes_by_node_id(props.node_id);
     this.state = {
       node: node,
+      user: user,
+      subnodes: subnodes,
     };
   }
 
-  componentDidMount = (): void => {};
+  // componentDidMount = (): void => {};
 
   renderSubnodes = (): JSX.Element => {
     const subnodes = this.state.subnodes;
     return (
       <div className="subnodes">
         {subnodes.map((subnode) => (
-          <Subnode subnode={null} name={subnode} key={uid(subnode)} />
+          <SubnodeView subnode={subnode} key={uid(subnode)} />
         ))}
       </div>
     );
   };
 
   render(): JSX.Element {
-    const { image, name } = this.state;
+    const node = this.state.node;
     return (
       <div className="node">
         <div className="node-header">
           <div className="node-topline">
-            <p>{name}</p>
+            <p>{node.name}</p>
             <ButtonGroup>
               <Button>
                 <EditIcon />
@@ -64,7 +70,7 @@ export default class NodeView extends Component<Props, State> {
               </Button>
             </ButtonGroup>
           </div>
-          <img className="node-header-image" src={image} alt="sky"></img>
+          <img className="node-header-image" src={node.image} alt="sky"></img>
         </div>
         {this.renderSubnodes()}
       </div>
