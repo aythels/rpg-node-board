@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 
+// Interfaces go here:
+
 interface Node {
   id: number;
   name: string;
@@ -34,6 +36,8 @@ interface User {
   email: string; // FOR NOW
   games: Array<number>;
 }
+
+// Hardcoded variables go here:
 
 const global_nodes = [
   {
