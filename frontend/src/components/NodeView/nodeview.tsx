@@ -28,7 +28,6 @@ export default class NodeView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const node = GET_node_by_id(props.node_id);
-    console.log(node);
     const user = GET_user_by_id(props.user_id);
     const subnodes = GET_subnodes_by_node_id(props.node_id);
     this.state = {
