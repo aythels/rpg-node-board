@@ -22,6 +22,7 @@ export interface Subnode {
 }
 
 export interface Game {
+  id: number;
   nodes: number[];
   players: number[];
   gms: number[];

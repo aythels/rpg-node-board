@@ -58,13 +58,16 @@ const globalUsers = [
   },
 ];
 
-const game1 = {
+const game1: Game = {
+  id: 7,
   nodes: [1],
   players: [1],
   gms: [2],
   users: [1, 2],
   settings: {},
 };
+
+const allGames = [game1];
 
 // Functions mocking backend behaviour go here:
 
@@ -78,4 +81,13 @@ export const GETuserById = (id: number): User => {
 
 export const GETsubnodesByNodeId = (node_id: number): Subnode[] => {
   return globalSubnodes.filter((subnode) => subnode.node_id == node_id);
+};
+
+const GETgame = (id: number): Game => {
+  return allGames.filter((game) => game.id === id)[0];
+};
+
+export const GETplayers = (gameId: number): User[] => {
+  const game = GETgame(gameId);
+  return game.users.map(GETuserById);
 };

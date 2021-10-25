@@ -1,0 +1,28 @@
+.sidebar {
+  background-color: blue;
+  height: 100vh;
+  width: 20%;
+  float: right;
+  overflow: scroll;
+}
+
+.game-name {
+  height: 10%;
+  background-color: green;
+}
+
+.player-list {
+  height: 65%;
+  overflow: scroll;
+}
+
+.player {
+  background-color: orange;
+  height: 3rem;
+  margin: 0.5rem;
+}
+
+.footer {
+  height: 25%;
+  background-color: yellow;
+}
