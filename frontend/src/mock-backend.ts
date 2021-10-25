@@ -34,7 +34,7 @@ const globalSubnodes = [
     type: 'description',
     content: new Delta({
       ops: [
-        { insert: 'A place of great knowledge. Near by' },
+        { insert: 'A place of great knowledge. Near by ' },
         { attributes: { link: true }, insert: 'St George' },
         { insert: '.\n' },
       ],
@@ -155,11 +155,11 @@ export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolea
   return subnode.editors.includes(userId);
 };
 
-export const GETnodeNamesInGame = (gameId: number): string[] => {
+export const GETnodesInGame = (gameId: number): Node[] => {
   const game = globalGames.filter((game) => game.id == gameId)[0];
-  const strings = [];
+  const nodes = [];
   for (const nodeid of game.nodes) {
-    strings.push(globalNodes[nodeid - 1].name);
+    nodes.push(globalNodes[nodeid - 1]);
   }
-  return strings;
+  return nodes;
 };

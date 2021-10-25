@@ -3,7 +3,7 @@ import { Component } from 'react';
 import Quill from 'quill';
 import Delta from 'quill-delta';
 import { Subnode, User } from '../../types';
-import { GETnodeNamesInGame, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
+import { GETnodesInGame, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
 
 interface Props {
   subnode: Subnode;
@@ -31,6 +31,13 @@ const standardEditorToolbar = [
   ['image', 'code-block'],
 ];
 
+interface TextLink {
+  location: number;
+  length: number;
+  name: string;
+  id: number;
+}
+
 export default class SubnodeView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -45,6 +52,10 @@ export default class SubnodeView extends Component<Props, State> {
   }
 
   componentDidMount = (): void => {
+    this.loadEditor();
+  };
+
+  loadEditor = (): void => {
     const readOnly = !GETuserCanEditSubnode(this.state.user.id, this.state.subnode.id);
     const toolbar = readOnly ? false : standardEditorToolbar;
 
@@ -56,7 +67,7 @@ export default class SubnodeView extends Component<Props, State> {
       readOnly: readOnly,
       theme: 'snow',
     });
-    editor.setContents(this.state.subnode.content, 'api'); // TODO: change the way contents is stored
+    editor.setContents(this.state.subnode.content, 'api');
     editor.on('text-change', (delta) => {
       this.setState({ change: this.state.change.compose(delta) });
     });
@@ -70,25 +81,20 @@ export default class SubnodeView extends Component<Props, State> {
   updateNodeTextLinks = (): void => {
     if (this.state.editor) {
       // Add in new links:
-      const names = GETnodeNamesInGame(1);
+      const nodes = GETnodesInGame(1); // <-- this is horribly inefficient
       const currentText = this.state.editor.getText();
-      // TODO: Fix
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const links = [];
-      for (const name of names) {
-        let nextNameInstance = currentText.indexOf(name, 0);
+      const links: TextLink[] = [];
+      for (const node of nodes) {
+        let nextNameInstance = currentText.indexOf(node.name, 0);
         while (nextNameInstance != -1) {
-          links.push([nextNameInstance, name.length]);
-          nextNameInstance = currentText.indexOf(name, nextNameInstance + 1);
+          links.push({ location: nextNameInstance, length: node.name.length, name: node.name, id: node.id });
+          nextNameInstance = currentText.indexOf(node.name, nextNameInstance + 1);
         }
       }
-      // TODO: Fix
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       for (const link of links) {
-        this.state.editor.formatText(link[0], link[1], 'link', true);
+        this.state.editor.formatText(link.location, link.length, 'link', '/nodeviewAdmin/' + link.id);
       }
+      // TODO: Remove outdated links
     }
   };
 

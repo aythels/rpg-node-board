@@ -18,6 +18,10 @@ function App(): JSX.Element {
           <Route exact path="/dummy" render={() => <DummyComponent counterCaption="Increment counter" />} />
           <Route exact path="/nodeviewAdmin" render={() => <NodeView node_id={4} user_id={2} />} />
           <Route exact path="/nodeviewUser" render={() => <NodeView node_id={4} user_id={1} />} />
+          <Route exact path="/nodeviewAdmin/1" render={() => <NodeView node_id={1} user_id={2} />} />
+          <Route exact path="/nodeviewAdmin/2" render={() => <NodeView node_id={2} user_id={2} />} />
+          <Route exact path="/nodeviewAdmin/3" render={() => <NodeView node_id={3} user_id={2} />} />
+          <Route exact path="/nodeviewAdmin/4" render={() => <NodeView node_id={4} user_id={2} />} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

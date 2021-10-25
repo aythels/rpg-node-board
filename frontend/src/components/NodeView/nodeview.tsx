@@ -38,8 +38,6 @@ export default class NodeView extends Component<Props, State> {
     };
   }
 
-  // componentDidMount = (): void => {};
-
   renderSubnodes = (): JSX.Element => {
     const subnodes = this.state.subnodes;
     return (
