@@ -20,8 +20,9 @@
 .header__title {
 }
 
-.header__button--edit {
+.header__button {
   margin-left: auto;
+  white-space: nowrap;
 }
 
 .player-list {

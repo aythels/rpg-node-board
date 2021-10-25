@@ -1,7 +1,7 @@
 import './canvasSidebar.css';
 import { Avatar, Button, IconButton, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
-import { Delete, Edit, HighlightOff, PersonAdd, PersonOutline } from '@mui/icons-material';
+import { Close, Delete, Done, Edit, HighlightOff, PersonAdd, PersonOutline } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { User } from '../../types';
 // eslint-disable-next-line
@@ -11,19 +11,27 @@ import uuid from 'react-uuid';
 interface Props {
   onInviteUserClicked: (username: string) => void;
   onRemoveUserClicked: (user: User) => void;
+  onSubmitTitleClicked: (newTitle: string) => void;
   users: User[];
+  gameTitle: string;
   gameMasterIds: number[];
 }
 
 interface State {
   inviteName: string;
+  editingTitle: boolean;
+  title: string;
 }
 
 export default class CanvasSidebar extends Component<Props, State> {
   state: State = {
     inviteName: '',
+    editingTitle: false,
+    title: this.props.gameTitle,
   };
+  prevTitle = '';
 
+  // Handlers related to user invites
   handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
     this.setState({ inviteName: event.target.value });
   };
@@ -40,17 +48,66 @@ export default class CanvasSidebar extends Component<Props, State> {
     }
   };
 
+  // Handlers related to game title
+  handleTitleChanged = (event: ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ title: event.target.value });
+  };
+
+  handleEditTitleClicked = (): void => {
+    this.prevTitle = this.state.title;
+    this.setState({
+      editingTitle: true,
+    });
+  };
+
+  handleSubmitTitleClicked = (): void => {
+    this.setState({
+      editingTitle: false,
+    });
+    this.props.onSubmitTitleClicked(this.state.title);
+  };
+
+  handleCancelEditClicked = (): void => {
+    this.setState({
+      title: this.prevTitle,
+      editingTitle: false,
+    });
+    this.prevTitle = '';
+  };
+
   render(): JSX.Element {
     return (
       <div className="sidebar">
         <div className="header">
           <div className="header__title">
-            <TextField id="outlined-basic" label="Game" variant="outlined" />
+            <TextField
+              disabled={!this.state.editingTitle}
+              id="outlined-basic"
+              value={this.state.title}
+              variant="outlined"
+              onChange={this.handleTitleChanged}
+            />
           </div>
-          <div className="header__button--edit">
-            <IconButton aria-label="Edit game name" component="span">
-              <Edit />
-            </IconButton>
+          <div className="header__button">
+            {this.state.editingTitle ? (
+              <>
+                <IconButton
+                  aria-label="Edit game name"
+                  component="span"
+                  disabled={!this.state.title}
+                  onClick={this.handleSubmitTitleClicked}
+                >
+                  <Done />
+                </IconButton>
+                <IconButton aria-label="Edit game name" component="span" onClick={this.handleCancelEditClicked}>
+                  <Close />
+                </IconButton>
+              </>
+            ) : (
+              <IconButton aria-label="Edit game name" component="span" onClick={this.handleEditTitleClicked}>
+                <Edit />
+              </IconButton>
+            )}
           </div>
         </div>
         <div className="player-list">
@@ -124,3 +181,5 @@ export default class CanvasSidebar extends Component<Props, State> {
 // - game name change
 // - modals
 // - fix css class name
+// - prevent suggestions in game name
+// - improve colors - delete button, cancel button in edit

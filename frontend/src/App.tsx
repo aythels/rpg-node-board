@@ -1,5 +1,13 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { GETgame, GETplayers, GETuserById, GETuserByUsername, addUserToGame, removeUserFromGame } from './mock-backend';
+import {
+  GETgame,
+  GETplayers,
+  GETuserById,
+  GETuserByUsername,
+  addUserToGame,
+  removeUserFromGame,
+  updateGameName,
+} from './mock-backend';
 import { Game, User } from './types';
 import { ThemeProvider, createTheme } from '@mui/material';
 import CanvasSidebar from './components/CanvasSidebar/CanvasSidebar';
@@ -50,6 +58,13 @@ function App(): JSX.Element {
     removeUserFromGame(user, currentGameId);
   };
 
+  const handleSubmitTitleClicked = (newTitle: string) => {
+    setGame((prevGame) => ({ ...prevGame, title: newTitle }));
+
+    // Temp: Mock updating data on the backend
+    updateGameName(game.id, newTitle);
+  };
+
   return (
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
@@ -64,9 +79,11 @@ function App(): JSX.Element {
               <div style={{ backgroundColor: 'red', height: '100vh' }}>
                 <CanvasSidebar
                   gameMasterIds={game.gms}
+                  gameTitle={game.title}
                   users={users}
                   onInviteUserClicked={handleInviteUserClicked}
                   onRemoveUserClicked={handleRemoveUserClicked}
+                  onSubmitTitleClicked={handleSubmitTitleClicked}
                 />
               </div>
             )}

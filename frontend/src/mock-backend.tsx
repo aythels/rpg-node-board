@@ -60,6 +60,7 @@ const globalUsers = [
 
 const game1: Game = {
   id: 7,
+  title: 'Test game',
   nodes: [1],
   players: [1],
   gms: [2],
@@ -92,6 +93,10 @@ export const addUserToGame = (user: User, gameId: number): void => {
 };
 
 export const removeUserFromGame = (user: User, gameId: number): void => {
+  // ...
+};
+
+export const updateGameName = (gameId: number, title: string): void => {
   // ...
 };
 
