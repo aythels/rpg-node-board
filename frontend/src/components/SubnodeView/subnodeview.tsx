@@ -27,8 +27,16 @@ const standardEditorToolbar = [
       header: [1, 2, false],
     },
   ],
-  ['bold', 'italic', 'underline'],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['blockquote'],
+  [{ script: 'sub' }, { script: 'super' }],
+  [{ color: [] }, { background: [] }],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ indent: '-1' }, { indent: '+1' }],
+  [{ direction: 'rtl' }],
+  [{ align: [] }],
   ['image', 'code-block'],
+  ['clean'],
 ];
 
 interface TextLink {
