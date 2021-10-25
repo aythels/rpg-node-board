@@ -1,6 +1,6 @@
 import './canvasSidebar.css';
 import { Avatar, Button, IconButton, TextField } from '@mui/material';
-import { Delete, HighlightOff, PersonAdd, PersonOutline } from '@mui/icons-material';
+import { Delete, Edit, HighlightOff, PersonAdd, PersonOutline } from '@mui/icons-material';
 import { Component } from 'react';
 import { User } from '../../types';
 // eslint-disable-next-line
@@ -23,7 +23,16 @@ export default class CanvasSidebar extends Component<Props> {
   render(): JSX.Element {
     return (
       <div className="sidebar">
-        <div className="game-name">The best game</div>
+        <div className="header">
+          <div className="header__title">
+            <TextField id="outlined-basic" label="Game" variant="outlined" />
+          </div>
+          <div className="header__button--edit">
+            <IconButton aria-label="Edit game name" component="span">
+              <Edit />
+            </IconButton>
+          </div>
+        </div>
         <div className="player-list">
           {this.tempPlayers.map((player: User) => (
             <div key={uuid()} className="player-card">

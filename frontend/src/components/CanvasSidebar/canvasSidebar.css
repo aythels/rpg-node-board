@@ -3,16 +3,28 @@
   height: 100vh;
   width: 22.5%;
   float: right;
-  overflow: scroll;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.game-name {
-  height: 10%;
+.header {
   background-color: green;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.header__title {
+}
+
+.header__button--edit {
+  margin-left: auto;
 }
 
 .player-list {
-  height: 65%;
   overflow: scroll;
 }
 
@@ -34,8 +46,8 @@
 }
 
 .footer {
-  height: 25%;
   background-color: yellow;
+  margin-top: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,12 +58,7 @@
 }
 
 .footer__item__wrapper {
-  margin: 0.6rem 0.5rem 0 0.5rem;
-}
-
-.footer__item__wrapper:last-child {
-  margin-top: auto;
-  margin-bottom: 0.6rem;
+  margin: 0.5rem;
 }
 
 .footer__item {
