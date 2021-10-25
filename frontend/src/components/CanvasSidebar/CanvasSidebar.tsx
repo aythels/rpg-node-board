@@ -2,6 +2,7 @@ import './canvasSidebar.css';
 import { Avatar, Button, IconButton, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Delete, Edit, HighlightOff, PersonAdd, PersonOutline } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import { User } from '../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
@@ -83,9 +84,17 @@ export default class CanvasSidebar extends Component<Props, State> {
             </Button>
           </div>
           <div className="footer__item__wrapper">
-            <Button className="footer__item" startIcon={<Delete />} variant="contained" aria-label="delete game server">
-              Delete server
-            </Button>
+            {/* TODO: update link target */}
+            <Link to="." style={{ textDecoration: 'none' }}>
+              <Button
+                className="footer__item"
+                startIcon={<Delete />}
+                variant="contained"
+                aria-label="delete game server"
+              >
+                Delete server
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
