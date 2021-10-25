@@ -5,6 +5,7 @@ import {
   GETuserById,
   GETuserByUsername,
   addUserToGame,
+  demoteGameMasterToPlayer,
   promoteUserToGameMaster,
   removeUserFromGame,
   updateGameName,
@@ -66,7 +67,7 @@ function App(): JSX.Element {
     updateGameName(game.id, newTitle);
   };
 
-  const handlePromoteButtonClicked = (id: number) => {
+  const handlePromoteClicked = (id: number) => {
     setGame((prevGame) => ({
       ...prevGame,
       gms: [...prevGame.gms, id],
@@ -76,10 +77,23 @@ function App(): JSX.Element {
     promoteUserToGameMaster(id, game.id);
   };
 
-  const prioritizeGameMasters = (users: User[]) => {
+  const handleDemoteClicked = (id: number) => {
+    if (game.gms.length === 1) {
+      alert('Cannot demote last game master.');
+    } else {
+      setGame((prevGame) => ({
+        ...prevGame,
+        gms: [...prevGame.gms.filter((gmId) => gmId !== id)],
+      }));
+      // Temp: Mock updating data on the backend
+      demoteGameMasterToPlayer(id, game.id);
+    }
+  };
+
+  const prioritizeGameMasters = (allUsers: User[]) => {
     return [
-      ...users.filter((user: User) => game.gms.includes(user.id)),
-      ...users.filter((user: User) => !game.gms.includes(user.id)),
+      ...allUsers.filter((user: User) => game.gms.includes(user.id)),
+      ...allUsers.filter((user: User) => !game.gms.includes(user.id)),
     ];
   };
 
@@ -99,8 +113,9 @@ function App(): JSX.Element {
                   gameMasterIds={game.gms}
                   gameTitle={game.title}
                   users={prioritizeGameMasters(users)}
+                  onDemoteClicked={handleDemoteClicked}
                   onInviteUserClicked={handleInviteUserClicked}
-                  onPromoteButtonClicked={handlePromoteButtonClicked}
+                  onPromoteClicked={handlePromoteClicked}
                   onRemoveUserClicked={handleRemoveUserClicked}
                   onSubmitTitleClicked={handleSubmitTitleClicked}
                 />

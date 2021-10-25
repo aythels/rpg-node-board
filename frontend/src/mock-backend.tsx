@@ -104,6 +104,10 @@ export const promoteUserToGameMaster = (userId: number, gameId: number) => {
   // ...
 };
 
+export const demoteGameMasterToPlayer = (userId: number, gameId: number) => {
+  // ...
+};
+
 export const GETgame = (id: number): Game => {
   return allGames.filter((game) => game.id === id)[0];
 };

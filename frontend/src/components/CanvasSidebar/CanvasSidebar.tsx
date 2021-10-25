@@ -12,7 +12,8 @@ interface Props {
   onInviteUserClicked: (username: string) => void;
   onRemoveUserClicked: (user: User) => void;
   onSubmitTitleClicked: (newTitle: string) => void;
-  onPromoteButtonClicked: (id: number) => void;
+  onPromoteClicked: (id: number) => void;
+  onDemoteClicked: (id: number) => void;
   users: User[];
   gameTitle: string;
   gameMasterIds: number[];
@@ -117,14 +118,18 @@ export default class CanvasSidebar extends Component<Props, State> {
             return (
               <div key={uuid()} className="player-card">
                 {isGameMaster ? (
-                  <IconButton disabled aria-label="Remove player" component="span">
+                  <IconButton
+                    aria-label={`Demote game master ${user.username} to regular player`}
+                    component="span"
+                    onClick={() => this.props.onDemoteClicked(user.id)}
+                  >
                     <Person />
                   </IconButton>
                 ) : (
                   <IconButton
-                    aria-label="Remove player"
+                    aria-label={`Promote player ${user.username} to game master`}
                     component="span"
-                    onClick={() => this.props.onPromoteButtonClicked(user.id)}
+                    onClick={() => this.props.onPromoteClicked(user.id)}
                   >
                     <PersonOutline />
                   </IconButton>
@@ -189,11 +194,13 @@ export default class CanvasSidebar extends Component<Props, State> {
 }
 
 // TODO:
+// - handle removing yourself - navigate back to homepage: https://www.telerik.com/blogs/programmatically-navigate-with-react-router
 // - fix colours
-// - fix css class name
+// - fix css class naming
 
 // - prevent suggestions in game name
+// - highlight personal user bubble?
 // - make colors semantic - delete button, cancel button in edit
 // - replace alert with modals
 // - add tooltips
-// - add aria labels
+// - add/check aria labels
