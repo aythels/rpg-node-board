@@ -45,7 +45,7 @@ export default class NodeView extends Component<Props, State> {
     return (
       <div className="subnodes">
         {subnodes.map((subnode) => (
-          <SubnodeView subnode={subnode} key={uid(subnode)} />
+          <SubnodeView subnode={subnode} user={this.state.user} key={uid(subnode)} />
         ))}
       </div>
     );

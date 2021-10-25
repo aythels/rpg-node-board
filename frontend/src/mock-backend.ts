@@ -1,7 +1,7 @@
 /* eslint-disable sort-imports */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-
+import Delta from 'quill-delta';
 import { Node, Subnode, Game, User } from './types';
 
 // Hardcoded variables go here:
@@ -11,21 +11,56 @@ const globalSubnodes = [
     node_id: 1,
     editors: [2],
     type: 'description',
-    content: 'A vast beautiful skyscape.',
+    content: new Delta({ ops: [{ insert: 'A vast sky.' }] }),
   },
   {
     id: 2,
     node_id: 1,
     editors: [2],
     type: 'event',
-    content: 'The sky is falling!',
+    content: new Delta({ ops: [{ insert: 'The sky is falling!' }] }),
   },
   {
     id: 3,
     node_id: 1,
-    editors: [2],
+    editors: [1],
     type: 'notes',
-    content: 'wow sure looks cool',
+    content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
+  },
+  {
+    id: 4,
+    node_id: 2,
+    editors: [2],
+    type: 'description',
+    content: new Delta({
+      ops: [
+        { insert: 'A place of great knowledge. Near by' },
+        { attributes: { link: true }, insert: 'St George' },
+        { insert: '.\n' },
+      ],
+    }),
+  },
+  {
+    id: 5,
+    node_id: 3,
+    editors: [2],
+    type: 'description',
+    content: new Delta({
+      ops: [
+        { insert: 'Somewhere to walk underneath ' },
+        { attributes: { link: true }, insert: 'The Soaring Skies' },
+        { insert: '.' },
+      ],
+    }),
+  },
+  {
+    id: 6,
+    node_id: 4,
+    editors: [2],
+    type: 'description',
+    content: new Delta({
+      ops: [{ insert: 'The center of UofT. Near ' }, { attributes: { link: true }, insert: 'Museum' }, { insert: '.' }],
+    }),
   },
 ];
 
@@ -34,6 +69,33 @@ const globalNodes = [
     id: 1,
     name: 'The Soaring Skies',
     image: '/images/sky.jpg',
+    image_alt: '',
+    subnodes: [],
+    editors: [],
+    type: 'location',
+  },
+  {
+    id: 2,
+    name: 'Museum',
+    image: '/images/museum.jpg',
+    image_alt: '',
+    subnodes: [],
+    editors: [],
+    type: 'location',
+  },
+  {
+    id: 3,
+    name: 'Lonely Path',
+    image: '/images/path.jpg',
+    image_alt: '',
+    subnodes: [],
+    editors: [],
+    type: 'location',
+  },
+  {
+    id: 4,
+    name: 'St. George',
+    image: '/images/stgeorge.jpg',
     image_alt: '',
     subnodes: [],
     editors: [],
@@ -58,13 +120,16 @@ const globalUsers = [
   },
 ];
 
-const game1 = {
-  nodes: [1],
-  players: [1],
-  gms: [2],
-  users: [1, 2],
-  settings: {},
-};
+const globalGames = [
+  {
+    id: 1,
+    nodes: [1, 2, 3, 4],
+    players: [1],
+    gms: [2],
+    users: [1, 2],
+    settings: {},
+  },
+];
 
 // Functions mocking backend behaviour go here:
 
@@ -80,7 +145,21 @@ export const GETsubnodesByNodeId = (node_id: number): Subnode[] => {
   return globalSubnodes.filter((subnode) => subnode.node_id == node_id);
 };
 
-export const POSTsubnodeContent = (id: number, newContent: string): void => {
+export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
   const subnode = globalSubnodes.filter((subnode) => subnode.id == id)[0];
-  subnode.content = newContent;
+  subnode.content.compose(newContent);
+};
+
+export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
+  const subnode = globalSubnodes.filter((subnode) => subnode.id == subnodeId)[0];
+  return subnode.editors.includes(userId);
+};
+
+export const GETnodeNamesInGame = (gameId: number): string[] => {
+  const game = globalGames.filter((game) => game.id == gameId)[0];
+  const strings = [];
+  for (const nodeid of game.nodes) {
+    strings.push(globalNodes[nodeid - 1].name);
+  }
+  return strings;
 };

@@ -16,7 +16,8 @@ function App(): JSX.Element {
         <Switch>
           <Route exact path="/" render={() => <Home />} />
           <Route exact path="/dummy" render={() => <DummyComponent counterCaption="Increment counter" />} />
-          <Route exact path="/nodeview" render={() => <NodeView node_id={1} user_id={2} />} />
+          <Route exact path="/nodeviewAdmin" render={() => <NodeView node_id={4} user_id={2} />} />
+          <Route exact path="/nodeviewUser" render={() => <NodeView node_id={4} user_id={1} />} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

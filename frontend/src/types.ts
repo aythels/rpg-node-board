@@ -1,3 +1,5 @@
+import Delta from 'quill-delta';
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 
@@ -18,7 +20,7 @@ export interface Subnode {
   // access_level: number;
   editors: number[];
   type: string;
-  content: string;
+  content: Delta;
 }
 
 export interface Game {
