@@ -1,7 +1,7 @@
 .sidebar {
   background-color: blue;
   height: 100vh;
-  width: 20%;
+  width: 22.5%;
   float: right;
   overflow: scroll;
 }
@@ -16,20 +16,44 @@
   overflow: scroll;
 }
 
-.player {
+.player-card {
   display: flex;
   flex-direction: row;
   align-items: center;
   background-color: orange;
   height: 3rem;
   margin: 0.5rem;
+  padding: 0.1rem;
+  border-radius: 0.5rem;
+}
+
+.player-card__name {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  overflow: hidden;
 }
 
 .footer {
   height: 25%;
   background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .button--remove {
   margin-left: auto;
+}
+
+.footer__item__wrapper {
+  margin: 0.6rem 0.5rem 0 0.5rem;
+}
+
+.footer__item__wrapper:last-child {
+  margin-top: auto;
+  margin-bottom: 0.6rem;
+}
+
+.footer__item {
+  width: 100%;
 }
