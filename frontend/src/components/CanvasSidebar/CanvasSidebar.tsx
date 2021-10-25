@@ -1,7 +1,7 @@
 import './canvasSidebar.css';
-import { Button, TextField } from '@mui/material';
+import { Avatar, Button, IconButton, TextField } from '@mui/material';
+import { Delete, HighlightOff, Person, PersonAdd, PersonOutline } from '@mui/icons-material';
 import { Component } from 'react';
-import { Delete, Send } from '@mui/icons-material';
 import { User } from '../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
@@ -12,40 +12,37 @@ interface Props {
 }
 
 export default class CanvasSidebar extends Component<Props> {
+  tempPlayers = [
+    ...this.props.players,
+    ...this.props.players,
+    ...this.props.players,
+    ...this.props.players,
+    ...this.props.players,
+  ];
+
   render(): JSX.Element {
     return (
       <div className="sidebar">
         <div className="game-name">The best game</div>
         <div className="player-list">
-          {this.props.players.map((player) => (
+          {this.tempPlayers.map((player: User) => (
             <div key={uuid()} className="player">
-              {player.username}
-            </div>
-          ))}
-          {this.props.players.map((player) => (
-            <div key={uuid()} className="player">
-              {player.username}
-            </div>
-          ))}
-          {this.props.players.map((player) => (
-            <div key={uuid()} className="player">
-              {player.username}
-            </div>
-          ))}
-          {this.props.players.map((player) => (
-            <div key={uuid()} className="player">
-              {player.username}
-            </div>
-          ))}
-          {this.props.players.map((player) => (
-            <div key={uuid()} className="player">
-              {player.username}
+              <IconButton aria-label="Remove player" component="span">
+                <PersonOutline />
+              </IconButton>
+              <Avatar>{player.username.charAt(0).toUpperCase()}</Avatar>
+              {`@${player.username}`}
+              <div className="button--remove">
+                <IconButton aria-label="Remove player" component="span">
+                  <HighlightOff />
+                </IconButton>
+              </div>
             </div>
           ))}
         </div>
         <div className="footer">
           <TextField id="outlined-basic" label="Player name" variant="outlined" />
-          <Button startIcon={<Send />} variant="contained" aria-label="invite user to the game">
+          <Button startIcon={<PersonAdd />} variant="contained" aria-label="invite user to the game">
             Invite user
           </Button>
           <Button startIcon={<Delete />} variant="contained" aria-label="delete game server">

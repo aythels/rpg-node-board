@@ -17,6 +17,9 @@
 }
 
 .player {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   background-color: orange;
   height: 3rem;
   margin: 0.5rem;
@@ -25,4 +28,8 @@
 .footer {
   height: 25%;
   background-color: yellow;
+}
+
+.button--remove {
+  margin-left: auto;
 }
