@@ -9,8 +9,10 @@ import { User } from '../../types';
 import uuid from 'react-uuid';
 
 interface Props {
-  players: User[];
-  onInviteUserClicked: (userName: string) => void;
+  onInviteUserClicked: (username: string) => void;
+  onRemoveUserClicked: (user: User) => void;
+  users: User[];
+  gameMasterIds: number[];
 }
 
 interface State {
@@ -24,6 +26,13 @@ export default class CanvasSidebar extends Component<Props, State> {
 
   handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
     this.setState({ inviteName: event.target.value });
+  };
+
+  handleInviteUserClicked = (): void => {
+    this.props.onInviteUserClicked(this.state.inviteName);
+    this.setState({
+      inviteName: '',
+    });
   };
 
   render(): JSX.Element {
@@ -40,57 +49,58 @@ export default class CanvasSidebar extends Component<Props, State> {
           </div>
         </div>
         <div className="player-list">
-          {this.props.players.map((player: User) => (
+          {this.props.users.map((user: User) => (
             <div key={uuid()} className="player-card">
               <IconButton aria-label="Remove player" component="span">
                 <PersonOutline />
               </IconButton>
-              <Avatar>{player.username.charAt(0).toUpperCase()}</Avatar>
-              <div className="player-card__name">{`@${player.username}`}</div>
-              <div className="button--remove">
-                <IconButton aria-label="Remove player" component="span">
-                  <HighlightOff />
-                </IconButton>
-              </div>
+              <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
+              <div className="player-card__name">{`@${user.username}`}</div>
+              {!this.props.gameMasterIds.includes(user.id) && (
+                <div className="button--remove">
+                  <IconButton
+                    aria-label="Remove player"
+                    component="span"
+                    onClick={() => this.props.onRemoveUserClicked(user)}
+                  >
+                    <HighlightOff />
+                  </IconButton>
+                </div>
+              )}
             </div>
           ))}
         </div>
         <div className="footer">
           <div className="footer__item__wrapper">
             <TextField
-              value={this.state.inviteName}
-              onChange={this.handleInviteNameChanged}
               className="footer__item"
               id="outlined-basic"
               label="Player name"
+              value={this.state.inviteName}
               variant="outlined"
+              onChange={this.handleInviteNameChanged}
             />
           </div>
           <div className="footer__item__wrapper">
             <Button
-              onClick={() => {
-                this.props.onInviteUserClicked(this.state.inviteName);
-                this.setState({
-                  inviteName: '',
-                });
-              }}
+              aria-label="invite user to the game"
               className="footer__item"
+              disabled={!this.state.inviteName}
               startIcon={<PersonAdd />}
               variant="contained"
-              aria-label="invite user to the game"
-              disabled={!this.state.inviteName}
+              onClick={this.handleInviteUserClicked}
             >
               Invite user
             </Button>
           </div>
           <div className="footer__item__wrapper">
             {/* TODO: update link target */}
-            <Link to="." style={{ textDecoration: 'none' }}>
+            <Link style={{ textDecoration: 'none' }} to=".">
               <Button
+                aria-label="delete game server"
                 className="footer__item"
                 startIcon={<Delete />}
                 variant="contained"
-                aria-label="delete game server"
               >
                 Delete server
               </Button>
@@ -103,10 +113,9 @@ export default class CanvasSidebar extends Component<Props, State> {
 }
 
 // TODO:
-// - user remove
 // - user promote
-// - delete server
 // - game name bind
 // - game name change
 // - modals
 // - handle user already added
+// - fix css class name

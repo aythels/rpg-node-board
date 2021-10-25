@@ -91,7 +91,11 @@ export const addUserToGame = (user: User, gameId: number): void => {
   // ...
 };
 
-const GETgame = (id: number): Game => {
+export const removeUserFromGame = (user: User, gameId: number): void => {
+  // ...
+};
+
+export const GETgame = (id: number): Game => {
   return allGames.filter((game) => game.id === id)[0];
 };
 

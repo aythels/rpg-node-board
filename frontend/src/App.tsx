@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { GETplayers, GETuserByUsername, addUserToGame } from './mock-backend';
+import { GETgame, GETplayers, GETuserById, GETuserByUsername, addUserToGame, removeUserFromGame } from './mock-backend';
+import { Game, User } from './types';
 import { ThemeProvider, createTheme } from '@mui/material';
 import CanvasSidebar from './components/CanvasSidebar/CanvasSidebar';
 import DummyComponent from './components/DummyComponent';
@@ -12,20 +13,41 @@ function App(): JSX.Element {
     palette: {},
   });
 
-  // Note: Mock fetching data from backend
-  const currentGameId = 7;
-  const [players, setPlayers] = useState(GETplayers(currentGameId));
+  // Temp: Mock fetching data from backend
+  const currentGameId = 7; // TODO: make part of state somewhere
+  const [game, setGame] = useState<Game>(GETgame(currentGameId));
+  const [users, setUsers] = useState<User[]>(GETplayers(game.id));
 
   const handleInviteUserClicked = (username: string) => {
-    // Note: Mock fetching data from backend
+    // Temp: Mock fetching data from backend
     const user = GETuserByUsername(username);
     if (user) {
-      setPlayers((prevPlayers) => [...prevPlayers, user]);
-      // Note: Mock adding data to backend
+      const newUsers = [...game.users, user.id];
+      setGame((prevGame: Game) => ({
+        ...prevGame,
+        players: [...prevGame.players, user.id],
+        users: newUsers,
+      }));
+      setUsers(newUsers.map(GETuserById));
+      // Temp: Mock updating data on the backend
       addUserToGame(user, currentGameId);
     } else {
       alert(`User ${username} could not be found!`);
     }
+  };
+
+  const handleRemoveUserClicked = (user: User) => {
+    const newUsers = [...game.users.filter((id) => id !== user.id)];
+    setGame((prevGame: Game) => ({
+      ...prevGame,
+      players: [...prevGame.players.filter((id) => id !== user.id)],
+      gms: [...prevGame.gms.filter((id) => id !== user.id)],
+      users: newUsers,
+    }));
+    setUsers(newUsers.map(GETuserById));
+
+    // Temp: Mock updating data on the backend
+    removeUserFromGame(user, currentGameId);
   };
 
   return (
@@ -40,7 +62,12 @@ function App(): JSX.Element {
             render={() => (
               // TODO: replace wrapper with canvas
               <div style={{ backgroundColor: 'red', height: '100vh' }}>
-                <CanvasSidebar players={players} onInviteUserClicked={handleInviteUserClicked} />
+                <CanvasSidebar
+                  gameMasterIds={game.gms}
+                  users={users}
+                  onInviteUserClicked={handleInviteUserClicked}
+                  onRemoveUserClicked={handleRemoveUserClicked}
+                />
               </div>
             )}
           />
