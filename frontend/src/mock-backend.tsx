@@ -79,8 +79,16 @@ export const GETuserById = (id: number): User => {
   return globalUsers.filter((user) => user.id == id)[0];
 };
 
+export const GETuserByUsername = (username: string): User | undefined => {
+  return globalUsers.find((user) => user.username == username);
+};
+
 export const GETsubnodesByNodeId = (node_id: number): Subnode[] => {
   return globalSubnodes.filter((subnode) => subnode.node_id == node_id);
+};
+
+export const addUserToGame = (user: User, gameId: number): void => {
+  // ...
 };
 
 const GETgame = (id: number): Game => {

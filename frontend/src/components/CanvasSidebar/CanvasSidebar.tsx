@@ -1,7 +1,7 @@
 import './canvasSidebar.css';
 import { Avatar, Button, IconButton, TextField } from '@mui/material';
+import { ChangeEvent, Component } from 'react';
 import { Delete, Edit, HighlightOff, PersonAdd, PersonOutline } from '@mui/icons-material';
-import { Component } from 'react';
 import { User } from '../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
@@ -9,16 +9,21 @@ import uuid from 'react-uuid';
 
 interface Props {
   players: User[];
+  onInviteUserClicked: (userName: string) => void;
 }
 
-export default class CanvasSidebar extends Component<Props> {
-  tempPlayers = [
-    ...this.props.players,
-    ...this.props.players,
-    ...this.props.players,
-    ...this.props.players,
-    ...this.props.players,
-  ];
+interface State {
+  inviteName: string;
+}
+
+export default class CanvasSidebar extends Component<Props, State> {
+  state: State = {
+    inviteName: '',
+  };
+
+  handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ inviteName: event.target.value });
+  };
 
   render(): JSX.Element {
     return (
@@ -34,7 +39,7 @@ export default class CanvasSidebar extends Component<Props> {
           </div>
         </div>
         <div className="player-list">
-          {this.tempPlayers.map((player: User) => (
+          {this.props.players.map((player: User) => (
             <div key={uuid()} className="player-card">
               <IconButton aria-label="Remove player" component="span">
                 <PersonOutline />
@@ -51,14 +56,28 @@ export default class CanvasSidebar extends Component<Props> {
         </div>
         <div className="footer">
           <div className="footer__item__wrapper">
-            <TextField className="footer__item" id="outlined-basic" label="Player name" variant="outlined" />
+            <TextField
+              value={this.state.inviteName}
+              onChange={this.handleInviteNameChanged}
+              className="footer__item"
+              id="outlined-basic"
+              label="Player name"
+              variant="outlined"
+            />
           </div>
           <div className="footer__item__wrapper">
             <Button
+              onClick={() => {
+                this.props.onInviteUserClicked(this.state.inviteName);
+                this.setState({
+                  inviteName: '',
+                });
+              }}
               className="footer__item"
               startIcon={<PersonAdd />}
               variant="contained"
               aria-label="invite user to the game"
+              disabled={!this.state.inviteName}
             >
               Invite user
             </Button>
@@ -73,3 +92,12 @@ export default class CanvasSidebar extends Component<Props> {
     );
   }
 }
+
+// TODO:
+// - user remove
+// - user promote
+// - delete server
+// - game name bind
+// - game name change
+// - modals
+// - handle user already added
