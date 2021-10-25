@@ -100,7 +100,7 @@ export default class SubnodeView extends Component<Props, State> {
         }
       }
       for (const link of links) {
-        this.state.editor.formatText(link.location, link.length, 'link', '/nodeviewAdmin/' + link.id);
+        this.state.editor.formatText(link.location, link.length, 'link', '/nodeviewAdmin/' + link.id, 'api');
       }
       // TODO: Remove outdated links
     }

@@ -35,7 +35,7 @@ const globalSubnodes = [
     content: new Delta({
       ops: [
         { insert: 'A place of great knowledge. Near by ' },
-        { attributes: { link: true }, insert: 'St George' },
+        { attributes: { link: '/nodeviewAdmin/4' }, insert: 'St George' },
         { insert: '.\n' },
       ],
     }),
@@ -48,7 +48,7 @@ const globalSubnodes = [
     content: new Delta({
       ops: [
         { insert: 'Somewhere to walk underneath ' },
-        { attributes: { link: true }, insert: 'The Soaring Skies' },
+        { attributes: { link: '/nodeviewAdmin/1' }, insert: 'The Soaring Skies' },
         { insert: '.' },
       ],
     }),
@@ -59,7 +59,11 @@ const globalSubnodes = [
     editors: [2],
     type: 'description',
     content: new Delta({
-      ops: [{ insert: 'The center of UofT. Near ' }, { attributes: { link: true }, insert: 'Museum' }, { insert: '.' }],
+      ops: [
+        { insert: 'The center of UofT. Near ' },
+        { attributes: { link: '/nodeviewAdmin/2' }, insert: 'Museum' },
+        { insert: '.' },
+      ],
     }),
   },
 ];

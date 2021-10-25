@@ -7,7 +7,7 @@ import { GETnodeById, GETsubnodesByNodeId, GETuserById } from '../../mock-backen
 import { Node, Subnode, User } from '../../types';
 
 // MUI Components
-import { ButtonGroup, Button } from '@mui/material';
+import { ButtonGroup, Button, Modal } from '@mui/material';
 
 // Icons
 import EditIcon from '@mui/icons-material/Edit';
@@ -23,6 +23,8 @@ interface State {
   node: Node;
   user: User;
   subnodes: Array<Subnode>;
+  editModalOpen: boolean;
+  usersModalOpen: boolean;
 }
 
 export default class NodeView extends Component<Props, State> {
@@ -35,6 +37,8 @@ export default class NodeView extends Component<Props, State> {
       node: node,
       user: user,
       subnodes: subnodes,
+      editModalOpen: false,
+      usersModalOpen: false,
     };
   }
 
@@ -49,18 +53,44 @@ export default class NodeView extends Component<Props, State> {
     );
   };
 
+  handleEditModalOpen = (): void => {
+    this.setState({
+      editModalOpen: true,
+    });
+  };
+
+  handleUsersModalOpen = (): void => {
+    this.setState({
+      usersModalOpen: true,
+    });
+  };
+
+  handleEditModalClose = (): void => {
+    this.setState({
+      editModalOpen: false,
+    });
+  };
+
+  handleUsersModalClose = (): void => {
+    this.setState({
+      usersModalOpen: false,
+    });
+  };
+
   render(): JSX.Element {
     const node = this.state.node;
     return (
       <div className="node">
         <div className="node-header">
           <div className="node-topline">
-            <p>{node.name}</p>
+            <p>
+              {node.name} &#8211; <span className="node__type">{node.type}</span>
+            </p>
             <ButtonGroup>
-              <Button>
+              <Button onClick={this.handleEditModalOpen}>
                 <EditIcon />
               </Button>
-              <Button>
+              <Button onClick={this.handleUsersModalOpen}>
                 <PeopleAltIcon />
               </Button>
               <Button>
@@ -70,6 +100,12 @@ export default class NodeView extends Component<Props, State> {
           </div>
           <img className="node-header-image" src={node.image} alt="sky"></img>
         </div>
+        <Modal open={this.state.editModalOpen} onClose={this.handleEditModalClose}>
+          <p>EDIT MODAL</p>
+        </Modal>
+        <Modal open={this.state.usersModalOpen} onClose={this.handleUsersModalClose}>
+          <p>EDIT MODAL</p>
+        </Modal>
         {this.renderSubnodes()}
       </div>
     );
