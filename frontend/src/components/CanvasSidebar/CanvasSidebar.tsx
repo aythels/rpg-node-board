@@ -1,7 +1,7 @@
 import './canvasSidebar.css';
 import { Avatar, Button, IconButton, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
-import { Close, Delete, Done, Edit, HighlightOff, PersonAdd, PersonOutline } from '@mui/icons-material';
+import { Close, Delete, Done, Edit, HighlightOff, Person, PersonAdd, PersonOutline } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { User } from '../../types';
 // eslint-disable-next-line
@@ -12,6 +12,7 @@ interface Props {
   onInviteUserClicked: (username: string) => void;
   onRemoveUserClicked: (user: User) => void;
   onSubmitTitleClicked: (newTitle: string) => void;
+  onPromoteButtonClicked: (id: number) => void;
   users: User[];
   gameTitle: string;
   gameMasterIds: number[];
@@ -111,26 +112,39 @@ export default class CanvasSidebar extends Component<Props, State> {
           </div>
         </div>
         <div className="player-list">
-          {this.props.users.map((user: User) => (
-            <div key={uuid()} className="player-card">
-              <IconButton aria-label="Remove player" component="span">
-                <PersonOutline />
-              </IconButton>
-              <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
-              <div className="player-card__name">{`@${user.username}`}</div>
-              {!this.props.gameMasterIds.includes(user.id) && (
-                <div className="button--remove">
+          {this.props.users.map((user: User) => {
+            const isGameMaster = this.props.gameMasterIds.includes(user.id);
+            return (
+              <div key={uuid()} className="player-card">
+                {isGameMaster ? (
+                  <IconButton disabled aria-label="Remove player" component="span">
+                    <Person />
+                  </IconButton>
+                ) : (
                   <IconButton
                     aria-label="Remove player"
                     component="span"
-                    onClick={() => this.props.onRemoveUserClicked(user)}
+                    onClick={() => this.props.onPromoteButtonClicked(user.id)}
                   >
-                    <HighlightOff />
+                    <PersonOutline />
                   </IconButton>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+                <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
+                <div className="player-card__name">{`@${user.username}`}</div>
+                {!isGameMaster && (
+                  <div className="button--remove">
+                    <IconButton
+                      aria-label="Remove player"
+                      component="span"
+                      onClick={() => this.props.onRemoveUserClicked(user)}
+                    >
+                      <HighlightOff />
+                    </IconButton>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
         <div className="footer">
           <div className="footer__item__wrapper">
@@ -175,11 +189,11 @@ export default class CanvasSidebar extends Component<Props, State> {
 }
 
 // TODO:
-// - admins first
-// - user promote
-// - game name bind
-// - game name change
-// - modals
+// - fix colours
 // - fix css class name
+
 // - prevent suggestions in game name
-// - improve colors - delete button, cancel button in edit
+// - make colors semantic - delete button, cancel button in edit
+// - replace alert with modals
+// - add tooltips
+// - add aria labels

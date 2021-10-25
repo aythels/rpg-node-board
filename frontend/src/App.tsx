@@ -5,6 +5,7 @@ import {
   GETuserById,
   GETuserByUsername,
   addUserToGame,
+  promoteUserToGameMaster,
   removeUserFromGame,
   updateGameName,
 } from './mock-backend';
@@ -65,6 +66,23 @@ function App(): JSX.Element {
     updateGameName(game.id, newTitle);
   };
 
+  const handlePromoteButtonClicked = (id: number) => {
+    setGame((prevGame) => ({
+      ...prevGame,
+      gms: [...prevGame.gms, id],
+    }));
+
+    // Temp: Mock updating data on the backend
+    promoteUserToGameMaster(id, game.id);
+  };
+
+  const prioritizeGameMasters = (users: User[]) => {
+    return [
+      ...users.filter((user: User) => game.gms.includes(user.id)),
+      ...users.filter((user: User) => !game.gms.includes(user.id)),
+    ];
+  };
+
   return (
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
@@ -80,8 +98,9 @@ function App(): JSX.Element {
                 <CanvasSidebar
                   gameMasterIds={game.gms}
                   gameTitle={game.title}
-                  users={users}
+                  users={prioritizeGameMasters(users)}
                   onInviteUserClicked={handleInviteUserClicked}
+                  onPromoteButtonClicked={handlePromoteButtonClicked}
                   onRemoveUserClicked={handleRemoveUserClicked}
                   onSubmitTitleClicked={handleSubmitTitleClicked}
                 />

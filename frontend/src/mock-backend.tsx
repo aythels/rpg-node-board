@@ -100,6 +100,10 @@ export const updateGameName = (gameId: number, title: string): void => {
   // ...
 };
 
+export const promoteUserToGameMaster = (userId: number, gameId: number) => {
+  // ...
+};
+
 export const GETgame = (id: number): Game => {
   return allGames.filter((game) => game.id === id)[0];
 };
