@@ -29,10 +29,15 @@ export default class CanvasSidebar extends Component<Props, State> {
   };
 
   handleInviteUserClicked = (): void => {
-    this.props.onInviteUserClicked(this.state.inviteName);
-    this.setState({
-      inviteName: '',
-    });
+    const alreadyAdded = this.props.users.find((user: User) => user.username === this.state.inviteName);
+    if (alreadyAdded) {
+      alert(`This user is already in the game!`);
+    } else {
+      this.props.onInviteUserClicked(this.state.inviteName);
+      this.setState({
+        inviteName: '',
+      });
+    }
   };
 
   render(): JSX.Element {
@@ -113,9 +118,9 @@ export default class CanvasSidebar extends Component<Props, State> {
 }
 
 // TODO:
+// - admins first
 // - user promote
 // - game name bind
 // - game name change
 // - modals
-// - handle user already added
 // - fix css class name
