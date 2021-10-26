@@ -9607,7 +9607,7 @@
     "extend" "^3.0.2"
     "fast-diff" "1.1.2"
 
-"quill-delta@^4.0.1":
+"quill-delta@^4.0.1", "quill-delta@^4.2.2":
   "integrity" "sha512-qjbn82b/yJzOjstBgkhtBjN2TNK+ZHP/BgUQO+j6bRhWQQdmj2lH6hXG7+nwwLF41Xgn//7/83lxs9n2BkTtTg=="
   "resolved" "https://registry.npmjs.org/quill-delta/-/quill-delta-4.2.2.tgz"
   "version" "4.2.2"
