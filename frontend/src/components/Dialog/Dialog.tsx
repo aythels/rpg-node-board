@@ -13,7 +13,7 @@ interface Props {
   description: string;
   header: string;
   onAgree?: () => void;
-  onAgreeRedirectTo: string;
+  onAgreeRedirectTo?: string;
   onClose: () => void;
   onDisagree?: () => void;
   open: boolean;

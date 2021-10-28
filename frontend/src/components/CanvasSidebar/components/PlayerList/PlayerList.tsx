@@ -6,22 +6,12 @@ import { User } from '../../../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
 import uuid from 'react-uuid';
+import Dialog from '../../../Dialog/Dialog';
 
 interface Handlers {
   onRemoveUserClicked: (user: User) => void;
   onPromoteClicked: (id: number) => void;
   onDemoteClicked: (id: number) => void;
-}
-
-interface Props extends Handlers {
-  currentUserId: number;
-  users: User[];
-  gameMasterIds: number[];
-}
-
-interface State {
-  inviteName: string;
-  showUserAlreadyInGameModal: boolean;
 }
 
 interface PlayerCardProps extends Handlers {
@@ -69,7 +59,29 @@ class PlayerCard extends PureComponent<PlayerCardProps> {
   }
 }
 
+interface Props extends Handlers {
+  currentUserId: number;
+  users: User[];
+  gameMasterIds: number[];
+}
+
+interface State {
+  showRemoveUserDialog: boolean;
+  userToRemove?: User;
+}
+
 export default class PlayerList extends Component<Props, State> {
+  state: State = {
+    showRemoveUserDialog: false,
+  };
+
+  handleUserRemove = (): void => {
+    if (this.state.userToRemove) {
+      this.props.onRemoveUserClicked(this.state.userToRemove);
+    }
+    this.setState({ showRemoveUserDialog: false, userToRemove: undefined });
+  };
+
   render(): JSX.Element {
     return (
       <div className="player-list">
@@ -84,10 +96,20 @@ export default class PlayerList extends Component<Props, State> {
               user={user}
               onDemoteClicked={this.props.onDemoteClicked}
               onPromoteClicked={this.props.onPromoteClicked}
-              onRemoveUserClicked={this.props.onRemoveUserClicked}
+              onRemoveUserClicked={(userToRemove: User) => {
+                this.setState({ showRemoveUserDialog: true, userToRemove });
+              }}
             />
           );
         })}
+        <Dialog
+          description="Doing so will prevent them from re-joining the game."
+          header="Remove user?"
+          open={this.state.showRemoveUserDialog}
+          onAgree={this.handleUserRemove}
+          onClose={() => this.setState({ showRemoveUserDialog: false, userToRemove: undefined })}
+          onDisagree={() => this.setState({ showRemoveUserDialog: false, userToRemove: undefined })}
+        />
       </div>
     );
   }
