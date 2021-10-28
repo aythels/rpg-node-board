@@ -83,6 +83,7 @@ export default class CanvasSidebar extends Component<Props, State> {
         <div className="header">
           <div className="header__title">
             <TextField
+              className="header__title__textfield"
               disabled={!this.state.editingTitle}
               id="outlined-basic"
               value={this.state.title}
