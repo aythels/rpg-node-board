@@ -9,6 +9,7 @@ import { User } from '../../types';
 import uuid from 'react-uuid';
 
 interface Props {
+  currentUserId: number;
   onInviteUserClicked: (username: string) => void;
   onRemoveUserClicked: (user: User) => void;
   onSubmitTitleClicked: (newTitle: string) => void;
@@ -83,6 +84,7 @@ export default class CanvasSidebar extends Component<Props, State> {
         <div className="header">
           <div className="header__title">
             <TextField
+              autoComplete="off"
               className="header__title__textfield"
               disabled={!this.state.editingTitle}
               id="outlined-basic"
@@ -116,6 +118,7 @@ export default class CanvasSidebar extends Component<Props, State> {
         <div className="player-list">
           {this.props.users.map((user: User) => {
             const isGameMaster = this.props.gameMasterIds.includes(user.id);
+            const isCurrentPlayer = user.id === this.props.currentUserId;
             return (
               <div key={uuid()} className="player-card">
                 {isGameMaster ? (
@@ -137,7 +140,7 @@ export default class CanvasSidebar extends Component<Props, State> {
                 )}
                 <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
                 <div className="player-card__name">{`@${user.username}`}</div>
-                {!isGameMaster && (
+                {!isGameMaster && !isCurrentPlayer && (
                   <div className="button--remove">
                     <IconButton
                       aria-label="Remove player"
@@ -195,13 +198,16 @@ export default class CanvasSidebar extends Component<Props, State> {
 }
 
 // TODO:
-// - handle removing yourself - navigate back to homepage: https://www.telerik.com/blogs/programmatically-navigate-with-react-router
 // - fix colours
+// -> make colors semantic - delete button, cancel button in edit
 // - fix css class naming
 
-// - prevent suggestions in game name
 // - highlight personal user bubble?
-// - make colors semantic - delete button, cancel button in edit
-// - replace alert with modals
-// - add tooltips
+
+// add modals:
+// - delete server
+// - remove player
+
 // - add/check aria labels
+
+// - add tooltips
