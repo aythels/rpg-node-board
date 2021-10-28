@@ -1,0 +1,31 @@
+.footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 1px solid lightgray;
+}
+
+.footer__item {
+  margin: 0.5rem;
+}
+
+.footer__item--inner {
+  width: 100%;
+}
+
+.footer__button--invite {
+  background-color: rgb(29, 160, 160);
+}
+
+.footer__button--invite:hover {
+  background-color: darkcyan;
+}
+
+.footer__button--delete {
+  background-color: rgb(158, 30, 30);
+}
+
+.footer__button--delete:hover {
+  background-color: darkred;
+}

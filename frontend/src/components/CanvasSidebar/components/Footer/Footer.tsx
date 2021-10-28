@@ -1,3 +1,4 @@
+import './footer.css';
 import { Button, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
@@ -23,9 +24,10 @@ export default class Footer extends Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className="footer">
-        <div className="footer__item__wrapper">
+        <div className="footer__item">
           <TextField
-            className="footer__item"
+            autoComplete="off"
+            className="footer__item--inner"
             id="outlined-basic"
             label="Player name"
             value={this.state.inviteName}
@@ -33,10 +35,10 @@ export default class Footer extends Component<Props, State> {
             onChange={this.handleInviteNameChanged}
           />
         </div>
-        <div className="footer__item__wrapper">
+        <div className="footer__item">
           <Button
             aria-label="invite user to the game"
-            className="footer__item"
+            className="footer__button--invite footer__item--inner"
             disabled={!this.state.inviteName}
             startIcon={<PersonAdd />}
             variant="contained"
@@ -50,10 +52,15 @@ export default class Footer extends Component<Props, State> {
             Invite user
           </Button>
         </div>
-        <div className="footer__item__wrapper">
+        <div className="footer__item">
           {/* TODO: update link target */}
           <Link style={{ textDecoration: 'none' }} to=".">
-            <Button aria-label="delete game server" className="footer__item" startIcon={<Delete />} variant="contained">
+            <Button
+              aria-label="delete game server"
+              className="footer__button--delete  footer__item--inner"
+              startIcon={<Delete />}
+              variant="contained"
+            >
               Delete server
             </Button>
           </Link>

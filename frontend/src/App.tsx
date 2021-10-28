@@ -112,7 +112,7 @@ function App(): JSX.Element {
             path="/sidebar"
             render={() => (
               // TODO: replace wrapper with canvas
-              <div style={{ backgroundColor: 'red', height: '100vh' }}>
+              <div style={{ backgroundColor: 'lightgray', height: '100vh' }}>
                 <CanvasSidebar
                   currentUserId={2}
                   gameMasterIds={game.gms}

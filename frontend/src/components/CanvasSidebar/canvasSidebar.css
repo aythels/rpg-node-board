@@ -1,25 +1,9 @@
 .sidebar {
-  background-color: blue;
+  background-color: gray;
   height: 100vh;
   width: 22.5%;
   float: right;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-
-.footer {
-  background-color: yellow;
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.footer__item__wrapper {
-  margin: 0.5rem;
-}
-
-.footer__item {
-  width: 100%;
 }

@@ -62,10 +62,6 @@ export default class CanvasSidebar extends Component<Props, State> {
 }
 
 // TODO:
-// - fix colours
-// -> make colors semantic - delete button, cancel button in edit
-
-// - highlight personal user bubble?
-
-// - add/check aria labels
-// - add tooltips
+// Modal
+// - confirm remove user
+// - confirm promote user
