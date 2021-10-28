@@ -8,28 +8,6 @@
   flex-direction: column;
 }
 
-.header {
-  background-color: green;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 0.5rem;
-  padding: 0.5rem;
-}
-
-.header__title {
-  flex-grow: 1;
-}
-
-.header__title__textfield {
-  width: 100%;
-}
-
-.header__button {
-  margin-left: auto;
-  white-space: nowrap;
-}
-
 .player-list {
   overflow: scroll;
 }

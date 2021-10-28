@@ -1,13 +1,14 @@
 import './canvasSidebar.css';
 import { Avatar, Button, IconButton, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
-import { Close, Delete, Done, Edit, HighlightOff, Person, PersonAdd, PersonOutline } from '@mui/icons-material';
+import { Delete, HighlightOff, Person, PersonAdd, PersonOutline } from '@mui/icons-material';
+import Header from './components/Header';
 import { Link } from 'react-router-dom';
+import Modal from '../Modal/Modal';
 import { User } from '../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
 import uuid from 'react-uuid';
-import Modal from '../Modal/Modal';
 
 interface Props {
   currentUserId: number;
@@ -23,19 +24,13 @@ interface Props {
 
 interface State {
   inviteName: string;
-  editingTitle: boolean;
-  title: string;
   showUserAlreadyInGameModal: boolean;
 }
-
 export default class CanvasSidebar extends Component<Props, State> {
   state: State = {
     inviteName: '',
-    editingTitle: false,
-    title: this.props.gameTitle,
     showUserAlreadyInGameModal: false,
   };
-  prevTitle = '';
 
   // Handlers related to user invites
   handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -56,70 +51,10 @@ export default class CanvasSidebar extends Component<Props, State> {
     }
   };
 
-  // Handlers related to game title
-  handleTitleChanged = (event: ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ title: event.target.value });
-  };
-
-  handleEditTitleClicked = (): void => {
-    this.prevTitle = this.state.title;
-    this.setState({
-      editingTitle: true,
-    });
-  };
-
-  handleSubmitTitleClicked = (): void => {
-    this.setState({
-      editingTitle: false,
-    });
-    this.props.onSubmitTitleClicked(this.state.title);
-  };
-
-  handleCancelEditClicked = (): void => {
-    this.setState({
-      title: this.prevTitle,
-      editingTitle: false,
-    });
-    this.prevTitle = '';
-  };
-
   render(): JSX.Element {
     return (
       <div className="sidebar">
-        <div className="header">
-          <div className="header__title">
-            <TextField
-              autoComplete="off"
-              className="header__title__textfield"
-              disabled={!this.state.editingTitle}
-              id="outlined-basic"
-              value={this.state.title}
-              variant="outlined"
-              onChange={this.handleTitleChanged}
-            />
-          </div>
-          <div className="header__button">
-            {this.state.editingTitle ? (
-              <>
-                <IconButton
-                  aria-label="Edit game name"
-                  component="span"
-                  disabled={!this.state.title}
-                  onClick={this.handleSubmitTitleClicked}
-                >
-                  <Done />
-                </IconButton>
-                <IconButton aria-label="Edit game name" component="span" onClick={this.handleCancelEditClicked}>
-                  <Close />
-                </IconButton>
-              </>
-            ) : (
-              <IconButton aria-label="Edit game name" component="span" onClick={this.handleEditTitleClicked}>
-                <Edit />
-              </IconButton>
-            )}
-          </div>
-        </div>
+        <Header title={this.props.gameTitle} onSubmitTitleClicked={this.props.onSubmitTitleClicked} />
         <div className="player-list">
           {this.props.users.map((user: User) => {
             const isGameMaster = this.props.gameMasterIds.includes(user.id);
