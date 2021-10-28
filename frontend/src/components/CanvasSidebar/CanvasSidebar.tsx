@@ -1,5 +1,5 @@
 import './canvasSidebar.css';
-import { Avatar, Button, IconButton, TextField } from '@mui/material';
+import { Avatar, Box, Button, IconButton, Modal, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Close, Delete, Done, Edit, HighlightOff, Person, PersonAdd, PersonOutline } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
@@ -24,6 +24,7 @@ interface State {
   inviteName: string;
   editingTitle: boolean;
   title: string;
+  showUserAlreadyInGameModal: boolean;
 }
 
 export default class CanvasSidebar extends Component<Props, State> {
@@ -31,6 +32,7 @@ export default class CanvasSidebar extends Component<Props, State> {
     inviteName: '',
     editingTitle: false,
     title: this.props.gameTitle,
+    showUserAlreadyInGameModal: false,
   };
   prevTitle = '';
 
@@ -42,7 +44,9 @@ export default class CanvasSidebar extends Component<Props, State> {
   handleInviteUserClicked = (): void => {
     const alreadyAdded = this.props.users.find((user: User) => user.username === this.state.inviteName);
     if (alreadyAdded) {
-      alert(`This user is already in the game!`);
+      this.setState({
+        showUserAlreadyInGameModal: true,
+      });
     } else {
       this.props.onInviteUserClicked(this.state.inviteName);
       this.setState({
@@ -192,12 +196,24 @@ export default class CanvasSidebar extends Component<Props, State> {
             </Link>
           </div>
         </div>
+        <Modal
+          aria-describedby="modal-modal-description"
+          aria-labelledby="modal-modal-title"
+          open={this.state.showUserAlreadyInGameModal}
+          onClose={() => this.setState({ showUserAlreadyInGameModal: false })}
+        >
+          <Box className="modal__box">
+            <h1 id="modal-modal-title">This user is already in the game!</h1>
+            <p id="modal-modal-description">You cannot add the same user twice.</p>
+          </Box>
+        </Modal>
       </div>
     );
   }
 }
 
 // TODO:
+// - code refactor
 // - fix colours
 // -> make colors semantic - delete button, cancel button in edit
 // - fix css class naming
