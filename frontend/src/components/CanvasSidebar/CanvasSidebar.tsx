@@ -1,5 +1,5 @@
 import './canvasSidebar.css';
-import { Avatar, Box, Button, IconButton, Modal, TextField } from '@mui/material';
+import { Avatar, Button, IconButton, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Close, Delete, Done, Edit, HighlightOff, Person, PersonAdd, PersonOutline } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { User } from '../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
 import uuid from 'react-uuid';
+import Modal from '../Modal/Modal';
 
 interface Props {
   currentUserId: number;
@@ -197,16 +198,11 @@ export default class CanvasSidebar extends Component<Props, State> {
           </div>
         </div>
         <Modal
-          aria-describedby="modal-modal-description"
-          aria-labelledby="modal-modal-title"
+          description="You cannot add the same user twice."
+          header="This user is already in the game!"
           open={this.state.showUserAlreadyInGameModal}
           onClose={() => this.setState({ showUserAlreadyInGameModal: false })}
-        >
-          <Box className="modal__box">
-            <h1 id="modal-modal-title">This user is already in the game!</h1>
-            <p id="modal-modal-description">You cannot add the same user twice.</p>
-          </Box>
-        </Modal>
+        />
       </div>
     );
   }
