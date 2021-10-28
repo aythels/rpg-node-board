@@ -65,3 +65,6 @@ export default class CanvasSidebar extends Component<Props, State> {
 // Modal
 // - confirm remove user
 // - confirm promote user
+
+// description="Doing so will prevent them from re-joining the game."
+//           header="Remove user?"

@@ -2,7 +2,7 @@ import './footer.css';
 import { Button, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import Dialog from '../../../Dialog/Dialog';
 
 interface Props {
   onInviteUserClicked: (username: string) => void;
@@ -10,11 +10,13 @@ interface Props {
 
 interface State {
   inviteName: string;
+  showDeleteServerDialog: boolean;
 }
 
 export default class Footer extends Component<Props, State> {
   state: State = {
     inviteName: '',
+    showDeleteServerDialog: false,
   };
 
   handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -55,18 +57,25 @@ export default class Footer extends Component<Props, State> {
           </Button>
         </div>
         <div className="footer__item">
-          {/* TODO: update link target */}
-          <Link style={{ textDecoration: 'none' }} to=".">
-            <Button
-              aria-label="delete game server"
-              className="footer__button--delete footer__item--inner"
-              startIcon={<Delete />}
-              variant="contained"
-            >
-              Delete server
-            </Button>
-          </Link>
+          <Button
+            aria-label="delete game server"
+            className="footer__button--delete footer__item--inner"
+            startIcon={<Delete />}
+            variant="contained"
+            onClick={() => this.setState({ showDeleteServerDialog: true })}
+          >
+            Delete server
+          </Button>
         </div>
+        <Dialog
+          description="Doing so will immediately end the session and remove the game."
+          header="Delete server?"
+          open={this.state.showDeleteServerDialog}
+          onAgree={() => this.setState({ showDeleteServerDialog: false })}
+          onAgreeRedirectTo="." // TODO: update target
+          onClose={() => this.setState({ showDeleteServerDialog: false })}
+          onDisagree={() => this.setState({ showDeleteServerDialog: false })}
+        />
       </div>
     );
   }
