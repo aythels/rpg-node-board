@@ -13,9 +13,9 @@ import {
 import { Game, User } from './types';
 import { ThemeProvider, createTheme } from '@mui/material';
 import CanvasSidebar from './components/CanvasSidebar/CanvasSidebar';
+import Dialog from './components/Dialog/Dialog';
 import DummyComponent from './components/DummyComponent';
 import Home from './components/Home';
-import Modal from './components/Modal/Modal';
 import { useState } from 'react';
 
 function App(): JSX.Element {
@@ -129,12 +129,13 @@ function App(): JSX.Element {
           />
         </Switch>
       </BrowserRouter>
-      <Modal
+      <Dialog
+        description="Please try again."
         header="The user could not be found!"
         open={showUserNotFoundModal}
         onClose={() => setShowUserNotFoundModal(false)}
       />
-      <Modal
+      <Dialog
         description="A game must have at least one game master at all times."
         header="Cannot demote last game master"
         open={showDemoteLastGmModal}

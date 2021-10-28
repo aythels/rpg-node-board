@@ -2,9 +2,10 @@ import './canvasSidebar.css';
 import { Component } from 'react';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
-import Modal from '../Modal/Modal';
+
 import PlayerList from './components/PlayerList/PlayerList';
 import { User } from '../../types';
+import Dialog from '../Dialog/Dialog';
 
 interface Props {
   currentUserId: number;
@@ -50,7 +51,7 @@ export default class CanvasSidebar extends Component<Props, State> {
           onRemoveUserClicked={this.props.onRemoveUserClicked}
         />
         <Footer onInviteUserClicked={this.handleInviteUserClicked} />
-        <Modal
+        <Dialog
           description="You cannot add the same user twice."
           header="This user is already in the game!"
           open={this.state.showUserAlreadyInGameModal}
@@ -60,8 +61,3 @@ export default class CanvasSidebar extends Component<Props, State> {
     );
   }
 }
-
-// TODO:
-// Modal
-// - confirm remove user
-// - confirm promote user

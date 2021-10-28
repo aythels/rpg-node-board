@@ -12,15 +12,16 @@ import { PureComponent } from 'react';
 interface Props {
   description: string;
   header: string;
+  open: boolean;
+  onClose: () => void;
   onAgree?: () => void;
   onAgreeRedirectTo?: string;
-  onClose: () => void;
   onDisagree?: () => void;
-  open: boolean;
 }
 
 export default class Dialog extends PureComponent<Props> {
   render(): JSX.Element {
+    const showActions = this.props.onDisagree && (this.props.onAgree || this.props.onAgreeRedirectTo);
     return (
       // Code retrieved from: https://mui.com/components/modal/#BasicModal.tsx
       <MuiDialog
@@ -33,16 +34,18 @@ export default class Dialog extends PureComponent<Props> {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">{this.props.description}</DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={this.props.onDisagree}>Disagree</Button>
-          {this.props.onAgreeRedirectTo ? (
-            <Link style={{ textDecoration: 'none' }} to={this.props.onAgreeRedirectTo}>
+        {showActions && (
+          <DialogActions>
+            <Button onClick={this.props.onDisagree}>Disagree</Button>
+            {this.props.onAgreeRedirectTo ? (
+              <Link style={{ textDecoration: 'none' }} to={this.props.onAgreeRedirectTo}>
+                <Button onClick={this.props.onAgree}>Agree</Button>
+              </Link>
+            ) : (
               <Button onClick={this.props.onAgree}>Agree</Button>
-            </Link>
-          ) : (
-            <Button onClick={this.props.onAgree}>Agree</Button>
-          )}
-        </DialogActions>
+            )}
+          </DialogActions>
+        )}
       </MuiDialog>
     );
   }
