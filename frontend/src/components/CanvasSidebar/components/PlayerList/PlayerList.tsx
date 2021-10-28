@@ -25,24 +25,16 @@ interface State {
 }
 
 interface PlayerCardProps extends Handlers {
-  allowDemote: boolean;
-  allowRemove: boolean;
+  promotable: boolean;
+  removable: boolean;
   user: User;
 }
 class PlayerCard extends PureComponent<PlayerCardProps> {
   render() {
-    const { allowDemote, allowRemove, user } = this.props;
+    const { promotable, removable, user } = this.props;
     return (
       <div className="player-list__card">
-        {allowDemote ? (
-          <IconButton
-            aria-label={`Demote game master ${user.username} to regular player`}
-            component="span"
-            onClick={() => this.props.onDemoteClicked(user.id)}
-          >
-            <Person />
-          </IconButton>
-        ) : (
+        {promotable ? (
           <IconButton
             aria-label={`Promote player ${user.username} to game master`}
             component="span"
@@ -50,10 +42,18 @@ class PlayerCard extends PureComponent<PlayerCardProps> {
           >
             <PersonOutline />
           </IconButton>
+        ) : (
+          <IconButton
+            aria-label={`Demote game master ${user.username} to regular player`}
+            component="span"
+            onClick={() => this.props.onDemoteClicked(user.id)}
+          >
+            <Person />
+          </IconButton>
         )}
         <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
         <div className="player-list__card__name">{`@${user.username}`}</div>
-        {allowRemove && (
+        {removable && (
           <div className="button--remove">
             <IconButton
               aria-label="Remove player"
@@ -79,8 +79,8 @@ export default class PlayerList extends Component<Props, State> {
           return (
             <PlayerCard
               key={uuid()}
-              allowDemote={!isGameMaster}
-              allowRemove={!isGameMaster && !isCurrentPlayer}
+              promotable={!isGameMaster}
+              removable={!isGameMaster && !isCurrentPlayer}
               user={user}
               onDemoteClicked={this.props.onDemoteClicked}
               onPromoteClicked={this.props.onPromoteClicked}
