@@ -56,6 +56,62 @@ const globalUsers = [
     email: 'admin@admin.com',
     games: [1],
   },
+  {
+    id: 3,
+    username: 'user2',
+    password: 'user2',
+    email: 'user2@user.com',
+    games: [1],
+  },
+  {
+    id: 4,
+    username: 'user3',
+    password: 'user3',
+    email: 'user3@user.com',
+    games: [1],
+  },
+  {
+    id: 5,
+    username: 'user4',
+    password: 'user4',
+    email: 'user4@user.com',
+    games: [1],
+  },
+  {
+    id: 6,
+    username: 'user5',
+    password: 'user5',
+    email: 'user5@user.com',
+    games: [1],
+  },
+  {
+    id: 7,
+    username: 'user6',
+    password: 'user6',
+    email: 'user6@user.com',
+    games: [1],
+  },
+  {
+    id: 8,
+    username: 'user7',
+    password: 'user7',
+    email: 'user7@user.com',
+    games: [1],
+  },
+  {
+    id: 9,
+    username: 'user8',
+    password: 'user8',
+    email: 'user8@user.com',
+    games: [1],
+  },
+  {
+    id: 10,
+    username: 'user8',
+    password: 'user8',
+    email: 'user8@user.com',
+    games: [1],
+  },
 ];
 
 const game1: Game = {
@@ -64,7 +120,7 @@ const game1: Game = {
   nodes: [1],
   players: [1],
   gms: [2],
-  users: [1, 2],
+  users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   settings: {},
 };
 
