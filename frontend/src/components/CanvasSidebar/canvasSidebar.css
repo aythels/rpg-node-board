@@ -8,37 +8,12 @@
   flex-direction: column;
 }
 
-.player-list {
-  overflow: scroll;
-}
-
-.player-card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: orange;
-  height: 3rem;
-  margin: 0.5rem;
-  padding: 0.1rem;
-  border-radius: 0.5rem;
-}
-
-.player-card__name {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  overflow: hidden;
-}
-
 .footer {
   background-color: yellow;
   margin-top: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.button--remove {
-  margin-left: auto;
 }
 
 .footer__item__wrapper {

@@ -1,0 +1,24 @@
+.player-list {
+  overflow: scroll;
+}
+
+.player-list__card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: orange;
+  height: 3rem;
+  margin: 0.5rem;
+  padding: 0.1rem;
+  border-radius: 0.5rem;
+}
+
+.player-list__card__name {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  overflow: hidden;
+}
+
+.button--remove {
+  margin-left: auto;
+}

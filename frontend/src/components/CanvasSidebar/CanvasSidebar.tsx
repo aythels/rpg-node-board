@@ -1,14 +1,12 @@
 import './canvasSidebar.css';
-import { Avatar, Button, IconButton, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
-import { Delete, HighlightOff, Person, PersonAdd, PersonOutline } from '@mui/icons-material';
-import Header from './components/Header';
+import { Delete, PersonAdd } from '@mui/icons-material';
+import Header from './components/Header/Header';
 import { Link } from 'react-router-dom';
 import Modal from '../Modal/Modal';
+import PlayerList from './components/PlayerList/PlayerList';
 import { User } from '../../types';
-// eslint-disable-next-line
-// @ts-ignore react-uuid has no type declaration file
-import uuid from 'react-uuid';
 
 interface Props {
   currentUserId: number;
@@ -55,46 +53,14 @@ export default class CanvasSidebar extends Component<Props, State> {
     return (
       <div className="sidebar">
         <Header title={this.props.gameTitle} onSubmitTitleClicked={this.props.onSubmitTitleClicked} />
-        <div className="player-list">
-          {this.props.users.map((user: User) => {
-            const isGameMaster = this.props.gameMasterIds.includes(user.id);
-            const isCurrentPlayer = user.id === this.props.currentUserId;
-            return (
-              <div key={uuid()} className="player-card">
-                {isGameMaster ? (
-                  <IconButton
-                    aria-label={`Demote game master ${user.username} to regular player`}
-                    component="span"
-                    onClick={() => this.props.onDemoteClicked(user.id)}
-                  >
-                    <Person />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    aria-label={`Promote player ${user.username} to game master`}
-                    component="span"
-                    onClick={() => this.props.onPromoteClicked(user.id)}
-                  >
-                    <PersonOutline />
-                  </IconButton>
-                )}
-                <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
-                <div className="player-card__name">{`@${user.username}`}</div>
-                {!isGameMaster && !isCurrentPlayer && (
-                  <div className="button--remove">
-                    <IconButton
-                      aria-label="Remove player"
-                      component="span"
-                      onClick={() => this.props.onRemoveUserClicked(user)}
-                    >
-                      <HighlightOff />
-                    </IconButton>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <PlayerList
+          currentUserId={this.props.currentUserId}
+          gameMasterIds={this.props.gameMasterIds}
+          users={this.props.users}
+          onDemoteClicked={this.props.onDemoteClicked}
+          onPromoteClicked={this.props.onPromoteClicked}
+          onRemoveUserClicked={this.props.onRemoveUserClicked}
+        />
         <div className="footer">
           <div className="footer__item__wrapper">
             <TextField
@@ -144,13 +110,13 @@ export default class CanvasSidebar extends Component<Props, State> {
 }
 
 // TODO:
-// - code refactor
+// - fix bug in playerlist - demote promote not working
+// - refactor footer
+
 // - fix colours
 // -> make colors semantic - delete button, cancel button in edit
-// - fix css class naming
 
 // - highlight personal user bubble?
 
 // - add/check aria labels
-
 // - add tooltips
