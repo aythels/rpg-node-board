@@ -36,13 +36,13 @@ export default class Dialog extends PureComponent<Props> {
         </DialogContent>
         {showActions && (
           <DialogActions>
-            <Button onClick={this.props.onDisagree}>Disagree</Button>
+            <Button onClick={this.props.onDisagree}>No</Button>
             {this.props.onAgreeRedirectTo ? (
               <Link style={{ textDecoration: 'none' }} to={this.props.onAgreeRedirectTo}>
-                <Button onClick={this.props.onAgree}>Agree</Button>
+                <Button onClick={this.props.onAgree}>Yes</Button>
               </Link>
             ) : (
-              <Button onClick={this.props.onAgree}>Agree</Button>
+              <Button onClick={this.props.onAgree}>Yes</Button>
             )}
           </DialogActions>
         )}
