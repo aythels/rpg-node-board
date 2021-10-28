@@ -15,6 +15,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import CanvasSidebar from './components/CanvasSidebar/CanvasSidebar';
 import DummyComponent from './components/DummyComponent';
 import Home from './components/Home';
+import Modal from './components/Modal/Modal';
 import { useState } from 'react';
 
 function App(): JSX.Element {
@@ -22,6 +23,9 @@ function App(): JSX.Element {
     // Note: to be edited later
     palette: {},
   });
+
+  const [showUserNotFoundModal, setShowUserNotFoundModal] = useState(false);
+  const [showDemoteLastGmModal, setShowDemoteLastGmModal] = useState(false);
 
   // Temp: Mock fetching data from backend
   const currentGameId = 7; // TODO: make part of state somewhere
@@ -42,7 +46,7 @@ function App(): JSX.Element {
       // Temp: Mock updating data on the backend
       addUserToGame(user, currentGameId);
     } else {
-      alert(`User ${username} could not be found!`);
+      setShowUserNotFoundModal(true);
     }
   };
 
@@ -79,7 +83,7 @@ function App(): JSX.Element {
 
   const handleDemoteClicked = (id: number) => {
     if (game.gms.length === 1) {
-      alert('Cannot demote last game master.');
+      setShowDemoteLastGmModal(true);
     } else {
       setGame((prevGame) => ({
         ...prevGame,
@@ -110,6 +114,7 @@ function App(): JSX.Element {
               // TODO: replace wrapper with canvas
               <div style={{ backgroundColor: 'red', height: '100vh' }}>
                 <CanvasSidebar
+                  currentUserId={2}
                   gameMasterIds={game.gms}
                   gameTitle={game.title}
                   users={prioritizeGameMasters(users)}
@@ -124,6 +129,17 @@ function App(): JSX.Element {
           />
         </Switch>
       </BrowserRouter>
+      <Modal
+        header="The user could not be found!"
+        open={showUserNotFoundModal}
+        onClose={() => setShowUserNotFoundModal(false)}
+      />
+      <Modal
+        description="A game must have at least one game master at all times."
+        header="Cannot demote last game master"
+        open={showDemoteLastGmModal}
+        onClose={() => setShowDemoteLastGmModal(false)}
+      />
     </ThemeProvider>
   );
 }

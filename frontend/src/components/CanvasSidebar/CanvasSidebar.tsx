@@ -216,10 +216,6 @@ export default class CanvasSidebar extends Component<Props, State> {
 
 // - highlight personal user bubble?
 
-// add modals:
-// - delete server
-// - remove player
-
 // - add/check aria labels
 
 // - add tooltips
