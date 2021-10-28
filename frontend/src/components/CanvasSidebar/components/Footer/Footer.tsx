@@ -25,20 +25,22 @@ export default class Footer extends Component<Props, State> {
     return (
       <div className="footer">
         <div className="footer__item">
-          <TextField
-            autoComplete="off"
-            className="footer__item--inner"
-            id="outlined-basic"
-            label="Player name"
-            value={this.state.inviteName}
-            variant="outlined"
-            onChange={this.handleInviteNameChanged}
-          />
+          <div className="footer__text-field--wrapper">
+            <TextField
+              autoComplete="off"
+              className="footer__item--inner"
+              id="outlined-basic"
+              label="Player name"
+              value={this.state.inviteName}
+              variant="outlined"
+              onChange={this.handleInviteNameChanged}
+            />
+          </div>
         </div>
         <div className="footer__item">
           <Button
             aria-label="invite user to the game"
-            className="footer__button--invite footer__item--inner"
+            className="footer__item--inner"
             disabled={!this.state.inviteName}
             startIcon={<PersonAdd />}
             variant="contained"
@@ -57,7 +59,7 @@ export default class Footer extends Component<Props, State> {
           <Link style={{ textDecoration: 'none' }} to=".">
             <Button
               aria-label="delete game server"
-              className="footer__button--delete  footer__item--inner"
+              className="footer__button--delete footer__item--inner"
               startIcon={<Delete />}
               variant="contained"
             >

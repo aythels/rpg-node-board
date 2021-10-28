@@ -14,18 +14,16 @@
   width: 100%;
 }
 
-.footer__button--invite {
-  background-color: rgb(29, 160, 160);
-}
-
-.footer__button--invite:hover {
-  background-color: darkcyan;
-}
-
 .footer__button--delete {
-  background-color: rgb(158, 30, 30);
+  background-color: rgb(158, 30, 30) !important;
 }
 
 .footer__button--delete:hover {
-  background-color: darkred;
+  background-color: darkred !important;
+}
+
+.footer__text-field--wrapper {
+  background-color: lightgray;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
 }
