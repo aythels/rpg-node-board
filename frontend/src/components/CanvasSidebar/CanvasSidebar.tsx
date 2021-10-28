@@ -1,11 +1,11 @@
 import './canvasSidebar.css';
 import { Component } from 'react';
+import Dialog from '../Dialog/Dialog';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 
 import PlayerList from './components/PlayerList/PlayerList';
 import { User } from '../../types';
-import Dialog from '../Dialog/Dialog';
 
 interface Props {
   currentUserId: number;

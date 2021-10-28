@@ -2,11 +2,11 @@ import './playerList.css';
 import { Avatar, IconButton } from '@mui/material';
 import { Component, PureComponent } from 'react';
 import { HighlightOff, Person, PersonOutline } from '@mui/icons-material';
+import Dialog from '../../../Dialog/Dialog';
 import { User } from '../../../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
 import uuid from 'react-uuid';
-import Dialog from '../../../Dialog/Dialog';
 
 interface Handlers {
   onRemoveUserClicked: (user: User) => void;
