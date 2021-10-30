@@ -2,6 +2,7 @@ import './subnodeview.css';
 import { Component } from 'react';
 import Quill from 'quill';
 import Delta from 'quill-delta';
+// import NodeLink from '../../NodeLink';
 import { Subnode, User } from '../../types';
 import { GETnodesInGame, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
 
@@ -38,6 +39,10 @@ const standardEditorToolbar = [
   ['image', 'code-block'],
   ['clean'],
 ];
+
+// Quill.register({
+//   'formats/nodelink': NodeLink,
+// });
 
 interface TextLink {
   location: number;

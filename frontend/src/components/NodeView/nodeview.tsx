@@ -1,44 +1,57 @@
 import './nodeview.css';
-import { Component } from 'react';
+import { Component, SyntheticEvent } from 'react';
 // import ReactQuill from 'react-quill';
 import SubnodeView from '../SubnodeView/subnodeview';
 import { uid } from 'react-uid';
-import { GETnodeById, GETsubnodesByNodeId, GETuserById } from '../../mock-backend';
-import { Node, Subnode, User } from '../../types';
+import {
+  GETgameById,
+  GETnodeById,
+  GETsubnodesVisibleToUser,
+  GETuserById,
+  GETuserCanEditNode,
+} from '../../mock-backend';
+import { Game, Node, Subnode, User } from '../../types';
 
 // MUI Components
-import { ButtonGroup, Button, Modal } from '@mui/material';
+import { ButtonGroup, Button } from '@mui/material';
 
 // Icons
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import NodeUserForm from '../NodeUserForm/nodeuserform';
 
 interface Props {
-  node_id: number;
-  user_id: number;
+  nodeId: number;
+  userId: number;
+  gameId: number;
 }
 
 interface State {
   node: Node;
   user: User;
-  subnodes: Array<Subnode>;
+  game: Game;
+  subnodes: Subnode[];
   editModalOpen: boolean;
   usersModalOpen: boolean;
+  imageModalOpen: boolean;
 }
 
 export default class NodeView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const node = GETnodeById(props.node_id);
-    const user = GETuserById(props.user_id);
-    const subnodes = GETsubnodesByNodeId(props.node_id);
+    const node = GETnodeById(props.nodeId);
+    const user = GETuserById(props.userId);
+    const subnodes = GETsubnodesVisibleToUser(props.nodeId, props.userId);
+    const game = GETgameById(props.gameId);
     this.state = {
       node: node,
       user: user,
+      game: game,
       subnodes: subnodes,
       editModalOpen: false,
       usersModalOpen: false,
+      imageModalOpen: false,
     };
   }
 
@@ -65,6 +78,12 @@ export default class NodeView extends Component<Props, State> {
     });
   };
 
+  handleImageModalOpen = (): void => {
+    this.setState({
+      imageModalOpen: true,
+    });
+  };
+
   handleEditModalClose = (): void => {
     this.setState({
       editModalOpen: false,
@@ -77,6 +96,42 @@ export default class NodeView extends Component<Props, State> {
     });
   };
 
+  handleImageModalClose = (): void => {
+    this.setState({
+      imageModalOpen: false,
+    });
+  };
+
+  renderMenu = (): JSX.Element | null => {
+    if (GETuserCanEditNode(this.state.user.id, this.state.node.id)) {
+      // It might be a good idea to make editability a state variable
+      return (
+        <ButtonGroup>
+          <Button onClick={this.handleEditModalOpen}>
+            <EditIcon />
+          </Button>
+          <Button onClick={this.handleUsersModalOpen}>
+            <PeopleAltIcon />
+          </Button>
+          <Button onClick={this.handleImageModalOpen}>
+            <InsertPhotoIcon />
+          </Button>
+        </ButtonGroup>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
+  handleUsersFormSubmit = (e: SyntheticEvent): void => {
+    if (!e.defaultPrevented) {
+      e.preventDefault();
+    }
+    console.log('(not actually) Updating permissions for node ' + this.state.node.name);
+    // const target = e.target as HTMLElement;
+    this.handleUsersModalClose();
+  };
+
   render(): JSX.Element {
     const node = this.state.node;
     return (
@@ -86,26 +141,39 @@ export default class NodeView extends Component<Props, State> {
             <p>
               {node.name} &#8211; <span className="node__type">{node.type}</span>
             </p>
-            <ButtonGroup>
-              <Button onClick={this.handleEditModalOpen}>
-                <EditIcon />
-              </Button>
-              <Button onClick={this.handleUsersModalOpen}>
-                <PeopleAltIcon />
-              </Button>
-              <Button>
-                <InsertPhotoIcon />
-              </Button>
-            </ButtonGroup>
+            {this.renderMenu()}
           </div>
           <img className="node-header-image" src={node.image} alt="sky"></img>
         </div>
-        <Modal open={this.state.editModalOpen} onClose={this.handleEditModalClose}>
+        {/* <Modal
+          open={this.state.editModalOpen}
+          onClose={this.handleEditModalClose}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
           <p>EDIT MODAL</p>
-        </Modal>
-        <Modal open={this.state.usersModalOpen} onClose={this.handleUsersModalClose}>
-          <p>EDIT MODAL</p>
-        </Modal>
+        </Modal> */}
+
+        {this.state.usersModalOpen ? (
+          <NodeUserForm
+            nodeId={this.state.node.id}
+            userId={this.state.user.id}
+            gameId={this.state.game.id}
+            closeCallback={this.handleUsersModalClose}
+            submitCallback={this.handleUsersFormSubmit}
+          />
+        ) : null}
+
+        {/* <Modal
+          open={this.state.imageModalOpen}
+          onClose={this.handleImageModalClose}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <input type="file"></input>
+        </Modal> */}
         {this.renderSubnodes()}
       </div>
     );

@@ -9,29 +9,43 @@ const globalSubnodes = [
   {
     id: 1,
     node_id: 1,
+    informationLevel: 1,
     editors: [2],
     type: 'description',
-    content: new Delta({ ops: [{ insert: 'A vast sky.' }] }),
+    name: 'Description',
+    content: new Delta({
+      ops: [
+        { insert: 'A vast sky. The ' },
+        { attributes: { link: '/nodeviewAdmin/3' }, insert: 'Lonely Path' },
+        { insert: ' can be found here.\n' },
+      ],
+    }),
   },
   {
     id: 2,
     node_id: 1,
+    informationLevel: 2,
     editors: [2],
     type: 'event',
+    name: 'Sky is Falling',
     content: new Delta({ ops: [{ insert: 'The sky is falling!' }] }),
   },
   {
     id: 3,
     node_id: 1,
+    informationLevel: 1,
     editors: [1],
     type: 'notes',
+    name: 'Notes',
     content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
   },
   {
     id: 4,
     node_id: 2,
+    informationLevel: 1,
     editors: [2],
     type: 'description',
+    name: 'Description',
     content: new Delta({
       ops: [
         { insert: 'A place of great knowledge. Near by ' },
@@ -43,8 +57,10 @@ const globalSubnodes = [
   {
     id: 5,
     node_id: 3,
+    informationLevel: 1,
     editors: [2],
     type: 'description',
+    name: 'Description',
     content: new Delta({
       ops: [
         { insert: 'Somewhere to walk underneath ' },
@@ -56,8 +72,10 @@ const globalSubnodes = [
   {
     id: 6,
     node_id: 4,
+    informationLevel: 1,
     editors: [2],
     type: 'description',
+    name: 'Description',
     content: new Delta({
       ops: [
         { insert: 'The center of UofT. Near ' },
@@ -73,36 +91,60 @@ const globalNodes = [
     id: 1,
     name: 'The Soaring Skies',
     image: '/images/sky.jpg',
-    image_alt: '',
+    imageAlt: '',
+    informationLevels: {
+      1: 0,
+      3: 1,
+      4: 1,
+      5: 2,
+    },
     subnodes: [],
-    editors: [],
+    editors: [2, 1],
     type: 'location',
   },
   {
     id: 2,
     name: 'Museum',
     image: '/images/museum.jpg',
-    image_alt: '',
+    imageAlt: '',
+    informationLevels: {
+      1: 0,
+      3: 1,
+      4: 1,
+      5: 2,
+    },
     subnodes: [],
-    editors: [],
+    editors: [2],
     type: 'location',
   },
   {
     id: 3,
     name: 'Lonely Path',
     image: '/images/path.jpg',
-    image_alt: '',
+    imageAlt: '',
+    informationLevels: {
+      1: 0,
+      3: 1,
+      4: 1,
+      5: 2,
+    },
     subnodes: [],
-    editors: [],
+    editors: [2],
     type: 'location',
   },
   {
     id: 4,
     name: 'St. George',
     image: '/images/stgeorge.jpg',
-    image_alt: '',
+    imageAlt: '',
+    informationLevels: {
+      1: 0,
+      3: 1,
+      4: 1,
+      5: 2,
+    },
     subnodes: [],
-    editors: [],
+    editors: [2],
     type: 'location',
   },
 ];
@@ -110,9 +152,9 @@ const globalNodes = [
 const globalUsers = [
   {
     id: 1,
-    username: 'user1',
-    password: 'user1',
-    email: 'user1@user.com',
+    username: 'user',
+    password: 'user',
+    email: 'user@user.com',
     games: [1],
   },
   {
@@ -120,6 +162,27 @@ const globalUsers = [
     username: 'admin',
     password: 'admin',
     email: 'admin@admin.com',
+    games: [1],
+  },
+  {
+    id: 3,
+    username: 'user1',
+    password: 'user1',
+    email: 'user1@user.com',
+    games: [1],
+  },
+  {
+    id: 4,
+    username: 'user2',
+    password: 'user2',
+    email: 'user2@user.com',
+    games: [1],
+  },
+  {
+    id: 5,
+    username: 'user3',
+    password: 'user3',
+    email: 'user3@user.com',
     games: [1],
   },
 ];
@@ -131,11 +194,14 @@ const globalGames = [
     players: [1],
     gms: [2],
     users: [1, 2],
+    title: 'Test Game',
     settings: {},
   },
 ];
 
 // Functions mocking backend behaviour go here:
+
+// TODO: change all filter()s to find()s
 
 export const GETnodeById = (id: number): Node => {
   return globalNodes.filter((node) => node.id == id)[0];
@@ -145,8 +211,16 @@ export const GETuserById = (id: number): User => {
   return globalUsers.filter((user) => user.id == id)[0];
 };
 
-export const GETsubnodesByNodeId = (node_id: number): Subnode[] => {
-  return globalSubnodes.filter((subnode) => subnode.node_id == node_id);
+export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnode[] => {
+  const node = GETnodeById(nodeId);
+  const allSubnodes = globalSubnodes.filter((subnode) => subnode.node_id == nodeId);
+  let visibleSubodes;
+  if (node.editors.includes(userId)) {
+    visibleSubodes = allSubnodes;
+  } else {
+    visibleSubodes = allSubnodes.filter((subnode) => subnode.informationLevel <= node.informationLevels[userId]);
+  }
+  return visibleSubodes;
 };
 
 export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
@@ -159,6 +233,11 @@ export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolea
   return subnode.editors.includes(userId);
 };
 
+export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
+  const node = globalNodes.filter((node) => node.id == nodeId)[0];
+  return node.editors.includes(userId);
+};
+
 export const GETnodesInGame = (gameId: number): Node[] => {
   const game = globalGames.filter((game) => game.id == gameId)[0];
   const nodes = [];
@@ -166,4 +245,30 @@ export const GETnodesInGame = (gameId: number): Node[] => {
     nodes.push(globalNodes[nodeid - 1]);
   }
   return nodes;
+};
+
+export const GETeditorsForNode = (nodeId: number): User[] => {
+  const node = globalNodes.filter((node) => node.id == nodeId)[0];
+  const users = globalUsers.filter((user) => node.editors.includes(user.id));
+  return users;
+};
+
+export const GETplayersForNode = (nodeId: number): User[] => {
+  const node = globalNodes.filter((node) => node.id == nodeId)[0];
+  const users = globalUsers.filter((user) => !node.editors.includes(user.id));
+  return users;
+};
+
+export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
+  const game = globalGames.filter((game) => game.id == gameId)[0];
+  return game.gms.includes(userId);
+};
+
+export const GETgameById = (gameId: number): Game => {
+  const game = globalGames.filter((game) => game.id == gameId)[0];
+  return game;
+};
+
+export const GETsubnodesByNodeId = (nodeId: number): Subnode[] => {
+  return globalSubnodes.filter((subnode) => subnode.node_id == nodeId);
 };
