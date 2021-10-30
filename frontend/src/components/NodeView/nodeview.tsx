@@ -9,6 +9,7 @@ import {
   GETsubnodesVisibleToUser,
   GETuserById,
   GETuserCanEditNode,
+  POSTnode,
 } from '../../mock-backend';
 import { Game, Node, Subnode, User } from '../../types';
 
@@ -20,6 +21,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import NodeUserForm from '../NodeUserForm/nodeuserform';
+import { cloneDeep } from 'lodash';
 
 interface Props {
   nodeId: number;
@@ -123,13 +125,21 @@ export default class NodeView extends Component<Props, State> {
     }
   };
 
-  handleUsersFormSubmit = (e: SyntheticEvent): void => {
+  saveNodeState = (): void => {
+    POSTnode(this.state.node);
+  };
+
+  handleUsersFormSubmit = (e: SyntheticEvent, node: Node): void => {
     if (!e.defaultPrevented) {
       e.preventDefault();
     }
-    console.log('(not actually) Updating permissions for node ' + this.state.node.name);
-    // const target = e.target as HTMLElement;
-    this.handleUsersModalClose();
+    console.log('Updating permissions for node ' + this.state.node.name);
+    this.setState(
+      {
+        node: cloneDeep(node),
+      },
+      this.saveNodeState,
+    );
   };
 
   render(): JSX.Element {
@@ -145,16 +155,7 @@ export default class NodeView extends Component<Props, State> {
           </div>
           <img className="node-header-image" src={node.image} alt="sky"></img>
         </div>
-        {/* <Modal
-          open={this.state.editModalOpen}
-          onClose={this.handleEditModalClose}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <p>EDIT MODAL</p>
-        </Modal> */}
-
+        {this.state.editModalOpen ? <p>EDIT</p> : null}
         {this.state.usersModalOpen ? (
           <NodeUserForm
             nodeId={this.state.node.id}
@@ -164,16 +165,7 @@ export default class NodeView extends Component<Props, State> {
             submitCallback={this.handleUsersFormSubmit}
           />
         ) : null}
-
-        {/* <Modal
-          open={this.state.imageModalOpen}
-          onClose={this.handleImageModalClose}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <input type="file"></input>
-        </Modal> */}
+        {this.state.imageModalOpen ? <input type="file" /> : null}
         {this.renderSubnodes()}
       </div>
     );

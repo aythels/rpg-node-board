@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 import Delta from 'quill-delta';
 import { Node, Subnode, Game, User } from './types';
+import CloneDeep from 'lodash.clonedeep';
 
 // Hardcoded variables go here:
 const globalSubnodes = [
@@ -204,15 +205,15 @@ const globalGames = [
 // TODO: change all filter()s to find()s
 
 export const GETnodeById = (id: number): Node => {
-  return globalNodes.filter((node) => node.id == id)[0];
+  return CloneDeep(globalNodes.filter((node) => node.id == id)[0]);
 };
 
 export const GETuserById = (id: number): User => {
-  return globalUsers.filter((user) => user.id == id)[0];
+  return CloneDeep(globalUsers.filter((user) => user.id == id)[0]);
 };
 
 export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnode[] => {
-  const node = GETnodeById(nodeId);
+  const node = globalNodes.filter((node) => node.id == nodeId)[0] as Node;
   const allSubnodes = globalSubnodes.filter((subnode) => subnode.node_id == nodeId);
   let visibleSubodes;
   if (node.editors.includes(userId)) {
@@ -220,7 +221,7 @@ export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnod
   } else {
     visibleSubodes = allSubnodes.filter((subnode) => subnode.informationLevel <= node.informationLevels[userId]);
   }
-  return visibleSubodes;
+  return CloneDeep(visibleSubodes);
 };
 
 export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
@@ -230,12 +231,12 @@ export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
 
 export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
   const subnode = globalSubnodes.filter((subnode) => subnode.id == subnodeId)[0];
-  return subnode.editors.includes(userId);
+  return CloneDeep(subnode.editors.includes(userId));
 };
 
 export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
   const node = globalNodes.filter((node) => node.id == nodeId)[0];
-  return node.editors.includes(userId);
+  return CloneDeep(node.editors.includes(userId));
 };
 
 export const GETnodesInGame = (gameId: number): Node[] => {
@@ -244,31 +245,40 @@ export const GETnodesInGame = (gameId: number): Node[] => {
   for (const nodeid of game.nodes) {
     nodes.push(globalNodes[nodeid - 1]);
   }
-  return nodes;
+  return CloneDeep(nodes);
 };
 
 export const GETeditorsForNode = (nodeId: number): User[] => {
   const node = globalNodes.filter((node) => node.id == nodeId)[0];
   const users = globalUsers.filter((user) => node.editors.includes(user.id));
-  return users;
+  return CloneDeep(users);
 };
 
 export const GETplayersForNode = (nodeId: number): User[] => {
   const node = globalNodes.filter((node) => node.id == nodeId)[0];
   const users = globalUsers.filter((user) => !node.editors.includes(user.id));
-  return users;
+  return CloneDeep(users);
 };
 
 export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
   const game = globalGames.filter((game) => game.id == gameId)[0];
-  return game.gms.includes(userId);
+  return CloneDeep(game.gms.includes(userId));
 };
 
 export const GETgameById = (gameId: number): Game => {
   const game = globalGames.filter((game) => game.id == gameId)[0];
-  return game;
+  return CloneDeep(game);
 };
 
 export const GETsubnodesByNodeId = (nodeId: number): Subnode[] => {
-  return globalSubnodes.filter((subnode) => subnode.node_id == nodeId);
+  return CloneDeep(globalSubnodes.filter((subnode) => subnode.node_id == nodeId));
+};
+
+export const POSTnode = (node: Node): void => {
+  let existingNode = globalNodes.filter((n) => n.id == node.id)[0] as Node;
+  existingNode = CloneDeep(node);
+  // FOR DEBUG:
+  // const newNode = globalNodes.filter((n) => n.id == node.id)[0] as Node;
+  // console.log('New value for node is:');
+  // console.log(newNode);
 };

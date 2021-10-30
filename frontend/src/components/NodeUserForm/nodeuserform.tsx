@@ -1,6 +1,17 @@
 import { Component, SyntheticEvent } from 'react';
 import { Game, Node, Subnode, User } from '../../types';
-import { Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+} from '@mui/material';
 import { Add, Close, DeleteForever, SaveRounded } from '@mui/icons-material';
 import './nodeuserform.css';
 import {
@@ -9,7 +20,6 @@ import {
   GETnodeById,
   GETplayersForNode,
   GETsubnodesByNodeId,
-  GETsubnodesVisibleToUser,
   GETuserById,
   GETuserIsGMInGame,
 } from '../../mock-backend';
@@ -21,7 +31,7 @@ interface Props {
   userId: number;
   closeCallback: () => void;
   // eslint-disable-next-line no-unused-vars
-  submitCallback: (arg0: SyntheticEvent) => void;
+  submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
 }
 
 interface State {
@@ -31,9 +41,10 @@ interface State {
   subnodes: Subnode[];
   closeCallback: () => void;
   // eslint-disable-next-line no-unused-vars
-  submitCallback: (arg0: SyntheticEvent) => void;
+  submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
   editors: User[];
   players: User[];
+  addEditorAnchorEl: EventTarget | null;
 }
 
 export default class NodeUserForm extends Component<Props, State> {
@@ -56,6 +67,7 @@ export default class NodeUserForm extends Component<Props, State> {
       submitCallback: props.submitCallback,
       editors: editors,
       players: players,
+      addEditorAnchorEl: null,
     };
   }
 
@@ -72,7 +84,8 @@ export default class NodeUserForm extends Component<Props, State> {
 
   handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    this.state.submitCallback(e);
+    const node = this.state.node;
+    this.state.submitCallback(e, node);
   };
 
   removeEditor = (editorToRemove: User): void => {
@@ -80,12 +93,25 @@ export default class NodeUserForm extends Component<Props, State> {
     players.push(editorToRemove);
     const node = this.state.node;
     node.informationLevels[editorToRemove.id] = 0;
+    node.editors = node.editors.filter((editor) => editor != editorToRemove.id);
     this.setState({
       editors: this.state.editors.filter((editor) => editor != editorToRemove),
     });
     this.setState({
       players: players,
       node: node,
+    });
+  };
+
+  addEditor = (playerToAdd: User): void => {
+    const editors = this.state.editors;
+    editors.push(playerToAdd);
+    const players = this.state.players.filter((player) => player !== playerToAdd);
+    const node = this.state.node;
+    node.editors.push(playerToAdd.id);
+    this.setState({
+      editors: editors,
+      players: players,
     });
   };
 
@@ -124,7 +150,9 @@ export default class NodeUserForm extends Component<Props, State> {
     const node = this.state.node;
     const players = this.state.players;
     for (const player of players) {
-      node.informationLevels[player.id]--;
+      if (node.informationLevels[player.id] > 0) {
+        node.informationLevels[player.id]--;
+      }
     }
     this.setState({
       node: node,
@@ -145,6 +173,21 @@ export default class NodeUserForm extends Component<Props, State> {
       node: node,
     });
   };
+
+  openNewEditorMenu = (e: SyntheticEvent): void => {
+    const target = e.currentTarget;
+    this.setState({
+      addEditorAnchorEl: target,
+    });
+  };
+
+  closeNewEditorMenu = (): void => {
+    this.setState({
+      addEditorAnchorEl: null,
+    });
+  };
+
+  // TODO: Make table responsive for mobile
 
   render(): JSX.Element {
     return (
@@ -174,9 +217,32 @@ export default class NodeUserForm extends Component<Props, State> {
                     </div>
                   );
                 })}
-                <IconButton aria-label="Add new editor">
+                <IconButton aria-label="Add new editor" onClick={this.openNewEditorMenu}>
                   <Add />
                 </IconButton>
+                <Menu
+                  anchorEl={this.state.addEditorAnchorEl as Element}
+                  open={Boolean(this.state.addEditorAnchorEl)}
+                  onClose={this.closeNewEditorMenu}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  {this.state.players.map((player) => {
+                    return (
+                      <MenuItem key={uid(player)}>
+                        <div className="users-box__user">
+                          <button
+                            onClick={() => {
+                              this.addEditor(player);
+                            }}
+                          >
+                            <p>{player.username}</p>
+                          </button>
+                        </div>
+                      </MenuItem>
+                    );
+                  })}
+                </Menu>
               </div>
             </div>
             <div className="modal__body__section">
@@ -208,9 +274,13 @@ export default class NodeUserForm extends Component<Props, State> {
                           ></input>
                         </TableCell>
                         <TableCell align="right">
-                          {GETsubnodesVisibleToUser(this.state.node.id, player.id).map((subnode) => {
-                            return <span key={uid(subnode)}>{subnode.type}, </span>;
-                          })}
+                          {this.state.subnodes
+                            .filter(
+                              (subnode) => subnode.informationLevel <= this.state.node.informationLevels[player.id],
+                            )
+                            .map((subnode) => {
+                              return <span key={uid(subnode)}>{subnode.name}, </span>;
+                            })}
                         </TableCell>
                       </TableRow>
                     );
