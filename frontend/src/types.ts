@@ -42,3 +42,17 @@ export interface User {
   email: string; // FOR NOW
   games: number[];
 }
+
+export enum DefaultNodeTypes {
+  location,
+  organization,
+  item,
+  person,
+}
+
+export enum DefaultSubnodeTypes {
+  description,
+  notes,
+  event,
+  linkList,
+}
