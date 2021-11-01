@@ -22,6 +22,8 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import NodeUserForm from '../NodeUserForm/nodeuserform';
 import { cloneDeep } from 'lodash';
+import NodeEditForm from '../NodeEditForm/nodeeditform';
+import NodeImageForm from '../NodeImageForm/nodeimageform';
 
 interface Props {
   nodeId: number;
@@ -56,17 +58,6 @@ export default class NodeView extends Component<Props, State> {
       imageModalOpen: false,
     };
   }
-
-  renderSubnodes = (): JSX.Element => {
-    const subnodes = this.state.subnodes;
-    return (
-      <div className="subnodes">
-        {subnodes.map((subnode) => (
-          <SubnodeView subnode={subnode} user={this.state.user} key={uid(subnode)} />
-        ))}
-      </div>
-    );
-  };
 
   handleEditModalOpen = (): void => {
     this.setState({
@@ -126,6 +117,7 @@ export default class NodeView extends Component<Props, State> {
   };
 
   saveNodeState = (): void => {
+    // console.log('Posting', this.state.node);
     POSTnode(this.state.node);
   };
 
@@ -142,6 +134,43 @@ export default class NodeView extends Component<Props, State> {
     );
   };
 
+  handleEditFormSubmit = (e: SyntheticEvent, node: Node): void => {
+    if (!e.defaultPrevented) {
+      e.preventDefault();
+    }
+    console.log('Updating settings for node ' + this.state.node.name);
+    this.setState(
+      {
+        node: cloneDeep(node),
+      },
+      this.saveNodeState,
+    );
+  };
+
+  handleImageFormSubmit = (e: SyntheticEvent, node: Node): void => {
+    if (!e.defaultPrevented) {
+      e.preventDefault();
+    }
+    console.log('Updating image for node ' + this.state.node.name);
+    this.setState(
+      {
+        node: cloneDeep(node),
+      },
+      this.saveNodeState,
+    );
+  };
+
+  renderSubnodes = (): JSX.Element => {
+    const subnodes = this.state.subnodes;
+    return (
+      <div className="subnodes">
+        {subnodes.map((subnode) => (
+          <SubnodeView subnode={subnode} user={this.state.user} key={uid(subnode)} />
+        ))}
+      </div>
+    );
+  };
+
   render(): JSX.Element {
     const node = this.state.node;
     return (
@@ -155,7 +184,15 @@ export default class NodeView extends Component<Props, State> {
           </div>
           <img className="node-header-image" src={node.image} alt="sky"></img>
         </div>
-        {this.state.editModalOpen ? <p>EDIT</p> : null}
+        {this.state.editModalOpen ? (
+          <NodeEditForm
+            nodeId={this.state.node.id}
+            userId={this.state.user.id}
+            gameId={this.state.game.id}
+            closeCallback={this.handleEditModalClose}
+            submitCallback={this.handleEditFormSubmit}
+          />
+        ) : null}
         {this.state.usersModalOpen ? (
           <NodeUserForm
             nodeId={this.state.node.id}
@@ -165,7 +202,15 @@ export default class NodeView extends Component<Props, State> {
             submitCallback={this.handleUsersFormSubmit}
           />
         ) : null}
-        {this.state.imageModalOpen ? <input type="file" /> : null}
+        {this.state.imageModalOpen ? (
+          <NodeImageForm
+            nodeId={this.state.node.id}
+            userId={this.state.user.id}
+            gameId={this.state.game.id}
+            closeCallback={this.handleImageModalClose}
+            submitCallback={this.handleImageFormSubmit}
+          />
+        ) : null}
         {this.renderSubnodes()}
       </div>
     );

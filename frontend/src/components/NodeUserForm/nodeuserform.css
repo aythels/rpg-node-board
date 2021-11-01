@@ -12,13 +12,15 @@
 
 .modal input {
   border: none;
-  text-align: right;
+  text-align: center;
+  width: 2rem;
 }
 
 .button-group {
   padding-top: 1rem;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
@@ -64,6 +66,7 @@
 
 .users-box {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 

@@ -102,7 +102,7 @@ const globalNodes = [
     subnodes: [],
     editors: [2, 1],
     type: 'location',
-  },
+  } as Node,
   {
     id: 2,
     name: 'Museum',
@@ -275,10 +275,12 @@ export const GETsubnodesByNodeId = (nodeId: number): Subnode[] => {
 };
 
 export const POSTnode = (node: Node): void => {
-  let existingNode = globalNodes.filter((n) => n.id == node.id)[0] as Node;
-  existingNode = CloneDeep(node);
+  const existingNode = globalNodes.filter((n) => n.id == node.id)[0];
+  const index = globalNodes.indexOf(existingNode);
+  if (index !== -1) {
+    globalNodes[index] = CloneDeep(node);
+  }
   // FOR DEBUG:
-  // const newNode = globalNodes.filter((n) => n.id == node.id)[0] as Node;
-  // console.log('New value for node is:');
-  // console.log(newNode);
+  const newNode = globalNodes.filter((n) => n.id == node.id)[0] as Node;
+  console.log('New value for node is:', newNode);
 };

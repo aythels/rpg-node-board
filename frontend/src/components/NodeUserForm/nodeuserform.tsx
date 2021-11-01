@@ -50,8 +50,6 @@ interface State {
 export default class NodeUserForm extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    // BUG: this state isn't reset onClose, but I think it will work when actually retrieving data from db, It's
-    // a result of the 'backend' state existing in js and being passed as reference from mock backend calls
     const game = GETgameById(props.gameId);
     const node = GETnodeById(props.nodeId);
     const user = GETuserById(props.userId);
@@ -250,7 +248,7 @@ export default class NodeUserForm extends Component<Props, State> {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Username</TableCell>
+                    <TableCell align="left">Username</TableCell>
                     <TableCell align="right">Level</TableCell>
                     <TableCell align="right">Visible Subnodes</TableCell>
                   </TableRow>
@@ -259,7 +257,7 @@ export default class NodeUserForm extends Component<Props, State> {
                   {this.state.players.map((player) => {
                     return (
                       <TableRow key={uid(player)}>
-                        <TableCell component="th" scope="row">
+                        <TableCell align="left" component="th" scope="row">
                           {player.username}
                         </TableCell>
                         <TableCell align="right">
