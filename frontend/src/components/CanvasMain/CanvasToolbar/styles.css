@@ -1,0 +1,11 @@
+#interface {
+    position: fixed;
+    background-color: red;
+    top: 0px;
+    left: 0px;
+}
+
+.btn {
+    user-select: none;
+    display: block;
+}

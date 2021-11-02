@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import DummyComponent from './components/DummyComponent';
+import CanvasMain from './components/CanvasMain';
 import Home from './components/Home';
 import NodeView from './components/NodeView/nodeview';
 
@@ -15,6 +16,7 @@ function App(): JSX.Element {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" render={() => <Home />} />
+          <Route exact path="/canvas" render={() => <CanvasMain />} />
           <Route exact path="/dummy" render={() => <DummyComponent counterCaption="Increment counter" />} />
           <Route exact path="/nodeviewAdmin" render={() => <NodeView nodeId={1} userId={2} gameId={1} />} />
           <Route exact path="/nodeviewUser" render={() => <NodeView nodeId={1} userId={1} gameId={1} />} />
