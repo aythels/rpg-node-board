@@ -82,10 +82,29 @@ export default class PlayerList extends Component<Props, State> {
     this.setState({ showRemoveUserDialog: false, userToRemove: undefined });
   };
 
+  prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
+    const A_BEFORE_B = -1;
+    const B_BEFORE_A = 1;
+    const gms = new Set(gameMasterIds);
+    return [...allUsers].sort((a: User, b: User) => {
+      const isGameMasterA = gms.has(a.id);
+      const isGameMasterB = gms.has(b.id);
+      if (isGameMasterA === isGameMasterB) {
+        return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
+      } else if (isGameMasterA && !isGameMasterB) {
+        return A_BEFORE_B;
+      } else {
+        return B_BEFORE_A;
+      }
+    });
+  };
+
   render(): JSX.Element {
+    const users = this.prioritizeGameMasters(this.props.gameMasterIds, this.props.users);
+
     return (
       <div className="player-list">
-        {this.props.users.map((user: User) => {
+        {users.map((user: User) => {
           const isCurrentPlayer = user.id === this.props.currentUserId;
           const isGameMaster = this.props.gameMasterIds.includes(user.id);
           return (

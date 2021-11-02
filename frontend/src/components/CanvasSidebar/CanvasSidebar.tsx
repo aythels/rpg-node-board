@@ -61,3 +61,25 @@ export default class CanvasSidebar extends Component<Props, State> {
     );
   }
 }
+
+// TODO:
+// - discuss invite text field:
+// 1. type name
+// 2. press search icon
+// 3. text field changes into dropdown
+// 4. press add icon
+
+// - prefix class names
+// - fix some wording
+// - add collapse sidebar button
+// - add user view
+// - tooltips
+// - aria labels
+
+// - remove delete server button
+// - add MUI theme
+// - clean up types
+// - replace filter with find
+// - all @type declarations should be *development* dependencies
+
+// - read enter for submit in textfield?

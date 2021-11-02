@@ -85,23 +85,6 @@ function App(): JSX.Element {
     }
   };
 
-  const prioritizeGameMasters = (allUsers: User[]) => {
-    const A_BEFORE_B = -1;
-    const B_BEFORE_A = 1;
-    const gms = new Set(game.gms);
-    return [...allUsers].sort((a: User, b: User) => {
-      const isGameMasterA = gms.has(a.id);
-      const isGameMasterB = gms.has(b.id);
-      if (isGameMasterA === isGameMasterB) {
-        return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
-      } else if (isGameMasterA && !isGameMasterB) {
-        return A_BEFORE_B;
-      } else {
-        return B_BEFORE_A;
-      }
-    });
-  };
-
   return (
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
@@ -117,7 +100,7 @@ function App(): JSX.Element {
                   currentUserId={2}
                   gameMasterIds={game.gms}
                   gameTitle={game.title}
-                  users={prioritizeGameMasters(game.users.map(GETuserById))}
+                  users={game.users.map(GETuserById)}
                   onDemoteClicked={handleDemoteClicked}
                   onInviteUserClicked={handleInviteUserClicked}
                   onPromoteClicked={handlePromoteClicked}
