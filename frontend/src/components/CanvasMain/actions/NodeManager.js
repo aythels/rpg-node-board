@@ -17,7 +17,7 @@ export const NodeManager = function (state) {
 
   /* INPUT */
   this.onPress = function (e) {
-    console.log(e.clientX);
+    // console.log(e.clientX);
     isMouseDown = true;
     startX = e.clientX;
     startY = e.clientY;
@@ -78,7 +78,8 @@ export const NodeManager = function (state) {
       _this.setAllPos(x, y);
     });*/
 
-    _this.setAllPos(x, y);
+    // _this.setAllPos(x, y);
+    _this.setAllPos(0, 0); //TODO: @elson, I added this because idk which x and y you meant (@filiposlav)
   };
 
   /* UTILITY */
@@ -87,7 +88,7 @@ export const NodeManager = function (state) {
     const offSetOld = 1 / _this.scale - 1;
     _this.addAllPos(-(offSetOld * mouseX), -(offSetOld * mouseY));
 
-    console.log(newScale);
+    // console.log(newScale);
     if (newScale > 0.5 && newScale < 2) _this.scale = newScale;
 
     const offSetNew = 1 / _this.scale - 1;

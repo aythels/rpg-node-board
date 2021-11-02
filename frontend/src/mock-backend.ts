@@ -150,14 +150,15 @@ const globalNodes = [
   },
 ];
 
-const globalUsers = [
+const globalUsers: User[] = [
   {
     id: 1,
-    username: 'user',
-    password: 'user',
-    email: 'user@user.com',
+    username: 'user1',
+    password: 'user1',
+    email: 'user1@user.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_1.png',
   },
   {
     id: 2,
@@ -165,33 +166,149 @@ const globalUsers = [
     password: 'admin',
     email: 'admin@admin.com',
     games: [1],
-    images: ['/images/stgeorge.jpg', '/images/path.jpg', '/images/museum.jpg', '/images/sky.jpg'],
+    images: [],
+    profilePicture: '/images/profile_picture_2.png',
   },
   {
     id: 3,
-    username: 'user1',
-    password: 'user1',
-    email: 'user1@user.com',
-    games: [1],
-    images: [],
-  },
-  {
-    id: 4,
     username: 'user2',
     password: 'user2',
     email: 'user2@user.com',
     games: [1],
-    images: [],
+    images: ['/images/stgeorge.jpg', '/images/path.jpg', '/images/museum.jpg', '/images/sky.jpg'],
   },
   {
-    id: 5,
+    id: 4,
     username: 'user3',
     password: 'user3',
     email: 'user3@user.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_4.png',
+  },
+  {
+    id: 5,
+    username: 'user4',
+    password: 'user4',
+    email: 'user4@user.com',
+    games: [1],
+    images: [],
+    profilePicture: '/images/profile_picture_5.png',
+  },
+  {
+    id: 6,
+    username: 'user5',
+    password: 'user5',
+    email: 'user5@user.com',
+    games: [1],
+    images: [],
+    profilePicture: '/images/profile_picture_6.png',
+  },
+  {
+    id: 7,
+    username: 'user6',
+    password: 'user6',
+    email: 'user6@user.com',
+    games: [1],
+    images: [],
+    profilePicture: '/images/profile_picture_7.png',
+  },
+  {
+    id: 8,
+    username: 'user7',
+    password: 'user7',
+    email: 'user7@user.com',
+    games: [1],
+    images: [],
+  },
+  {
+    id: 9,
+    username: 'user8',
+    password: 'user8',
+    email: 'user8@user.com',
+    games: [1],
+    images: [],
+  },
+  {
+    id: 10,
+    username: 'user8',
+    password: 'user8',
+    email: 'user8@user.com',
+    games: [1],
+    images: [],
+  },
+  {
+    id: 11,
+    username: 'user9',
+    password: 'user9',
+    email: 'user9@user.com',
+    games: [1],
+    images: [],
+    profilePicture: '/images/profile_picture_11.png',
+  },
+  {
+    id: 12,
+    username: 'user10',
+    password: 'user10',
+    email: 'user10@user.com',
+    games: [1],
+    images: [],
   },
 ];
+
+const game1: Game = {
+  id: 7,
+  title: 'Test game',
+  nodes: [1],
+  players: [1],
+  gms: [2],
+  users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  settings: {},
+};
+
+const allGames = [game1];
+
+// Functions mocking backend behaviour go here:
+
+export const GETuserByUsername = (username: string): User | undefined => {
+  return globalUsers.find((user) => user.username == username);
+};
+
+export const GETgame = (id: number): Game => {
+  return allGames.filter((game) => game.id === id)[0];
+};
+
+export const GETplayers = (gameId: number): User[] => {
+  const game = GETgame(gameId);
+  return game.users.map(GETuserById);
+};
+
+export const POSTaddPlayerToGame = (playerId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.players.push(playerId);
+  game.users.push(playerId);
+};
+
+export const POSTremovePlayerFromGame = (playerId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.players = game.players.filter((id) => id !== playerId);
+  game.users = game.users.filter((id) => id !== playerId);
+};
+
+export const POSTupdateGameName = (gameId: number, newTitle: string): void => {
+  const game = GETgame(gameId);
+  game.title = newTitle;
+};
+
+export const POSTpromoteUserToGameMaster = (userId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.gms.push(userId);
+};
+
+export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.gms = game.gms.filter((id) => id !== userId);
+};
 
 const globalGames = [
   {
