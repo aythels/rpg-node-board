@@ -157,6 +157,7 @@ const globalUsers = [
     password: 'user',
     email: 'user@user.com',
     games: [1],
+    images: [],
   },
   {
     id: 2,
@@ -164,6 +165,7 @@ const globalUsers = [
     password: 'admin',
     email: 'admin@admin.com',
     games: [1],
+    images: ['/images/stgeorge.jpg', '/images/path.jpg', '/images/museum.jpg', '/images/sky.jpg'],
   },
   {
     id: 3,
@@ -171,6 +173,7 @@ const globalUsers = [
     password: 'user1',
     email: 'user1@user.com',
     games: [1],
+    images: [],
   },
   {
     id: 4,
@@ -178,6 +181,7 @@ const globalUsers = [
     password: 'user2',
     email: 'user2@user.com',
     games: [1],
+    images: [],
   },
   {
     id: 5,
@@ -185,6 +189,7 @@ const globalUsers = [
     password: 'user3',
     email: 'user3@user.com',
     games: [1],
+    images: [],
   },
 ];
 
@@ -283,4 +288,15 @@ export const POSTnode = (node: Node): void => {
   // FOR DEBUG:
   const newNode = globalNodes.filter((n) => n.id == node.id)[0] as Node;
   console.log('New value for node is:', newNode);
+};
+
+export const POSTuser = (user: User): void => {
+  const existingUser = globalUsers.filter((u) => u.id == user.id)[0];
+  const index = globalUsers.indexOf(existingUser);
+  if (index !== -1) {
+    globalUsers[index] = CloneDeep(user);
+  }
+  // FOR DEBUG:
+  const newUser = globalUsers.filter((u) => u.id == user.id)[0] as User;
+  console.log('New value for node is:', newUser);
 };

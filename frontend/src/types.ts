@@ -41,6 +41,7 @@ export interface User {
   password: string; // FOR NOW
   email: string; // FOR NOW
   games: number[];
+  images: string[]; // FOR NOW
 }
 
 export enum DefaultNodeTypes {

@@ -28,14 +28,21 @@
   background-color: white;
   width: 80%;
   max-width: 40rem;
+  max-height: 90vh;
   padding: 1rem;
   padding-top: 0.5rem;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 0.5rem;
+  /* border-radius: 0.5rem; */
   transition: ease 0.5s all;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.--wide {
+  max-width: 80rem;
 }
 
 .modal__header {

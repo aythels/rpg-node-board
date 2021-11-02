@@ -132,6 +132,7 @@ export default class NodeView extends Component<Props, State> {
       },
       this.saveNodeState,
     );
+    this.handleUsersModalClose();
   };
 
   handleEditFormSubmit = (e: SyntheticEvent, node: Node): void => {
@@ -145,6 +146,7 @@ export default class NodeView extends Component<Props, State> {
       },
       this.saveNodeState,
     );
+    this.handleEditModalClose();
   };
 
   handleImageFormSubmit = (e: SyntheticEvent, node: Node): void => {
@@ -158,6 +160,7 @@ export default class NodeView extends Component<Props, State> {
       },
       this.saveNodeState,
     );
+    this.handleImageModalClose();
   };
 
   renderSubnodes = (): JSX.Element => {
@@ -182,7 +185,7 @@ export default class NodeView extends Component<Props, State> {
             </p>
             {this.renderMenu()}
           </div>
-          <img className="node-header-image" src={node.image} alt="sky"></img>
+          <img className="node-header-image" src={node.image} alt={node.imageAlt}></img>
         </div>
         {this.state.editModalOpen ? (
           <NodeEditForm
