@@ -50,9 +50,9 @@ export default class CanvasSidebar extends Component<Props, State> {
             aria-label={`${this.state.sidebarOpen ? 'Close' : 'Open'} the sidebar`}
             component="span"
             onClick={() =>
-              this.setState((prevState: State) => {
-                sidebarOpen: !prevState.sidebarOpen;
-              })
+              this.setState((prevState: State) => ({
+                sidebarOpen: !prevState.sidebarOpen,
+              }))
             }
           >
             {this.state.sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
