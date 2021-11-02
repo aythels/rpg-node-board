@@ -1,7 +1,7 @@
 import './canvasSidebarHeader.css';
 import { ChangeEvent, Component } from 'react';
 import { Close, Done, Edit } from '@mui/icons-material';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton, TextField, Tooltip } from '@mui/material';
 
 interface Props {
   onSubmitGameTitleClicked: (newTitle: string) => void;
@@ -64,26 +64,32 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
         <div className="canvas-sidebar-header__button">
           {this.state.editingTitle ? (
             <>
-              <IconButton
-                aria-label="Submit edited game name"
-                component="span"
-                disabled={!this.state.title}
-                onClick={this.handleSubmitTitleClicked}
-              >
-                <Done />
-              </IconButton>
-              <IconButton
-                aria-label="Stop editing game name and discard changes"
-                component="span"
-                onClick={this.handleCancelEditClicked}
-              >
-                <Close />
-              </IconButton>
+              <Tooltip arrow title="Submit new title">
+                <IconButton
+                  aria-label="Submit edited game name"
+                  component="span"
+                  disabled={!this.state.title}
+                  onClick={this.handleSubmitTitleClicked}
+                >
+                  <Done />
+                </IconButton>
+              </Tooltip>
+              <Tooltip arrow title="Discard changes">
+                <IconButton
+                  aria-label="Stop editing game name and discard changes"
+                  component="span"
+                  onClick={this.handleCancelEditClicked}
+                >
+                  <Close />
+                </IconButton>
+              </Tooltip>
             </>
           ) : (
-            <IconButton aria-label="Edit game name" component="span" onClick={this.handleEditTitleClicked}>
-              <Edit />
-            </IconButton>
+            <Tooltip arrow title="Edit game title">
+              <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>
+                <Edit />
+              </IconButton>
+            </Tooltip>
           )}
         </div>
       </div>
