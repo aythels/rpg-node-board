@@ -5,7 +5,7 @@ import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../../../Dialog/Dialog';
 
 interface Props {
-  onInviteUserClicked: (username: string) => void;
+  onInvitePlayerClicked: (username: string) => void;
 }
 
 interface State {
@@ -32,7 +32,7 @@ export default class Footer extends Component<Props, State> {
               autoComplete="off"
               className="footer__item--inner"
               id="outlined-basic"
-              label="Player name"
+              label="Type player name"
               value={this.state.inviteName}
               variant="outlined"
               onChange={this.handleInviteNameChanged}
@@ -47,13 +47,13 @@ export default class Footer extends Component<Props, State> {
             startIcon={<PersonAdd />}
             variant="contained"
             onClick={() => {
-              this.props.onInviteUserClicked(this.state.inviteName);
+              this.props.onInvitePlayerClicked(this.state.inviteName);
               this.setState({
                 inviteName: '',
               });
             }}
           >
-            Invite user
+            Invite player
           </Button>
         </div>
         <div className="footer__item">
@@ -68,7 +68,7 @@ export default class Footer extends Component<Props, State> {
           </Button>
         </div>
         <Dialog
-          description="Doing so will immediately end the session and remove the game."
+          description="Doing so will immediately end the session and remove the game from the server."
           header="Delete server?"
           open={this.state.showDeleteServerDialog}
           onAgree={() => this.setState({ showDeleteServerDialog: false })}

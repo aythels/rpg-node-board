@@ -4,7 +4,7 @@ import { Close, Done, Edit } from '@mui/icons-material';
 import { IconButton, TextField } from '@mui/material';
 
 interface Props {
-  onSubmitTitleClicked: (newTitle: string) => void;
+  onSubmitGameTitleClicked: (newTitle: string) => void;
   title: string;
 }
 
@@ -36,7 +36,7 @@ export default class Header extends Component<Props, State> {
     this.setState({
       editingTitle: false,
     });
-    this.props.onSubmitTitleClicked(this.state.title);
+    this.props.onSubmitGameTitleClicked(this.state.title);
   };
 
   handleCancelEditClicked = (): void => {

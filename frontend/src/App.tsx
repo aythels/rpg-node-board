@@ -30,7 +30,7 @@ function App(): JSX.Element {
   const currentGameId = 7;
   const [game, setGame] = useState(GETgame(currentGameId));
 
-  const handleInviteUserClicked = (username: string) => {
+  const handleInvitePlayerClicked = (username: string) => {
     const user = GETuserByUsername(username);
     if (user) {
       const newUsers = [...game.users, user.id];
@@ -46,7 +46,7 @@ function App(): JSX.Element {
     }
   };
 
-  const handleRemoveUserClicked = (user: User) => {
+  const handleRemovePlayerClicked = (user: User) => {
     const newUsers = [...game.users.filter((id) => id !== user.id)];
     setGame((prevGame: Game) => ({
       ...prevGame,
@@ -58,13 +58,13 @@ function App(): JSX.Element {
     POSTremovePlayerFromGame(user.id, currentGameId);
   };
 
-  const handleSubmitTitleClicked = (newTitle: string) => {
+  const handleSubmitGameTitleClicked = (newTitle: string) => {
     setGame((prevGame) => ({ ...prevGame, title: newTitle }));
 
     POSTupdateGameName(game.id, newTitle);
   };
 
-  const handlePromoteClicked = (id: number) => {
+  const handlePromotePlayerClicked = (id: number) => {
     setGame((prevGame) => ({
       ...prevGame,
       gms: [...prevGame.gms, id],
@@ -73,7 +73,7 @@ function App(): JSX.Element {
     POSTpromoteUserToGameMaster(id, game.id);
   };
 
-  const handleDemoteClicked = (id: number) => {
+  const handleDemotePlayerClicked = (id: number) => {
     if (game.gms.length === 1) {
       setShowDemoteLastGmModal(true);
     } else {
@@ -101,11 +101,11 @@ function App(): JSX.Element {
                   gameMasterIds={game.gms}
                   gameTitle={game.title}
                   users={game.users.map(GETuserById)}
-                  onDemoteClicked={handleDemoteClicked}
-                  onInviteUserClicked={handleInviteUserClicked}
-                  onPromoteClicked={handlePromoteClicked}
-                  onRemoveUserClicked={handleRemoveUserClicked}
-                  onSubmitTitleClicked={handleSubmitTitleClicked}
+                  onDemotePlayerClicked={handleDemotePlayerClicked}
+                  onInvitePlayerClicked={handleInvitePlayerClicked}
+                  onPromotePlayerClicked={handlePromotePlayerClicked}
+                  onRemovePlayerClicked={handleRemovePlayerClicked}
+                  onSubmitGameTitleClicked={handleSubmitGameTitleClicked}
                 />
               </div>
             )}

@@ -9,9 +9,9 @@ import { User } from '../../../../types';
 import uuid from 'react-uuid';
 
 interface Handlers {
-  onRemoveUserClicked: (user: User) => void;
-  onPromoteClicked: (id: number) => void;
-  onDemoteClicked: (id: number) => void;
+  onRemovePlayerClicked: (user: User) => void;
+  onPromotePlayerClicked: (id: number) => void;
+  onDemotePlayerClicked: (id: number) => void;
 }
 
 interface PlayerCardProps extends Handlers {
@@ -28,7 +28,7 @@ class PlayerCard extends PureComponent<PlayerCardProps> {
           <IconButton
             aria-label={`Promote player ${user.username} to game master`}
             component="span"
-            onClick={() => this.props.onPromoteClicked(user.id)}
+            onClick={() => this.props.onPromotePlayerClicked(user.id)}
           >
             <PersonOutline />
           </IconButton>
@@ -36,7 +36,7 @@ class PlayerCard extends PureComponent<PlayerCardProps> {
           <IconButton
             aria-label={`Demote game master ${user.username} to regular player`}
             component="span"
-            onClick={() => this.props.onDemoteClicked(user.id)}
+            onClick={() => this.props.onDemotePlayerClicked(user.id)}
           >
             <Person />
           </IconButton>
@@ -48,7 +48,7 @@ class PlayerCard extends PureComponent<PlayerCardProps> {
             <IconButton
               aria-label="Remove player"
               component="span"
-              onClick={() => this.props.onRemoveUserClicked(user)}
+              onClick={() => this.props.onRemovePlayerClicked(user)}
             >
               <HighlightOff />
             </IconButton>
@@ -77,7 +77,7 @@ export default class PlayerList extends Component<Props, State> {
 
   handleUserRemove = (): void => {
     if (this.state.userToRemove) {
-      this.props.onRemoveUserClicked(this.state.userToRemove);
+      this.props.onRemovePlayerClicked(this.state.userToRemove);
     }
     this.setState({ showRemoveUserDialog: false, userToRemove: undefined });
   };
@@ -113,9 +113,9 @@ export default class PlayerList extends Component<Props, State> {
               promotable={!isGameMaster}
               removable={!isGameMaster && !isCurrentPlayer}
               user={user}
-              onDemoteClicked={this.props.onDemoteClicked}
-              onPromoteClicked={this.props.onPromoteClicked}
-              onRemoveUserClicked={(userToRemove: User) => {
+              onDemotePlayerClicked={this.props.onDemotePlayerClicked}
+              onPromotePlayerClicked={this.props.onPromotePlayerClicked}
+              onRemovePlayerClicked={(userToRemove: User) => {
                 this.setState({ showRemoveUserDialog: true, userToRemove });
               }}
             />
