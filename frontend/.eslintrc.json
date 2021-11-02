@@ -25,6 +25,6 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/prefer-optional-chain": "warn",
     "@typescript-eslint/prefer-for-of": "warn",
-    "sort-imports": "warn"
+    "sort-imports": "off"
   }
 }

@@ -14,8 +14,10 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import CanvasSidebar from './components/CanvasSidebar/CanvasSidebar';
 import Dialog from './components/Dialog/Dialog';
 import DummyComponent from './components/DummyComponent';
+import CanvasMain from './components/CanvasMain';
 import Home from './components/Home';
 import { useState } from 'react';
+import NodeView from './components/NodeView/nodeview';
 
 function App(): JSX.Element {
   const customTheme = createTheme({
@@ -90,6 +92,7 @@ function App(): JSX.Element {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" render={() => <Home />} />
+          <Route exact path="/canvas" render={() => <CanvasMain />} />
           <Route exact path="/dummy" render={() => <DummyComponent counterCaption="Increment counter" />} />
           <Route
             exact
@@ -111,6 +114,17 @@ function App(): JSX.Element {
               </div>
             )}
           />
+          <Route exact path="/nodeviewAdmin" render={() => <NodeView nodeId={1} userId={2} gameId={1} />} />
+          <Route exact path="/nodeviewUser" render={() => <NodeView nodeId={1} userId={1} gameId={1} />} />
+          {/* TODO: Figure out how to route this better */}
+          <Route exact path="/nodeviewAdmin/1" render={() => <NodeView nodeId={1} userId={2} gameId={1} />} />
+          <Route exact path="/nodeviewAdmin/2" render={() => <NodeView nodeId={2} userId={2} gameId={1} />} />
+          <Route exact path="/nodeviewAdmin/3" render={() => <NodeView nodeId={3} userId={2} gameId={1} />} />
+          <Route exact path="/nodeviewAdmin/4" render={() => <NodeView nodeId={4} userId={2} gameId={1} />} />
+          <Route exact path="/nodeviewUser/1" render={() => <NodeView nodeId={1} userId={1} gameId={1} />} />
+          <Route exact path="/nodeviewUser/2" render={() => <NodeView nodeId={2} userId={1} gameId={1} />} />
+          <Route exact path="/nodeviewUser/3" render={() => <NodeView nodeId={3} userId={1} gameId={1} />} />
+          <Route exact path="/nodeviewUser/4" render={() => <NodeView nodeId={4} userId={1} gameId={1} />} />
         </Switch>
       </BrowserRouter>
       <Dialog

@@ -3,9 +3,6 @@ import CanvasSidebarPlayerCard from '../CanvasSidebarPlayerCard/CanvasSidebarPla
 import { Component } from 'react';
 import Dialog from '../Dialog/Dialog';
 import { User } from '../../types';
-// eslint-disable-next-line
-// @ts-ignore react-uuid has no type declaration file
-import uuid from 'react-uuid';
 
 interface Props {
   currentUserId: number;
@@ -61,7 +58,7 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
           const isGameMaster = this.props.gameMasterIds.includes(user.id);
           return (
             <CanvasSidebarPlayerCard
-              key={uuid()}
+              key={user.id}
               isAdmin={this.props.isAdmin}
               promotable={!isGameMaster}
               removable={!isGameMaster && !isCurrentPlayer}
