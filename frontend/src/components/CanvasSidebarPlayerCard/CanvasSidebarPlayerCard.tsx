@@ -1,6 +1,6 @@
 import './canvasSidebarPlayerCard.css';
 import { Avatar, IconButton } from '@mui/material';
-import { HighlightOff, Person, PersonOutline } from '@mui/icons-material';
+import { Person, PersonOutline, PersonRemove } from '@mui/icons-material';
 import { PureComponent } from 'react';
 import { User } from '../../types';
 
@@ -44,7 +44,7 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
               component="span"
               onClick={() => this.props.onRemovePlayerClicked(user)}
             >
-              <HighlightOff />
+              <PersonRemove />
             </IconButton>
           </div>
         )}

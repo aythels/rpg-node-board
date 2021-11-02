@@ -72,7 +72,6 @@ export default class CanvasSidebar extends Component<Props, State> {
 // 3. text field changes into dropdown
 // 4. press add icon
 
-// - better remove icon
 // - add at least one profile picture
 // - add collapse sidebar button
 // - add user view
