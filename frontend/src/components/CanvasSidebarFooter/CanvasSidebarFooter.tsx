@@ -36,6 +36,12 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
               value={this.state.inviteName}
               variant="outlined"
               onChange={this.handleInviteNameChanged}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  this.props.onInvitePlayerClicked(this.state.inviteName);
+                }
+              }}
             />
           </div>
         </div>
@@ -48,9 +54,6 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
             variant="contained"
             onClick={() => {
               this.props.onInvitePlayerClicked(this.state.inviteName);
-              this.setState({
-                inviteName: '',
-              });
             }}
           >
             Invite player

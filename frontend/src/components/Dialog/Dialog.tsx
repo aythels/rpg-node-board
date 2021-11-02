@@ -29,6 +29,12 @@ export default class Dialog extends PureComponent<Props> {
         aria-labelledby="alert-dialog-title"
         open={this.props.open}
         onClose={this.props.onClose}
+        onKeyPress={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            this.props.onClose();
+          }
+        }}
       >
         <DialogTitle id="alert-dialog-title">{this.props.header}</DialogTitle>
         <DialogContent>

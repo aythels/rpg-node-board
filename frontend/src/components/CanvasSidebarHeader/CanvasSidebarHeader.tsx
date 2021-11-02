@@ -60,6 +60,12 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
             value={this.state.title}
             variant="outlined"
             onChange={this.handleTitleChanged}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                this.handleSubmitTitleClicked();
+              }
+            }}
           />
         </div>
         {this.props.isAdmin && (
