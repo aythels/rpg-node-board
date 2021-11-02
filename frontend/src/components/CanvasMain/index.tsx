@@ -4,9 +4,114 @@ import React from 'react';
 import CanvasToolbar from './CanvasToolbar';
 import CanvasNode from './CanvasNode';
 import { NodeManager } from './actions/NodeManager';
+import {
+  GETgame,
+  GETuserById,
+  GETuserByUsername,
+  POSTaddPlayerToGame,
+  POSTdemoteGameMasterToPlayer,
+  POSTpromoteUserToGameMaster,
+  POSTremovePlayerFromGame,
+  POSTupdateGameName,
+} from '../../mock-backend';
+import { Game, User } from '../../types';
+import Dialog from '../Dialog/Dialog';
+import CanvasSidebar from '../CanvasSidebar/CanvasSidebar';
 
-export default class CanvasMain extends React.Component {
+interface Props {
+  currentUserId: number;
+  currentGameId: number;
+}
+
+interface State {
+  game: Game;
+  showUserNotFoundModal: boolean;
+  showDemoteLastGmModal: boolean;
+}
+
+export default class CanvasMain extends React.Component<Props, State> {
   nodeManager = new NodeManager(this);
+
+  state: State = {
+    game: GETgame(this.props.currentGameId),
+    showUserNotFoundModal: false,
+    showDemoteLastGmModal: false,
+  };
+
+  handleInvitePlayerClicked = (username: string): void => {
+    const user = GETuserByUsername(username);
+    if (user) {
+      const prevGame = this.state.game;
+      this.setState({
+        game: {
+          ...prevGame,
+          players: [...prevGame.players, user.id],
+          users: [...prevGame.users, user.id],
+        },
+      });
+
+      POSTaddPlayerToGame(user.id, prevGame.id);
+    } else {
+      this.setState({
+        showUserNotFoundModal: true,
+      });
+    }
+  };
+
+  handleRemovePlayerClicked = (user: User): void => {
+    const prevGame = this.state.game;
+    this.setState({
+      game: {
+        ...prevGame,
+        players: [...prevGame.players.filter((id) => id !== user.id)],
+        gms: [...prevGame.gms.filter((id) => id !== user.id)],
+        users: [...prevGame.users.filter((id) => id !== user.id)],
+      },
+    });
+
+    POSTremovePlayerFromGame(user.id, prevGame.id);
+  };
+
+  handleSubmitGameTitleClicked = (newTitle: string): void => {
+    const prevGame = this.state.game;
+    this.setState({
+      game: {
+        ...prevGame,
+        title: newTitle,
+      },
+    });
+
+    POSTupdateGameName(prevGame.id, newTitle);
+  };
+
+  handlePromotePlayerClicked = (id: number): void => {
+    const prevGame = this.state.game;
+    this.setState({
+      game: {
+        ...prevGame,
+        gms: [...prevGame.gms, id],
+      },
+    });
+
+    POSTpromoteUserToGameMaster(id, prevGame.id);
+  };
+
+  handleDemotePlayerClicked = (id: number): void => {
+    const isLastGameMaster = this.state.game.gms.length === 1;
+    if (isLastGameMaster) {
+      this.setState({
+        showDemoteLastGmModal: true,
+      });
+    } else {
+      this.setState({
+        game: {
+          ...this.state.game,
+          gms: [...this.state.game.gms.filter((gmId) => gmId !== id)],
+        },
+      });
+      POSTdemoteGameMasterToPlayer(id, this.state.game.id);
+    }
+  };
 
   render(): JSX.Element {
     const array = this.nodeManager.allNodes.slice().reverse();
@@ -43,6 +148,31 @@ export default class CanvasMain extends React.Component {
           backButton={() => console.log('back')}
           centerButton={this.nodeManager.setCenter}
           addButton={this.nodeManager.createNode}
+        />
+        <CanvasSidebar
+          currentUserId={this.props.currentUserId}
+          gameMasterIds={this.state.game.gms}
+          gameTitle={this.state.game.title}
+          isAdmin={this.state.game.gms.includes(this.props.currentUserId)}
+          users={this.state.game.users.map(GETuserById)}
+          onDemotePlayerClicked={this.handleDemotePlayerClicked}
+          onInvitePlayerClicked={this.handleInvitePlayerClicked}
+          onPromotePlayerClicked={this.handlePromotePlayerClicked}
+          onRemovePlayerClicked={this.handleRemovePlayerClicked}
+          onSubmitGameTitleClicked={this.handleSubmitGameTitleClicked}
+        />
+
+        <Dialog
+          description="Please try again."
+          header="The user could not be found!"
+          open={this.state.showUserNotFoundModal}
+          onClose={() => this.setState({ showUserNotFoundModal: false })}
+        />
+        <Dialog
+          description="A game must have at least one game master at all times."
+          header="Cannot demote last game master"
+          open={this.state.showDemoteLastGmModal}
+          onClose={() => this.setState({ showDemoteLastGmModal: false })}
         />
       </div>
     );
