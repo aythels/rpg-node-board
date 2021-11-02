@@ -41,16 +41,16 @@ export default class CanvasMain extends React.Component<Props, State> {
   handleInvitePlayerClicked = (username: string): void => {
     const user = GETuserByUsername(username);
     if (user) {
-      const prevGame = this.state.game;
-      this.setState({
-        game: {
-          ...prevGame,
-          players: [...prevGame.players, user.id],
-          users: [...prevGame.users, user.id],
-        },
-      });
-
-      POSTaddPlayerToGame(user.id, prevGame.id);
+      this.setState(
+        (prevState: State) => ({
+          game: {
+            ...prevState.game,
+            players: [...prevState.game.players, user.id],
+            users: [...prevState.game.users, user.id],
+          },
+        }),
+        () => POSTaddPlayerToGame(user.id, this.state.game.id),
+      );
     } else {
       this.setState({
         showUserNotFoundModal: true,
@@ -59,41 +59,41 @@ export default class CanvasMain extends React.Component<Props, State> {
   };
 
   handleRemovePlayerClicked = (user: User): void => {
-    const prevGame = this.state.game;
-    this.setState({
-      game: {
-        ...prevGame,
-        players: [...prevGame.players.filter((id) => id !== user.id)],
-        gms: [...prevGame.gms.filter((id) => id !== user.id)],
-        users: [...prevGame.users.filter((id) => id !== user.id)],
-      },
-    });
-
-    POSTremovePlayerFromGame(user.id, prevGame.id);
+    this.setState(
+      (prevState: State) => ({
+        game: {
+          ...prevState.game,
+          players: prevState.game.players.filter((id) => id !== user.id),
+          gms: prevState.game.gms.filter((id) => id !== user.id),
+          users: prevState.game.users.filter((id) => id !== user.id),
+        },
+      }),
+      () => POSTremovePlayerFromGame(user.id, this.state.game.id),
+    );
   };
 
   handleSubmitGameTitleClicked = (newTitle: string): void => {
-    const prevGame = this.state.game;
-    this.setState({
-      game: {
-        ...prevGame,
-        title: newTitle,
-      },
-    });
-
-    POSTupdateGameName(prevGame.id, newTitle);
+    this.setState(
+      (prevState: State) => ({
+        game: {
+          ...prevState.game,
+          title: newTitle,
+        },
+      }),
+      () => POSTupdateGameName(this.state.game.id, newTitle),
+    );
   };
 
   handlePromotePlayerClicked = (id: number): void => {
-    const prevGame = this.state.game;
-    this.setState({
-      game: {
-        ...prevGame,
-        gms: [...prevGame.gms, id],
-      },
-    });
-
-    POSTpromoteUserToGameMaster(id, prevGame.id);
+    this.setState(
+      (prevState: State) => ({
+        game: {
+          ...prevState.game,
+          gms: [...prevState.game.gms, id],
+        },
+      }),
+      () => POSTpromoteUserToGameMaster(id, this.state.game.id),
+    );
   };
 
   handleDemotePlayerClicked = (id: number): void => {
@@ -103,13 +103,15 @@ export default class CanvasMain extends React.Component<Props, State> {
         showDemoteLastGmModal: true,
       });
     } else {
-      this.setState({
-        game: {
-          ...this.state.game,
-          gms: [...this.state.game.gms.filter((gmId) => gmId !== id)],
-        },
-      });
-      POSTdemoteGameMasterToPlayer(id, this.state.game.id);
+      this.setState(
+        (prevState: State) => ({
+          game: {
+            ...prevState.game,
+            gms: prevState.game.gms.filter((gmId) => gmId !== id),
+          },
+        }),
+        () => POSTdemoteGameMasterToPlayer(id, this.state.game.id),
+      );
     }
   };
 
