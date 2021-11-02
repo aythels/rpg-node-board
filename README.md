@@ -25,3 +25,5 @@ Before you install a new package, always make sure you are in the directory `fro
 ## Backend
 
 TBA
+
+Note: react-quill was installed with --legacy-peer-deps which may cause issues at some point in the future
