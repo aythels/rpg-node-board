@@ -26,7 +26,6 @@ interface Props {
 interface State {
   game: Game;
   showUserNotFoundModal: boolean;
-  showDemoteLastGmModal: boolean;
 }
 
 export default class CanvasMain extends React.Component<Props, State> {
@@ -35,7 +34,6 @@ export default class CanvasMain extends React.Component<Props, State> {
   state: State = {
     game: GETgame(this.props.currentGameId),
     showUserNotFoundModal: false,
-    showDemoteLastGmModal: false,
   };
 
   handleInvitePlayerClicked = (username: string): void => {
@@ -97,22 +95,15 @@ export default class CanvasMain extends React.Component<Props, State> {
   };
 
   handleDemotePlayerClicked = (id: number): void => {
-    const isLastGameMaster = this.state.game.gms.length === 1;
-    if (isLastGameMaster) {
-      this.setState({
-        showDemoteLastGmModal: true,
-      });
-    } else {
-      this.setState(
-        (prevState: State) => ({
-          game: {
-            ...prevState.game,
-            gms: prevState.game.gms.filter((gmId) => gmId !== id),
-          },
-        }),
-        () => POSTdemoteGameMasterToPlayer(id, this.state.game.id),
-      );
-    }
+    this.setState(
+      (prevState: State) => ({
+        game: {
+          ...prevState.game,
+          gms: prevState.game.gms.filter((gmId) => gmId !== id),
+        },
+      }),
+      () => POSTdemoteGameMasterToPlayer(id, this.state.game.id),
+    );
   };
 
   render(): JSX.Element {
@@ -170,12 +161,6 @@ export default class CanvasMain extends React.Component<Props, State> {
           header="The user could not be found!"
           open={this.state.showUserNotFoundModal}
           onClose={() => this.setState({ showUserNotFoundModal: false })}
-        />
-        <Dialog
-          description="A game must have at least one game master at all times."
-          header="Cannot demote last game master"
-          open={this.state.showDemoteLastGmModal}
-          onClose={() => this.setState({ showDemoteLastGmModal: false })}
         />
       </div>
     );
