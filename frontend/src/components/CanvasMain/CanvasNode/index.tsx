@@ -6,12 +6,12 @@ interface Props {
   yPos: number;
   nodeWidth: number;
   nodeHeight: number;
-  removeButton(): any;
+  onCloseClicked: () => void;
 }
 
 export default class CanvasNode extends React.Component<Props> {
   render(): JSX.Element {
-    const { xPos, yPos, nodeWidth, nodeHeight, removeButton } = this.props;
+    const { xPos, yPos, nodeWidth, nodeHeight, onCloseClicked } = this.props;
 
     return (
       <div
@@ -19,7 +19,7 @@ export default class CanvasNode extends React.Component<Props> {
         style={{ left: `${xPos}px`, top: `${yPos}px`, width: `${nodeWidth}px`, height: `${nodeHeight}px` }}
       >
         <div>
-          <button type="button" onClick={removeButton}>
+          <button type="button" onClick={onCloseClicked}>
             Close
           </button>
         </div>

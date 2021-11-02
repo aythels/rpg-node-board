@@ -139,15 +139,15 @@ export default class CanvasMain extends React.Component<Props, State> {
               yPos={node.yPos}
               nodeWidth={node.width}
               nodeHeight={node.height}
-              removeButton={() => this.nodeManager.removeNode(node.id)}
+              onCloseClicked={() => this.nodeManager.removeNode(node.id)}
             />
           ))}
         </div>
 
         <CanvasToolbar
-          backButton={() => console.log('back')}
-          centerButton={this.nodeManager.setCenter}
-          addButton={this.nodeManager.createNode}
+          onBackClicked={() => console.log('back')}
+          onCenterClicked={this.nodeManager.setCenter}
+          onAddClicked={this.nodeManager.createNode}
         />
         <CanvasSidebar
           currentUserId={this.props.currentUserId}
