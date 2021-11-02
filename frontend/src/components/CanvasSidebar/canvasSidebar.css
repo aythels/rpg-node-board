@@ -1,9 +1,18 @@
 .canvas-sidebar__wrapper {
+}
+
+.canvas-sidebar__button {
+}
+
+.canvas-sidebar {
   background-color: gray;
   height: 100vh;
-  width: 22.5%;
   float: right;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.canvas-sidebar > .MuiDrawer-paper {
+  width: 22.5%;
 }
