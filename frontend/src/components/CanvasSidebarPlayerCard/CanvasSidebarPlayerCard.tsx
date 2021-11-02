@@ -5,6 +5,7 @@ import { PureComponent } from 'react';
 import { User } from '../../types';
 
 interface Props {
+  isAdmin: boolean;
   promotable: boolean;
   removable: boolean;
   user: User;
@@ -16,7 +17,7 @@ interface Props {
 export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
     // TODO: TEMP: https://static.wikia.nocookie.net/pixar/images/f/f8/Mike2.png/revision/latest?cb=20210630232000
-    const { promotable, removable, user } = this.props;
+    const { isAdmin, promotable, removable, user } = this.props;
     return (
       <div className="canvas-sidebar-player-card">
         <Tooltip arrow placement="left" title={promotable ? 'Promote to game master' : 'Demote to regular player'}>
@@ -27,7 +28,10 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
                 : `Demote game master ${user.username} to regular player`
             }
             component="span"
-            onClick={() => this.props.onPromotePlayerClicked(user.id)}
+            disabled={!isAdmin}
+            onClick={() =>
+              promotable ? this.props.onPromotePlayerClicked(user.id) : this.props.onDemotePlayerClicked(user.id)
+            }
           >
             {promotable ? <PersonOutline /> : <Person />}
           </IconButton>
@@ -36,7 +40,7 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
           {user.username.charAt(0).toUpperCase()}
         </Avatar>
         <div className="canvas-sidebar-player-card__name">{`@${user.username}`}</div>
-        {removable && (
+        {isAdmin && removable && (
           <div className="canvas-sidebar-player-card__button">
             <Tooltip arrow placement="left" title="Remove player">
               <IconButton

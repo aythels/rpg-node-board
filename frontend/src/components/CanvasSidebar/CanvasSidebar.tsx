@@ -3,13 +3,14 @@ import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Drawer, IconButton } from '@mui/material';
 import CanvasSidebarFooter from '../CanvasSidebarFooter/CanvasSidebarFooter';
 import CanvasSidebarHeader from '../CanvasSidebarHeader/CanvasSidebarHeader';
+import CanvasSidebarPlayerList from '../CanvasSidebarPlayerList/CanvasSidebarPlayerList';
 import { Component } from 'react';
 import Dialog from '../Dialog/Dialog';
-import PlayerList from '../CanvasSidebarPlayerList/CanvasSidebarPlayerList';
 import { User } from '../../types';
 
 interface Props {
   currentUserId: number;
+  isAdmin: boolean;
   onInvitePlayerClicked: (username: string) => void;
   onRemovePlayerClicked: (user: User) => void;
   onSubmitGameTitleClicked: (newTitle: string) => void;
@@ -55,18 +56,20 @@ export default class CanvasSidebar extends Component<Props, State> {
         </span>
         <Drawer anchor="right" className="canvas-sidebar" open={this.state.sidebarOpen} variant="persistent">
           <CanvasSidebarHeader
+            isAdmin={this.props.isAdmin}
             title={this.props.gameTitle}
             onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
           />
-          <PlayerList
+          <CanvasSidebarPlayerList
             currentUserId={this.props.currentUserId}
             gameMasterIds={this.props.gameMasterIds}
+            isAdmin={this.props.isAdmin}
             users={this.props.users}
             onDemotePlayerClicked={this.props.onDemotePlayerClicked}
             onPromotePlayerClicked={this.props.onPromotePlayerClicked}
             onRemovePlayerClicked={this.props.onRemovePlayerClicked}
           />
-          <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} />
+          {this.props.isAdmin && <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} />}
           <Dialog
             description="You cannot add the same user twice."
             header="This user is already in the game!"
@@ -87,7 +90,6 @@ export default class CanvasSidebar extends Component<Props, State> {
 // 4. press add icon
 
 // - add user context and view
-// - tooltips
 // - aria labels
 // - add a few profile pictures
 // - fix positioning of sidebar collapse button

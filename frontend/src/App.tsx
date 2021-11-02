@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {
   GETgame,
-  GETplayers,
   GETuserById,
   GETuserByUsername,
   POSTaddPlayerToGame,
@@ -28,6 +27,7 @@ function App(): JSX.Element {
   const [showDemoteLastGmModal, setShowDemoteLastGmModal] = useState(false);
 
   const currentGameId = 7;
+  const currentUserId = 1;
   const [game, setGame] = useState(GETgame(currentGameId));
 
   const handleInvitePlayerClicked = (username: string) => {
@@ -97,9 +97,10 @@ function App(): JSX.Element {
             render={() => (
               <div style={{ backgroundColor: 'lightgray', height: '100vh' }}>
                 <CanvasSidebar
-                  currentUserId={2}
+                  currentUserId={currentUserId}
                   gameMasterIds={game.gms}
                   gameTitle={game.title}
+                  isAdmin={game.gms.includes(currentUserId)}
                   users={game.users.map(GETuserById)}
                   onDemotePlayerClicked={handleDemotePlayerClicked}
                   onInvitePlayerClicked={handleInvitePlayerClicked}

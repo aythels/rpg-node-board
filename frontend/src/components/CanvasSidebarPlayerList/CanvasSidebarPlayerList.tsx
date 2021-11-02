@@ -9,6 +9,7 @@ import uuid from 'react-uuid';
 
 interface Props {
   currentUserId: number;
+  isAdmin: boolean;
   users: User[];
   gameMasterIds: number[];
   onRemovePlayerClicked: (user: User) => void;
@@ -61,6 +62,7 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
           return (
             <CanvasSidebarPlayerCard
               key={uuid()}
+              isAdmin={this.props.isAdmin}
               promotable={!isGameMaster}
               removable={!isGameMaster && !isCurrentPlayer}
               user={user}
