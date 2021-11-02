@@ -4,11 +4,11 @@ import {
   GETplayers,
   GETuserById,
   GETuserByUsername,
-  addUserToGame,
-  demoteGameMasterToPlayer,
-  promoteUserToGameMaster,
-  removeUserFromGame,
-  updateGameName,
+  POSTaddPlayerToGame,
+  POSTdemoteGameMasterToPlayer,
+  POSTpromoteUserToGameMaster,
+  POSTremovePlayerFromGame,
+  POSTupdateGameName,
 } from './mock-backend';
 import { Game, User } from './types';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -27,13 +27,11 @@ function App(): JSX.Element {
   const [showUserNotFoundModal, setShowUserNotFoundModal] = useState(false);
   const [showDemoteLastGmModal, setShowDemoteLastGmModal] = useState(false);
 
-  // Temp: Mock fetching data from backend
-  const currentGameId = 7; // TODO: make part of state somewhere
-  const [game, setGame] = useState<Game>(GETgame(currentGameId));
-  const [users, setUsers] = useState<User[]>(GETplayers(game.id));
+  const currentGameId = 7;
+  const [game, setGame] = useState(GETgame(currentGameId));
+  const [users, setUsers] = useState(GETplayers(game.id));
 
   const handleInviteUserClicked = (username: string) => {
-    // Temp: Mock fetching data from backend
     const user = GETuserByUsername(username);
     if (user) {
       const newUsers = [...game.users, user.id];
@@ -43,8 +41,8 @@ function App(): JSX.Element {
         users: newUsers,
       }));
       setUsers(newUsers.map(GETuserById));
-      // Temp: Mock updating data on the backend
-      addUserToGame(user, currentGameId);
+
+      POSTaddPlayerToGame(user.id, currentGameId);
     } else {
       setShowUserNotFoundModal(true);
     }
@@ -60,15 +58,13 @@ function App(): JSX.Element {
     }));
     setUsers(newUsers.map(GETuserById));
 
-    // Temp: Mock updating data on the backend
-    removeUserFromGame(user, currentGameId);
+    POSTremovePlayerFromGame(user.id, currentGameId);
   };
 
   const handleSubmitTitleClicked = (newTitle: string) => {
     setGame((prevGame) => ({ ...prevGame, title: newTitle }));
 
-    // Temp: Mock updating data on the backend
-    updateGameName(game.id, newTitle);
+    POSTupdateGameName(game.id, newTitle);
   };
 
   const handlePromoteClicked = (id: number) => {
@@ -77,8 +73,7 @@ function App(): JSX.Element {
       gms: [...prevGame.gms, id],
     }));
 
-    // Temp: Mock updating data on the backend
-    promoteUserToGameMaster(id, game.id);
+    POSTpromoteUserToGameMaster(id, game.id);
   };
 
   const handleDemoteClicked = (id: number) => {
@@ -89,8 +84,7 @@ function App(): JSX.Element {
         ...prevGame,
         gms: [...prevGame.gms.filter((gmId) => gmId !== id)],
       }));
-      // Temp: Mock updating data on the backend
-      demoteGameMasterToPlayer(id, game.id);
+      POSTdemoteGameMasterToPlayer(id, game.id);
     }
   };
 
@@ -111,7 +105,6 @@ function App(): JSX.Element {
             exact
             path="/sidebar"
             render={() => (
-              // TODO: replace wrapper with canvas
               <div style={{ backgroundColor: 'lightgray', height: '100vh' }}>
                 <CanvasSidebar
                   currentUserId={2}

@@ -144,26 +144,6 @@ export const GETsubnodesByNodeId = (node_id: number): Subnode[] => {
   return globalSubnodes.filter((subnode) => subnode.node_id == node_id);
 };
 
-export const addUserToGame = (user: User, gameId: number): void => {
-  // ...
-};
-
-export const removeUserFromGame = (user: User, gameId: number): void => {
-  // ...
-};
-
-export const updateGameName = (gameId: number, title: string): void => {
-  // ...
-};
-
-export const promoteUserToGameMaster = (userId: number, gameId: number) => {
-  // ...
-};
-
-export const demoteGameMasterToPlayer = (userId: number, gameId: number) => {
-  // ...
-};
-
 export const GETgame = (id: number): Game => {
   return allGames.filter((game) => game.id === id)[0];
 };
@@ -171,4 +151,31 @@ export const GETgame = (id: number): Game => {
 export const GETplayers = (gameId: number): User[] => {
   const game = GETgame(gameId);
   return game.users.map(GETuserById);
+};
+
+export const POSTaddPlayerToGame = (playerId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.players.push(playerId);
+  game.users.push(playerId);
+};
+
+export const POSTremovePlayerFromGame = (playerId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.players = game.players.filter((id) => id !== playerId);
+  game.users = game.users.filter((id) => id !== playerId);
+};
+
+export const POSTupdateGameName = (gameId: number, newTitle: string): void => {
+  const game = GETgame(gameId);
+  game.title = newTitle;
+};
+
+export const POSTpromoteUserToGameMaster = (userId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.gms.push(userId);
+};
+
+export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
+  const game = GETgame(gameId);
+  game.gms = game.gms.filter((id) => id !== userId);
 };
