@@ -29,7 +29,6 @@ function App(): JSX.Element {
 
   const currentGameId = 7;
   const [game, setGame] = useState(GETgame(currentGameId));
-  const [users, setUsers] = useState(GETplayers(game.id));
 
   const handleInviteUserClicked = (username: string) => {
     const user = GETuserByUsername(username);
@@ -40,7 +39,6 @@ function App(): JSX.Element {
         players: [...prevGame.players, user.id],
         users: newUsers,
       }));
-      setUsers(newUsers.map(GETuserById));
 
       POSTaddPlayerToGame(user.id, currentGameId);
     } else {
@@ -56,7 +54,6 @@ function App(): JSX.Element {
       gms: [...prevGame.gms.filter((id) => id !== user.id)],
       users: newUsers,
     }));
-    setUsers(newUsers.map(GETuserById));
 
     POSTremovePlayerFromGame(user.id, currentGameId);
   };
@@ -89,10 +86,20 @@ function App(): JSX.Element {
   };
 
   const prioritizeGameMasters = (allUsers: User[]) => {
-    return [
-      ...allUsers.filter((user: User) => game.gms.includes(user.id)),
-      ...allUsers.filter((user: User) => !game.gms.includes(user.id)),
-    ];
+    const A_BEFORE_B = -1;
+    const B_BEFORE_A = 1;
+    const gms = new Set(game.gms);
+    return [...allUsers].sort((a: User, b: User) => {
+      const isGameMasterA = gms.has(a.id);
+      const isGameMasterB = gms.has(b.id);
+      if (isGameMasterA === isGameMasterB) {
+        return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
+      } else if (isGameMasterA && !isGameMasterB) {
+        return A_BEFORE_B;
+      } else {
+        return B_BEFORE_A;
+      }
+    });
   };
 
   return (
@@ -110,7 +117,7 @@ function App(): JSX.Element {
                   currentUserId={2}
                   gameMasterIds={game.gms}
                   gameTitle={game.title}
-                  users={prioritizeGameMasters(users)}
+                  users={prioritizeGameMasters(game.users.map(GETuserById))}
                   onDemoteClicked={handleDemoteClicked}
                   onInviteUserClicked={handleInviteUserClicked}
                   onPromoteClicked={handlePromoteClicked}
