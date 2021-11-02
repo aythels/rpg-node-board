@@ -199,7 +199,7 @@ const globalGames = [
     nodes: [1, 2, 3, 4],
     players: [1],
     gms: [2],
-    users: [1, 2],
+    users: [1, 2, 3, 4, 5],
     title: 'Test Game',
     settings: {},
   },
