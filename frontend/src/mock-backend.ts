@@ -158,7 +158,7 @@ const globalUsers: User[] = [
     email: 'user1@user.com',
     games: [1],
     images: [],
-    profilePicture: 'https://i1.sndcdn.com/artworks-O3KRNzxEL0X8XF9j-WX5lJw-t500x500.jpg',
+    profilePicture: '/images/profile_picture_1.png',
   },
   {
     id: 2,
@@ -167,6 +167,7 @@ const globalUsers: User[] = [
     email: 'admin@admin.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_2.png',
   },
   {
     id: 3,
@@ -183,6 +184,7 @@ const globalUsers: User[] = [
     email: 'user3@user.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_4.png',
   },
   {
     id: 5,
@@ -191,6 +193,7 @@ const globalUsers: User[] = [
     email: 'user4@user.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_5.png',
   },
   {
     id: 6,
@@ -199,6 +202,7 @@ const globalUsers: User[] = [
     email: 'user5@user.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_6.png',
   },
   {
     id: 7,
@@ -207,6 +211,7 @@ const globalUsers: User[] = [
     email: 'user6@user.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_7.png',
   },
   {
     id: 8,
@@ -239,6 +244,7 @@ const globalUsers: User[] = [
     email: 'user9@user.com',
     games: [1],
     images: [],
+    profilePicture: '/images/profile_picture_11.png',
   },
   {
     id: 12,
