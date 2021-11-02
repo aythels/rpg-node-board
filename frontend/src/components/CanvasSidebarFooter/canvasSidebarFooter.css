@@ -1,4 +1,4 @@
-.canvas-sidebar-footer__wrapper {
+.canvas-sidebar-footer {
   margin-top: auto;
   display: flex;
   flex-direction: column;
@@ -6,29 +6,29 @@
   border-top: 1px solid lightgray;
 }
 
-.canvas-sidebar-footer__item__wrapper {
+.canvas-sidebar-footer .item__wrapper {
   margin: 0.5rem;
 }
 
-.canvas-sidebar-footer__item {
+.canvas-sidebar-footer .item {
   width: 100%;
 }
 
-.canvas-sidebar-footer__delete-button {
+.canvas-sidebar-footer .delete-button {
   width: 100%;
   background-color: rgb(158, 30, 30) !important;
 }
 
-.canvas-sidebar-footer__delete-button:hover {
+.canvas-sidebar-footer .delete-button:hover {
   background-color: darkred !important;
 }
 
-.canvas-sidebar-footer__text-field__wrapper {
+.canvas-sidebar-footer .text-field__wrapper {
   background-color: lightgray;
   border-radius: 0.5rem;
   padding: 0.5rem;
 }
 
-.canvas-sidebar-footer__text-field {
+.canvas-sidebar-footer .text-field {
   width: 100%;
 }

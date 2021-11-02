@@ -44,8 +44,8 @@ export default class CanvasSidebar extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="canvas-sidebar__wrapper">
-        <span className="canvas-sidebar__button">
+      <div className="canvas-sidebar">
+        <span className="button">
           <IconButton
             aria-label={`${this.state.sidebarOpen ? 'Close' : 'Open'} the sidebar`}
             component="span"
@@ -54,7 +54,7 @@ export default class CanvasSidebar extends Component<Props, State> {
             {this.state.sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
           </IconButton>
         </span>
-        <Drawer anchor="right" className="canvas-sidebar" open={this.state.sidebarOpen} variant="persistent">
+        <Drawer anchor="right" className="container" open={this.state.sidebarOpen} variant="persistent">
           <CanvasSidebarHeader
             isAdmin={this.props.isAdmin}
             title={this.props.gameTitle}

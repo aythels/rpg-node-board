@@ -50,11 +50,11 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="canvas-sidebar-header__wrapper">
-        <div className="canvas-sidebar-header__title__wrapper">
+      <div className="canvas-sidebar-header">
+        <div className="title__wrapper">
           <TextField
             autoComplete="off"
-            className="canvas-sidebar-header__title"
+            className="title"
             disabled={!this.state.editingTitle}
             id="outlined-basic"
             value={this.state.title}
@@ -69,7 +69,7 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
           />
         </div>
         {this.props.isAdmin && (
-          <div className="canvas-sidebar-header__button">
+          <div className="button">
             {this.state.editingTitle ? (
               <>
                 <Tooltip arrow title="Submit new title">

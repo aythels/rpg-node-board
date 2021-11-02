@@ -38,9 +38,9 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
         <Avatar alt={user.username} src={user.profilePicture}>
           {user.username.charAt(0).toUpperCase()}
         </Avatar>
-        <div className="canvas-sidebar-player-card__name">{`@${user.username}`}</div>
+        <div className="name">{`@${user.username}`}</div>
         {isAdmin && removable && (
-          <div className="canvas-sidebar-player-card__button">
+          <div className="button">
             <Tooltip arrow placement="left" title="Remove player">
               <IconButton
                 aria-label="Remove player"

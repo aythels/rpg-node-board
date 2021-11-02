@@ -9,12 +9,12 @@
   border-radius: 0.5rem;
 }
 
-.canvas-sidebar-player-card__name {
+.canvas-sidebar-player-card .name {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   overflow: hidden;
 }
 
-.canvas-sidebar-player-card__button {
+.canvas-sidebar-player-card .button {
   margin-left: auto;
 }
