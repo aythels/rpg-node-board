@@ -210,16 +210,16 @@ const globalGames = [
 // TODO: change all filter()s to find()s
 
 export const GETnodeById = (id: number): Node => {
-  return CloneDeep(globalNodes.filter((node) => node.id == id)[0]);
+  return CloneDeep(globalNodes.filter((node) => node.id === id)[0]);
 };
 
 export const GETuserById = (id: number): User => {
-  return CloneDeep(globalUsers.filter((user) => user.id == id)[0]);
+  return CloneDeep(globalUsers.filter((user) => user.id === id)[0]);
 };
 
 export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnode[] => {
-  const node = globalNodes.filter((node) => node.id == nodeId)[0] as Node;
-  const allSubnodes = globalSubnodes.filter((subnode) => subnode.node_id == nodeId);
+  const node = globalNodes.filter((node) => node.id === nodeId)[0] as Node;
+  const allSubnodes = globalSubnodes.filter((subnode) => subnode.node_id === nodeId);
   let visibleSubodes;
   if (node.editors.includes(userId)) {
     visibleSubodes = allSubnodes;
@@ -230,22 +230,25 @@ export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnod
 };
 
 export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
-  const subnode = globalSubnodes.filter((subnode) => subnode.id == id)[0];
-  subnode.content.compose(newContent);
+  const subnode = globalSubnodes.filter((subnode) => subnode.id === id)[0];
+  console.log(newContent);
+  subnode.content = subnode.content.compose(newContent);
+  // console.log(subnode.content.compose(newContent));
+  console.log(subnode.content);
 };
 
 export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
-  const subnode = globalSubnodes.filter((subnode) => subnode.id == subnodeId)[0];
+  const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
   return CloneDeep(subnode.editors.includes(userId));
 };
 
 export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
-  const node = globalNodes.filter((node) => node.id == nodeId)[0];
+  const node = globalNodes.filter((node) => node.id === nodeId)[0];
   return CloneDeep(node.editors.includes(userId));
 };
 
 export const GETnodesInGame = (gameId: number): Node[] => {
-  const game = globalGames.filter((game) => game.id == gameId)[0];
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   const nodes = [];
   for (const nodeid of game.nodes) {
     nodes.push(globalNodes[nodeid - 1]);
@@ -254,49 +257,49 @@ export const GETnodesInGame = (gameId: number): Node[] => {
 };
 
 export const GETeditorsForNode = (nodeId: number): User[] => {
-  const node = globalNodes.filter((node) => node.id == nodeId)[0];
+  const node = globalNodes.filter((node) => node.id === nodeId)[0];
   const users = globalUsers.filter((user) => node.editors.includes(user.id));
   return CloneDeep(users);
 };
 
 export const GETplayersForNode = (nodeId: number): User[] => {
-  const node = globalNodes.filter((node) => node.id == nodeId)[0];
+  const node = globalNodes.filter((node) => node.id === nodeId)[0];
   const users = globalUsers.filter((user) => !node.editors.includes(user.id));
   return CloneDeep(users);
 };
 
 export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
-  const game = globalGames.filter((game) => game.id == gameId)[0];
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   return CloneDeep(game.gms.includes(userId));
 };
 
 export const GETgameById = (gameId: number): Game => {
-  const game = globalGames.filter((game) => game.id == gameId)[0];
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   return CloneDeep(game);
 };
 
 export const GETsubnodesByNodeId = (nodeId: number): Subnode[] => {
-  return CloneDeep(globalSubnodes.filter((subnode) => subnode.node_id == nodeId));
+  return CloneDeep(globalSubnodes.filter((subnode) => subnode.node_id === nodeId));
 };
 
 export const POSTnode = (node: Node): void => {
-  const existingNode = globalNodes.filter((n) => n.id == node.id)[0];
+  const existingNode = globalNodes.filter((n) => n.id === node.id)[0];
   const index = globalNodes.indexOf(existingNode);
   if (index !== -1) {
     globalNodes[index] = CloneDeep(node);
   }
   // FOR DEBUG:
-  const newNode = globalNodes.filter((n) => n.id == node.id)[0] as Node;
+  const newNode = globalNodes.filter((n) => n.id === node.id)[0] as Node;
   console.log('New value for node is:', newNode);
 };
 
 export const POSTuser = (user: User): void => {
-  const existingUser = globalUsers.filter((u) => u.id == user.id)[0];
+  const existingUser = globalUsers.filter((u) => u.id === user.id)[0];
   const index = globalUsers.indexOf(existingUser);
   if (index !== -1) {
     globalUsers[index] = CloneDeep(user);
   }
   // FOR DEBUG:
-  const newUser = globalUsers.filter((u) => u.id == user.id)[0] as User;
+  const newUser = globalUsers.filter((u) => u.id === user.id)[0] as User;
   console.log('New value for node is:', newUser);
 };

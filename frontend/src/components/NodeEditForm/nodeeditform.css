@@ -39,5 +39,6 @@
 }
 
 .subnode-organization-menu__subnode:hover {
-  cursor: move;
+  /* cursor: move; */
+  cursor: default;
 }

@@ -2,7 +2,7 @@ import './subnodeview.css';
 import { Component } from 'react';
 import Quill from 'quill';
 import Delta from 'quill-delta';
-import NodeLinkBlot from '../../NodeLink';
+import NodeLinkBlot from '../../blots/NodeLink';
 import { Subnode, User } from '../../types';
 import { GETnodesInGame, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
 
@@ -44,10 +44,6 @@ NodeLinkBlot.blotName = 'nodelink';
 NodeLinkBlot.tagName = 'A';
 
 Quill.register(NodeLinkBlot);
-
-// Quill.register({
-//   'formats/nodelink': NodeLink,
-// });
 
 interface TextLink {
   location: number;
@@ -99,7 +95,7 @@ export default class SubnodeView extends Component<Props, State> {
   updateNodeTextLinks = (): void => {
     if (this.state.editor) {
       // Add in new links:
-      const nodes = GETnodesInGame(1); // <-- this is horribly inefficient
+      const nodes = GETnodesInGame(1); // <-- this is horribly inefficient, also hardcoded GameId
       const currentText = this.state.editor.getText();
       const links: TextLink[] = [];
       for (const node of nodes) {
@@ -125,9 +121,8 @@ export default class SubnodeView extends Component<Props, State> {
   saveEditorChanges = (): void => {
     if (this.state.editor && this.state.change.length() > 0) {
       console.log('Saving changes for subnode ' + this.state.subnode.id, this.state.change);
-      POSTsubnodeContent(this.state.subnode.id, this.state.editor.getContents());
-      this.setState({ change: new Delta() });
-      this.updateNodeTextLinks();
+      POSTsubnodeContent(this.state.subnode.id, this.state.change);
+      this.setState({ change: new Delta() }, this.updateNodeTextLinks);
     }
   };
 

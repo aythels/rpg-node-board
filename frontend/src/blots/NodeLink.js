@@ -10,6 +10,7 @@ class NodeLinkBlot extends Inline {
     // node.setAttribute('target', '_self');
     node.setAttribute('title', node.textContent);
     node.setAttribute('style', 'color:blue');
+    node.setAttribute('url', url);
     node.addEventListener('click', () => {
       console.log(url);
     });
@@ -18,12 +19,14 @@ class NodeLinkBlot extends Inline {
   }
 
   static formats(domNode) {
-    return domNode.getAttribute('onClick') || true;
+    // return domNode.getAttribute('url') || true;
+    console.log(domNode); // To suppress warning
+    return true;
   }
 
   format(name, value) {
     if (name === 'nodelink' && value) {
-      this.domNode.setAttribute('onClick', value);
+      this.domNode.setAttribute('url', value);
     } else {
       super.format(name, value);
     }
