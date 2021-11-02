@@ -1,3 +1,5 @@
+import Delta from 'quill-delta';
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 
@@ -7,22 +9,26 @@ export interface Node {
   id: number;
   name: string;
   image: string;
+  imageAlt: string;
   subnodes: number[];
-  // access_level: number;
+  informationLevels: { [userid: number]: number };
   editors: number[];
   type: string;
 }
 
 export interface Subnode {
   id: number;
-  // access_level: number;
+  name: string;
+  informationLevel: number;
   editors: number[];
   type: string;
-  content: unknown;
+  content: Delta;
 }
 
 export interface Game {
+  id: number;
   nodes: number[];
+  title: string;
   players: number[];
   gms: number[];
   users: number[]; // = players + gms, might be a better way to define this
@@ -35,4 +41,19 @@ export interface User {
   password: string; // FOR NOW
   email: string; // FOR NOW
   games: number[];
+  images: string[]; // FOR NOW
+}
+
+export enum DefaultNodeTypes {
+  location,
+  organization,
+  item,
+  person,
+}
+
+export enum DefaultSubnodeTypes {
+  description,
+  notes,
+  event,
+  linkList,
 }
