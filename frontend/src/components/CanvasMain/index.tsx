@@ -58,17 +58,17 @@ export default class CanvasMain extends React.Component<Props, State> {
     }
   };
 
-  handleRemovePlayerClicked = (user: User): void => {
+  handleRemovePlayerClicked = (playerId: number): void => {
     this.setState(
       (prevState: State) => ({
         game: {
           ...prevState.game,
-          players: prevState.game.players.filter((id) => id !== user.id),
-          gms: prevState.game.gms.filter((id) => id !== user.id),
-          users: prevState.game.users.filter((id) => id !== user.id),
+          players: prevState.game.players.filter((id) => id !== playerId),
+          gms: prevState.game.gms.filter((id) => id !== playerId),
+          users: prevState.game.users.filter((id) => id !== playerId),
         },
       }),
-      () => POSTremovePlayerFromGame(user.id, this.state.game.id),
+      () => POSTremovePlayerFromGame(playerId, this.state.game.id),
     );
   };
 

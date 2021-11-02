@@ -12,7 +12,7 @@ interface Props {
   currentUserId: number;
   isAdmin: boolean;
   onInvitePlayerClicked: (username: string) => void;
-  onRemovePlayerClicked: (user: User) => void;
+  onRemovePlayerClicked: (id: number) => void;
   onSubmitGameTitleClicked: (newTitle: string) => void;
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;

@@ -9,14 +9,14 @@ interface Props {
   isAdmin: boolean;
   users: User[];
   gameMasterIds: number[];
-  onRemovePlayerClicked: (user: User) => void;
+  onRemovePlayerClicked: (id: number) => void;
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;
 }
 
 interface State {
   showRemoveUserDialog: boolean;
-  userToRemove?: User;
+  userIdToRemove?: number;
 }
 
 export default class CanvasSidebarPlayerList extends Component<Props, State> {
@@ -25,10 +25,10 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
   };
 
   handleUserRemove = (): void => {
-    if (this.state.userToRemove) {
-      this.props.onRemovePlayerClicked(this.state.userToRemove);
+    if (this.state.userIdToRemove) {
+      this.props.onRemovePlayerClicked(this.state.userIdToRemove);
     }
-    this.setState({ showRemoveUserDialog: false, userToRemove: undefined });
+    this.setState({ showRemoveUserDialog: false, userIdToRemove: undefined });
   };
 
   prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
@@ -65,8 +65,8 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
               user={user}
               onDemotePlayerClicked={this.props.onDemotePlayerClicked}
               onPromotePlayerClicked={this.props.onPromotePlayerClicked}
-              onRemovePlayerClicked={(userToRemove: User) => {
-                this.setState({ showRemoveUserDialog: true, userToRemove });
+              onRemovePlayerClicked={(id: number) => {
+                this.setState({ showRemoveUserDialog: true, userIdToRemove: id });
               }}
             />
           );
@@ -76,8 +76,8 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
           header="Remove user?"
           open={this.state.showRemoveUserDialog}
           onAgree={this.handleUserRemove}
-          onClose={() => this.setState({ showRemoveUserDialog: false, userToRemove: undefined })}
-          onDisagree={() => this.setState({ showRemoveUserDialog: false, userToRemove: undefined })}
+          onClose={() => this.setState({ showRemoveUserDialog: false, userIdToRemove: undefined })}
+          onDisagree={() => this.setState({ showRemoveUserDialog: false, userIdToRemove: undefined })}
         />
       </div>
     );
