@@ -1,41 +1,39 @@
-// /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-// import Inline from 'quill';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import Quill from 'quill';
 
-// class NodeLink extends Inline {
-//   static create(value) {
-//     const node = super.create(value);
-//     node.setAttribute('href', this.sanitize(value));
-//     node.setAttribute('rel', 'noopener noreferrer');
-//     // node.setAttribute('target', '_blank');
-//     return node;
-//   }
+let Inline = Quill.import('blots/inline');
 
-//   static formats(domNode) {
-//     return domNode.getAttribute('href');
-//   }
+class NodeLinkBlot extends Inline {
+  static create(url) {
+    let node = super.create();
+    // node.setAttribute('href', url);
+    // node.setAttribute('target', '_self');
+    node.setAttribute('title', node.textContent);
+    node.setAttribute('style', 'color:blue');
+    node.addEventListener('click', () => {
+      console.log(url);
+    });
+    node.classList.add('nodelink');
+    return node;
+  }
 
-//   static sanitize(url) {
-//     return sanitize(url, this.PROTOCOL_WHITELIST) ? url : this.SANITIZED_URL;
-//   }
+  static formats(domNode) {
+    return domNode.getAttribute('onClick') || true;
+  }
 
-//   format(name, value) {
-//     if (name !== this.statics.blotName || !value) {
-//       super.format(name, value);
-//     } else {
-//       this.domNode.setAttribute('href', this.constructor.sanitize(value));
-//     }
-//   }
-// }
-// NodeLink.blotName = 'link';
-// NodeLink.tagName = 'A';
-// NodeLink.SANITIZED_URL = 'about:blank';
-// NodeLink.PROTOCOL_WHITELIST = ['http', 'https', 'mailto', 'tel'];
+  format(name, value) {
+    if (name === 'nodelink' && value) {
+      this.domNode.setAttribute('onClick', value);
+    } else {
+      super.format(name, value);
+    }
+  }
 
-// function sanitize(url, protocols) {
-//   const anchor = document.createElement('a');
-//   anchor.href = url;
-//   const protocol = anchor.href.slice(0, anchor.href.indexOf(':'));
-//   return protocols.indexOf(protocol) > -1;
-// }
+  formats() {
+    let formats = super.formats();
+    formats['nodelink'] = NodeLinkBlot.formats(this.domNode);
+    return formats;
+  }
+}
 
-// export { NodeLink as default, sanitize };
+export default NodeLinkBlot;

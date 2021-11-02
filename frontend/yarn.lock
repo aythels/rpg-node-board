@@ -8465,10 +8465,20 @@
     "dot-case" "^3.0.4"
     "tslib" "^2.0.3"
 
-"parchment@^1.1.2", "parchment@^1.1.4":
+"parchment@^1.1.2":
   "integrity" "sha512-J5FBQt/pM2inLzg4hEWmzQx/8h8D0CiDxaG3vyp9rKrQRSDgBlhjdP5jQGgosEajXPSQouXGHOmVdgo7QmJuOg=="
   "resolved" "https://registry.npmjs.org/parchment/-/parchment-1.1.4.tgz"
   "version" "1.1.4"
+
+"parchment@^1.1.4":
+  "integrity" "sha512-J5FBQt/pM2inLzg4hEWmzQx/8h8D0CiDxaG3vyp9rKrQRSDgBlhjdP5jQGgosEajXPSQouXGHOmVdgo7QmJuOg=="
+  "resolved" "https://registry.npmjs.org/parchment/-/parchment-1.1.4.tgz"
+  "version" "1.1.4"
+
+"parchment@^2.0.0-dev.2":
+  "integrity" "sha512-4fgRny4pPISoML08Zp7poi52Dff3E2G1ORTi2D/acJ/RiROdDAMDB6VcQNfBcmehrX5Wixp6dxh6JjLyE5yUNQ=="
+  "resolved" "https://registry.npmjs.org/parchment/-/parchment-2.0.0-dev.2.tgz"
+  "version" "2.0.0-dev.2"
 
 "parent-module@^1.0.0":
   "integrity" "sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g=="

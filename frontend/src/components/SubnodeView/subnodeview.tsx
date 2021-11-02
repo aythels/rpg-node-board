@@ -2,7 +2,7 @@ import './subnodeview.css';
 import { Component } from 'react';
 import Quill from 'quill';
 import Delta from 'quill-delta';
-// import NodeLink from '../../NodeLink';
+import NodeLinkBlot from '../../NodeLink';
 import { Subnode, User } from '../../types';
 import { GETnodesInGame, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
 
@@ -39,6 +39,11 @@ const standardEditorToolbar = [
   ['image', 'code-block'],
   ['clean'],
 ];
+
+NodeLinkBlot.blotName = 'nodelink';
+NodeLinkBlot.tagName = 'A';
+
+Quill.register(NodeLinkBlot);
 
 // Quill.register({
 //   'formats/nodelink': NodeLink,
@@ -105,7 +110,7 @@ export default class SubnodeView extends Component<Props, State> {
         }
       }
       for (const link of links) {
-        this.state.editor.formatText(link.location, link.length, 'link', '/nodeviewAdmin/' + link.id, 'api');
+        this.state.editor.formatText(link.location, link.length, 'nodelink', 'nodeviewAdmin/' + link.id, 'api');
       }
       // TODO: Remove outdated links
     }
@@ -119,7 +124,7 @@ export default class SubnodeView extends Component<Props, State> {
 
   saveEditorChanges = (): void => {
     if (this.state.editor && this.state.change.length() > 0) {
-      console.log('Saving changes for subnode ' + this.state.subnode.id);
+      console.log('Saving changes for subnode ' + this.state.subnode.id, this.state.change);
       POSTsubnodeContent(this.state.subnode.id, this.state.editor.getContents());
       this.setState({ change: new Delta() });
       this.updateNodeTextLinks();
