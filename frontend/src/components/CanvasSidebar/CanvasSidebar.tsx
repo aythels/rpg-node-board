@@ -40,7 +40,7 @@ export default class CanvasSidebar extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="sidebar">
+      <div className="canvas-sidebar__wrapper">
         <CanvasSidebarHeader
           title={this.props.gameTitle}
           onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
@@ -72,9 +72,8 @@ export default class CanvasSidebar extends Component<Props, State> {
 // 3. text field changes into dropdown
 // 4. press add icon
 
+// - better remove icon
 // - add at least one profile picture
-// - split card
-// - prefix CSS class names
 // - add collapse sidebar button
 // - add user view
 // - tooltips

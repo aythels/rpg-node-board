@@ -1,4 +1,4 @@
-.player-list__card {
+.canvas-sidebar-player-card {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -9,8 +9,12 @@
   border-radius: 0.5rem;
 }
 
-.player-list__card__name {
+.canvas-sidebar-player-card__name {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   overflow: hidden;
+}
+
+.canvas-sidebar-player-card__button {
+  margin-left: auto;
 }

@@ -1,4 +1,4 @@
-.header {
+.canvas-sidebar-header__wrapper {
   background-color: lightgray;
   display: flex;
   flex-direction: row;
@@ -8,15 +8,15 @@
   border-radius: 0.5rem;
 }
 
-.header__title {
+.canvas-sidebar-header__title__wrapper {
   flex-grow: 1;
 }
 
-.header__title__textfield {
+.canvas-sidebar-header__title {
   width: 100%;
 }
 
-.header__button {
+.canvas-sidebar-header__button {
   margin-left: auto;
   white-space: nowrap;
 }

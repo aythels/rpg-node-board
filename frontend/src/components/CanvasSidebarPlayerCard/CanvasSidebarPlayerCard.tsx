@@ -17,7 +17,7 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
     const { promotable, removable, user } = this.props;
     return (
-      <div className="player-list__card">
+      <div className="canvas-sidebar-player-card">
         {promotable ? (
           <IconButton
             aria-label={`Promote player ${user.username} to game master`}
@@ -36,9 +36,9 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
           </IconButton>
         )}
         <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
-        <div className="player-list__card__name">{`@${user.username}`}</div>
+        <div className="canvas-sidebar-player-card__name">{`@${user.username}`}</div>
         {removable && (
-          <div className="button--remove">
+          <div className="canvas-sidebar-player-card__button">
             <IconButton
               aria-label="Remove player"
               component="span"

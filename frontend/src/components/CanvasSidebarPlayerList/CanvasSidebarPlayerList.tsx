@@ -54,7 +54,7 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
     const users = this.prioritizeGameMasters(this.props.gameMasterIds, this.props.users);
 
     return (
-      <div className="player-list">
+      <div className="canvas-sidebar-player-list">
         {users.map((user: User) => {
           const isCurrentPlayer = user.id === this.props.currentUserId;
           const isGameMaster = this.props.gameMasterIds.includes(user.id);

@@ -1,7 +1,3 @@
-.player-list {
+.canvas-sidebar-player-list {
   overflow: scroll;
-}
-
-.button--remove {
-  margin-left: auto;
 }

@@ -49,11 +49,11 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="header">
-        <div className="header__title">
+      <div className="canvas-sidebar-header__wrapper">
+        <div className="canvas-sidebar-header__title__wrapper">
           <TextField
             autoComplete="off"
-            className="header__title__textfield"
+            className="canvas-sidebar-header__title"
             disabled={!this.state.editingTitle}
             id="outlined-basic"
             value={this.state.title}
@@ -61,7 +61,7 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
             onChange={this.handleTitleChanged}
           />
         </div>
-        <div className="header__button">
+        <div className="canvas-sidebar-header__button">
           {this.state.editingTitle ? (
             <>
               <IconButton

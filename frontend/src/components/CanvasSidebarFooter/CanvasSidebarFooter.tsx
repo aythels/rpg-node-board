@@ -25,12 +25,12 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="footer">
-        <div className="footer__item">
-          <div className="footer__text-field--wrapper">
+      <div className="canvas-sidebar-footer__wrapper">
+        <div className="canvas-sidebar-footer__item__wrapper">
+          <div className="canvas-sidebar-footer__text-field__wrapper">
             <TextField
               autoComplete="off"
-              className="footer__item--inner"
+              className="canvas-sidebar-footer__text-field"
               id="outlined-basic"
               label="Enter player name"
               value={this.state.inviteName}
@@ -39,10 +39,10 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
             />
           </div>
         </div>
-        <div className="footer__item">
+        <div className="canvas-sidebar-footer__item__wrapper">
           <Button
             aria-label="invite user to the game"
-            className="footer__item--inner"
+            className="canvas-sidebar-footer__item"
             disabled={!this.state.inviteName}
             startIcon={<PersonAdd />}
             variant="contained"
@@ -56,10 +56,10 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
             Invite player
           </Button>
         </div>
-        <div className="footer__item">
+        <div className="canvas-sidebar-footer__item__wrapper">
           <Button
             aria-label="delete game server"
-            className="footer__button--delete footer__item--inner"
+            className="canvas-sidebar-footer__item canvas-sidebar-footer__delete-button"
             startIcon={<Delete />}
             variant="contained"
             onClick={() => this.setState({ showDeleteServerDialog: true })}
