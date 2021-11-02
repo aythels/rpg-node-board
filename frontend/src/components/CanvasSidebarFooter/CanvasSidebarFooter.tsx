@@ -1,8 +1,8 @@
-import './footer.css';
+import './canvasSidebarFooter.css';
 import { Button, TextField } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
-import Dialog from '../../../Dialog/Dialog';
+import Dialog from '../Dialog/Dialog';
 
 interface Props {
   onInvitePlayerClicked: (username: string) => void;
@@ -13,7 +13,7 @@ interface State {
   showDeleteServerDialog: boolean;
 }
 
-export default class Footer extends Component<Props, State> {
+export default class CanvasSidebarFooter extends Component<Props, State> {
   state: State = {
     inviteName: '',
     showDeleteServerDialog: false,
@@ -32,7 +32,7 @@ export default class Footer extends Component<Props, State> {
               autoComplete="off"
               className="footer__item--inner"
               id="outlined-basic"
-              label="Type player name"
+              label="Enter player name"
               value={this.state.inviteName}
               variant="outlined"
               onChange={this.handleInviteNameChanged}

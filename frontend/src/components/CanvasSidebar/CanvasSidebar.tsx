@@ -1,10 +1,10 @@
 import './canvasSidebar.css';
+import CanvasSidebarFooter from '../CanvasSidebarFooter/CanvasSidebarFooter';
+import CanvasSidebarHeader from '../CanvasSidebarHeader/CanvasSidebarHeader';
 import { Component } from 'react';
 import Dialog from '../Dialog/Dialog';
-import Footer from './components/Footer/Footer';
-import Header from './components/Header/Header';
 
-import PlayerList from './components/PlayerList/PlayerList';
+import PlayerList from '../CanvasSidebarPlayerList/CanvasSidebarPlayerList';
 import { User } from '../../types';
 
 interface Props {
@@ -41,7 +41,10 @@ export default class CanvasSidebar extends Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className="sidebar">
-        <Header title={this.props.gameTitle} onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked} />
+        <CanvasSidebarHeader
+          title={this.props.gameTitle}
+          onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
+        />
         <PlayerList
           currentUserId={this.props.currentUserId}
           gameMasterIds={this.props.gameMasterIds}
@@ -50,7 +53,7 @@ export default class CanvasSidebar extends Component<Props, State> {
           onPromotePlayerClicked={this.props.onPromotePlayerClicked}
           onRemovePlayerClicked={this.props.onRemovePlayerClicked}
         />
-        <Footer onInvitePlayerClicked={this.handleInviteUserClicked} />
+        <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} />
         <Dialog
           description="You cannot add the same user twice."
           header="This user is already in the game!"
@@ -69,10 +72,9 @@ export default class CanvasSidebar extends Component<Props, State> {
 // 3. text field changes into dropdown
 // 4. press add icon
 
-// - each component prefix with Sidebar, prevent nesting
+// - add at least one profile picture
 // - split card
 // - prefix CSS class names
-// - fix some wording
 // - add collapse sidebar button
 // - add user view
 // - tooltips

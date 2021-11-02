@@ -1,4 +1,4 @@
-import './header.css';
+import './canvasSidebarHeader.css';
 import { ChangeEvent, Component } from 'react';
 import { Close, Done, Edit } from '@mui/icons-material';
 import { IconButton, TextField } from '@mui/material';
@@ -13,7 +13,7 @@ interface State {
   title: string;
 }
 
-export default class Header extends Component<Props, State> {
+export default class CanvasSidebarHeader extends Component<Props, State> {
   state: State = {
     editingTitle: false,
     title: this.props.title,

@@ -1,0 +1,7 @@
+.player-list {
+  overflow: scroll;
+}
+
+.button--remove {
+  margin-left: auto;
+}

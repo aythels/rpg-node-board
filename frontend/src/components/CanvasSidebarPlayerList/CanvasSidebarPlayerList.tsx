@@ -1,68 +1,19 @@
-import './playerList.css';
-import { Avatar, IconButton } from '@mui/material';
-import { Component, PureComponent } from 'react';
-import { HighlightOff, Person, PersonOutline } from '@mui/icons-material';
-import Dialog from '../../../Dialog/Dialog';
-import { User } from '../../../../types';
+import './canvasSidebarPlayerList.css';
+import CanvasSidebarPlayerCard from '../CanvasSidebarPlayerCard/CanvasSidebarPlayerCard';
+import { Component } from 'react';
+import Dialog from '../Dialog/Dialog';
+import { User } from '../../types';
 // eslint-disable-next-line
 // @ts-ignore react-uuid has no type declaration file
 import uuid from 'react-uuid';
 
-interface Handlers {
-  onRemovePlayerClicked: (user: User) => void;
-  onPromotePlayerClicked: (id: number) => void;
-  onDemotePlayerClicked: (id: number) => void;
-}
-
-interface PlayerCardProps extends Handlers {
-  promotable: boolean;
-  removable: boolean;
-  user: User;
-}
-class PlayerCard extends PureComponent<PlayerCardProps> {
-  render() {
-    const { promotable, removable, user } = this.props;
-    return (
-      <div className="player-list__card">
-        {promotable ? (
-          <IconButton
-            aria-label={`Promote player ${user.username} to game master`}
-            component="span"
-            onClick={() => this.props.onPromotePlayerClicked(user.id)}
-          >
-            <PersonOutline />
-          </IconButton>
-        ) : (
-          <IconButton
-            aria-label={`Demote game master ${user.username} to regular player`}
-            component="span"
-            onClick={() => this.props.onDemotePlayerClicked(user.id)}
-          >
-            <Person />
-          </IconButton>
-        )}
-        <Avatar>{user.username.charAt(0).toUpperCase()}</Avatar>
-        <div className="player-list__card__name">{`@${user.username}`}</div>
-        {removable && (
-          <div className="button--remove">
-            <IconButton
-              aria-label="Remove player"
-              component="span"
-              onClick={() => this.props.onRemovePlayerClicked(user)}
-            >
-              <HighlightOff />
-            </IconButton>
-          </div>
-        )}
-      </div>
-    );
-  }
-}
-
-interface Props extends Handlers {
+interface Props {
   currentUserId: number;
   users: User[];
   gameMasterIds: number[];
+  onRemovePlayerClicked: (user: User) => void;
+  onPromotePlayerClicked: (id: number) => void;
+  onDemotePlayerClicked: (id: number) => void;
 }
 
 interface State {
@@ -70,7 +21,7 @@ interface State {
   userToRemove?: User;
 }
 
-export default class PlayerList extends Component<Props, State> {
+export default class CanvasSidebarPlayerList extends Component<Props, State> {
   state: State = {
     showRemoveUserDialog: false,
   };
@@ -108,7 +59,7 @@ export default class PlayerList extends Component<Props, State> {
           const isCurrentPlayer = user.id === this.props.currentUserId;
           const isGameMaster = this.props.gameMasterIds.includes(user.id);
           return (
-            <PlayerCard
+            <CanvasSidebarPlayerCard
               key={uuid()}
               promotable={!isGameMaster}
               removable={!isGameMaster && !isCurrentPlayer}
