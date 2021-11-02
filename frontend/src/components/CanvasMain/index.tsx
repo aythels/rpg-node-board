@@ -14,7 +14,7 @@ import {
   POSTremovePlayerFromGame,
   POSTupdateGameName,
 } from '../../mock-backend';
-import { Game, User } from '../../types';
+import { Game } from '../../types';
 import Dialog from '../Dialog/Dialog';
 import CanvasSidebar from '../CanvasSidebar/CanvasSidebar';
 

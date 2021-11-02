@@ -9,9 +9,9 @@ interface Props {
   promotable: boolean;
   removable: boolean;
   user: User;
-  onRemovePlayerClicked: (id: number) => void;
-  onPromotePlayerClicked: (id: number) => void;
-  onDemotePlayerClicked: (id: number) => void;
+  onRemovePlayerClicked: () => void;
+  onPromotePlayerClicked: () => void;
+  onDemotePlayerClicked: () => void;
 }
 
 export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
@@ -28,9 +28,7 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
             }
             component="span"
             disabled={!isAdmin}
-            onClick={() =>
-              promotable ? this.props.onPromotePlayerClicked(user.id) : this.props.onDemotePlayerClicked(user.id)
-            }
+            onClick={promotable ? this.props.onPromotePlayerClicked : this.props.onDemotePlayerClicked}
           >
             {promotable ? <PersonOutline /> : <Person />}
           </IconButton>
@@ -42,11 +40,7 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
         {isAdmin && removable && (
           <div className="button">
             <Tooltip arrow placement="left" title="Remove player">
-              <IconButton
-                aria-label="Remove player"
-                component="span"
-                onClick={() => this.props.onRemovePlayerClicked(user.id)}
-              >
+              <IconButton aria-label="Remove player" component="span" onClick={this.props.onRemovePlayerClicked}>
                 <PersonRemove />
               </IconButton>
             </Tooltip>
