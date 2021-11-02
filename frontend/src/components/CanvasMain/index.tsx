@@ -12,7 +12,6 @@ export default class CanvasMain extends React.Component {
   render(): JSX.Element {
 
     const array = this.nodeManager.allNodes.slice().reverse();
-    // filter dont render things out of canvas
 
     return (
       <div className="w"

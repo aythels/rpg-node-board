@@ -2,11 +2,11 @@
   user-select: none;
   position: absolute;
   background-color: yellow;
+  border: solid #000;
+  border-width: 2px;
   text-align: center;
   top: 100px;
   left: 100px;
   width: 200px;
   height: 200px;
-  border: solid #000;
-  border-width: 2px;
 }
