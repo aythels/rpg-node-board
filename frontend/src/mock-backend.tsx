@@ -113,6 +113,20 @@ const globalUsers: User[] = [
     email: 'user8@user.com',
     games: [1],
   },
+  {
+    id: 11,
+    username: 'user9',
+    password: 'user9',
+    email: 'user9@user.com',
+    games: [1],
+  },
+  {
+    id: 12,
+    username: 'user10',
+    password: 'user10',
+    email: 'user10@user.com',
+    games: [1],
+  },
 ];
 
 const game1: Game = {
@@ -121,7 +135,7 @@ const game1: Game = {
   nodes: [1],
   players: [1],
   gms: [2],
-  users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   settings: {},
 };
 
