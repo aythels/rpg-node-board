@@ -41,13 +41,14 @@ const globalNodes = [
   },
 ];
 
-const globalUsers = [
+const globalUsers: User[] = [
   {
     id: 1,
     username: 'user1',
     password: 'user1',
     email: 'user1@user.com',
     games: [1],
+    profilePicture: 'https://i1.sndcdn.com/artworks-O3KRNzxEL0X8XF9j-WX5lJw-t500x500.jpg',
   },
   {
     id: 2,
