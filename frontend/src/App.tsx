@@ -27,7 +27,7 @@ function App(): JSX.Element {
   const [showDemoteLastGmModal, setShowDemoteLastGmModal] = useState(false);
 
   const currentGameId = 7;
-  const currentUserId = 1;
+  const currentUserId = 2;
   const [game, setGame] = useState(GETgame(currentGameId));
 
   const handleInvitePlayerClicked = (username: string) => {

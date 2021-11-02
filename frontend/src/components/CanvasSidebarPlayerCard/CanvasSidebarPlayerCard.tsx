@@ -16,7 +16,6 @@ interface Props {
 
 export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
-    // TODO: TEMP: https://static.wikia.nocookie.net/pixar/images/f/f8/Mike2.png/revision/latest?cb=20210630232000
     const { isAdmin, promotable, removable, user } = this.props;
     return (
       <div className="canvas-sidebar-player-card">
