@@ -160,7 +160,7 @@ export default class CanvasMain extends React.Component<Props, State> {
 
         <Dialog
           description="Please try again."
-          header="The user could not be found!"
+          header="The player could not be found!"
           open={this.state.showUserNotFoundModal}
           onClose={() => this.setState({ showUserNotFoundModal: false })}
         />
