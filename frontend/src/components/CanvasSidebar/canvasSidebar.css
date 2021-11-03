@@ -1,5 +1,6 @@
-.canvas-sidebar .button {
+.canvas-sidebar .open-close-button {
   position: absolute;
+  transition: all 0.15s ease-out;
 }
 
 .canvas-sidebar .navbar {
