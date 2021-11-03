@@ -1,7 +1,5 @@
-.canvas-sidebar {
-}
-
 .canvas-sidebar .button {
+  position: absolute;
 }
 
 .canvas-sidebar .navbar {

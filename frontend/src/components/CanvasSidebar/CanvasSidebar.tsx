@@ -53,15 +53,18 @@ export default class CanvasSidebar extends Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className="canvas-sidebar">
-        <span className="button">
-          <IconButton
-            aria-label={`${this.state.sidebarOpen ? 'Close' : 'Open'} the sidebar`}
-            component="span"
-            onClick={this.toggleSidebarOpen}
-          >
-            {this.state.sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
-          </IconButton>
-        </span>
+        <IconButton
+          className="button"
+          style={{
+            right: this.state.sidebarOpen ? '22.5%' : '0%',
+            transition: 'all 0.15s ease-out',
+          }}
+          aria-label={`${this.state.sidebarOpen ? 'Close' : 'Open'} the sidebar`}
+          component="span"
+          onClick={this.toggleSidebarOpen}
+        >
+          {this.state.sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
+        </IconButton>
         <Drawer anchor="right" className="container" open={this.state.sidebarOpen} variant="persistent">
           {this.props.isAdmin && (
             <div className="navbar">
