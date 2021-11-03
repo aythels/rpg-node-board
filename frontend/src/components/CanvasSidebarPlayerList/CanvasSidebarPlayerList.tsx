@@ -6,7 +6,7 @@ import { User } from '../../types';
 
 interface Props {
   currentUserId: number;
-  isAdmin: boolean;
+  exposeSettings: boolean;
   users: User[];
   gameMasterIds: number[];
   onRemovePlayerClicked: (id: number) => void;
@@ -88,7 +88,7 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
           return (
             <CanvasSidebarPlayerCard
               key={user.id}
-              isAdmin={this.props.isAdmin}
+              exposeSettings={this.props.exposeSettings}
               promotable={!isGameMaster}
               removable={!isGameMaster && !isCurrentPlayer}
               user={user}

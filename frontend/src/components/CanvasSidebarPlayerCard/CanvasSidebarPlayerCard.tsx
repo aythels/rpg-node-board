@@ -5,7 +5,7 @@ import { PureComponent } from 'react';
 import { User } from '../../types';
 
 interface Props {
-  isAdmin: boolean;
+  exposeSettings: boolean;
   promotable: boolean;
   removable: boolean;
   user: User;
@@ -16,7 +16,7 @@ interface Props {
 
 export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
-    const { isAdmin, promotable, removable, user } = this.props;
+    const { exposeSettings, promotable, removable, user } = this.props;
     return (
       <div className="canvas-sidebar-player-card">
         <Tooltip arrow placement="left" title={promotable ? 'Promote to game master' : 'Demote to regular player'}>
@@ -27,7 +27,7 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
                 : `Demote game master ${user.username} to regular player`
             }
             component="span"
-            disabled={!isAdmin}
+            disabled={!exposeSettings}
             onClick={promotable ? this.props.onPromotePlayerClicked : this.props.onDemotePlayerClicked}
           >
             {promotable ? <PersonOutline /> : <Person />}
@@ -37,7 +37,7 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
           {user.username.charAt(0).toUpperCase()}
         </Avatar>
         <div className="name">{`@${user.username}`}</div>
-        {isAdmin && removable && (
+        {exposeSettings && removable && (
           <div className="button">
             <Tooltip arrow placement="left" title="Remove player">
               <IconButton aria-label="Remove player" component="span" onClick={this.props.onRemovePlayerClicked}>

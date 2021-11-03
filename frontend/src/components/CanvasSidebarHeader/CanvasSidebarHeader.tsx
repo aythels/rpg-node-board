@@ -4,7 +4,7 @@ import { Close, Done, Edit } from '@mui/icons-material';
 import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
 
 interface Props {
-  isAdmin: boolean;
+  exposeSettings: boolean;
   onSubmitGameTitleClicked: (newTitle: string) => void;
   title: string;
 }
@@ -59,7 +59,7 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
     return (
       <div className="canvas-sidebar-header">
         <div className="title__wrapper">
-          {this.props.isAdmin && this.state.editingTitle ? (
+          {this.props.exposeSettings && this.state.editingTitle ? (
             <TextField
               autoComplete="off"
               className="title"
@@ -75,7 +75,7 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
             </Typography>
           )}
         </div>
-        {this.props.isAdmin && (
+        {this.props.exposeSettings && (
           <div className="button">
             {this.state.editingTitle ? (
               <>

@@ -91,14 +91,14 @@ export default class CanvasSidebar extends Component<Props, State> {
             </div>
           )}
           <CanvasSidebarHeader
-            isAdmin={this.state.settingsOpen}
+            exposeSettings={this.state.settingsOpen}
             title={this.props.gameTitle}
             onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
           />
           <CanvasSidebarPlayerList
             currentUserId={this.props.currentUserId}
             gameMasterIds={this.props.gameMasterIds}
-            isAdmin={this.state.settingsOpen}
+            exposeSettings={this.state.settingsOpen}
             users={this.props.users}
             onDemotePlayerClicked={this.props.onDemotePlayerClicked}
             onPromotePlayerClicked={this.props.onPromotePlayerClicked}
