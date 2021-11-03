@@ -1,6 +1,6 @@
 import './canvasSidebar.css';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { Drawer, IconButton } from '@mui/material';
+import { ChevronLeft, ChevronRight, Settings } from '@mui/icons-material';
+import { Drawer, IconButton, Tooltip } from '@mui/material';
 import CanvasSidebarFooter from '../CanvasSidebarFooter/CanvasSidebarFooter';
 import CanvasSidebarHeader from '../CanvasSidebarHeader/CanvasSidebarHeader';
 import CanvasSidebarPlayerList from '../CanvasSidebarPlayerList/CanvasSidebarPlayerList';
@@ -24,11 +24,13 @@ interface Props {
 interface State {
   showUserAlreadyInGameModal: boolean;
   sidebarOpen: boolean;
+  settingsOpen: boolean;
 }
 export default class CanvasSidebar extends Component<Props, State> {
   state: State = {
     showUserAlreadyInGameModal: false,
     sidebarOpen: true,
+    settingsOpen: false,
   };
 
   handleInviteUserClicked = (username: string): void => {
@@ -42,6 +44,12 @@ export default class CanvasSidebar extends Component<Props, State> {
     }
   };
 
+  toggleSidebarOpen = (): void => {
+    this.setState((prevState: State) => ({
+      sidebarOpen: !prevState.sidebarOpen,
+    }));
+  };
+
   render(): JSX.Element {
     return (
       <div className="canvas-sidebar">
@@ -49,31 +57,54 @@ export default class CanvasSidebar extends Component<Props, State> {
           <IconButton
             aria-label={`${this.state.sidebarOpen ? 'Close' : 'Open'} the sidebar`}
             component="span"
-            onClick={() =>
-              this.setState((prevState: State) => ({
-                sidebarOpen: !prevState.sidebarOpen,
-              }))
-            }
+            onClick={this.toggleSidebarOpen}
           >
             {this.state.sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
           </IconButton>
         </span>
         <Drawer anchor="right" className="container" open={this.state.sidebarOpen} variant="persistent">
+          {this.props.isAdmin && (
+            <div className="navbar">
+              {this.state.settingsOpen ? (
+                <Tooltip arrow placement="left" title="Close game settings">
+                  <IconButton
+                    aria-label="Close game settings"
+                    component="span"
+                    className="temp"
+                    onClick={() => this.setState({ settingsOpen: false })}
+                  >
+                    <ChevronLeft />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Tooltip arrow placement="left" title="Open game settings">
+                  <IconButton
+                    aria-label="Open game settings"
+                    component="span"
+                    className="temp"
+                    onClick={() => this.setState({ settingsOpen: true })}
+                  >
+                    <Settings />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </div>
+          )}
           <CanvasSidebarHeader
-            isAdmin={this.props.isAdmin}
+            isAdmin={this.state.settingsOpen}
             title={this.props.gameTitle}
             onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
           />
           <CanvasSidebarPlayerList
             currentUserId={this.props.currentUserId}
             gameMasterIds={this.props.gameMasterIds}
-            isAdmin={this.props.isAdmin}
+            isAdmin={this.state.settingsOpen}
             users={this.props.users}
             onDemotePlayerClicked={this.props.onDemotePlayerClicked}
             onPromotePlayerClicked={this.props.onPromotePlayerClicked}
             onRemovePlayerClicked={this.props.onRemovePlayerClicked}
           />
-          {this.props.isAdmin && <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} />}
+          {this.state.settingsOpen && <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} />}
           <Dialog
             description="You cannot add the same user twice."
             header="This user is already in the game!"
