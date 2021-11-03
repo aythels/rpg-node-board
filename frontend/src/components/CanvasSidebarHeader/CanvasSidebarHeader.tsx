@@ -1,7 +1,7 @@
 import './canvasSidebarHeader.css';
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent, Component, KeyboardEvent } from 'react';
 import { Close, Done, Edit } from '@mui/icons-material';
-import { IconButton, TextField, Tooltip } from '@mui/material';
+import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
 
 interface Props {
   isAdmin: boolean;
@@ -48,25 +48,32 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
     this.prevTitle = '';
   };
 
+  handleSubmitTitleKeyPress = (event: KeyboardEvent<Element>): void => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.handleSubmitTitleClicked();
+    }
+  };
+
   render(): JSX.Element {
     return (
       <div className="canvas-sidebar-header">
         <div className="title__wrapper">
-          <TextField
-            autoComplete="off"
-            className="title"
-            disabled={!this.state.editingTitle}
-            id="outlined-basic"
-            value={this.state.title}
-            variant="outlined"
-            onChange={this.handleTitleChanged}
-            onKeyPress={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                this.handleSubmitTitleClicked();
-              }
-            }}
-          />
+          {this.props.isAdmin && this.state.editingTitle ? (
+            <TextField
+              autoComplete="off"
+              className="title"
+              id="outlined-basic"
+              value={this.state.title}
+              variant="outlined"
+              onChange={this.handleTitleChanged}
+              onKeyPress={this.handleSubmitTitleKeyPress}
+            />
+          ) : (
+            <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
+              {this.state.title}
+            </Typography>
+          )}
         </div>
         {this.props.isAdmin && (
           <div className="button">
