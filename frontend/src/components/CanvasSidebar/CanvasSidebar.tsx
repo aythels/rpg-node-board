@@ -109,8 +109,8 @@ export default class CanvasSidebar extends Component<Props, State> {
           />
           {this.state.settingsOpen && <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} />}
           <Dialog
-            description="You cannot add the same user twice."
-            header="This user is already in the game!"
+            description="You cannot add the same player twice."
+            header="This player is already in the game!"
             open={this.state.showUserAlreadyInGameModal}
             onClose={() => this.setState({ showUserAlreadyInGameModal: false })}
           />
