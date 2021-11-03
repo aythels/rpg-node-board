@@ -3,9 +3,11 @@ import { Button, TextField, IconButton, Tooltip } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../Dialog/Dialog';
+import { POSTremoveGame } from '../../mock-backend';
 
 interface Props {
   onInvitePlayerClicked: (username: string) => void;
+  gameId: number;
 }
 
 interface State {
@@ -67,7 +69,7 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
           description="Doing so will immediately end the session and remove the game from the server."
           header="Delete server?"
           open={this.state.showDeleteServerDialog}
-          onAgree={() => this.setState({ showDeleteServerDialog: false })}
+          onAgree={() => POSTremoveGame(this.props.gameId)}
           onAgreeRedirectTo="." // TODO: update target
           onClose={() => this.setState({ showDeleteServerDialog: false })}
           onDisagree={() => this.setState({ showDeleteServerDialog: false })}

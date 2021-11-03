@@ -5,7 +5,7 @@ import CanvasToolbar from './CanvasToolbar';
 import CanvasNode from './CanvasNode';
 import { NodeManager } from './actions/NodeManager';
 import {
-  GETgame,
+  GETgameById,
   GETuserById,
   GETuserByUsername,
   POSTaddPlayerToGame,
@@ -32,7 +32,7 @@ export default class CanvasMain extends React.Component<Props, State> {
   nodeManager = new NodeManager(this);
 
   state: State = {
-    game: GETgame(this.props.currentGameId),
+    game: GETgameById(this.props.currentGameId),
     showUserNotFoundModal: false,
   };
 
@@ -107,6 +107,7 @@ export default class CanvasMain extends React.Component<Props, State> {
   };
 
   render(): JSX.Element {
+    console.log(this.state.game);
     const array = this.nodeManager.allNodes.slice().reverse();
 
     return (
@@ -145,6 +146,7 @@ export default class CanvasMain extends React.Component<Props, State> {
         />
         <CanvasSidebar
           currentUserId={this.props.currentUserId}
+          gameId={1}
           gameMasterIds={this.state.game.gms}
           gameTitle={this.state.game.title}
           isAdmin={this.state.game.gms.includes(this.props.currentUserId)}

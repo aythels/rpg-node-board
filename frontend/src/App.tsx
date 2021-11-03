@@ -11,7 +11,7 @@ function App(): JSX.Element {
     palette: {},
   });
 
-  const currentGameId = 7;
+  const currentGameId = 1;
   const currentUserId = 2;
 
   return (

@@ -16,6 +16,7 @@ interface Props {
   onSubmitGameTitleClicked: (newTitle: string) => void;
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;
+  gameId: number;
   users: User[];
   gameTitle: string;
   gameMasterIds: number[];
@@ -107,7 +108,9 @@ export default class CanvasSidebar extends Component<Props, State> {
             onPromotePlayerClicked={this.props.onPromotePlayerClicked}
             onRemovePlayerClicked={this.props.onRemovePlayerClicked}
           />
-          {this.state.settingsOpen && <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} />}
+          {this.state.settingsOpen && (
+            <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} gameId={this.props.gameId} />
+          )}
           <Dialog
             description="You cannot add the same player twice."
             header="This player is already in the game!"
