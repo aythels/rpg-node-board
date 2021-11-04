@@ -1,6 +1,7 @@
 import './styles.css';
 import React from 'react';
 import { Node } from '../../types';
+import { Close, Launch } from '@mui/icons-material';
 
 interface Props {
   xPos: number;
@@ -29,13 +30,17 @@ export default class CanvasInternalNode extends React.Component<Props> {
           backgroundImage: `url(${dataNode.image})`,
         }}
       >
-        <div className="node-button-div">
-          <button className="node-button" type="button" onClick={onCloseClicked}>
-            X
+        <div className="node__header">
+          <div className="node-text-div">{dataNode.name}</div>
+        </div>
+        <div className="node__footer">
+          <button className="node-button" onClick={onCloseClicked}>
+            <Close />
+          </button>
+          <button className="node-button" onClick={() => onImageClicked(id)}>
+            <Launch />
           </button>
         </div>
-
-        <div className="node-text-div">{dataNode.name}</div>
       </div>
     );
   }
