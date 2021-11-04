@@ -27,8 +27,10 @@ export interface Subnode {
 
 export interface Game {
   id: number;
-  nodes: number[];
   title: string;
+  // TODO: instead of players, gms and users store an augmented list of users, where each user has an assigned role
+  // TODO: store objects rather than IDs?
+  nodes: number[];
   players: number[];
   gms: number[];
   users: number[]; // = players + gms, might be a better way to define this
@@ -41,6 +43,7 @@ export interface User {
   password: string; // FOR NOW
   email: string; // FOR NOW
   games: number[];
+  profilePicture?: string;
   images: string[]; // FOR NOW
 }
 

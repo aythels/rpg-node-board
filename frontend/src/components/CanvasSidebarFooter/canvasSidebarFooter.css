@@ -1,0 +1,34 @@
+.canvas-sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 1px solid lightgray;
+}
+
+.canvas-sidebar-footer .item__wrapper {
+  margin: 0.5rem;
+}
+
+.canvas-sidebar-footer .item {
+  width: 100%;
+}
+
+.canvas-sidebar-footer .delete-button {
+  width: 100%;
+  background-color: rgb(158, 30, 30) !important;
+}
+
+.canvas-sidebar-footer .delete-button:hover {
+  background-color: darkred !important;
+}
+
+.canvas-sidebar-footer .text-field__wrapper {
+  background-color: lightgray;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.canvas-sidebar-footer .text-field {
+  width: 100%;
+}
