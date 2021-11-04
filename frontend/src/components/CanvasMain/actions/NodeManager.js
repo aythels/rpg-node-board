@@ -73,12 +73,9 @@ export const NodeManager = function (state) {
   };
 
   this.setCenter = function () {
-    /*
     animate(finalX, finalY, 0, 0, (x, y) => {
       _this.setAllPos(x, y);
-    });*/
-
-    _this.setAllPos(x, y);
+    });
   };
 
   /* UTILITY */
@@ -129,9 +126,12 @@ export const NodeManager = function (state) {
   };
 
   this.setAllPos = function (xPos, yPos) {
+    const deltaX = finalX - xPos;
+    const deltaY = finalY - yPos;
+
     for (const node of _this.allNodes) {
-      node.xPos -= finalX;
-      node.yPos -= finalY;
+      node.xPos -= deltaX;
+      node.yPos -= deltaY;
     }
 
     finalX = xPos;
@@ -167,8 +167,10 @@ function animate(x, y, newX, newY, c) {
   }
 
   const callback = () => {
-    if (Math.abs(x - newX) + Math.abs(y - newY) < 5) return;
-
+    if (Math.abs(x - newX) + Math.abs(y - newY) < 3) {
+      c(newX, newY);
+      return;
+    }
     tick();
     window.requestAnimationFrame(callback);
   };
