@@ -24,9 +24,10 @@
   margin: 0;
 }
 
-.node {
+.nodeview {
   box-sizing: border-box;
   width: 100%;
+  min-height: 100vh;
   padding: 1rem;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -41,12 +42,12 @@
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.node::-webkit-scrollbar {
+.nodeview::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.node {
+.nodeview {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }

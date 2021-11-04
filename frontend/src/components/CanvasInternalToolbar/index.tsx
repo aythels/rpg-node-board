@@ -7,7 +7,7 @@ interface Props {
   onAddClicked: () => void;
 }
 
-export default class CanvasToolbar extends React.Component<Props> {
+export default class CanvasInternalToolbar extends React.Component<Props> {
   render(): JSX.Element {
     const { onBackClicked, onCenterClicked, onAddClicked } = this.props;
 

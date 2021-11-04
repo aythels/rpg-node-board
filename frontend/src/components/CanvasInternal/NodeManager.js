@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { uid } from 'react-uid';
 
-export const NodeManager = function (state) {
+export const NodeManager = function () {
   const _this = this;
   let isMouseDown = false;
   let activeNode = null;
@@ -49,40 +49,41 @@ export const NodeManager = function (state) {
     if (e.deltaY < 0) _this.setScale(_this.scale + tolerance, e.clientX, e.clientY);
     else if (e.deltaY > 0) _this.setScale(_this.scale - tolerance, e.clientX, e.clientY);
 
-    state.setState({});
+    _this.update();
   };
 
   /* BUTTONS */
-  this.createNode = function () {
+
+  this.createNodeDefault = function () {
+    _this.createNode(null, 'Untitled', null);
+  };
+
+  this.createNode = function (id, name, image) {
     const node = {};
     node.xPos = 0;
     node.yPos = 0;
     node.width = 200;
     node.height = 200;
-    node.id = uid(node);
+    node.id = id == null ? uid(node) : id;
+    node.name = name;
+    node.image = image;
 
     _this.allNodes.push(node);
 
-    state.setState({});
+    _this.update();
   };
 
   this.removeNode = function (id) {
     const index = this.allNodes.findIndex((e) => e.id == id);
     if (index > -1) this.allNodes.splice(index, 1);
-    state.setState({});
+
+    this.update();
   };
 
   this.setCenter = function () {
     animate(finalX, finalY, 0, 0, (x, y) => {
       _this.setAllPos(x, y);
-<<<<<<< HEAD
     });
-=======
-    });*/
-
-    // _this.setAllPos(x, y);
-    _this.setAllPos(0, 0); //TODO: @elson, I added this because idk which x and y you meant (@filiposlav)
->>>>>>> 1f5bd1f52e2bb1cf34a67f69182b3adbc696c74d
   };
 
   /* UTILITY */
@@ -97,7 +98,7 @@ export const NodeManager = function (state) {
     const offSetNew = 1 / _this.scale - 1;
     _this.addAllPos(offSetNew * mouseX, offSetNew * mouseY);
 
-    state.setState({});
+    _this.update();
   };
 
   this.isMouseOver = function (mouseX, mouseY) {
@@ -117,7 +118,7 @@ export const NodeManager = function (state) {
     node.xPos += xPos;
     node.yPos += yPos;
 
-    state.setState({});
+    _this.update();
   };
 
   this.addAllPos = function (xPos, yPos) {
@@ -129,7 +130,7 @@ export const NodeManager = function (state) {
       node.yPos += yPos;
     }
 
-    state.setState({});
+    _this.update();
   };
 
   this.setAllPos = function (xPos, yPos) {
@@ -144,7 +145,7 @@ export const NodeManager = function (state) {
     finalX = xPos;
     finalY = yPos;
 
-    state.setState({});
+    _this.update();
   };
 
   this.getFinalX = function () {
@@ -155,7 +156,13 @@ export const NodeManager = function (state) {
     return finalY;
   };
 
-  return;
+  this.addOnUpdateEvent = function (callback) {
+    _this.renderCallbacks.push(callback);
+  };
+
+  this.update = function () {
+    for (const callback of _this.renderCallbacks) callback();
+  };
 };
 
 function animate(x, y, newX, newY, c) {
