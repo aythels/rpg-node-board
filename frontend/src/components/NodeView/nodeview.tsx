@@ -1,6 +1,5 @@
 import './nodeview.css';
 import { Component, SyntheticEvent } from 'react';
-// import ReactQuill from 'react-quill';
 import SubnodeView from '../SubnodeView/subnodeview';
 import { uid } from 'react-uid';
 import {

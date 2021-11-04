@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import DummyComponent from './components/DummyComponent';
 import Home from './components/Home';
-import NodeView from './components/NodeView/nodeview';
 import CanvasMain from './components/CanvasMain';
 
 function App(): JSX.Element {

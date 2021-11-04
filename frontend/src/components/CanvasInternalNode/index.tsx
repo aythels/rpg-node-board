@@ -1,5 +1,6 @@
 import './styles.css';
 import React from 'react';
+import { Node } from '../../types';
 
 interface Props {
   xPos: number;
@@ -7,15 +8,14 @@ interface Props {
   nodeWidth: number;
   nodeHeight: number;
   id: number;
-  name: string;
-  image: string;
+  dataNode: Node;
   onCloseClicked: () => void;
   onImageClicked: (id: number) => void;
 }
 
 export default class CanvasInternalNode extends React.Component<Props> {
   render(): JSX.Element {
-    const { xPos, yPos, nodeWidth, nodeHeight, id, name, image, onCloseClicked, onImageClicked } = this.props;
+    const { xPos, yPos, nodeWidth, nodeHeight, id, dataNode, onCloseClicked, onImageClicked } = this.props;
 
     return (
       <div
@@ -26,7 +26,7 @@ export default class CanvasInternalNode extends React.Component<Props> {
           top: `${yPos}px`,
           width: `${nodeWidth}px`,
           height: `${nodeHeight}px`,
-          backgroundImage: `url(${image})`,
+          backgroundImage: `url(${dataNode.image})`,
         }}
       >
         <div className="node-button-div">
@@ -35,7 +35,7 @@ export default class CanvasInternalNode extends React.Component<Props> {
           </button>
         </div>
 
-        <div className="node-text-div">{name}</div>
+        <div className="node-text-div">{dataNode.name}</div>
       </div>
     );
   }

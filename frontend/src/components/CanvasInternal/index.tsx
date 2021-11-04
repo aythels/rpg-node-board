@@ -4,8 +4,9 @@ import React from 'react';
 import CanvasInternalToolbar from '../CanvasInternalToolbar';
 import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
-import { GETgameById, GETnodesInGame, GETuserById, GETnodeById } from '../../mock-backend';
+import { GETgameById, GETnodesInGame, GETuserById } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
+import { Node } from '../../types';
 
 interface Props {
   currentGameId: number;
@@ -22,12 +23,17 @@ export default class CanvasInternal extends React.Component<Props> {
 
     const game = GETgameById(props.currentGameId);
     for (const node of GETnodesInGame(game.id)) {
-      this.nodeManager.createNode(node.id, node.name, node.image);
+      this.nodeManager.createNode(node.id, node);
     }
   }
 
+  getActiveNodeFromNodeManager = (): Node => {
+    const node = this.nodeManager.allNodes.filter((node) => node.id === this.activeNode)[0];
+    return node.dataNode;
+  };
+
   render(): JSX.Element {
-    const array = this.nodeManager.allNodes.slice().reverse();
+    const array = this.nodeManager.allNodes.reverse();
 
     return (
       <div>
@@ -54,8 +60,7 @@ export default class CanvasInternal extends React.Component<Props> {
                 nodeWidth={node.width}
                 nodeHeight={node.height}
                 id={node.id}
-                name={node.name}
-                image={node.image}
+                dataNode={node.dataNode}
                 onCloseClicked={() => this.nodeManager.removeNode(node.id)}
                 onImageClicked={(id) => {
                   this.activeNode = id;
@@ -71,13 +76,15 @@ export default class CanvasInternal extends React.Component<Props> {
           onAddClicked={this.nodeManager.createNodeDefault}
         />
 
-        {this.activeNode && GETnodeById(this.activeNode) ? (
+        {this.activeNode !== -1 ? (
           <div className="nodeview-container">
             <NodeView
-              node={GETnodeById(this.activeNode)}
+              node={this.getActiveNodeFromNodeManager()}
               user={GETuserById(this.props.currentUserId)}
               game={GETgameById(this.props.currentGameId)}
-              closeCallback={() => {
+              closeCallback={(updatedNode: Node) => {
+                const nodeToUpdate = this.nodeManager.allNodes.filter((node) => node.dataNode.id === updatedNode.id)[0];
+                nodeToUpdate.dataNode = updatedNode;
                 this.activeNode = -1;
                 this.setState({});
               }}

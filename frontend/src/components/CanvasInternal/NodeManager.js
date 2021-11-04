@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { uid } from 'react-uid';
 
@@ -58,15 +60,14 @@ export const NodeManager = function () {
     _this.createNode(null, 'Untitled', null);
   };
 
-  this.createNode = function (id, name, image) {
+  this.createNode = function (id, dataNode) {
     const node = {};
     node.xPos = 0;
     node.yPos = 0;
     node.width = 200;
     node.height = 200;
     node.id = id == null ? uid(node) : id;
-    node.name = name;
-    node.image = image;
+    node.dataNode = dataNode;
 
     _this.allNodes.push(node);
 

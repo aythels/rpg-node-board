@@ -18,9 +18,10 @@ class NodeLinkBlot extends Inline {
     return node;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static formats(domNode) {
     // return domNode.getAttribute('url') || true;
-    console.log(domNode); // To suppress warning
+    // console.log(domNode);
     return true;
   }
 
