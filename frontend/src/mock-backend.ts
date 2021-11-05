@@ -166,7 +166,7 @@ const globalUsers: User[] = [
     password: 'admin',
     email: 'admin@admin.com',
     games: [1],
-    images: [],
+    images: ['/images/sky.jpg', '/images/path.jpg', '/images/stgeorge.jpg', '/images/museum.jpg'],
     profilePicture: '/images/profile_picture_2.png',
   },
   {
@@ -176,6 +176,7 @@ const globalUsers: User[] = [
     email: 'user2@user.com',
     games: [1],
     images: ['/images/stgeorge.jpg', '/images/path.jpg', '/images/museum.jpg', '/images/sky.jpg'],
+    profilePicture: '/images/profile_picture_2.png',
   },
   {
     id: 4,
