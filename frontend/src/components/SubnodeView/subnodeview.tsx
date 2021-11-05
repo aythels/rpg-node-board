@@ -3,13 +3,16 @@ import { Component } from 'react';
 import Quill from 'quill';
 import Delta from 'quill-delta';
 import NodeLinkBlot from '../../blots/NodeLink';
-import { Subnode, User } from '../../types';
+import { Game, Subnode, User, Node } from '../../types';
 import { GETnodesInGame, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
 
 interface Props {
+  game: Game;
+  node: Node;
   subnode: Subnode;
   user: User;
   key: string;
+  onLinkClick: (id: number, node: Node) => void;
 }
 
 interface State {
@@ -41,7 +44,7 @@ const standardEditorToolbar = [
 ];
 
 NodeLinkBlot.blotName = 'nodelink';
-NodeLinkBlot.tagName = 'A';
+NodeLinkBlot.tagName = 'nodelink';
 
 Quill.register(NodeLinkBlot);
 
@@ -85,20 +88,27 @@ export default class SubnodeView extends Component<Props, State> {
     editor.on('text-change', (delta) => {
       this.setState({ change: this.state.change.compose(delta) });
     });
-    this.setState({
-      editor: editor,
-      // Start autosaving
-      autosaver: setInterval(this.saveEditorChanges, autosaveFrequency),
-    });
+    this.setState(
+      {
+        editor: editor,
+        // Start autosaving
+        autosaver: setInterval(this.saveEditorChanges, autosaveFrequency),
+      },
+      () => {
+        this.updateNodeTextLinks();
+      },
+    );
   };
 
   updateNodeTextLinks = (): void => {
     if (this.state.editor) {
       // Add in new links:
-      const nodes = GETnodesInGame(1); // <-- this is horribly inefficient, also hardcoded GameId
+      const nodes = GETnodesInGame(this.props.game.id); // <-- this is horribly inefficient
       const currentText = this.state.editor.getText();
       const links: TextLink[] = [];
+      const names = [];
       for (const node of nodes) {
+        names.push(node.name);
         let nextNameInstance = currentText.indexOf(node.name, 0);
         while (nextNameInstance != -1) {
           links.push({ location: nextNameInstance, length: node.name.length, name: node.name, id: node.id });
@@ -106,9 +116,22 @@ export default class SubnodeView extends Component<Props, State> {
         }
       }
       for (const link of links) {
-        this.state.editor.formatText(link.location, link.length, 'nodelink', 'nodeviewAdmin/' + link.id, 'api');
+        this.state.editor.formatText(link.location, link.length, 'nodelink', link.id, 'api');
       }
-      // TODO: Remove outdated links
+
+      // Add onclick behaviour
+      const nodeLinks = document.getElementsByTagName('nodelink');
+
+      for (const nodeLink of nodeLinks) {
+        if (names.includes(nodeLink.innerHTML)) {
+          nodeLink.addEventListener('click', () => {
+            const linkId = nodeLink.getAttribute('linkid');
+            if (linkId) this.props.onLinkClick(parseInt(linkId), this.props.node);
+          });
+        } else {
+          // TODO: Remove outdated links
+        }
+      }
     }
   };
 

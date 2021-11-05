@@ -32,6 +32,22 @@ export default class CanvasInternal extends React.Component<Props> {
     return node.dataNode;
   };
 
+  handleNodeLinkClick = (id: number, updatedNode: Node): void => {
+    this.handleNodeviewSave(updatedNode);
+    this.activeNode = -1;
+    this.setState({}, () => {
+      this.activeNode = id;
+      this.setState({});
+    });
+  };
+
+  handleNodeviewSave = (updatedNode: Node): void => {
+    const nodeToUpdate = this.nodeManager.allNodes.filter((node) => node.dataNode.id === updatedNode.id)[0];
+    nodeToUpdate.dataNode = updatedNode;
+    this.activeNode = -1;
+    this.setState({});
+  };
+
   render(): JSX.Element {
     const array = this.nodeManager.allNodes.reverse();
 
@@ -82,12 +98,8 @@ export default class CanvasInternal extends React.Component<Props> {
               node={this.getActiveNodeFromNodeManager()}
               user={GETuserById(this.props.currentUserId)}
               game={GETgameById(this.props.currentGameId)}
-              closeCallback={(updatedNode: Node) => {
-                const nodeToUpdate = this.nodeManager.allNodes.filter((node) => node.dataNode.id === updatedNode.id)[0];
-                nodeToUpdate.dataNode = updatedNode;
-                this.activeNode = -1;
-                this.setState({});
-              }}
+              onLinkClick={this.handleNodeLinkClick}
+              closeCallback={this.handleNodeviewSave}
             />
           </div>
         ) : null}
