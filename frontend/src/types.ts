@@ -29,6 +29,7 @@ export interface Subnode {
 export interface Game {
   id: number;
   title: string;
+  imgpath: string; //path to image from /public/images/path. includes filetype e.g. .jpg
   // TODO: instead of players, gms and users store an augmented list of users, where each user has an assigned role
   // TODO: store objects rather than IDs?
   nodes: number[];

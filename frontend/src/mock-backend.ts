@@ -257,27 +257,47 @@ const globalUsers: User[] = [
   },
 ];
 
-const game1: Game = {
-  id: 7,
-  title: 'Test game',
-  nodes: [1],
-  players: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-  gms: [2],
-  users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-  settings: {},
-};
-
-const globalGames = [
+let globalGames: Game[] = [
   {
     id: 1,
     nodes: [1, 2, 3, 4],
-    players: [1, 3, 4, 5],
+    players: [1],
     gms: [2],
     users: [1, 2, 3, 4, 5],
-    title: 'Test Game',
+    title: 'CLICK ME!',
+    imgpath: '/uoft.png',
     settings: {},
   },
-  game1,
+  {
+    id: 2,
+    nodes: [1, 2],
+    players: [1],
+    gms: [2],
+    users: [1, 2, 3, 4, 5],
+    title: 'Filler game 1',
+    imgpath: '/ryerson.jpg',
+    settings: {},
+  },
+  {
+    id: 3,
+    nodes: [1],
+    players: [1],
+    gms: [2],
+    users: [1, 2, 3, 4, 5],
+    title: 'Filler game 2',
+    imgpath: '/ryerson.jpg',
+    settings: {},
+  },
+  {
+    id: 4,
+    nodes: [1, 2],
+    players: [1],
+    gms: [2],
+    title: 'Filler game 3',
+    imgpath: '/ryerson.jpg',
+    users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    settings: {},
+  },
 ];
 
 // Functions mocking backend behaviour go here:
@@ -286,45 +306,44 @@ export const GETuserByUsername = (username: string): User | undefined => {
   return globalUsers.find((user) => user.username == username);
 };
 
-export const GETgame = (id: number): Game => {
-  return globalGames.filter((game) => game.id === id)[0];
-};
-
 export const GETplayers = (gameId: number): User[] => {
-  const game = GETgame(gameId);
+  const game = GETgameById(gameId);
   return game.users.map(GETuserById);
 };
 
 export const POSTaddPlayerToGame = (playerId: number, gameId: number): void => {
-  const game = GETgame(gameId);
+  const game = GETgameById(gameId);
   game.players.push(playerId);
   game.users.push(playerId);
 };
 
 export const POSTremovePlayerFromGame = (playerId: number, gameId: number): void => {
-  const game = GETgame(gameId);
+  const game = GETgameById(gameId);
   game.players = game.players.filter((id) => id !== playerId);
   game.users = game.users.filter((id) => id !== playerId);
 };
 
 export const POSTupdateGameName = (gameId: number, newTitle: string): void => {
-  const game = GETgame(gameId);
+  const game = GETgameById(gameId);
   game.title = newTitle;
 };
 
 export const POSTpromoteUserToGameMaster = (userId: number, gameId: number): void => {
-  const game = GETgame(gameId);
+  const game = GETgameById(gameId);
   game.gms.push(userId);
 };
 
 export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
-  const game = GETgame(gameId);
+  const game = GETgameById(gameId);
   game.gms = game.gms.filter((id) => id !== userId);
 };
 
-// Functions mocking backend behaviour go here:
+// Functions mocking backend behaviour:
 
-// TODO: change all filter()s to find()s
+// This mock-db method will CERTAINLY be changed.
+export const VerifyLogin = (username: string, password: string): boolean => {
+  return globalUsers.filter((user) => user.username === username && user.password === password).length == 1;
+};
 
 export const GETnodeById = (id: number): Node => {
   return CloneDeep(globalNodes.filter((node) => node.id === id)[0]);
@@ -417,6 +436,10 @@ export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
   return CloneDeep(game.gms.includes(userId));
 };
 
+export const GETgamesByUserID = (userID: number): Game[] => {
+  return CloneDeep(globalGames.filter((game) => game.users.includes(userID)));
+};
+
 export const GETgameById = (gameId: number): Game => {
   const game = globalGames.filter((game) => game.id === gameId)[0];
   return CloneDeep(game);
@@ -446,4 +469,11 @@ export const POSTuser = (user: User): void => {
   // FOR DEBUG:
   const newUser = globalUsers.filter((u) => u.id === user.id)[0] as User;
   console.log('New value for node is:', newUser);
+};
+
+export const POSTremoveGame = (id: number): void => {
+  console.log('Removing game with ID ', id);
+  console.log('Games before', globalGames);
+  globalGames = globalGames.filter((game) => game.id !== id);
+  console.log('Games after', globalGames);
 };
