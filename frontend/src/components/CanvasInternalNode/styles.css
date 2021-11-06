@@ -1,0 +1,51 @@
+.node {
+  user-select: none;
+  position: absolute;
+  background-color: yellow;
+  background-size: cover;
+  overflow: visible;
+  /* border: solid #000; */
+  border-width: 2px;
+  padding: 0px;
+  top: 100px;
+  left: 100px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.node:hover {
+  cursor: move;
+}
+
+.node-button-div {
+  position: relative;
+  float: right;
+  top: -32px;
+}
+
+.node-button {
+  /* height: 30px;
+  width: 30px; */
+  text-align: center;
+  line-height: 50%;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+}
+
+.node-button:hover {
+  cursor: pointer;
+}
+
+.node-text-div {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 0.2rem;
+}
+
+.node__footer {
+  display: flex;
+  justify-content: space-between;
+}

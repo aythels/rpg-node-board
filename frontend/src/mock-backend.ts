@@ -17,7 +17,7 @@ const globalSubnodes = [
     content: new Delta({
       ops: [
         { insert: 'A vast sky. The ' },
-        { attributes: { nodelink: 'nodeviewAdmin/3' }, insert: 'Lonely Path' },
+        { attributes: { nodelink: '3' }, insert: 'Lonely Path' },
         { insert: ' can be found here.\n' },
       ],
     }),
@@ -50,7 +50,7 @@ const globalSubnodes = [
     content: new Delta({
       ops: [
         { insert: 'A place of great knowledge. Near by ' },
-        { attributes: { nodelink: 'nodeviewAdmin/4' }, insert: 'St George' },
+        { attributes: { nodelink: '4' }, insert: 'St. George' },
         { insert: '.\n' },
       ],
     }),
@@ -65,7 +65,7 @@ const globalSubnodes = [
     content: new Delta({
       ops: [
         { insert: 'Somewhere to walk underneath ' },
-        { attributes: { nodelink: 'nodeviewAdmin/1' }, insert: 'The Soaring Skies' },
+        { attributes: { nodelink: '1' }, insert: 'The Soaring Skies' },
         { insert: '.' },
       ],
     }),
@@ -80,7 +80,7 @@ const globalSubnodes = [
     content: new Delta({
       ops: [
         { insert: 'The center of UofT. Near ' },
-        { attributes: { nodelink: 'nodeviewAdmin/2' }, insert: 'Museum' },
+        { attributes: { nodelink: '2' }, insert: 'Museum' },
         { insert: '.' },
       ],
     }),
@@ -166,7 +166,7 @@ const globalUsers: User[] = [
     password: 'admin',
     email: 'admin@admin.com',
     games: [1],
-    images: [],
+    images: ['/images/sky.jpg', '/images/path.jpg', '/images/stgeorge.jpg', '/images/museum.jpg'],
     profilePicture: '/images/profile_picture_2.png',
   },
   {
@@ -176,6 +176,7 @@ const globalUsers: User[] = [
     email: 'user2@user.com',
     games: [1],
     images: ['/images/stgeorge.jpg', '/images/path.jpg', '/images/museum.jpg', '/images/sky.jpg'],
+    profilePicture: '/images/profile_picture_2.png',
   },
   {
     id: 4,
@@ -256,6 +257,27 @@ const globalUsers: User[] = [
   },
 ];
 
+let globalGames: Game[] = [
+  {
+    id: 1,
+    title: 'Test Game',
+    nodes: [1, 2, 3, 4],
+    players: [1],
+    gms: [2],
+    users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    settings: {},
+  },
+  {
+    id: 7,
+    title: 'Test game 7',
+    nodes: [1],
+    players: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    gms: [2],
+    users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    settings: {},
+  },
+];
+
 // Functions mocking backend behaviour go here:
 
 export const GETuserByUsername = (username: string): User | undefined => {
@@ -294,21 +316,7 @@ export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): vo
   game.gms = game.gms.filter((id) => id !== userId);
 };
 
-let globalGames: Game[] = [
-  {
-    id: 1,
-    title: 'Test Game',
-    nodes: [1, 2, 3, 4],
-    players: [1],
-    gms: [2],
-    users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    settings: {},
-  },
-];
-
-// Functions mocking backend behaviour go here:
-
-// TODO: change all filter()s to find()s
+// Functions mocking backend behaviour:
 
 export const GETnodeById = (id: number): Node => {
   return CloneDeep(globalNodes.filter((node) => node.id === id)[0]);
@@ -354,7 +362,7 @@ export const GETnodesInGame = (gameId: number): Node[] => {
   for (const nodeid of game.nodes) {
     nodes.push(globalNodes[nodeid - 1]);
   }
-  return CloneDeep(nodes);
+  return nodes;
 };
 
 export const GETeditorsForNode = (nodeId: number): User[] => {
@@ -363,9 +371,11 @@ export const GETeditorsForNode = (nodeId: number): User[] => {
   return CloneDeep(users);
 };
 
-export const GETplayersForNode = (nodeId: number): User[] => {
-  const node = globalNodes.filter((node) => node.id === nodeId)[0];
-  const users = globalUsers.filter((user) => !node.editors.includes(user.id));
+export const GETplayersInGame = (gameId: number): User[] => {
+  // const node = globalNodes.filter((node) => node.id === nodeId)[0];
+  const game = globalGames.filter((game) => game.id === gameId)[0];
+  const userIds = game.players;
+  const users = globalUsers.filter((user) => userIds.includes(user.id));
   return CloneDeep(users);
 };
 
