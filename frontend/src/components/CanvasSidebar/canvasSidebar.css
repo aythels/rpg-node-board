@@ -13,7 +13,6 @@
 
 .canvas-sidebar .container {
   background-color: gray;
-  height: 100vh;
   float: right;
   overflow: hidden;
   display: flex;
