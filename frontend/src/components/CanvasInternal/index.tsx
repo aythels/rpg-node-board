@@ -4,7 +4,7 @@ import React from 'react';
 import CanvasInternalToolbar from '../CanvasInternalToolbar';
 import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
-import { GETgameById, GETnodesInGame, GETuserById } from '../../mock-backend';
+import { GETgameById, GETnodesInGameVisibleToUser, GETuserById } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
 
@@ -20,9 +20,7 @@ export default class CanvasInternal extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.nodeManager.addOnUpdateEvent(() => this.setState({}));
-
-    const game = GETgameById(props.currentGameId);
-    for (const node of GETnodesInGame(game.id)) {
+    for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
       this.nodeManager.createNode(node.id, node);
     }
   }
