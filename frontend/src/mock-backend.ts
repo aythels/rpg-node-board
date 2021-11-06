@@ -261,7 +261,7 @@ let globalGames: Game[] = [
   {
     id: 1,
     nodes: [1, 2, 3, 4],
-    players: [1],
+    players: [1, 3, 4, 5],
     gms: [2],
     users: [1, 2, 3, 4, 5],
     title: 'CLICK ME!',
@@ -424,7 +424,6 @@ export const GETeditorsForNode = (nodeId: number): User[] => {
 };
 
 export const GETplayersInGame = (gameId: number): User[] => {
-  // const node = globalNodes.filter((node) => node.id === nodeId)[0];
   const game = globalGames.filter((game) => game.id === gameId)[0];
   const userIds = game.players;
   const users = globalUsers.filter((user) => userIds.includes(user.id));

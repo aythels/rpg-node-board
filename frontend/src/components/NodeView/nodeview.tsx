@@ -251,34 +251,37 @@ export default class NodeView extends Component<Props, State> {
         ) : null}
         {this.renderSubnodes()}
         {GETuserCanEditNode(this.state.user.id, this.state.node.id) ? (
-          <form
-            className="new-subnode"
-            onSubmit={(e) => {
-              this.addNewSubnode(e);
-            }}
-          >
-            <Tooltip title="Add new subnode">
-              <Button type="submit">
-                <Add />
-              </Button>
-            </Tooltip>
-            <TextField
-              required
-              label="Name"
-              value={this.state.newSubnodeName}
-              onChange={(event) => {
-                this.setState({ newSubnodeName: event.target.value });
+          <div className="new-subnode-wrapper">
+            <h2>Add new subnode</h2>
+            <form
+              className="new-subnode"
+              onSubmit={(e) => {
+                this.addNewSubnode(e);
               }}
-            ></TextField>
-            <TextField
-              required
-              label="Type"
-              value={this.state.newSubnodeType}
-              onChange={(event) => {
-                this.setState({ newSubnodeType: event.target.value });
-              }}
-            ></TextField>
-          </form>
+            >
+              <Tooltip title="Add new subnode">
+                <Button type="submit">
+                  <Add />
+                </Button>
+              </Tooltip>
+              <TextField
+                required
+                label="Name"
+                value={this.state.newSubnodeName}
+                onChange={(event) => {
+                  this.setState({ newSubnodeName: event.target.value });
+                }}
+              ></TextField>
+              <TextField
+                required
+                label="Type"
+                value={this.state.newSubnodeType}
+                onChange={(event) => {
+                  this.setState({ newSubnodeType: event.target.value });
+                }}
+              ></TextField>
+            </form>
+          </div>
         ) : null}
       </div>
     );
