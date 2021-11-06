@@ -1,0 +1,30 @@
+.canvas-sidebar-footer {
+  background-color: lightgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.canvas-sidebar-footer .text-field__wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.canvas-sidebar-footer .text-field {
+  width: 100%;
+}
+
+.canvas-sidebar-footer .delete-button {
+  width: 100%;
+  margin-top: 0.5rem;
+  background-color: rgb(158, 30, 30) !important;
+}
+
+.canvas-sidebar-footer .delete-button:hover {
+  background-color: darkred !important;
+}

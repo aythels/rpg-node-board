@@ -1,34 +1,32 @@
 import './nodeview.css';
 import { Component, SyntheticEvent } from 'react';
-// import ReactQuill from 'react-quill';
 import SubnodeView from '../SubnodeView/subnodeview';
 import { uid } from 'react-uid';
 import {
-  GETgameById,
-  GETnodeById,
+  // GETgameById,
+  // GETnodeById,
   GETsubnodesVisibleToUser,
-  GETuserById,
+  // GETuserById,
   GETuserCanEditNode,
   POSTnode,
 } from '../../mock-backend';
 import { Game, Node, Subnode, User } from '../../types';
-
-// MUI Components
+import { cloneDeep } from 'lodash';
 import { ButtonGroup, Button } from '@mui/material';
-
-// Icons
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import NodeUserForm from '../NodeUserForm/nodeuserform';
-import { cloneDeep } from 'lodash';
 import NodeEditForm from '../NodeEditForm/nodeeditform';
 import NodeImageForm from '../NodeImageForm/nodeimageform';
+import { Close } from '@mui/icons-material';
 
 interface Props {
-  nodeId: number;
-  userId: number;
-  gameId: number;
+  node: Node;
+  user: User;
+  game: Game;
+  closeCallback: (node: Node) => void;
+  onLinkClick: (id: number, node: Node) => void;
 }
 
 interface State {
@@ -44,10 +42,10 @@ interface State {
 export default class NodeView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const node = GETnodeById(props.nodeId);
-    const user = GETuserById(props.userId);
-    const subnodes = GETsubnodesVisibleToUser(props.nodeId, props.userId);
-    const game = GETgameById(props.gameId);
+    const node = props.node; //GETnodeById(props.nodeId);
+    const user = props.user; //GETuserById(props.userId);
+    const subnodes = GETsubnodesVisibleToUser(node.id, user.id);
+    const game = props.game; //GETgameById(props.gameId);
     this.state = {
       node: node,
       user: user,
@@ -109,6 +107,9 @@ export default class NodeView extends Component<Props, State> {
           <Button onClick={this.handleImageModalOpen}>
             <InsertPhotoIcon />
           </Button>
+          <Button onClick={() => this.props.closeCallback(this.state.node)}>
+            <Close />
+          </Button>
         </ButtonGroup>
       );
     } else {
@@ -117,7 +118,6 @@ export default class NodeView extends Component<Props, State> {
   };
 
   saveNodeState = (): void => {
-    // console.log('Posting', this.state.node);
     POSTnode(this.state.node);
   };
 
@@ -168,7 +168,14 @@ export default class NodeView extends Component<Props, State> {
     return (
       <div className="subnodes">
         {subnodes.map((subnode) => (
-          <SubnodeView subnode={subnode} user={this.state.user} key={uid(subnode)} />
+          <SubnodeView
+            subnode={subnode}
+            game={this.props.game}
+            node={this.state.node}
+            user={this.state.user}
+            key={uid(subnode)}
+            onLinkClick={this.props.onLinkClick}
+          />
         ))}
       </div>
     );
@@ -177,7 +184,7 @@ export default class NodeView extends Component<Props, State> {
   render(): JSX.Element {
     const node = this.state.node;
     return (
-      <div className="node">
+      <div className="nodeview">
         <div className="node-header">
           <div className="node-topline">
             <p>

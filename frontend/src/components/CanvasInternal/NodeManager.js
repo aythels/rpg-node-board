@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { uid } from 'react-uid';
 
-export const NodeManager = function (state) {
+export const NodeManager = function () {
   const _this = this;
   let isMouseDown = false;
   let activeNode = null;
@@ -17,7 +19,7 @@ export const NodeManager = function (state) {
 
   /* INPUT */
   this.onPress = function (e) {
-    console.log(e.clientX);
+    // console.log(e.clientX);
     isMouseDown = true;
     startX = e.clientX;
     startY = e.clientY;
@@ -49,36 +51,40 @@ export const NodeManager = function (state) {
     if (e.deltaY < 0) _this.setScale(_this.scale + tolerance, e.clientX, e.clientY);
     else if (e.deltaY > 0) _this.setScale(_this.scale - tolerance, e.clientX, e.clientY);
 
-    state.setState({});
+    _this.update();
   };
 
   /* BUTTONS */
-  this.createNode = function () {
+
+  this.createNodeDefault = function () {
+    _this.createNode(null, 'Untitled', null);
+  };
+
+  this.createNode = function (id, dataNode) {
     const node = {};
     node.xPos = 0;
     node.yPos = 0;
     node.width = 200;
     node.height = 200;
-    node.id = uid(node);
+    node.id = id == null ? uid(node) : id;
+    node.dataNode = dataNode;
 
     _this.allNodes.push(node);
 
-    state.setState({});
+    _this.update();
   };
 
   this.removeNode = function (id) {
     const index = this.allNodes.findIndex((e) => e.id == id);
     if (index > -1) this.allNodes.splice(index, 1);
-    state.setState({});
+
+    this.update();
   };
 
   this.setCenter = function () {
-    /*
     animate(finalX, finalY, 0, 0, (x, y) => {
       _this.setAllPos(x, y);
-    });*/
-
-    _this.setAllPos(x, y);
+    });
   };
 
   /* UTILITY */
@@ -87,13 +93,13 @@ export const NodeManager = function (state) {
     const offSetOld = 1 / _this.scale - 1;
     _this.addAllPos(-(offSetOld * mouseX), -(offSetOld * mouseY));
 
-    console.log(newScale);
+    // console.log(newScale);
     if (newScale > 0.5 && newScale < 2) _this.scale = newScale;
 
     const offSetNew = 1 / _this.scale - 1;
     _this.addAllPos(offSetNew * mouseX, offSetNew * mouseY);
 
-    state.setState({});
+    _this.update();
   };
 
   this.isMouseOver = function (mouseX, mouseY) {
@@ -113,7 +119,7 @@ export const NodeManager = function (state) {
     node.xPos += xPos;
     node.yPos += yPos;
 
-    state.setState({});
+    _this.update();
   };
 
   this.addAllPos = function (xPos, yPos) {
@@ -125,19 +131,22 @@ export const NodeManager = function (state) {
       node.yPos += yPos;
     }
 
-    state.setState({});
+    _this.update();
   };
 
   this.setAllPos = function (xPos, yPos) {
+    const deltaX = finalX - xPos;
+    const deltaY = finalY - yPos;
+
     for (const node of _this.allNodes) {
-      node.xPos -= finalX;
-      node.yPos -= finalY;
+      node.xPos -= deltaX;
+      node.yPos -= deltaY;
     }
 
     finalX = xPos;
     finalY = yPos;
 
-    state.setState({});
+    _this.update();
   };
 
   this.getFinalX = function () {
@@ -148,7 +157,13 @@ export const NodeManager = function (state) {
     return finalY;
   };
 
-  return;
+  this.addOnUpdateEvent = function (callback) {
+    _this.renderCallbacks.push(callback);
+  };
+
+  this.update = function () {
+    for (const callback of _this.renderCallbacks) callback();
+  };
 };
 
 function animate(x, y, newX, newY, c) {
@@ -167,8 +182,10 @@ function animate(x, y, newX, newY, c) {
   }
 
   const callback = () => {
-    if (Math.abs(x - newX) + Math.abs(y - newY) < 5) return;
-
+    if (Math.abs(x - newX) + Math.abs(y - newY) < 3) {
+      c(newX, newY);
+      return;
+    }
     tick();
     window.requestAnimationFrame(callback);
   };

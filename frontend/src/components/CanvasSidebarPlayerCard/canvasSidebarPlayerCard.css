@@ -1,0 +1,20 @@
+.canvas-sidebar-player-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: lightgray;
+  height: 3rem;
+  margin: 0.5rem;
+  padding: 0.1rem;
+  border-radius: 0.5rem;
+}
+
+.canvas-sidebar-player-card .name {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  overflow: hidden;
+}
+
+.canvas-sidebar-player-card .button {
+  margin-left: auto;
+}

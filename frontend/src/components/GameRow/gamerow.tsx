@@ -13,7 +13,7 @@ interface GameDisplayProps {
 
 export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) => {
   const games = GETgamesByUserID(userID); //TODO pass user id in.
-
+  console.log(games);
   return (
     <div style={{ width: '100%' }}>
       <Box
@@ -27,7 +27,7 @@ export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) =
         }}
       >
         {games.map((game) => (
-          <GameIcon name={game.title} path={game.imgpath} userID={userID} gameID={gameID} key={uid(game)} />
+          <GameIcon name={game.title} path={game.imgpath} userID={userID} gameID={game.id} key={uid(game)} />
         ))}
       </Box>
     </div>

@@ -18,7 +18,7 @@ import {
   GETeditorsForNode,
   GETgameById,
   GETnodeById,
-  GETplayersForNode,
+  GETplayersInGame,
   GETsubnodesByNodeId,
   GETuserById,
   GETuserIsGMInGame,
@@ -55,7 +55,7 @@ export default class NodeUserForm extends Component<Props, State> {
     const user = GETuserById(props.userId);
     const subnodes = GETsubnodesByNodeId(node.id);
     const editors = GETeditorsForNode(node.id);
-    const players = GETplayersForNode(node.id);
+    const players = GETplayersInGame(game.id);
     this.state = {
       game: game,
       node: node,
@@ -137,7 +137,7 @@ export default class NodeUserForm extends Component<Props, State> {
     const node = this.state.node;
     const players = this.state.players;
     for (const player of players) {
-      node.informationLevels[player.id]++;
+      node.informationLevels[player.id] ? node.informationLevels[player.id]++ : (node.informationLevels[player.id] = 1);
     }
     this.setState({
       node: node,
@@ -265,7 +265,11 @@ export default class NodeUserForm extends Component<Props, State> {
                             type="number"
                             step="1"
                             min="0"
-                            value={this.state.node.informationLevels[player.id].toString()}
+                            value={
+                              this.state.node.informationLevels[player.id]
+                                ? this.state.node.informationLevels[player.id].toString()
+                                : 0
+                            }
                             onChange={(event) => {
                               this.handleInformationLevelChange(event, player);
                             }}
