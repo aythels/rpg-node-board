@@ -26,6 +26,7 @@ interface Props {
   user: User;
   game: Game;
   closeCallback: (node: Node) => void;
+  onLinkClick: (id: number, node: Node) => void;
 }
 
 interface State {
@@ -167,7 +168,14 @@ export default class NodeView extends Component<Props, State> {
     return (
       <div className="subnodes">
         {subnodes.map((subnode) => (
-          <SubnodeView subnode={subnode} user={this.state.user} key={uid(subnode)} />
+          <SubnodeView
+            subnode={subnode}
+            game={this.props.game}
+            node={this.state.node}
+            user={this.state.user}
+            key={uid(subnode)}
+            onLinkClick={this.props.onLinkClick}
+          />
         ))}
       </div>
     );

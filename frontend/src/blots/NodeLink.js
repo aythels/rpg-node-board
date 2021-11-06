@@ -4,16 +4,13 @@ import Quill from 'quill';
 let Inline = Quill.import('blots/inline');
 
 class NodeLinkBlot extends Inline {
-  static create(url) {
+  static create(id) {
     let node = super.create();
-    // node.setAttribute('href', url);
-    // node.setAttribute('target', '_self');
     node.setAttribute('title', node.textContent);
-    node.setAttribute('style', 'color:blue');
-    node.setAttribute('url', url);
-    node.addEventListener('click', () => {
-      console.log(url);
-    });
+    node.setAttribute('linkid', id);
+    // node.addEventListener('click', () => {
+    //   console.log(id);
+    // });
     node.classList.add('nodelink');
     return node;
   }
@@ -27,7 +24,7 @@ class NodeLinkBlot extends Inline {
 
   format(name, value) {
     if (name === 'nodelink' && value) {
-      this.domNode.setAttribute('url', value);
+      this.domNode.setAttribute('linkid', value);
     } else {
       super.format(name, value);
     }
