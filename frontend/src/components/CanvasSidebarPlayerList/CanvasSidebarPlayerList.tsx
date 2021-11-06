@@ -6,29 +6,58 @@ import { User } from '../../types';
 
 interface Props {
   currentUserId: number;
-  isAdmin: boolean;
+  exposeSettings: boolean;
   users: User[];
   gameMasterIds: number[];
-  onRemovePlayerClicked: (user: User) => void;
+  onRemovePlayerClicked: (id: number) => void;
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;
 }
 
 interface State {
-  showRemoveUserDialog: boolean;
-  userToRemove?: User;
+  playerToRemove?: number;
+  playerToDemote?: number;
+  playerToPromote?: number;
+  showDemoteLastGmModal: boolean;
 }
 
 export default class CanvasSidebarPlayerList extends Component<Props, State> {
   state: State = {
-    showRemoveUserDialog: false,
+    showDemoteLastGmModal: false,
   };
 
-  handleUserRemove = (): void => {
-    if (this.state.userToRemove) {
-      this.props.onRemovePlayerClicked(this.state.userToRemove);
+  handlePlayerRemove = (): void => {
+    if (this.state.playerToRemove) {
+      this.props.onRemovePlayerClicked(this.state.playerToRemove);
+      this.setState({ playerToRemove: undefined });
     }
-    this.setState({ showRemoveUserDialog: false, userToRemove: undefined });
+  };
+
+  handlePlayerPromote = (): void => {
+    if (this.state.playerToPromote) {
+      this.props.onPromotePlayerClicked(this.state.playerToPromote);
+      this.setState({ playerToPromote: undefined });
+    }
+  };
+
+  handlePlayerDemote = (): void => {
+    if (this.state.playerToDemote) {
+      this.props.onDemotePlayerClicked(this.state.playerToDemote);
+      this.setState({ playerToDemote: undefined });
+    }
+  };
+
+  handlePlayerDemoteRequested = (id: number): void => {
+    const isLastGameMaster = this.props.gameMasterIds.length === 1;
+    if (isLastGameMaster) {
+      this.setState({
+        showDemoteLastGmModal: true,
+      });
+    } else {
+      this.setState({
+        playerToDemote: id,
+      });
+    }
   };
 
   prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
@@ -59,25 +88,45 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
           return (
             <CanvasSidebarPlayerCard
               key={user.id}
-              isAdmin={this.props.isAdmin}
+              exposeSettings={this.props.exposeSettings}
               promotable={!isGameMaster}
               removable={!isGameMaster && !isCurrentPlayer}
               user={user}
-              onDemotePlayerClicked={this.props.onDemotePlayerClicked}
-              onPromotePlayerClicked={this.props.onPromotePlayerClicked}
-              onRemovePlayerClicked={(userToRemove: User) => {
-                this.setState({ showRemoveUserDialog: true, userToRemove });
-              }}
+              onDemotePlayerClicked={() => this.handlePlayerDemoteRequested(user.id)}
+              onPromotePlayerClicked={() => this.setState({ playerToPromote: user.id })}
+              onRemovePlayerClicked={() => this.setState({ playerToRemove: user.id })}
             />
           );
         })}
         <Dialog
           description="Doing so will prevent them from re-joining the game."
-          header="Remove user?"
-          open={this.state.showRemoveUserDialog}
-          onAgree={this.handleUserRemove}
-          onClose={() => this.setState({ showRemoveUserDialog: false, userToRemove: undefined })}
-          onDisagree={() => this.setState({ showRemoveUserDialog: false, userToRemove: undefined })}
+          header="Remove player?"
+          open={this.state.playerToRemove !== undefined}
+          onAgree={this.handlePlayerRemove}
+          onClose={() => this.setState({ playerToRemove: undefined })}
+          onDisagree={() => this.setState({ playerToRemove: undefined })}
+        />
+        <Dialog
+          description="Doing so will grant them game master privileges."
+          header="Promote player to game master?"
+          open={this.state.playerToPromote !== undefined}
+          onAgree={this.handlePlayerPromote}
+          onClose={() => this.setState({ playerToPromote: undefined })}
+          onDisagree={() => this.setState({ playerToPromote: undefined })}
+        />
+        <Dialog
+          description="Doing so will take game master privileges from them."
+          header="Demote game master to regular player?"
+          open={this.state.playerToDemote !== undefined}
+          onAgree={this.handlePlayerDemote}
+          onClose={() => this.setState({ playerToDemote: undefined })}
+          onDisagree={() => this.setState({ playerToDemote: undefined })}
+        />
+        <Dialog
+          description="A game must have at least one game master at all times."
+          header="Cannot demote last game master"
+          open={this.state.showDemoteLastGmModal}
+          onClose={() => this.setState({ showDemoteLastGmModal: false })}
         />
       </div>
     );

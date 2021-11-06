@@ -1,7 +1,12 @@
-.canvas-sidebar {
+.canvas-sidebar .open-close-button {
+  position: absolute;
+  transition: all 0.15s ease-out;
 }
 
-.canvas-sidebar .button {
+.canvas-sidebar .navbar {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem 0.5rem 0rem 0.5rem;
 }
 
 .canvas-sidebar .container {
@@ -11,6 +16,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding: 0.5rem;
 }
 
 .canvas-sidebar .container .MuiDrawer-paper {

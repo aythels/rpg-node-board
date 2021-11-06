@@ -1,34 +1,30 @@
 .canvas-sidebar-footer {
-  margin-top: auto;
+  background-color: lightgray;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top: 1px solid lightgray;
-}
-
-.canvas-sidebar-footer .item__wrapper {
   margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
 
-.canvas-sidebar-footer .item {
+.canvas-sidebar-footer .text-field__wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.canvas-sidebar-footer .text-field {
   width: 100%;
 }
 
 .canvas-sidebar-footer .delete-button {
   width: 100%;
+  margin-top: 0.5rem;
   background-color: rgb(158, 30, 30) !important;
 }
 
 .canvas-sidebar-footer .delete-button:hover {
   background-color: darkred !important;
-}
-
-.canvas-sidebar-footer .text-field__wrapper {
-  background-color: lightgray;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-.canvas-sidebar-footer .text-field {
-  width: 100%;
 }
