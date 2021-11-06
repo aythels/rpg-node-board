@@ -4,6 +4,8 @@ import DummyComponent from './components/DummyComponent';
 import CanvasMain from './components/CanvasMain';
 import Home from './components/Home';
 import NodeView from './components/NodeView/nodeview';
+import UserDashboard from './components/UserDashboard/UserDashboard';
+import Login from './components/Login/login';
 
 function App(): JSX.Element {
   const customTheme = createTheme({
@@ -29,6 +31,8 @@ function App(): JSX.Element {
           <Route exact path="/nodeviewUser/2" render={() => <NodeView nodeId={2} userId={1} gameId={1} />} />
           <Route exact path="/nodeviewUser/3" render={() => <NodeView nodeId={3} userId={1} gameId={1} />} />
           <Route exact path="/nodeviewUser/4" render={() => <NodeView nodeId={4} userId={1} gameId={1} />} />
+          <Route exact path="/games" render={() => <UserDashboard />} />
+          <Route exact path="/login" render={() => <Login />} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

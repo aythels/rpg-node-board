@@ -200,7 +200,38 @@ const globalGames = [
     players: [1],
     gms: [2],
     users: [1, 2, 3, 4, 5],
-    title: 'Test Game',
+    title: 'CLICK ME!',
+    imgpath: '/uoft.png',
+    settings: {},
+  },
+  {
+    id: 2,
+    nodes: [1, 2],
+    players: [1],
+    gms: [2],
+    users: [1, 2, 3, 4, 5],
+    title: 'Filler game 1',
+    imgpath: '/ryerson.jpg',
+    settings: {},
+  },
+  {
+    id: 3,
+    nodes: [1],
+    players: [1],
+    gms: [2],
+    users: [1, 2, 3, 4, 5],
+    title: 'Filler game 2',
+    imgpath: '/ryerson.jpg',
+    settings: {},
+  },
+  {
+    id: 4,
+    nodes: [1, 2],
+    players: [1],
+    gms: [2],
+    users: [1, 2, 3, 4, 5],
+    title: 'Filler game 3',
+    imgpath: '/ryerson.jpg',
     settings: {},
   },
 ];
@@ -208,6 +239,11 @@ const globalGames = [
 // Functions mocking backend behaviour go here:
 
 // TODO: change all filter()s to find()s
+
+// This mock-db method will CERTAINLY be changed.
+export const VerifyLogin = (username: string, password: string): boolean => {
+  return globalUsers.filter((user) => user.username === username && user.password === password).length == 1;
+};
 
 export const GETnodeById = (id: number): Node => {
   return CloneDeep(globalNodes.filter((node) => node.id === id)[0]);
@@ -271,6 +307,10 @@ export const GETplayersForNode = (nodeId: number): User[] => {
 export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
   const game = globalGames.filter((game) => game.id === gameId)[0];
   return CloneDeep(game.gms.includes(userId));
+};
+
+export const GETgamesByUserID = (userID: number): Game[] => {
+  return CloneDeep(globalGames.filter((game) => game.users.includes(userID)));
 };
 
 export const GETgameById = (gameId: number): Game => {

@@ -29,6 +29,7 @@ export interface Game {
   id: number;
   nodes: number[];
   title: string;
+  imgpath: string; //path to image from /public/images/path. includes filetype e.g. .jpg
   players: number[];
   gms: number[];
   users: number[]; // = players + gms, might be a better way to define this
