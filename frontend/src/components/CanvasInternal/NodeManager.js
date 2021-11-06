@@ -67,6 +67,7 @@ export const NodeManager = function () {
     node.width = 200;
     node.height = 200;
     node.id = id == null ? uid(node) : id;
+    node.isVisible = true;
     node.dataNode = dataNode;
 
     _this.allNodes.push(node);
@@ -83,6 +84,16 @@ export const NodeManager = function () {
 
   this.setCenter = function () {
     animate(finalX, finalY, 0, 0, (x, y) => {
+      _this.setAllPos(x, y);
+    });
+  };
+
+  this.centerNode = function (nodeID) {
+    const node = _this.allNodes.find((e) => e.id == nodeID);
+    const deltaX = finalX - node.xPos;
+    const deltaY = finalY - node.yPos;
+
+    animate(finalX, finalY, deltaX, deltaY, (x, y) => {
       _this.setAllPos(x, y);
     });
   };
@@ -163,6 +174,10 @@ export const NodeManager = function () {
 
   this.update = function () {
     for (const callback of _this.renderCallbacks) callback();
+  };
+
+  this.getAllNodes = function () {
+    return _this.allNodes.reverse();
   };
 };
 

@@ -21,7 +21,7 @@ const globalSubnodes = [
         { insert: ' can be found here.\n' },
       ],
     }),
-  },
+  } as Subnode,
   {
     id: 2,
     node_id: 1,
@@ -35,7 +35,7 @@ const globalSubnodes = [
     id: 3,
     node_id: 1,
     informationLevel: 1,
-    editors: [1],
+    editors: [1, 2, 3, 4, 5],
     type: 'notes',
     name: 'Notes',
     content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
@@ -111,7 +111,7 @@ const globalNodes = [
     informationLevels: {
       1: 0,
       3: 1,
-      4: 1,
+      4: 0,
       5: 2,
     },
     subnodes: [],
@@ -140,7 +140,7 @@ const globalNodes = [
     imageAlt: '',
     informationLevels: {
       1: 0,
-      3: 1,
+      3: 0,
       4: 1,
       5: 2,
     },
@@ -153,9 +153,9 @@ const globalNodes = [
 const globalUsers: User[] = [
   {
     id: 1,
-    username: 'user1',
-    password: 'user1',
-    email: 'user1@user.com',
+    username: 'user',
+    password: 'user',
+    email: 'user@user.com',
     games: [1],
     images: [],
     profilePicture: '/images/profile_picture_1.png',
@@ -260,19 +260,41 @@ const globalUsers: User[] = [
 let globalGames: Game[] = [
   {
     id: 1,
-    title: 'Test Game',
     nodes: [1, 2, 3, 4],
     players: [1],
     gms: [2],
-    users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    users: [1, 2, 3, 4, 5],
+    title: 'CLICK ME!',
+    imgpath: '/uoft.png',
     settings: {},
   },
   {
-    id: 7,
-    title: 'Test game 7',
-    nodes: [1],
-    players: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    id: 2,
+    nodes: [1, 2],
+    players: [1],
     gms: [2],
+    users: [1, 2, 3, 4, 5],
+    title: 'Filler game 1',
+    imgpath: '/ryerson.jpg',
+    settings: {},
+  },
+  {
+    id: 3,
+    nodes: [1],
+    players: [1],
+    gms: [2],
+    users: [1, 2, 3, 4, 5],
+    title: 'Filler game 2',
+    imgpath: '/ryerson.jpg',
+    settings: {},
+  },
+  {
+    id: 4,
+    nodes: [1, 2],
+    players: [1],
+    gms: [2],
+    title: 'Filler game 3',
+    imgpath: '/ryerson.jpg',
     users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     settings: {},
   },
@@ -318,6 +340,11 @@ export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): vo
 
 // Functions mocking backend behaviour:
 
+// This mock-db method will CERTAINLY be changed.
+export const VerifyLogin = (username: string, password: string): boolean => {
+  return globalUsers.filter((user) => user.username === username && user.password === password).length == 1;
+};
+
 export const GETnodeById = (id: number): Node => {
   return CloneDeep(globalNodes.filter((node) => node.id === id)[0]);
 };
@@ -346,6 +373,10 @@ export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
   console.log(subnode.content);
 };
 
+export const POSTsubnode = (subnode: Subnode): void => {
+  globalSubnodes.push(CloneDeep(subnode));
+};
+
 export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
   const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
   return CloneDeep(subnode.editors.includes(userId));
@@ -365,6 +396,27 @@ export const GETnodesInGame = (gameId: number): Node[] => {
   return nodes;
 };
 
+export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
+  const allNodes = GETnodesInGame(gameId);
+  const nodes = allNodes.filter((node) => {
+    if (node.editors.includes(userId)) {
+      return true;
+    } else if (node.informationLevels[userId]) {
+      return node.informationLevels[userId] > 0;
+    } else {
+      return false;
+    }
+  });
+  return nodes;
+};
+
+let NEXT_SUBNODE = globalSubnodes.length;
+
+export const GETnewSubnodeId = (): number => {
+  NEXT_SUBNODE += 1;
+  return NEXT_SUBNODE;
+};
+
 export const GETeditorsForNode = (nodeId: number): User[] => {
   const node = globalNodes.filter((node) => node.id === nodeId)[0];
   const users = globalUsers.filter((user) => node.editors.includes(user.id));
@@ -382,6 +434,10 @@ export const GETplayersInGame = (gameId: number): User[] => {
 export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
   const game = globalGames.filter((game) => game.id === gameId)[0];
   return CloneDeep(game.gms.includes(userId));
+};
+
+export const GETgamesByUserID = (userID: number): Game[] => {
+  return CloneDeep(globalGames.filter((game) => game.users.includes(userID)));
 };
 
 export const GETgameById = (gameId: number): Game => {

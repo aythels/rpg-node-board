@@ -1,7 +1,10 @@
 import './styles.css';
 import React from 'react';
+import CanvasInternalToolbarEntry from '../CanvasInternalToolbarEntry/CanvasInternalToolbarEntry';
 
 interface Props {
+  nodeManager: any;
+  setActiveNodeCallback: (id: number) => void;
   onCenterClicked: () => void;
   onAddClicked: () => void;
 }
@@ -27,7 +30,7 @@ export default class CanvasInternalToolbar extends React.Component<Props, State>
   };
 
   render(): JSX.Element {
-    const { onCenterClicked, onAddClicked } = this.props;
+    const { nodeManager, setActiveNodeCallback, onCenterClicked, onAddClicked } = this.props;
 
     return (
       <div
@@ -36,7 +39,21 @@ export default class CanvasInternalToolbar extends React.Component<Props, State>
           left: `${this.state.isOpen ? this.state.openLeftPos : this.state.closeLeftPos}px`,
         }}
       >
-        <div className="sideBar">test</div>
+        <div className="sideBar">
+          {nodeManager.getAllNodes().map((node: any) => (
+            <CanvasInternalToolbarEntry
+              key={node.id}
+              node={node}
+              entryDBClickCallback={() => setActiveNodeCallback(node.id)}
+              visibleCallback={() => {
+                node.isVisible = !node.isVisible;
+                nodeManager.update();
+              }}
+              navigateCallback={() => nodeManager.centerNode(node.id)}
+              closeCallback={() => nodeManager.removeNode(node.id)}
+            ></CanvasInternalToolbarEntry>
+          ))}
+        </div>
         <div className="interface">
           <button className="btn" onClick={onCenterClicked} type="button">
             ۞

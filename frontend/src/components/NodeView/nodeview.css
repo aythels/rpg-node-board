@@ -26,6 +26,9 @@
 
 .nodeview {
   box-sizing: border-box;
+  position: absolute;
+  background-color: white;
+  z-index: 2000;
   width: 100%;
   min-height: 100vh;
   padding: 1rem;
@@ -49,4 +52,9 @@
 .nodeview {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.new-subnode {
+  display: flex;
+  gap: 1rem;
 }

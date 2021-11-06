@@ -4,7 +4,7 @@ import React from 'react';
 import CanvasInternalToolbar from '../CanvasInternalToolbar';
 import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
-import { GETgameById, GETnodesInGame, GETuserById } from '../../mock-backend';
+import { GETgameById, GETnodesInGameVisibleToUser, GETuserById } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
 
@@ -20,9 +20,7 @@ export default class CanvasInternal extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.nodeManager.addOnUpdateEvent(() => this.setState({}));
-
-    const game = GETgameById(props.currentGameId);
-    for (const node of GETnodesInGame(game.id)) {
+    for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
       this.nodeManager.createNode(node.id, node);
     }
   }
@@ -49,8 +47,6 @@ export default class CanvasInternal extends React.Component<Props> {
   };
 
   render(): JSX.Element {
-    const array = this.nodeManager.allNodes.reverse();
-
     return (
       <div>
         <div
@@ -68,25 +64,36 @@ export default class CanvasInternal extends React.Component<Props> {
               style={{ left: `${this.nodeManager.getFinalX()}px`, top: `${this.nodeManager.getFinalY()}px` }}
             />
 
-            {array.map((node) => (
-              <CanvasInternalNode
-                key={node.id}
-                xPos={node.xPos}
-                yPos={node.yPos}
-                nodeWidth={node.width}
-                nodeHeight={node.height}
-                id={node.id}
-                dataNode={node.dataNode}
-                onCloseClicked={() => this.nodeManager.removeNode(node.id)}
-                onImageClicked={(id) => {
-                  this.activeNode = id;
-                  this.setState({});
-                }}
-              />
-            ))}
+            {this.nodeManager.getAllNodes().map((node) => {
+              if (!node.isVisible) {
+                return;
+              } else {
+                return (
+                  <CanvasInternalNode
+                    key={node.id}
+                    xPos={node.xPos}
+                    yPos={node.yPos}
+                    nodeWidth={node.width}
+                    nodeHeight={node.height}
+                    id={node.id}
+                    dataNode={node.dataNode}
+                    onCloseClicked={() => this.nodeManager.removeNode(node.id)}
+                    onImageClicked={(id) => {
+                      this.activeNode = id;
+                      this.setState({});
+                    }}
+                  />
+                );
+              }
+            })}
           </div>
         </div>
         <CanvasInternalToolbar
+          nodeManager={this.nodeManager}
+          setActiveNodeCallback={(id) => {
+            this.activeNode = id;
+            this.setState({});
+          }}
           onCenterClicked={this.nodeManager.setCenter}
           onAddClicked={this.nodeManager.createNodeDefault}
         />
