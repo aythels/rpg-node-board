@@ -35,7 +35,7 @@ const globalSubnodes = [
     id: 3,
     node_id: 1,
     informationLevel: 1,
-    editors: [1, 3, 4, 5],
+    editors: [1, 2, 3, 4, 5],
     type: 'notes',
     name: 'Notes',
     content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
