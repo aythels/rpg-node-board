@@ -87,7 +87,6 @@ export default class CanvasInternal extends React.Component<Props> {
           </div>
         </div>
         <CanvasInternalToolbar
-          onBackClicked={() => console.log('back')}
           onCenterClicked={this.nodeManager.setCenter}
           onAddClicked={this.nodeManager.createNodeDefault}
         />
