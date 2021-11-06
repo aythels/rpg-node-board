@@ -121,16 +121,11 @@ export default class SubnodeView extends Component<Props, State> {
 
       // Add onclick behaviour
       const nodeLinks = document.getElementsByTagName('nodelink');
-
       for (const nodeLink of nodeLinks) {
-        if (names.includes(nodeLink.innerHTML)) {
-          nodeLink.addEventListener('click', () => {
-            const linkId = nodeLink.getAttribute('linkid');
-            if (linkId) this.props.onLinkClick(parseInt(linkId), this.props.node);
-          });
-        } else {
-          // TODO: Remove outdated links
-        }
+        nodeLink.addEventListener('click', () => {
+          const linkId = nodeLink.getAttribute('linkid');
+          if (linkId) this.props.onLinkClick(parseInt(linkId), this.props.node);
+        });
       }
     }
   };
