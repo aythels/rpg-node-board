@@ -3,15 +3,15 @@
 ## General Information
 
 ### Login Info:
-- Username: admin, password: admin
-- Username: user, password: user
-- Note: There are other users that exist in the data to demonstrate some of the functionality of the views, but they should not be accessed.
+- Username: **admin**, password: **admin**
+- Username: **user**, password: **user**
+- *Note:* There are other users that exist in the data to demonstrate some of the functionality of the views, but they should not be accessed.
 
 ### Note on Hardcoded Values
 Our phase 1 project does not utilize any external data source. Rather, we created the `mock-backend.ts` file, which includes all of the hardcoded JS values that are used throughout the frontend. Any line in the code that calls a function exported from `mock-backend.ts` will, in later phases, send an equivalent request to the actual backend. Therefore, function calls such as `GETnodesInGame()` and `GETuserCanEditNode()` should be treated as equivalent to having a comment above them saying "// code below requires server call".
 
 ### Admin Functionalities
-After logging in as 'admin', click on a game card. This will bring you to the main view of the app (canvas). From here, click on the gear button at the top of the righthand sidebar to enable user editing (the ability to add/remove users, promote a player to a game master, change the game name, and delete the game). Double-click on any of the square nodes in the canvas to bring up their associated NodeView. Inside the node, you can edit any subnode which you have permission to edit by typing in the Quill WYSIWYG editor (as admin you can edit all subnodes, as a user you can only edit the Notes subnodes as well as any other subnodes that an admin has explicitly given you permission to edit). If you type the name of another node in the current game, it will automatically be formatted as a clickable block of text that will open up the appropriate node. Subnodes autosave their content once every second. You can add new subnodes using the tools at the bottom of the NodeView. You can edit the node's meta-information, permissions, and image using the menu modals that open when you click the buttons on the top-right of the NodeView. **Note:** Adding a new image works *in theory*, but as all images are accessed as paths to the app's `public/images/` folder, inserting new images from the user's machine is not supported and this functionality should not be treated as part of the current build.
+After logging in as 'admin', click on a game card. This will bring you to the main view of the app (canvas). From here, click on the gear button at the top of the righthand sidebar to enable user editing (the ability to add/remove users, promote a player to a game master, change the game name, and delete the game). Double-click on any of the square nodes in the canvas to bring up their associated NodeView. Inside the node, you can edit any subnode which you have permission to edit by typing in the Quill WYSIWYG editor (as admin you can edit all subnodes, as a user you can only edit the Notes subnodes as well as any other subnodes that an admin has explicitly given you permission to edit). If you type the name of another node in the current game, it will automatically be formatted as a clickable block of text that will open up the appropriate node. Subnodes autosave their content once every second. You can add new subnodes using the tools at the bottom of the NodeView. You can edit the node's meta-information, permissions, and image using the menu modals that open when you click the buttons on the top-right of the NodeView. ***Note:*** Adding a new image works *in theory*, but as all images are accessed as paths to the app's `public/images/` folder, inserting new images from the user's machine is not supported and this functionality should not be treated as part of the current build.
 
 You can add new nodes by clicking on the plus button at the top-left of the page.
 
