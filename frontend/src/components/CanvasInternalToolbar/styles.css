@@ -1,0 +1,35 @@
+.wrapper {
+  position: absolute;
+  margin: 0px;
+  top: 0px;
+  left: -240px;
+  height: 100%;
+  transition: left 0.3s ease-in-out;
+}
+
+.sideBar {
+  user-select: none;
+  background-color: green;
+  float: left;
+  width: 240px;
+  height: 100%;
+}
+
+#sideBarToggleButton {
+  position: absolute;
+  bottom: 0px;
+  width: 40px;
+  height: 40px;
+}
+
+.interface {
+  float: left;
+  background-color: red;
+}
+
+.btn {
+  user-select: none;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
