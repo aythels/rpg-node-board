@@ -21,7 +21,7 @@ const globalSubnodes = [
         { insert: ' can be found here.\n' },
       ],
     }),
-  },
+  } as Subnode,
   {
     id: 2,
     node_id: 1,
@@ -35,7 +35,7 @@ const globalSubnodes = [
     id: 3,
     node_id: 1,
     informationLevel: 1,
-    editors: [1],
+    editors: [1, 3, 4, 5],
     type: 'notes',
     name: 'Notes',
     content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
@@ -111,7 +111,7 @@ const globalNodes = [
     informationLevels: {
       1: 0,
       3: 1,
-      4: 1,
+      4: 0,
       5: 2,
     },
     subnodes: [],
@@ -140,7 +140,7 @@ const globalNodes = [
     imageAlt: '',
     informationLevels: {
       1: 0,
-      3: 1,
+      3: 0,
       4: 1,
       5: 2,
     },
@@ -354,6 +354,10 @@ export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
   console.log(subnode.content);
 };
 
+export const POSTsubnode = (subnode: Subnode): void => {
+  globalSubnodes.push(CloneDeep(subnode));
+};
+
 export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
   const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
   return CloneDeep(subnode.editors.includes(userId));
@@ -371,6 +375,27 @@ export const GETnodesInGame = (gameId: number): Node[] => {
     nodes.push(globalNodes[nodeid - 1]);
   }
   return nodes;
+};
+
+export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
+  const allNodes = GETnodesInGame(gameId);
+  const nodes = allNodes.filter((node) => {
+    if (node.editors.includes(userId)) {
+      return true;
+    } else if (node.informationLevels[userId]) {
+      return node.informationLevels[userId] > 0;
+    } else {
+      return false;
+    }
+  });
+  return nodes;
+};
+
+let NEXT_SUBNODE = globalSubnodes.length;
+
+export const GETnewSubnodeId = (): number => {
+  NEXT_SUBNODE += 1;
+  return NEXT_SUBNODE;
 };
 
 export const GETeditorsForNode = (nodeId: number): User[] => {

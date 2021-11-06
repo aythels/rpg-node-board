@@ -18,6 +18,7 @@ export interface Node {
 
 export interface Subnode {
   id: number;
+  node_id: number;
   name: string;
   informationLevel: number;
   editors: number[];
