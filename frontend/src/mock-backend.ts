@@ -153,9 +153,9 @@ const globalNodes = [
 const globalUsers: User[] = [
   {
     id: 1,
-    username: 'user1',
-    password: 'user1',
-    email: 'user1@user.com',
+    username: 'user',
+    password: 'user',
+    email: 'user@user.com',
     games: [1],
     images: [],
     profilePicture: '/images/profile_picture_1.png',
