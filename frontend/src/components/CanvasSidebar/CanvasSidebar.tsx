@@ -57,7 +57,7 @@ export default class CanvasSidebar extends Component<Props, State> {
         <IconButton
           className="open-close-button"
           style={{
-            right: this.state.sidebarOpen ? '22.5%' : '0%',
+            right: this.state.sidebarOpen ? '20%' : '0%',
           }}
           aria-label={`${this.state.sidebarOpen ? 'Close' : 'Open'} the sidebar`}
           component="span"
