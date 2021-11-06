@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import Home from './components/Home';
-import NodeView from './components/NodeView/nodeview';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain';

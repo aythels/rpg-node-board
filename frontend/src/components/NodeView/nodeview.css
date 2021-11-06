@@ -50,3 +50,8 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.new-subnode {
+  display: flex;
+  gap: 1rem;
+}

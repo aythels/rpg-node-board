@@ -1,7 +1,5 @@
 /* eslint-disable sort-imports */
-import { Game } from '../../types';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import { uid } from 'react-uid';
 import React from 'react';
 import { GameIcon } from '../GameIcon/gameicon';

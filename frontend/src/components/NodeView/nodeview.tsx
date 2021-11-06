@@ -1,25 +1,28 @@
 import './nodeview.css';
-import { Component, SyntheticEvent } from 'react';
+import { Component, FormEvent, SyntheticEvent } from 'react';
 import SubnodeView from '../SubnodeView/subnodeview';
 import { uid } from 'react-uid';
 import {
+  GETnewSubnodeId,
   // GETgameById,
   // GETnodeById,
   GETsubnodesVisibleToUser,
   // GETuserById,
   GETuserCanEditNode,
   POSTnode,
+  POSTsubnode,
 } from '../../mock-backend';
 import { Game, Node, Subnode, User } from '../../types';
 import { cloneDeep } from 'lodash';
-import { ButtonGroup, Button } from '@mui/material';
+import { ButtonGroup, Button, TextField, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import NodeUserForm from '../NodeUserForm/nodeuserform';
 import NodeEditForm from '../NodeEditForm/nodeeditform';
 import NodeImageForm from '../NodeImageForm/nodeimageform';
-import { Close } from '@mui/icons-material';
+import { Add, Close } from '@mui/icons-material';
+import Delta from 'quill-delta';
 
 interface Props {
   node: Node;
@@ -37,6 +40,8 @@ interface State {
   editModalOpen: boolean;
   usersModalOpen: boolean;
   imageModalOpen: boolean;
+  newSubnodeName: string;
+  newSubnodeType: string;
 }
 
 export default class NodeView extends Component<Props, State> {
@@ -54,6 +59,8 @@ export default class NodeView extends Component<Props, State> {
       editModalOpen: false,
       usersModalOpen: false,
       imageModalOpen: false,
+      newSubnodeName: '',
+      newSubnodeType: '',
     };
   }
 
@@ -95,7 +102,6 @@ export default class NodeView extends Component<Props, State> {
 
   renderMenu = (): JSX.Element | null => {
     if (GETuserCanEditNode(this.state.user.id, this.state.node.id)) {
-      // It might be a good idea to make editability a state variable
       return (
         <ButtonGroup>
           <Button onClick={this.handleEditModalOpen}>
@@ -113,7 +119,13 @@ export default class NodeView extends Component<Props, State> {
         </ButtonGroup>
       );
     } else {
-      return <></>;
+      return (
+        <ButtonGroup>
+          <Button onClick={() => this.props.closeCallback(this.state.node)}>
+            <Close />
+          </Button>
+        </ButtonGroup>
+      );
     }
   };
 
@@ -161,6 +173,22 @@ export default class NodeView extends Component<Props, State> {
       this.saveNodeState,
     );
     this.handleImageModalClose();
+  };
+
+  addNewSubnode = (e: FormEvent): void => {
+    e.preventDefault();
+    POSTsubnode({
+      id: GETnewSubnodeId(),
+      node_id: this.state.node.id,
+      name: this.state.newSubnodeName,
+      type: this.state.newSubnodeType,
+      informationLevel: 1,
+      editors: this.state.node.editors,
+      content: new Delta(),
+    });
+    this.setState({
+      subnodes: GETsubnodesVisibleToUser(this.state.node.id, this.state.user.id),
+    });
   };
 
   renderSubnodes = (): JSX.Element => {
@@ -222,6 +250,36 @@ export default class NodeView extends Component<Props, State> {
           />
         ) : null}
         {this.renderSubnodes()}
+        {GETuserCanEditNode(this.state.user.id, this.state.node.id) ? (
+          <form
+            className="new-subnode"
+            onSubmit={(e) => {
+              this.addNewSubnode(e);
+            }}
+          >
+            <Tooltip title="Add new subnode">
+              <Button type="submit">
+                <Add />
+              </Button>
+            </Tooltip>
+            <TextField
+              required
+              label="Name"
+              value={this.state.newSubnodeName}
+              onChange={(event) => {
+                this.setState({ newSubnodeName: event.target.value });
+              }}
+            ></TextField>
+            <TextField
+              required
+              label="Type"
+              value={this.state.newSubnodeType}
+              onChange={(event) => {
+                this.setState({ newSubnodeType: event.target.value });
+              }}
+            ></TextField>
+          </form>
+        ) : null}
       </div>
     );
   }
