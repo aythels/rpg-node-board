@@ -1,6 +1,8 @@
 .canvas-sidebar .open-close-button {
   position: absolute;
   transition: all 0.15s ease-out;
+  bottom: 0;
+  margin: 0.5rem;
 }
 
 .canvas-sidebar .navbar {
@@ -20,5 +22,5 @@
 }
 
 .canvas-sidebar .container .MuiDrawer-paper {
-  width: 22.5%;
+  width: 20%;
 }
