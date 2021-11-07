@@ -65,17 +65,13 @@ export default class LeftSidebar extends React.Component<Props, State> {
             left: this.state.isOpen ? '20%' : '0%',
           }}
         >
-          <IconButton className="button" aria-label="Center node view" onClick={onCenterClicked}>
+          <IconButton aria-label="Center node view" onClick={onCenterClicked}>
             <CenterFocusStrong />
           </IconButton>
-          <IconButton className="button" aria-label="Add a new node" onClick={onAddClicked}>
+          <IconButton aria-label="Add a new node" onClick={onAddClicked}>
             <Add />
           </IconButton>
-          <IconButton
-            className="button"
-            aria-label={`${this.state.isOpen ? 'Close' : 'Open'} the sidebar`}
-            onClick={this.onToggleSideBar}
-          >
+          <IconButton aria-label={`${this.state.isOpen ? 'Close' : 'Open'} the sidebar`} onClick={this.onToggleSideBar}>
             {this.state.isOpen ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </div>

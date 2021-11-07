@@ -2,10 +2,10 @@
   position: absolute;
   bottom: 0;
   transition: all 0.15s ease-out;
-}
-
-.left-sidebar .button {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem;
 }
 
 .left-sidebar .container .MuiDrawer-paper {
