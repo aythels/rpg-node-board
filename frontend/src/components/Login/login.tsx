@@ -1,10 +1,7 @@
 import './login.css';
 import { Button, Grid, TextField } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { Component, SyntheticEvent } from 'react';
+import { Component } from 'react';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Redirect } from 'react-router-dom';
 import { VerifyLogin } from '../../mock-backend';
 import { createBrowserHistory } from 'history';
 

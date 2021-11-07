@@ -1,5 +1,4 @@
 import './styles.css';
-import gridImage from './grid.jpg';
 import React from 'react';
 import Sidebar from '../LeftSidebar';
 import CanvasInternalNode from '../CanvasInternalNode';
@@ -102,10 +101,21 @@ export default class CanvasInternal extends React.Component<Props> {
           <div className="offSet">
             <div className="c" style={{ transform: `scale(${this.nodeManager.scale})` }}>
               <div className="imgContainer">
-                <img
+                <div
                   id="img"
-                  src={gridImage}
-                  style={{ left: `${this.nodeManager.getFinalX()}px`, top: `${this.nodeManager.getFinalY()}px` }}
+                  style={{
+                    left: `${this.nodeManager.getFinalX()}px`,
+                    top: `${this.nodeManager.getFinalY()}px`,
+                    width: `10000px`,
+                    height: `10000px`,
+                    backgroundColor: `white`,
+                    opacity: `0.8`,
+                    backgroundImage: `linear-gradient(#d2d3e1 4.4px, transparent 4.4px),
+    linear-gradient(90deg, #d2d3e1 4.4px, transparent 4.4px), linear-gradient(#d2d3e1 2.2px, transparent 2.2px),
+    linear-gradient(90deg, #d2d3e1 2.2px, #ffffff 2.2px)`,
+                    backgroundSize: `110px 110px, 110px 110px, 22px 22px, 22px 22px`,
+                    backgroundPosition: `-4.4px -4.4px, -4.4px -4.4px, -2.2px -2.2px, -2.2px -2.2px`,
+                  }}
                 />
               </div>
 
