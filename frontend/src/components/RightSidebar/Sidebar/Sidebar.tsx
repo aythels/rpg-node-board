@@ -32,7 +32,7 @@ interface State {
 class Sidebar extends Component<Props, State> {
   state: State = {
     showUserAlreadyInGameModal: false,
-    sidebarOpen: false,
+    sidebarOpen: true,
     settingsOpen: false,
   };
 
