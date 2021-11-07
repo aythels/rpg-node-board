@@ -5,6 +5,7 @@ import { Drawer, IconButton } from '@mui/material';
 import { Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   nodeManager: any;
   setActiveNodeCallback: (id: number) => void;
   onCenterClicked: () => void;
@@ -13,48 +14,40 @@ interface Props {
 }
 
 interface State {
-  openLeftPos: number;
-  closeLeftPos: number;
   isOpen: boolean;
 }
 
 export default class LeftSidebar extends React.Component<Props, State> {
   state: State = {
-    openLeftPos: 0,
-    closeLeftPos: -240,
     isOpen: true,
   };
 
   onToggleSideBar = (): void => {
-    console.log(this.state.isOpen);
     this.setState({
       isOpen: !this.state.isOpen,
     });
   };
 
   render(): JSX.Element {
-    const { nodeManager, setActiveNodeCallback, onCenterClicked, onAddClicked } = this.props;
+    const { nodeManager, setActiveNodeCallback, onCenterClicked, onAddClicked, closeCallback } = this.props;
 
     return (
-      <div
-        className="left-sidebar"
-        style={{
-          left: `${this.state.isOpen ? this.state.openLeftPos : this.state.closeLeftPos}px`,
-        }}
-      >
+      <div className="left-sidebar">
         <Drawer className="container" anchor="left" open={this.state.isOpen} variant="persistent">
           <div className="node-list">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {nodeManager.getAllNodes().map((node: any) => (
               <NodeCard
                 key={node.id}
-                node={node}
-                entryDBClickCallback={() => setActiveNodeCallback(node.id)}
-                visibleCallback={() => {
+                visible={node.isVisible}
+                caption={node.dataNode.name}
+                onDoubleClick={() => setActiveNodeCallback(node.id)}
+                onVisibilityToggled={() => {
                   node.isVisible = !node.isVisible;
                   nodeManager.update();
                 }}
-                navigateCallback={() => nodeManager.centerNode(node.id)}
-                closeCallback={() => this.props.closeCallback(node.id)}
+                onNavigateToNodeClicked={() => nodeManager.centerNode(node.id)}
+                onDeleteNodeClicked={() => closeCallback(node.id)}
               />
             ))}
           </div>

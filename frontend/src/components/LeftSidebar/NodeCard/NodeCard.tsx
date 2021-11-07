@@ -4,43 +4,40 @@ import { IconButton, Tooltip, Typography } from '@mui/material';
 import { CenterFocusStrong, Delete, Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
-  node: any;
-  entryDBClickCallback: () => void;
-  visibleCallback: () => void;
-  navigateCallback: () => void;
-  closeCallback: () => void;
+  caption: string;
+  visible: boolean;
+  onDoubleClick: () => void;
+  onVisibilityToggled: () => void;
+  onNavigateToNodeClicked: () => void;
+  onDeleteNodeClicked: () => void;
 }
 
 export default class NodeCard extends PureComponent<Props> {
   render(): JSX.Element {
-    const { node, entryDBClickCallback, visibleCallback, navigateCallback, closeCallback } = this.props;
+    const { visible, caption, onDoubleClick, onVisibilityToggled, onNavigateToNodeClicked, onDeleteNodeClicked } =
+      this.props;
 
     return (
-      <div className="node-card" onDoubleClick={entryDBClickCallback}>
+      <div className="node-card" onDoubleClick={onDoubleClick}>
         <Typography className="title" variant="body1" component="div" align="center" noWrap={true}>
-          {node.dataNode.name}
+          {caption}
         </Typography>
-
-        <Tooltip arrow title={`Make node ${node.isVisible ? 'invisible' : 'visible'}`}>
+        <Tooltip arrow title={`Make node ${visible ? 'invisible' : 'visible'}`}>
           <IconButton
             style={{ marginLeft: 'auto' }}
-            aria-label={`Make node ${node.isVisible ? 'invisible' : 'visible'}`}
-            onClick={() => {
-              visibleCallback();
-              this.setState({});
-            }}
+            aria-label={`Make node ${visible ? 'invisible' : 'visible'}`}
+            onClick={onVisibilityToggled}
           >
-            {/* TODO: get isVisible as props */}
-            {node.isVisible ? <Visibility /> : <VisibilityOff />}
+            {visible ? <Visibility /> : <VisibilityOff />}
           </IconButton>
         </Tooltip>
-        <Tooltip arrow title="Bring node into view">
-          <IconButton aria-label="Bring node into view" onClick={navigateCallback}>
+        <Tooltip arrow title="Navigate to node">
+          <IconButton aria-label="Navigate to node" onClick={onNavigateToNodeClicked}>
             <CenterFocusStrong />
           </IconButton>
         </Tooltip>
         <Tooltip arrow title="Delete node">
-          <IconButton color="warning" aria-label="Delete node" onClick={closeCallback}>
+          <IconButton color="warning" aria-label="Delete node" onClick={onDeleteNodeClicked}>
             <Delete />
           </IconButton>
         </Tooltip>
