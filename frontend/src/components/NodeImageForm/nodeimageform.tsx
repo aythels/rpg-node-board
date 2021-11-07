@@ -121,7 +121,16 @@ export default class NodeImageForm extends Component<Props, State> {
             </div>
             <div className="modal__body__section">
               <h4>Stock Images</h4>
-              <div className="image-collection"></div>
+              <div className="image-collection">
+                <div className="image-collection__image">
+                  <img
+                    src="/images/default.jpg"
+                    onClick={() => {
+                      this.changeImage('/images/default.jpg');
+                    }}
+                  ></img>
+                </div>
+              </div>
             </div>
             <div className="modal__body__section">
               <h4>Upload New Image</h4>

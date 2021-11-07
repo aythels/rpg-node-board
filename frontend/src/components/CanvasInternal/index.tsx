@@ -4,7 +4,15 @@ import React from 'react';
 import CanvasInternalToolbar from '../CanvasInternalToolbar';
 import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
-import { GETgameById, GETnodesInGameVisibleToUser, GETuserById } from '../../mock-backend';
+import {
+  DELETEnode,
+  GETgameById,
+  GETgmIds,
+  GETnewNodeId,
+  GETnodesInGameVisibleToUser,
+  GETuserById,
+  POSTnodeToGame,
+} from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
 
@@ -46,6 +54,27 @@ export default class CanvasInternal extends React.Component<Props> {
     this.setState({});
   };
 
+  removeNode = (nodeId: number): void => {
+    DELETEnode(nodeId);
+    this.nodeManager.removeNode(nodeId);
+  };
+
+  createBlankNode = (): void => {
+    const id = GETnewNodeId();
+    const newNode = {
+      id: id,
+      name: 'Default' + id,
+      image: '/images/default.jpg',
+      imageAlt: 'Default',
+      subnodes: [],
+      informationLevels: {},
+      editors: GETgmIds(this.props.currentGameId),
+      type: 'default',
+    } as Node;
+    POSTnodeToGame(newNode, this.props.currentGameId);
+    this.nodeManager.createNode(newNode.id, newNode);
+  };
+
   render(): JSX.Element {
     return (
       <div>
@@ -77,7 +106,9 @@ export default class CanvasInternal extends React.Component<Props> {
                     nodeHeight={node.height}
                     id={node.id}
                     dataNode={node.dataNode}
-                    onCloseClicked={() => this.nodeManager.removeNode(node.id)}
+                    onCloseClicked={() => {
+                      this.removeNode(node.id);
+                    }}
                     onImageClicked={(id) => {
                       this.activeNode = id;
                       this.setState({});
@@ -95,7 +126,8 @@ export default class CanvasInternal extends React.Component<Props> {
             this.setState({});
           }}
           onCenterClicked={this.nodeManager.setCenter}
-          onAddClicked={this.nodeManager.createNodeDefault}
+          onAddClicked={this.createBlankNode}
+          closeCallback={this.removeNode}
         />
 
         {this.activeNode !== -1 ? (

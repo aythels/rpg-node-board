@@ -42,6 +42,7 @@ interface State {
   imageModalOpen: boolean;
   newSubnodeName: string;
   newSubnodeType: string;
+  newSubnodeInfoLevel: string;
 }
 
 export default class NodeView extends Component<Props, State> {
@@ -61,6 +62,7 @@ export default class NodeView extends Component<Props, State> {
       imageModalOpen: false,
       newSubnodeName: '',
       newSubnodeType: '',
+      newSubnodeInfoLevel: '',
     };
   }
 
@@ -182,7 +184,7 @@ export default class NodeView extends Component<Props, State> {
       node_id: this.state.node.id,
       name: this.state.newSubnodeName,
       type: this.state.newSubnodeType,
-      informationLevel: 1,
+      informationLevel: parseInt(this.state.newSubnodeInfoLevel),
       editors: this.state.node.editors,
       content: new Delta(),
     });
@@ -251,34 +253,52 @@ export default class NodeView extends Component<Props, State> {
         ) : null}
         {this.renderSubnodes()}
         {GETuserCanEditNode(this.state.user.id, this.state.node.id) ? (
-          <form
-            className="new-subnode"
-            onSubmit={(e) => {
-              this.addNewSubnode(e);
-            }}
-          >
-            <Tooltip title="Add new subnode">
-              <Button type="submit">
-                <Add />
-              </Button>
-            </Tooltip>
-            <TextField
-              required
-              label="Name"
-              value={this.state.newSubnodeName}
-              onChange={(event) => {
-                this.setState({ newSubnodeName: event.target.value });
+          <div className="new-subnode-wrapper">
+            <h2>Add new subnode</h2>
+            <form
+              className="new-subnode"
+              onSubmit={(e) => {
+                this.addNewSubnode(e);
               }}
-            ></TextField>
-            <TextField
-              required
-              label="Type"
-              value={this.state.newSubnodeType}
-              onChange={(event) => {
-                this.setState({ newSubnodeType: event.target.value });
-              }}
-            ></TextField>
-          </form>
+            >
+              <Tooltip title="Add new subnode">
+                <Button type="submit">
+                  <Add />
+                </Button>
+              </Tooltip>
+              <TextField
+                required
+                label="Name"
+                value={this.state.newSubnodeName}
+                onChange={(event) => {
+                  this.setState({ newSubnodeName: event.target.value });
+                }}
+              ></TextField>
+              <TextField
+                required
+                label="Type"
+                value={this.state.newSubnodeType}
+                onChange={(event) => {
+                  this.setState({ newSubnodeType: event.target.value });
+                }}
+              ></TextField>
+              <TextField
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0,
+                    step: 1,
+                  },
+                }}
+                label="Information Level"
+                value={this.state.newSubnodeInfoLevel}
+                onChange={(event) => {
+                  this.setState({ newSubnodeInfoLevel: event.target.value });
+                }}
+              ></TextField>
+            </form>
+          </div>
         ) : null}
       </div>
     );
