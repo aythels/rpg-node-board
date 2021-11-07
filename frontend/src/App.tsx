@@ -20,16 +20,16 @@ function App(): JSX.Element {
         white: '#fff',
       },
       error: {
-        light: '#ffe97d',
-        main: '#ffb74d',
-        dark: '#c88719',
-        contrastText: '#000',
-      },
-      warning: {
         light: '#ff867c',
         main: '#ef5350',
         dark: '#b61827',
         contrastText: '#fff',
+      },
+      warning: {
+        light: '#ffe97d',
+        main: '#ffb74d',
+        dark: '#c88719',
+        contrastText: '#000',
       },
     },
   });
