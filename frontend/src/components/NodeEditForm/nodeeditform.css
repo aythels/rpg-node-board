@@ -1,4 +1,4 @@
-.input-line-wrapper input {
+.custom-modal .input-line-wrapper input {
   display: inline;
   flex: 1;
   text-align: left;
@@ -7,29 +7,29 @@
   border-bottom: 1px dashed black;
 }
 
-.input-line-wrapper input:focus {
+.custom-modal .input-line-wrapper input:focus {
   outline: none;
   background-color: lightgray;
   font-style: italic;
 }
 
-.input-label {
+.custom-modal .input-label {
   font-weight: bold;
 }
 
-.input-line-wrapper {
+.custom-modal .input-line-wrapper {
   display: flex;
   gap: 2rem;
   justify-content: space-between;
   margin-top: 1rem;
 }
 
-.subnode-organization-menu {
+.custom-modal .subnode-organization-menu {
   display: flex;
   flex-direction: column;
 }
 
-.subnode-organization-menu__subnode {
+.custom-modal .subnode-organization-menu__subnode {
   /* width: 100%; */
   display: flex;
   gap: 0.5rem;
@@ -38,7 +38,7 @@
   padding: 0.5rem;
 }
 
-.subnode-organization-menu__subnode:hover {
+.custom-modal .subnode-organization-menu__subnode:hover {
   /* cursor: move; */
   cursor: default;
 }

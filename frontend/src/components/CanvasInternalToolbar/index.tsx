@@ -7,6 +7,7 @@ interface Props {
   setActiveNodeCallback: (id: number) => void;
   onCenterClicked: () => void;
   onAddClicked: () => void;
+  closeCallback: (id: number) => void;
 }
 
 interface State {
@@ -50,7 +51,7 @@ export default class CanvasInternalToolbar extends React.Component<Props, State>
                 nodeManager.update();
               }}
               navigateCallback={() => nodeManager.centerNode(node.id)}
-              closeCallback={() => nodeManager.removeNode(node.id)}
+              closeCallback={() => this.props.closeCallback(node.id)}
             ></CanvasInternalToolbarEntry>
           ))}
         </div>

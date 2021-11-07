@@ -1,12 +1,16 @@
-import './canvasSidebarHeader.css';
+import './header.css';
 import { ChangeEvent, Component, KeyboardEvent } from 'react';
-import { Close, Done, Edit } from '@mui/icons-material';
+import { Done, Edit, ChevronLeft, Settings } from '@mui/icons-material';
 import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { MuiTheme } from '../../../theme';
+import { withTheme } from '@mui/styles';
 
-interface Props {
+interface Props extends MuiTheme {
   exposeSettings: boolean;
   onSubmitGameTitleClicked: (newTitle: string) => void;
   title: string;
+  isAdmin: boolean;
+  onSettingsToggleClicked: () => void;
 }
 
 interface State {
@@ -14,7 +18,7 @@ interface State {
   title: string;
 }
 
-export default class CanvasSidebarHeader extends Component<Props, State> {
+class Header extends Component<Props, State> {
   state: State = {
     editingTitle: false,
     title: this.props.title,
@@ -33,14 +37,14 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
     });
   };
 
-  handleSubmitTitleClicked = (): void => {
+  handleSubmitTitle = (): void => {
     this.setState({
       editingTitle: false,
     });
     this.props.onSubmitGameTitleClicked(this.state.title);
   };
 
-  handleCancelEditClicked = (): void => {
+  handleCancelEdit = (): void => {
     this.setState({
       title: this.prevTitle,
       editingTitle: false,
@@ -48,26 +52,46 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
     this.prevTitle = '';
   };
 
-  handleSubmitTitleKeyPress = (event: KeyboardEvent<Element>): void => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.handleSubmitTitleClicked();
+  handleTitleTextFieldKeyPress = (event: KeyboardEvent<Element>): void => {
+    switch (event.key) {
+      case 'Enter':
+        event.preventDefault();
+        this.handleSubmitTitle();
+        break;
+      case 'Esc': // IE/Edge specific value
+      case 'Escape':
+        event.preventDefault();
+        this.handleCancelEdit();
+        break;
     }
   };
 
   render(): JSX.Element {
     return (
-      <div className="canvas-sidebar-header">
-        <div className="title__wrapper">
+      <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.light }}>
+        {this.props.isAdmin && !this.state.editingTitle && (
+          <Tooltip arrow placement="left" title="Close game settings">
+            <IconButton
+              aria-label="Close game settings"
+              component="span"
+              className="temp"
+              onClick={this.props.onSettingsToggleClicked}
+            >
+              {this.props.exposeSettings ? <ChevronLeft /> : <Settings />}
+            </IconButton>
+          </Tooltip>
+        )}
+        <div className="title">
           {this.props.exposeSettings && this.state.editingTitle ? (
             <TextField
+              fullWidth
               autoComplete="off"
               className="title"
               id="outlined-basic"
               value={this.state.title}
               variant="outlined"
               onChange={this.handleTitleChanged}
-              onKeyPress={this.handleSubmitTitleKeyPress}
+              onKeyDown={this.handleTitleTextFieldKeyPress}
             />
           ) : (
             <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
@@ -78,27 +102,16 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
         {this.props.exposeSettings && (
           <div className="button">
             {this.state.editingTitle ? (
-              <>
-                <Tooltip arrow title="Submit new title">
-                  <IconButton
-                    aria-label="Submit edited game name"
-                    component="span"
-                    disabled={!this.state.title}
-                    onClick={this.handleSubmitTitleClicked}
-                  >
-                    <Done />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip arrow title="Discard changes">
-                  <IconButton
-                    aria-label="Stop editing game name and discard changes"
-                    component="span"
-                    onClick={this.handleCancelEditClicked}
-                  >
-                    <Close />
-                  </IconButton>
-                </Tooltip>
-              </>
+              <Tooltip arrow placement="left" title="Submit new title">
+                <IconButton
+                  aria-label="Submit edited game name"
+                  component="span"
+                  disabled={!this.state.title}
+                  onClick={this.handleSubmitTitle}
+                >
+                  <Done />
+                </IconButton>
+              </Tooltip>
             ) : (
               <Tooltip arrow title="Edit game title">
                 <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>
@@ -112,3 +125,5 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
     );
   }
 }
+
+export default withTheme(Header);

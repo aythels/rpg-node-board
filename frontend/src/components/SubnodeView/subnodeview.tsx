@@ -102,6 +102,9 @@ export default class SubnodeView extends Component<Props, State> {
 
   updateNodeTextLinks = (): void => {
     if (this.state.editor) {
+      // Remove outdated links
+      this.state.editor.formatText(0, this.state.editor.getLength(), 'nodelink', false);
+
       // Add in new links:
       const nodes = GETnodesInGame(this.props.game.id); // <-- this is horribly inefficient
       const currentText = this.state.editor.getText();
@@ -138,7 +141,7 @@ export default class SubnodeView extends Component<Props, State> {
 
   saveEditorChanges = (): void => {
     if (this.state.editor && this.state.change.length() > 0) {
-      console.log('Saving changes for subnode ' + this.state.subnode.id, this.state.change);
+      // console.log('Saving changes for subnode ' + this.state.subnode.id, this.state.change);
       POSTsubnodeContent(this.state.subnode.id, this.state.change);
       this.setState({ change: new Delta() }, this.updateNodeTextLinks);
     }
@@ -147,7 +150,7 @@ export default class SubnodeView extends Component<Props, State> {
   render(): JSX.Element {
     const subnode = this.state.subnode;
     return (
-      <div className="subnode">
+      <div className="subnodeview">
         <h2>{subnode.name}</h2>
         <div id={'editor-' + this.state.subnode.id} />
       </div>

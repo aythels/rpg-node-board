@@ -1,4 +1,4 @@
-.node-header-image {
+.nodeview .node-header-image {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -6,12 +6,12 @@
   object-fit: cover;
 }
 
-.node-header {
+.nodeview .node-header {
   /* background-color: royalblue; */
   width: 100%;
 }
 
-.node-topline {
+.nodeview .node-topline {
   display: flex;
   justify-content: space-between;
   font-size: 1rem;
@@ -19,7 +19,7 @@
   margin: 0.5rem 0;
 }
 
-.node-topline p {
+.nodeview .node-topline p {
   font-size: 2rem;
   margin: 0;
 }
@@ -28,7 +28,7 @@
   box-sizing: border-box;
   position: absolute;
   background-color: white;
-  z-index: 2000;
+  z-index: 1201;
   width: 100%;
   min-height: 100vh;
   padding: 1rem;
@@ -37,7 +37,7 @@
   margin: 0 auto;
 }
 
-.node__type {
+.nodeview .node__type {
   font-size: 1.5rem;
   font-weight: lighter;
   font-style: italic;
@@ -54,7 +54,7 @@
   scrollbar-width: none; /* Firefox */
 }
 
-.new-subnode {
+.nodeview .new-subnode {
   display: flex;
   gap: 1rem;
 }
