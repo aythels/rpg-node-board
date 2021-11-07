@@ -11,7 +11,7 @@ function App(): JSX.Element {
     palette: {
       primary: {
         light: '#fff',
-        main: '#f5f5f5',
+        main: '#e2e2e2',
         dark: '#c2c2c2',
         contrastText: '#000',
       },

@@ -1,17 +1,18 @@
 .canvas-sidebar-header {
   display: flex;
+  flex-direction: column;
+}
+
+.canvas-sidebar-header .title__wrapper {
+  display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0.5rem;
 }
 
-.canvas-sidebar-header .title__wrapper {
+.canvas-sidebar-header .title {
   flex-grow: 1;
   min-width: 0;
-}
-
-.canvas-sidebar-header .title {
-  width: 100%;
 }
 
 .canvas-sidebar-header .button {

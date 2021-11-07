@@ -1,6 +1,6 @@
 import './canvasSidebarHeader.css';
 import { ChangeEvent, Component, KeyboardEvent } from 'react';
-import { Close, Done, Edit } from '@mui/icons-material';
+import { Close, Done, Edit, ChevronLeft, Settings } from '@mui/icons-material';
 import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import { MuiTheme } from '../../theme';
 import { withTheme } from '@mui/styles';
@@ -9,6 +9,8 @@ interface Props extends MuiTheme {
   exposeSettings: boolean;
   onSubmitGameTitleClicked: (newTitle: string) => void;
   title: string;
+  isAdmin: boolean;
+  onSettingsToggleClicked: () => void;
 }
 
 interface State {
@@ -60,56 +62,73 @@ class CanvasSidebarHeader extends Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.dark }}>
-        <div className="title__wrapper">
-          {this.props.exposeSettings && this.state.editingTitle ? (
-            <TextField
-              autoComplete="off"
-              className="title"
-              id="outlined-basic"
-              value={this.state.title}
-              variant="outlined"
-              onChange={this.handleTitleChanged}
-              onKeyPress={this.handleSubmitTitleKeyPress}
-            />
-          ) : (
-            <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
-              {this.state.title}
-            </Typography>
-          )}
-        </div>
-        {this.props.exposeSettings && (
-          <div className="button">
-            {this.state.editingTitle ? (
-              <>
-                <Tooltip arrow title="Submit new title">
-                  <IconButton
-                    aria-label="Submit edited game name"
-                    component="span"
-                    disabled={!this.state.title}
-                    onClick={this.handleSubmitTitleClicked}
-                  >
-                    <Done />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip arrow title="Discard changes">
-                  <IconButton
-                    aria-label="Stop editing game name and discard changes"
-                    component="span"
-                    onClick={this.handleCancelEditClicked}
-                  >
-                    <Close />
-                  </IconButton>
-                </Tooltip>
-              </>
-            ) : (
-              <Tooltip arrow title="Edit game title">
-                <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>
-                  <Edit />
-                </IconButton>
-              </Tooltip>
-            )}
+        {this.props.isAdmin && (
+          <div className="navbar">
+            <Tooltip arrow placement="left" title="Close game settings">
+              <IconButton
+                aria-label="Close game settings"
+                component="span"
+                className="temp"
+                onClick={this.props.onSettingsToggleClicked}
+              >
+                {this.props.exposeSettings ? <ChevronLeft /> : <Settings />}
+              </IconButton>
+            </Tooltip>
           </div>
         )}
+        <div className="title__wrapper">
+          <div className="title">
+            {this.props.exposeSettings && this.state.editingTitle ? (
+              <TextField
+                fullWidth
+                autoComplete="off"
+                className="title"
+                id="outlined-basic"
+                value={this.state.title}
+                variant="outlined"
+                onChange={this.handleTitleChanged}
+                onKeyPress={this.handleSubmitTitleKeyPress}
+              />
+            ) : (
+              <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
+                {this.state.title}
+              </Typography>
+            )}
+          </div>
+          {this.props.exposeSettings && (
+            <div className="button">
+              {this.state.editingTitle ? (
+                <>
+                  <Tooltip arrow title="Submit new title">
+                    <IconButton
+                      aria-label="Submit edited game name"
+                      component="span"
+                      disabled={!this.state.title}
+                      onClick={this.handleSubmitTitleClicked}
+                    >
+                      <Done />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip arrow title="Discard changes">
+                    <IconButton
+                      aria-label="Stop editing game name and discard changes"
+                      component="span"
+                      onClick={this.handleCancelEditClicked}
+                    >
+                      <Close />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              ) : (
+                <Tooltip arrow title="Edit game title">
+                  <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
