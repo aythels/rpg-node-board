@@ -2,8 +2,11 @@ import './login.css';
 import { Button, Grid, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Component, SyntheticEvent } from 'react';
-import React, { useState } from 'react';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Redirect } from 'react-router-dom';
 import { VerifyLogin } from '../../mock-backend';
+import { createBrowserHistory } from 'history';
 
 interface LoginState {
   username: string;
@@ -18,19 +21,18 @@ export default class Login extends Component<Record<string, unknown>, LoginState
       password: '',
     };
   }
-  // handleNameChange = (e: SyntheticEvent): void => {
-  //   const target = e.target as HTMLInputElement;
-  //   this.setState({
-  //     node: node,
-  //   });
-  // };
 
-  submitStuff = (): void => {
+  checkPassword = (): void => {
     console.log(this.state);
     if (!VerifyLogin(this.state.username, this.state.password)) {
       console.log('naope');
     } else {
-      console.log('yes'); //route the user to the correct screen.
+      //route the user to the correct screen.
+      // as referenced in README, we will be changing how we are doing this for phase 2, once we have a server etc
+      const history = createBrowserHistory();
+      history.push(this.state.username === 'admin' ? '/gamesAdmin' : '/gamesUser');
+      console.log(history);
+      history.go(0);
     }
   };
 
@@ -55,7 +57,7 @@ export default class Login extends Component<Record<string, unknown>, LoginState
           ></TextField>
         </Grid>
         <Grid item>
-          <Button color="primary" variant="contained" type="submit" onClick={this.submitStuff}>
+          <Button color="primary" variant="contained" type="submit" onClick={this.checkPassword}>
             Log In
           </Button>
         </Grid>
