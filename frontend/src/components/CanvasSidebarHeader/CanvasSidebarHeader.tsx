@@ -2,8 +2,10 @@ import './canvasSidebarHeader.css';
 import { ChangeEvent, Component, KeyboardEvent } from 'react';
 import { Close, Done, Edit } from '@mui/icons-material';
 import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { MuiTheme } from '../../theme';
+import { withTheme } from '@mui/styles';
 
-interface Props {
+interface Props extends MuiTheme {
   exposeSettings: boolean;
   onSubmitGameTitleClicked: (newTitle: string) => void;
   title: string;
@@ -14,7 +16,7 @@ interface State {
   title: string;
 }
 
-export default class CanvasSidebarHeader extends Component<Props, State> {
+class CanvasSidebarHeader extends Component<Props, State> {
   state: State = {
     editingTitle: false,
     title: this.props.title,
@@ -57,7 +59,7 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="canvas-sidebar-header">
+      <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.dark }}>
         <div className="title__wrapper">
           {this.props.exposeSettings && this.state.editingTitle ? (
             <TextField
@@ -112,3 +114,5 @@ export default class CanvasSidebarHeader extends Component<Props, State> {
     );
   }
 }
+
+export default withTheme(CanvasSidebarHeader);

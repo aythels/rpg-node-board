@@ -7,8 +7,10 @@ import CanvasSidebarPlayerList from '../CanvasSidebarPlayerList/CanvasSidebarPla
 import { Component } from 'react';
 import Dialog from '../Dialog/Dialog';
 import { User } from '../../types';
+import { MuiTheme } from '../../theme';
+import { withTheme } from '@mui/styles';
 
-interface Props {
+interface Props extends MuiTheme {
   currentUserId: number;
   isAdmin: boolean;
   onInvitePlayerClicked: (username: string) => void;
@@ -27,7 +29,7 @@ interface State {
   sidebarOpen: boolean;
   settingsOpen: boolean;
 }
-export default class CanvasSidebar extends Component<Props, State> {
+class CanvasSidebar extends Component<Props, State> {
   state: State = {
     showUserAlreadyInGameModal: false,
     sidebarOpen: true,
@@ -53,7 +55,7 @@ export default class CanvasSidebar extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="canvas-sidebar">
+      <div className="canvas-sidebar" style={{ backgroundColor: this.props.theme.palette.primary }}>
         <IconButton
           className="open-close-button"
           style={{
@@ -121,3 +123,5 @@ export default class CanvasSidebar extends Component<Props, State> {
     );
   }
 }
+
+export default withTheme(CanvasSidebar);

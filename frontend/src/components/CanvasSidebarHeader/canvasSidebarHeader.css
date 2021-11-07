@@ -1,11 +1,8 @@
 .canvas-sidebar-header {
-  background-color: lightgray;
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0.5rem;
   padding: 0.5rem;
-  border-radius: 0.5rem;
 }
 
 .canvas-sidebar-header .title__wrapper {

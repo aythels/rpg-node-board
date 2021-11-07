@@ -3,8 +3,10 @@ import { Avatar, IconButton, Tooltip } from '@mui/material';
 import { Person, PersonOutline, PersonRemove } from '@mui/icons-material';
 import { PureComponent } from 'react';
 import { User } from '../../types';
+import { withTheme } from '@mui/styles';
+import { MuiTheme } from '../../theme';
 
-interface Props {
+interface Props extends MuiTheme {
   exposeSettings: boolean;
   promotable: boolean;
   removable: boolean;
@@ -13,12 +15,11 @@ interface Props {
   onPromotePlayerClicked: () => void;
   onDemotePlayerClicked: () => void;
 }
-
-export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
+class CanvasSidebarPlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
-    const { exposeSettings, promotable, removable, user } = this.props;
+    const { exposeSettings, promotable, removable, user, theme } = this.props;
     return (
-      <div className="canvas-sidebar-player-card">
+      <div className="canvas-sidebar-player-card" style={{ backgroundColor: theme.palette.primary.light }}>
         <Tooltip arrow placement="left" title={promotable ? 'Promote to game master' : 'Demote to regular player'}>
           <IconButton
             aria-label={
@@ -50,3 +51,5 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
     );
   }
 }
+
+export default withTheme(CanvasSidebarPlayerCard);

@@ -8,7 +8,36 @@ import CanvasMain from './components/CanvasMain';
 function App(): JSX.Element {
   const customTheme = createTheme({
     // Note: to be edited later
-    palette: {},
+    palette: {
+      primary: {
+        light: '#fff',
+        main: '#f5f5f5',
+        dark: '#c2c2c2',
+        contrastText: '#000',
+      },
+      common: {
+        black: '#000',
+        white: '#fff',
+      },
+      secondary: {
+        light: '#fff',
+        main: '#cfd8dc',
+        dark: '#9ea7aa',
+        contrastText: '#000',
+      },
+      error: {
+        light: '#ffe97d',
+        main: '#ffb74d',
+        dark: '#c88719',
+        contrastText: '#000',
+      },
+      warning: {
+        light: '#ff867c',
+        main: '#ef5350',
+        dark: '#b61827',
+        contrastText: '#000',
+      },
+    },
   });
 
   const currentGameId = 1;
