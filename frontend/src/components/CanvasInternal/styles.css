@@ -41,3 +41,11 @@
   left: 0;
   top: 0;
 }
+
+.alert-container {
+  position: absolute;
+  margin: 1rem;
+  z-index: 1201;
+  right: 0;
+  bottom: 0;
+}

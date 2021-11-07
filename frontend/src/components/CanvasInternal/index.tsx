@@ -11,10 +11,12 @@ import {
   GETnewNodeId,
   GETnodesInGameVisibleToUser,
   GETuserById,
+  GETuserIsGMInGame,
   POSTnodeToGame,
 } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
+import { Alert, AlertTitle } from '@mui/material';
 
 interface Props {
   currentGameId: number;
@@ -24,6 +26,7 @@ interface Props {
 export default class CanvasInternal extends React.Component<Props> {
   nodeManager = new NodeManager();
   activeNode = -1;
+  activeAlert = false;
 
   constructor(props: Props) {
     super(props);
@@ -55,11 +58,21 @@ export default class CanvasInternal extends React.Component<Props> {
   };
 
   handleRemoveNodeClicked = (nodeId: number): void => {
+    if (!GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)) {
+      this.activeAlert = true;
+      this.setState({});
+      return;
+    }
     DELETEnode(nodeId);
     this.nodeManager.removeNode(nodeId);
   };
 
   handleAddNodeClicked = (): void => {
+    if (!GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)) {
+      this.activeAlert = true;
+      this.setState({});
+      return;
+    }
     const id = GETnewNodeId();
     const newNode = {
       id: id,
@@ -144,6 +157,20 @@ export default class CanvasInternal extends React.Component<Props> {
             />
           </div>
         ) : null}
+        <div className="alert-container">
+          {this.activeAlert ? (
+            <Alert
+              severity="error"
+              onClose={() => {
+                this.activeAlert = false;
+                this.setState({});
+              }}
+            >
+              <AlertTitle>ERROR</AlertTitle>
+              <p>You do not have permission to do that.</p>
+            </Alert>
+          ) : null}
+        </div>
       </div>
     );
   }

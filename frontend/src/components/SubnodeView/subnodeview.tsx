@@ -4,7 +4,7 @@ import Quill from 'quill';
 import Delta from 'quill-delta';
 import NodeLinkBlot from '../../blots/NodeLink';
 import { Game, Subnode, User, Node } from '../../types';
-import { GETnodesInGame, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
+import { GETnodesInGameVisibleToUser, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
 
 interface Props {
   game: Game;
@@ -106,7 +106,7 @@ export default class SubnodeView extends Component<Props, State> {
       this.state.editor.formatText(0, this.state.editor.getLength(), 'nodelink', false);
 
       // Add in new links:
-      const nodes = GETnodesInGame(this.props.game.id); // <-- this is horribly inefficient
+      const nodes = GETnodesInGameVisibleToUser(this.props.game.id, this.props.user.id);
       const currentText = this.state.editor.getText();
       const links: TextLink[] = [];
       const names = [];
