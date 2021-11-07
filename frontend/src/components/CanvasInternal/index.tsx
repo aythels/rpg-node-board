@@ -11,6 +11,7 @@ import {
   GETnewNodeId,
   GETnodesInGameVisibleToUser,
   GETuserById,
+  GETuserIsGMInGame,
   POSTnodeToGame,
 } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
@@ -55,11 +56,17 @@ export default class CanvasInternal extends React.Component<Props> {
   };
 
   handleRemoveNodeClicked = (nodeId: number): void => {
+    if (!GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)) {
+      return;
+    }
     DELETEnode(nodeId);
     this.nodeManager.removeNode(nodeId);
   };
 
   handleAddNodeClicked = (): void => {
+    if (!GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)) {
+      return;
+    }
     const id = GETnewNodeId();
     const newNode = {
       id: id,

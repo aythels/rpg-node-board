@@ -43,7 +43,6 @@ function App(): JSX.Element {
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" render={() => <Home />} />
           <Route
             exact
             path="/canvasAdmin"
@@ -62,7 +61,7 @@ function App(): JSX.Element {
           <Route exact path="/gamesAdmin" render={() => <UserDashboard userID={adminID} />} />
           <Route exact path="/gamesUser" render={() => <UserDashboard userID={userID} />} />
 
-          <Route exact path="/login" render={() => <Login />} />
+          <Route exact path="/" render={() => <Login />} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
