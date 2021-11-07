@@ -42,6 +42,7 @@ interface State {
   imageModalOpen: boolean;
   newSubnodeName: string;
   newSubnodeType: string;
+  newSubnodeInfoLevel: string;
 }
 
 export default class NodeView extends Component<Props, State> {
@@ -61,6 +62,7 @@ export default class NodeView extends Component<Props, State> {
       imageModalOpen: false,
       newSubnodeName: '',
       newSubnodeType: '',
+      newSubnodeInfoLevel: '',
     };
   }
 
@@ -182,7 +184,7 @@ export default class NodeView extends Component<Props, State> {
       node_id: this.state.node.id,
       name: this.state.newSubnodeName,
       type: this.state.newSubnodeType,
-      informationLevel: 1,
+      informationLevel: parseInt(this.state.newSubnodeInfoLevel),
       editors: this.state.node.editors,
       content: new Delta(),
     });
@@ -278,6 +280,21 @@ export default class NodeView extends Component<Props, State> {
                 value={this.state.newSubnodeType}
                 onChange={(event) => {
                   this.setState({ newSubnodeType: event.target.value });
+                }}
+              ></TextField>
+              <TextField
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0,
+                    step: 1,
+                  },
+                }}
+                label="Information Level"
+                value={this.state.newSubnodeInfoLevel}
+                onChange={(event) => {
+                  this.setState({ newSubnodeInfoLevel: event.target.value });
                 }}
               ></TextField>
             </form>
