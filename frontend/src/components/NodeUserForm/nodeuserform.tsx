@@ -192,9 +192,6 @@ export default class NodeUserForm extends Component<Props, State> {
     return (
       <div className="modal custom-modal nodeuserform" onClick={this.handleModalClick}>
         <form onSubmit={this.handleSubmit} className="modal-content-wrapper">
-          <div className="modal__header">
-            <p>Node Permissions</p>
-          </div>
           <div className="modal__body">
             <div className="modal__body__section">
               <h4>Editors</h4>
@@ -314,7 +311,7 @@ export default class NodeUserForm extends Component<Props, State> {
             </div>
             <div>
               <Tooltip title="Save Changes">
-                <Button type="submit" variant="contained">
+                <Button type="submit" variant="contained" color="success">
                   <SaveRounded />
                 </Button>
               </Tooltip>

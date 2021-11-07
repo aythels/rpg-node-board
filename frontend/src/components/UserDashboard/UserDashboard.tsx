@@ -1,5 +1,3 @@
-import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { GameRow } from '../GameRow/gamerow';
 import { Component } from 'react';
 import { GETuserById } from '../../mock-backend';
