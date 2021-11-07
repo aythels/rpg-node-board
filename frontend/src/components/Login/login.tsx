@@ -55,7 +55,7 @@ export default class Login extends Component<Record<string, unknown>, LoginState
             label="Username"
             error={this.state.invalid}
             helperText={this.state.invalid ? 'Username or Password are invalid' : ''}
-            onChange={(event) => this.setState({ username: event.target.value })}
+            onChange={(event) => this.setState({ username: event.target.value, invalid: false })}
           ></TextField>
         </Grid>
         <Grid item>
@@ -64,7 +64,7 @@ export default class Login extends Component<Record<string, unknown>, LoginState
             type="password"
             error={this.state.invalid}
             helperText={this.state.invalid ? 'Username or Password are invalid' : ''}
-            onChange={(event) => this.setState({ password: event.target.value })}
+            onChange={(event) => this.setState({ password: event.target.value, invalid: false })}
           ></TextField>
         </Grid>
         <Grid item>
