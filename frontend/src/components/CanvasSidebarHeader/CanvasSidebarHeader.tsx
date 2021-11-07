@@ -1,6 +1,6 @@
 import './canvasSidebarHeader.css';
 import { ChangeEvent, Component, KeyboardEvent } from 'react';
-import { Close, Done, Edit, ChevronLeft, Settings } from '@mui/icons-material';
+import { Done, Edit, ChevronLeft, Settings } from '@mui/icons-material';
 import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import { MuiTheme } from '../../theme';
 import { withTheme } from '@mui/styles';
@@ -37,14 +37,14 @@ class CanvasSidebarHeader extends Component<Props, State> {
     });
   };
 
-  handleSubmitTitleClicked = (): void => {
+  handleSubmitTitle = (): void => {
     this.setState({
       editingTitle: false,
     });
     this.props.onSubmitGameTitleClicked(this.state.title);
   };
 
-  handleCancelEditClicked = (): void => {
+  handleCancelEdit = (): void => {
     this.setState({
       title: this.prevTitle,
       editingTitle: false,
@@ -52,10 +52,17 @@ class CanvasSidebarHeader extends Component<Props, State> {
     this.prevTitle = '';
   };
 
-  handleSubmitTitleKeyPress = (event: KeyboardEvent<Element>): void => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.handleSubmitTitleClicked();
+  handleTitleTextFieldKeyPress = (event: KeyboardEvent<Element>): void => {
+    switch (event.key) {
+      case 'Enter':
+        event.preventDefault();
+        this.handleSubmitTitle();
+        break;
+      case 'Esc': // IE/Edge specific value
+      case 'Escape':
+        event.preventDefault();
+        this.handleCancelEdit();
+        break;
     }
   };
 
@@ -84,7 +91,7 @@ class CanvasSidebarHeader extends Component<Props, State> {
               value={this.state.title}
               variant="outlined"
               onChange={this.handleTitleChanged}
-              onKeyPress={this.handleSubmitTitleKeyPress}
+              onKeyDown={this.handleTitleTextFieldKeyPress}
             />
           ) : (
             <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
@@ -95,27 +102,16 @@ class CanvasSidebarHeader extends Component<Props, State> {
         {this.props.exposeSettings && (
           <div className="button">
             {this.state.editingTitle ? (
-              <div className="button-group">
-                <Tooltip arrow placement="left" title="Submit new title">
-                  <IconButton
-                    aria-label="Submit edited game name"
-                    component="span"
-                    disabled={!this.state.title}
-                    onClick={this.handleSubmitTitleClicked}
-                  >
-                    <Done />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip arrow placement="left" title="Discard changes">
-                  <IconButton
-                    aria-label="Stop editing game name and discard changes"
-                    component="span"
-                    onClick={this.handleCancelEditClicked}
-                  >
-                    <Close />
-                  </IconButton>
-                </Tooltip>
-              </div>
+              <Tooltip arrow placement="left" title="Submit new title">
+                <IconButton
+                  aria-label="Submit edited game name"
+                  component="span"
+                  disabled={!this.state.title}
+                  onClick={this.handleSubmitTitle}
+                >
+                  <Done />
+                </IconButton>
+              </Tooltip>
             ) : (
               <Tooltip arrow title="Edit game title">
                 <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>

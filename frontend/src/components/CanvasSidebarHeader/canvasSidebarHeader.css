@@ -16,9 +16,3 @@
   white-space: nowrap;
   margin: 0.5rem;
 }
-
-.canvas-sidebar-header .button-group {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
