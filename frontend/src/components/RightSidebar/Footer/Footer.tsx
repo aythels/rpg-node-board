@@ -63,7 +63,7 @@ class Footer extends Component<Props, State> {
         </div>
         <Button
           fullWidth
-          color="warning"
+          color="error"
           aria-label="delete game server"
           className="delete-button"
           startIcon={<Delete />}

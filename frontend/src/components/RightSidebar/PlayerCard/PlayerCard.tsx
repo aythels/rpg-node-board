@@ -44,7 +44,7 @@ class PlayerCard extends PureComponent<Props> {
           <div className="button">
             <Tooltip arrow placement="left" title="Remove player">
               <IconButton
-                color="warning"
+                color="error"
                 aria-label="Remove player"
                 component="span"
                 onClick={this.props.onRemovePlayerClicked}
