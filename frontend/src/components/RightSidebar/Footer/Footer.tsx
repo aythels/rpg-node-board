@@ -3,7 +3,7 @@ import { Button, TextField, IconButton, Tooltip } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../../Dialog/Dialog';
-import { POSTremoveGame } from '../../../mock-backend';
+import { DELETEGame } from '../../../mock-backend';
 import { MuiTheme } from '../../../theme';
 import { withTheme } from '@mui/styles';
 
@@ -70,15 +70,17 @@ class Footer extends Component<Props, State> {
           variant="contained"
           onClick={() => this.setState({ showDeleteServerDialog: true })}
         >
-          Delete server
+          Delete Game
         </Button>
 
         <Dialog
           description="Doing so will immediately end the session and remove the game from the server."
           header="Delete server?"
           open={this.state.showDeleteServerDialog}
-          onAgree={() => POSTremoveGame(this.props.gameId)}
-          onAgreeRedirectTo="/games"
+          onAgree={() => {
+            DELETEGame(this.props.gameId);
+          }}
+          onAgreeRedirectTo="/gamesAdmin"
           onClose={() => this.setState({ showDeleteServerDialog: false })}
           onDisagree={() => this.setState({ showDeleteServerDialog: false })}
         />

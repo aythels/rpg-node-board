@@ -499,11 +499,11 @@ export const POSTuser = (user: User): void => {
   console.log('New value for node is:', newUser);
 };
 
-export const POSTremoveGame = (gameId: number): void => {
+export const DELETEGame = (gameId: number): void => {
   globalGames = globalGames.filter((game) => game.id !== gameId);
-  globalUsers.forEach((user: User) => {
+  for (const user of globalUsers) {
     user.games = user.games.filter((id) => id !== gameId);
-  });
+  }
 };
 
 export const DELETEnode = (nodeId: number): void => {
