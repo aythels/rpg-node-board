@@ -1,10 +1,10 @@
-import './canvasSidebarPlayerCard.css';
+import './playerCard.css';
 import { Avatar, IconButton, Tooltip } from '@mui/material';
 import { Person, PersonOutline, PersonRemove } from '@mui/icons-material';
 import { PureComponent } from 'react';
-import { User } from '../../types';
+import { User } from '../../../types';
 import { withTheme } from '@mui/styles';
-import { MuiTheme } from '../../theme';
+import { MuiTheme } from '../../../theme';
 
 interface Props extends MuiTheme {
   exposeSettings: boolean;
@@ -15,7 +15,7 @@ interface Props extends MuiTheme {
   onPromotePlayerClicked: () => void;
   onDemotePlayerClicked: () => void;
 }
-class CanvasSidebarPlayerCard extends PureComponent<Props> {
+class PlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
     const { exposeSettings, promotable, removable, user } = this.props;
     return (
@@ -52,4 +52,4 @@ class CanvasSidebarPlayerCard extends PureComponent<Props> {
   }
 }
 
-export default withTheme(CanvasSidebarPlayerCard);
+export default withTheme(PlayerCard);

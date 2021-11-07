@@ -1,13 +1,13 @@
-import './canvasSidebar.css';
+import './sidebar.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Drawer, IconButton } from '@mui/material';
-import CanvasSidebarFooter from '../CanvasSidebarFooter/CanvasSidebarFooter';
-import CanvasSidebarHeader from '../CanvasSidebarHeader/CanvasSidebarHeader';
-import CanvasSidebarPlayerList from '../CanvasSidebarPlayerList/CanvasSidebarPlayerList';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import PlayerList from '../PlayerList/PlayerList';
 import { Component } from 'react';
-import Dialog from '../Dialog/Dialog';
-import { User } from '../../types';
-import { MuiTheme } from '../../theme';
+import Dialog from '../../Dialog/Dialog';
+import { User } from '../../../types';
+import { MuiTheme } from '../../../theme';
 import { withTheme } from '@mui/styles';
 
 interface Props extends MuiTheme {
@@ -29,7 +29,7 @@ interface State {
   sidebarOpen: boolean;
   settingsOpen: boolean;
 }
-class CanvasSidebar extends Component<Props, State> {
+class Sidebar extends Component<Props, State> {
   state: State = {
     showUserAlreadyInGameModal: false,
     sidebarOpen: true,
@@ -74,14 +74,14 @@ class CanvasSidebar extends Component<Props, State> {
           {this.state.sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
         </IconButton>
         <Drawer anchor="right" className="container" open={this.state.sidebarOpen} variant="persistent">
-          <CanvasSidebarHeader
+          <Header
             isAdmin={this.props.isAdmin}
             exposeSettings={this.state.settingsOpen}
             title={this.props.gameTitle}
             onSettingsToggleClicked={this.toggleSettingsOpen}
             onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
           />
-          <CanvasSidebarPlayerList
+          <PlayerList
             currentUserId={this.props.currentUserId}
             gameMasterIds={this.props.gameMasterIds}
             exposeSettings={this.state.settingsOpen}
@@ -91,7 +91,7 @@ class CanvasSidebar extends Component<Props, State> {
             onRemovePlayerClicked={this.props.onRemovePlayerClicked}
           />
           {this.state.settingsOpen && (
-            <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} gameId={this.props.gameId} />
+            <Footer onInvitePlayerClicked={this.handleInviteUserClicked} gameId={this.props.gameId} />
           )}
           <Dialog
             description="You cannot add the same player twice."
@@ -105,4 +105,4 @@ class CanvasSidebar extends Component<Props, State> {
   }
 }
 
-export default withTheme(CanvasSidebar);
+export default withTheme(Sidebar);

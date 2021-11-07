@@ -1,10 +1,10 @@
-import './canvasSidebarFooter.css';
+import './footer.css';
 import { Button, TextField, IconButton, Tooltip } from '@mui/material';
 import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
-import Dialog from '../Dialog/Dialog';
-import { POSTremoveGame } from '../../mock-backend';
-import { MuiTheme } from '../../theme';
+import Dialog from '../../Dialog/Dialog';
+import { POSTremoveGame } from '../../../mock-backend';
+import { MuiTheme } from '../../../theme';
 import { withTheme } from '@mui/styles';
 
 interface Props extends MuiTheme {
@@ -17,7 +17,7 @@ interface State {
   showDeleteServerDialog: boolean;
 }
 
-class CanvasSidebarFooter extends Component<Props, State> {
+class Footer extends Component<Props, State> {
   state: State = {
     inviteName: '',
     showDeleteServerDialog: false,
@@ -87,4 +87,4 @@ class CanvasSidebarFooter extends Component<Props, State> {
   }
 }
 
-export default withTheme(CanvasSidebarFooter);
+export default withTheme(Footer);
