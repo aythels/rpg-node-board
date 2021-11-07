@@ -101,7 +101,7 @@ export default class NodeEditForm extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="modal" onClick={this.handleModalClick}>
+      <div className="custom-modal" onClick={this.handleModalClick}>
         <form onSubmit={this.handleSubmit} className="modal-content-wrapper">
           <div className="modal__header">
             <p>Node Settings</p>

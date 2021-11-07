@@ -1,12 +1,12 @@
-.subnode {
+.subnodeview {
   padding: 0 0 1rem 0;
 }
 
-.nodelink {
+.subnodeview .nodelink {
   color: red;
 }
 
-.nodelink:hover {
+.subnodeview .nodelink:hover {
   cursor: pointer;
   background-color: lightgray;
 }
