@@ -70,7 +70,7 @@ class Header extends Component<Props, State> {
     return (
       <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.light }}>
         {this.props.isAdmin && !this.state.editingTitle && (
-          <Tooltip arrow placement="left" title="Close game settings">
+          <Tooltip arrow title={this.props.exposeSettings ? 'Close game settings' : 'Open game settings'}>
             <IconButton
               aria-label="Close game settings"
               component="span"
@@ -102,7 +102,7 @@ class Header extends Component<Props, State> {
         {this.props.exposeSettings && (
           <div className="button">
             {this.state.editingTitle ? (
-              <Tooltip arrow placement="left" title="Submit new title">
+              <Tooltip arrow title="Submit new title">
                 <IconButton
                   aria-label="Submit edited game name"
                   component="span"
