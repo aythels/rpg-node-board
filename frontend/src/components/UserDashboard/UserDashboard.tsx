@@ -1,7 +1,9 @@
 import { Button, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SettingsIcon from '@mui/icons-material/Settings';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { GameRow } from '../GameRow/gamerow';
+import Typography from '@mui/material/Typography';
 import { Component } from 'react';
 import './UserDashboard.css';
 import { GETuserById } from '../../mock-backend';
@@ -15,13 +17,13 @@ export default class UserDashboard extends Component<Props> {
       <div className="padded_div">
         <Grid container direction="row" justifyContent="space-between" alignItems="flex-start">
           <Grid item>
-            <h1>Welcome, {GETuserById(this.props.userID).username} </h1>
+            <Typography variant="h2">Welcome, {GETuserById(this.props.userID).username} </Typography>
           </Grid>
           <Grid item>
-            <SettingsIcon fontSize="large" />
+            <SettingsIcon sx={{ fontSize: 100 }} />
           </Grid>
           <Grid item container>
-            <h2>My games </h2>
+            <Typography variant="h3">My games </Typography>
             <GameRow userID={this.props.userID} />
           </Grid>
         </Grid>
