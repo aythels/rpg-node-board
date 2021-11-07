@@ -78,7 +78,7 @@ class CanvasSidebarFooter extends Component<Props, State> {
           header="Delete server?"
           open={this.state.showDeleteServerDialog}
           onAgree={() => POSTremoveGame(this.props.gameId)}
-          onAgreeRedirectTo="." // TODO: update target
+          onAgreeRedirectTo="/games"
           onClose={() => this.setState({ showDeleteServerDialog: false })}
           onDisagree={() => this.setState({ showDeleteServerDialog: false })}
         />
