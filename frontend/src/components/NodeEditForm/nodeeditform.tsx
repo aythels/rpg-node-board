@@ -144,7 +144,7 @@ export default class NodeEditForm extends Component<Props, State> {
             </div>
             <div>
               <Tooltip title="Save Changes">
-                <Button type="submit" variant="contained">
+                <Button type="submit" variant="contained" color="success">
                   <SaveRounded />
                 </Button>
               </Tooltip>
