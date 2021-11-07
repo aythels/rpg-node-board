@@ -1,0 +1,13 @@
+.left-sidebar .vertical-toolbar {
+  position: absolute;
+  bottom: 0;
+  transition: all 0.15s ease-out;
+}
+
+.left-sidebar .button {
+  display: block;
+}
+
+.left-sidebar .temp .MuiDrawer-paper {
+  width: 20%;
+}

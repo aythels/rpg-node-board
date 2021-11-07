@@ -1,6 +1,8 @@
-import './styles.css';
+import './leftSidebar.css';
 import React from 'react';
-import CanvasInternalToolbarEntry from '../CanvasInternalToolbarEntry/CanvasInternalToolbarEntry';
+import CanvasInternalToolbarEntry from '../../CanvasInternalToolbarEntry/CanvasInternalToolbarEntry';
+import { Drawer, IconButton } from '@mui/material';
+import { Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 interface Props {
   nodeManager: any;
@@ -16,7 +18,7 @@ interface State {
   isOpen: boolean;
 }
 
-export default class CanvasInternalToolbar extends React.Component<Props, State> {
+export default class LeftSidebar extends React.Component<Props, State> {
   state: State = {
     openLeftPos: 0,
     closeLeftPos: -240,
@@ -35,12 +37,12 @@ export default class CanvasInternalToolbar extends React.Component<Props, State>
 
     return (
       <div
-        className="wrapper"
+        className="left-sidebar"
         style={{
           left: `${this.state.isOpen ? this.state.openLeftPos : this.state.closeLeftPos}px`,
         }}
       >
-        <div className="sideBar">
+        <Drawer className="temp" anchor="left" open={this.state.isOpen} variant="persistent">
           {nodeManager.getAllNodes().map((node: any) => (
             <CanvasInternalToolbarEntry
               key={node.id}
@@ -54,17 +56,26 @@ export default class CanvasInternalToolbar extends React.Component<Props, State>
               closeCallback={() => this.props.closeCallback(node.id)}
             ></CanvasInternalToolbarEntry>
           ))}
-        </div>
-        <div className="interface">
-          <button className="btn" onClick={onCenterClicked} type="button">
-            ۞
-          </button>
-          <button className="btn" onClick={onAddClicked} type="button">
-            +
-          </button>
-          <button className="btn" id="sideBarToggleButton" onClick={this.onToggleSideBar} type="button">
-            {this.state.isOpen ? <span>≪</span> : <span>≫</span>}
-          </button>
+        </Drawer>
+        <div
+          className="vertical-toolbar"
+          style={{
+            left: this.state.isOpen ? '20%' : '0%',
+          }}
+        >
+          <IconButton className="button" aria-label="Center node view" onClick={onCenterClicked}>
+            <CenterFocusStrong />
+          </IconButton>
+          <IconButton className="button" aria-label="Add a new node" onClick={onAddClicked}>
+            <Add />
+          </IconButton>
+          <IconButton
+            className="button"
+            aria-label={`${this.state.isOpen ? 'Close' : 'Open'} the sidebar`}
+            onClick={this.onToggleSideBar}
+          >
+            {this.state.isOpen ? <ChevronLeft /> : <ChevronRight />}
+          </IconButton>
         </div>
       </div>
     );

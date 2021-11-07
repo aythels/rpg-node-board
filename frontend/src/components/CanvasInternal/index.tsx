@@ -1,7 +1,7 @@
 import './styles.css';
 import gridImage from './grid.jpg';
 import React from 'react';
-import CanvasInternalToolbar from '../CanvasInternalToolbar';
+import Sidebar from '../LeftSidebar';
 import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
 import {
@@ -119,7 +119,7 @@ export default class CanvasInternal extends React.Component<Props> {
             })}
           </div>
         </div>
-        <CanvasInternalToolbar
+        <Sidebar
           nodeManager={this.nodeManager}
           setActiveNodeCallback={(id) => {
             this.activeNode = id;
