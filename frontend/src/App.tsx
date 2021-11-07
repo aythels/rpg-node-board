@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import Home from './components/Home';
-import NodeView from './components/NodeView/nodeview';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain';
@@ -9,7 +8,30 @@ import CanvasMain from './components/CanvasMain';
 function App(): JSX.Element {
   const customTheme = createTheme({
     // Note: to be edited later
-    palette: {},
+    palette: {
+      primary: {
+        light: '#a4a4a4',
+        main: '#757575',
+        dark: '#494949',
+        contrastText: '#fff',
+      },
+      common: {
+        black: '#000',
+        white: '#fff',
+      },
+      error: {
+        light: '#ffe97d',
+        main: '#ffb74d',
+        dark: '#c88719',
+        contrastText: '#000',
+      },
+      warning: {
+        light: '#ff867c',
+        main: '#ef5350',
+        dark: '#b61827',
+        contrastText: '#fff',
+      },
+    },
   });
 
   // NOTE: this type of routing is temporary, and will be replaced in phase 2, most likely using some state management solution like redux.

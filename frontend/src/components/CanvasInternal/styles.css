@@ -7,23 +7,35 @@
   background-color: blue;
 }
 
+.offSet {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /*
+  position: absolute;
+  top: 50%;
+  left: 50%;*/
+}
+
 .c {
   user-select: none;
   transform-origin: top left;
   transform: scale(1);
 }
 
+.imgContainer {
+  transform: translate(-50%, -50%);
+}
+
 #img {
   pointer-events: none;
   user-select: none;
-  width: 1000px;
   position: relative;
-  top: 0x;
-  left: 0px;
+  width: 1000px;
 }
 
 .nodeview-container {
-  width: 77.5%;
+  width: 100%;
   background-color: white;
   position: absolute;
   left: 0;

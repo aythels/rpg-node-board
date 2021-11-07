@@ -1,0 +1,26 @@
+.canvas-sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  margin-top: auto;
+  border-top: 1px solid #9ea7aa;
+}
+
+.canvas-sidebar-footer .text-field__wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.canvas-sidebar-footer .delete-button {
+  margin-top: 0.5rem;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: black !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: black !important;
+}

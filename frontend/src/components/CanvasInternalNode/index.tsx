@@ -1,7 +1,7 @@
 import './styles.css';
 import React from 'react';
 import { Node } from '../../types';
-import { Close, Launch } from '@mui/icons-material';
+import { Delete, Launch } from '@mui/icons-material';
 
 interface Props {
   xPos: number;
@@ -20,6 +20,7 @@ export default class CanvasInternalNode extends React.Component<Props> {
 
     return (
       <div
+        node-id={id}
         className="node"
         onDoubleClick={() => onImageClicked(id)}
         style={{
@@ -35,7 +36,7 @@ export default class CanvasInternalNode extends React.Component<Props> {
         </div>
         <div className="node__footer">
           <button className="node-button" onClick={onCloseClicked}>
-            <Close />
+            <Delete />
           </button>
           <button className="node-button" onClick={() => onImageClicked(id)}>
             <Launch />

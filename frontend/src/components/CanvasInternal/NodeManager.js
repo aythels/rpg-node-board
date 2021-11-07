@@ -8,10 +8,10 @@ export const NodeManager = function () {
   let isMouseDown = false;
   let activeNode = null;
 
-  let finalX = 0;
-  let finalY = 0;
   let startX = 0;
   let startY = 0;
+  let finalX = 0;
+  let finalY = 0;
 
   this.allNodes = [];
   this.renderCallbacks = [];
@@ -19,12 +19,16 @@ export const NodeManager = function () {
 
   /* INPUT */
   this.onPress = function (e) {
-    // console.log(e.clientX);
     isMouseDown = true;
     startX = e.clientX;
     startY = e.clientY;
 
+    /*
+    console.log(e.target.getAttribute('node-id'));
     activeNode = _this.isMouseOver(e.clientX, e.clientY);
+    */
+
+    activeNode = _this.allNodes.find((node) => node.id == e.target.getAttribute('node-id'));
   };
 
   this.onRelease = function (e) {
@@ -62,12 +66,19 @@ export const NodeManager = function () {
 
   this.createNode = function (id, dataNode) {
     const node = {};
-    node.xPos = 0;
-    node.yPos = 0;
     node.width = 200;
     node.height = 200;
+    node.xPos = 0;
+    node.yPos = 0;
     node.id = id == null ? uid(node) : id;
+    node.isVisible = true;
     node.dataNode = dataNode;
+    node.getRenderX = () => {
+      return node.xPos - node.width / 2;
+    };
+    node.getRenderY = () => {
+      return node.yPos - node.height / 2;
+    };
 
     _this.allNodes.push(node);
 
@@ -87,17 +98,35 @@ export const NodeManager = function () {
     });
   };
 
+  this.centerNode = function (nodeID) {
+    const node = _this.allNodes.find((e) => e.id == nodeID);
+    const deltaX = finalX - node.xPos;
+    const deltaY = finalY - node.yPos;
+
+    animate(finalX, finalY, deltaX, deltaY, (x, y) => {
+      _this.setAllPos(x, y);
+    });
+  };
+
   /* UTILITY */
 
   this.setScale = function (newScale, mouseX, mouseY) {
     const offSetOld = 1 / _this.scale - 1;
+    _this.addAllPos(-offSetOld * (mouseX - window.innerWidth / 2), -offSetOld * (mouseY - window.innerHeight / 2));
+
+    if (newScale > 0.5 && newScale < 2) _this.scale = newScale;
+
+    const offSetNew = 1 / _this.scale - 1;
+    _this.addAllPos(offSetNew * (mouseX - window.innerWidth / 2), offSetNew * (mouseY - window.innerHeight / 2));
+    /*
+    const offSetOld = 1 / _this.scale - 1;
     _this.addAllPos(-(offSetOld * mouseX), -(offSetOld * mouseY));
 
-    // console.log(newScale);
     if (newScale > 0.5 && newScale < 2) _this.scale = newScale;
 
     const offSetNew = 1 / _this.scale - 1;
     _this.addAllPos(offSetNew * mouseX, offSetNew * mouseY);
+    */
 
     _this.update();
   };
@@ -113,6 +142,14 @@ export const NodeManager = function () {
   };
 
   this.addNodePos = function (xPos, yPos, node) {
+    const limitX = 2000 + window.innerWidth - node.width / 2;
+    const limitY = 2000 + window.innerHeight - node.height / 2;
+
+    if (node.xPos - finalX + xPos > limitX) xPos = limitX - (node.xPos - finalX);
+    if (node.xPos - finalX + xPos < -limitX) xPos = -limitX - (node.xPos - finalX);
+    if (node.yPos - finalY + yPos > limitY) yPos = limitY - (node.yPos - finalY);
+    if (node.yPos - finalY + yPos < -limitY) yPos = -limitY - (node.yPos - finalY);
+
     _this.allNodes = _this.allNodes.filter((item) => item !== node);
     _this.allNodes.unshift(node);
 
@@ -123,6 +160,11 @@ export const NodeManager = function () {
   };
 
   this.addAllPos = function (xPos, yPos) {
+    if (finalX + xPos > 2000) xPos = 2000 - finalX;
+    if (finalX + xPos < -2000) xPos = -2000 - finalX;
+    if (finalY + yPos > 2000) yPos = 2000 - finalY;
+    if (finalY + yPos < -2000) yPos = -2000 - finalY;
+
     finalX += xPos;
     finalY += yPos;
 
@@ -163,6 +205,10 @@ export const NodeManager = function () {
 
   this.update = function () {
     for (const callback of _this.renderCallbacks) callback();
+  };
+
+  this.getAllNodes = function () {
+    return _this.allNodes.reverse();
   };
 };
 

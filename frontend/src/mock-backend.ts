@@ -21,7 +21,7 @@ const globalSubnodes = [
         { insert: ' can be found here.\n' },
       ],
     }),
-  },
+  } as Subnode,
   {
     id: 2,
     node_id: 1,
@@ -35,7 +35,7 @@ const globalSubnodes = [
     id: 3,
     node_id: 1,
     informationLevel: 1,
-    editors: [1],
+    editors: [1, 2, 3, 4, 5],
     type: 'notes',
     name: 'Notes',
     content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
@@ -111,7 +111,7 @@ const globalNodes = [
     informationLevels: {
       1: 0,
       3: 1,
-      4: 1,
+      4: 0,
       5: 2,
     },
     subnodes: [],
@@ -140,7 +140,7 @@ const globalNodes = [
     imageAlt: '',
     informationLevels: {
       1: 0,
-      3: 1,
+      3: 0,
       4: 1,
       5: 2,
     },
@@ -153,9 +153,9 @@ const globalNodes = [
 const globalUsers: User[] = [
   {
     id: 1,
-    username: 'user1',
-    password: 'user1',
-    email: 'user1@user.com',
+    username: 'user',
+    password: 'user',
+    email: 'user@user.com',
     games: [1],
     images: [],
     profilePicture: '/images/profile_picture_1.png',
@@ -261,7 +261,7 @@ let globalGames: Game[] = [
   {
     id: 1,
     nodes: [1, 2, 3, 4],
-    players: [1],
+    players: [1, 3, 4, 5],
     gms: [2],
     users: [1, 2, 3, 4, 5],
     title: 'CLICK ME!',
@@ -271,7 +271,7 @@ let globalGames: Game[] = [
   {
     id: 2,
     nodes: [1, 2],
-    players: [1],
+    players: [1, 3, 4, 5],
     gms: [2],
     users: [1, 2, 3, 4, 5],
     title: 'Filler game 1',
@@ -281,7 +281,7 @@ let globalGames: Game[] = [
   {
     id: 3,
     nodes: [1],
-    players: [1],
+    players: [1, 3, 4, 5],
     gms: [2],
     users: [1, 2, 3, 4, 5],
     title: 'Filler game 2',
@@ -291,7 +291,7 @@ let globalGames: Game[] = [
   {
     id: 4,
     nodes: [1, 2],
-    players: [1],
+    players: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     gms: [2],
     title: 'Filler game 3',
     imgpath: '/ryerson.jpg',
@@ -307,38 +307,59 @@ export const GETuserByUsername = (username: string): User | undefined => {
 };
 
 export const GETplayers = (gameId: number): User[] => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   return game.users.map(GETuserById);
 };
 
+export const GETgmIds = (gameId: number): number[] => {
+  const game = globalGames.filter((game) => game.id === gameId)[0];
+  return game.gms;
+};
+
 export const POSTaddPlayerToGame = (playerId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.players.push(playerId);
   game.users.push(playerId);
+
+  const player = globalUsers.filter((user) => user.id === playerId)[0];
+  player.games.push(gameId);
 };
 
 export const POSTremovePlayerFromGame = (playerId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.players = game.players.filter((id) => id !== playerId);
   game.users = game.users.filter((id) => id !== playerId);
+
+  const player = globalUsers.filter((user) => user.id === playerId)[0];
+  player.games = player.games.filter((id) => id !== gameId);
 };
 
 export const POSTupdateGameName = (gameId: number, newTitle: string): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.title = newTitle;
 };
 
 export const POSTpromoteUserToGameMaster = (userId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.gms.push(userId);
+  game.players = game.players.filter((id) => id !== userId);
+  game.nodes.forEach((nodeId) => {
+    const node = globalNodes.filter((node) => node.id === nodeId)[0];
+    if (!node.editors.includes(userId)) {
+      node.editors.push(userId);
+    }
+  });
 };
 
 export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.gms = game.gms.filter((id) => id !== userId);
+  game.players.push(userId);
+  game.nodes.forEach((nodeId) => {
+    const node = globalNodes.filter((node) => node.id === nodeId)[0];
+    node.editors = node.editors.filter((editorId) => editorId !== userId);
+  });
 };
-
-// Functions mocking backend behaviour:
 
 // This mock-db method will CERTAINLY be changed.
 export const VerifyLogin = (username: string, password: string): boolean => {
@@ -367,10 +388,14 @@ export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnod
 
 export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
   const subnode = globalSubnodes.filter((subnode) => subnode.id === id)[0];
-  console.log(newContent);
+  // console.log(newContent);
   subnode.content = subnode.content.compose(newContent);
   // console.log(subnode.content.compose(newContent));
-  console.log(subnode.content);
+  // console.log(subnode.content);
+};
+
+export const POSTsubnode = (subnode: Subnode): void => {
+  globalSubnodes.push(CloneDeep(subnode));
 };
 
 export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
@@ -385,11 +410,34 @@ export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
 
 export const GETnodesInGame = (gameId: number): Node[] => {
   const game = globalGames.filter((game) => game.id === gameId)[0];
-  const nodes = [];
-  for (const nodeid of game.nodes) {
-    nodes.push(globalNodes[nodeid - 1]);
-  }
+  return globalNodes.filter((node) => game.nodes.includes(node.id));
+};
+
+export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
+  const allNodes = GETnodesInGame(gameId);
+  const nodes = allNodes.filter((node) => {
+    if (node.editors.includes(userId)) {
+      return true;
+    } else if (node.informationLevels[userId]) {
+      return node.informationLevels[userId] > 0;
+    } else {
+      return false;
+    }
+  });
   return nodes;
+};
+
+let NEXT_SUBNODE = globalSubnodes.length;
+let NEXT_NODE = globalNodes.length;
+
+export const GETnewSubnodeId = (): number => {
+  NEXT_SUBNODE += 1;
+  return NEXT_SUBNODE;
+};
+
+export const GETnewNodeId = (): number => {
+  NEXT_NODE += 1;
+  return NEXT_NODE;
 };
 
 export const GETeditorsForNode = (nodeId: number): User[] => {
@@ -399,7 +447,6 @@ export const GETeditorsForNode = (nodeId: number): User[] => {
 };
 
 export const GETplayersInGame = (gameId: number): User[] => {
-  // const node = globalNodes.filter((node) => node.id === nodeId)[0];
   const game = globalGames.filter((game) => game.id === gameId)[0];
   const userIds = game.players;
   const users = globalUsers.filter((user) => userIds.includes(user.id));
@@ -435,6 +482,12 @@ export const POSTnode = (node: Node): void => {
   console.log('New value for node is:', newNode);
 };
 
+export const POSTnodeToGame = (node: Node, gameId: number): void => {
+  globalNodes.push(node);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
+  game.nodes.push(node.id);
+};
+
 export const POSTuser = (user: User): void => {
   const existingUser = globalUsers.filter((u) => u.id === user.id)[0];
   const index = globalUsers.indexOf(existingUser);
@@ -446,9 +499,17 @@ export const POSTuser = (user: User): void => {
   console.log('New value for node is:', newUser);
 };
 
-export const POSTremoveGame = (id: number): void => {
-  console.log('Removing game with ID ', id);
-  console.log('Games before', globalGames);
-  globalGames = globalGames.filter((game) => game.id !== id);
-  console.log('Games after', globalGames);
+export const POSTremoveGame = (gameId: number): void => {
+  globalGames = globalGames.filter((game) => game.id !== gameId);
+  globalUsers.forEach((user: User) => {
+    user.games = user.games.filter((id) => id !== gameId);
+  });
+};
+
+export const DELETEnode = (nodeId: number): void => {
+  // Note, in actual db should also recursively delete subnodes
+  globalNodes.filter((node) => node.id !== nodeId);
+  for (const game of globalGames) {
+    game.nodes = game.nodes.filter((node) => node !== nodeId);
+  }
 };

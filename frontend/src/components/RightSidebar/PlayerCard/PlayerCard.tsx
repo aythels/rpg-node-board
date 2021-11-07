@@ -1,10 +1,12 @@
-import './canvasSidebarPlayerCard.css';
-import { Avatar, IconButton, Tooltip } from '@mui/material';
+import './playerCard.css';
+import { Avatar, IconButton, Tooltip, Typography } from '@mui/material';
 import { Person, PersonOutline, PersonRemove } from '@mui/icons-material';
 import { PureComponent } from 'react';
-import { User } from '../../types';
+import { User } from '../../../types';
+import { withTheme } from '@mui/styles';
+import { MuiTheme } from '../../../theme';
 
-interface Props {
+interface Props extends MuiTheme {
   exposeSettings: boolean;
   promotable: boolean;
   removable: boolean;
@@ -13,8 +15,7 @@ interface Props {
   onPromotePlayerClicked: () => void;
   onDemotePlayerClicked: () => void;
 }
-
-export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
+class PlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
     const { exposeSettings, promotable, removable, user } = this.props;
     return (
@@ -33,14 +34,21 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
             {promotable ? <PersonOutline /> : <Person />}
           </IconButton>
         </Tooltip>
-        <Avatar alt={user.username} src={user.profilePicture}>
+        <Avatar color="primary" alt={user.username} src={user.profilePicture}>
           {user.username.charAt(0).toUpperCase()}
         </Avatar>
-        <div className="name">{`@${user.username}`}</div>
+        <Typography className="name" variant="body1" component="div" noWrap={true}>
+          {`@${user.username}`}
+        </Typography>
         {exposeSettings && removable && (
           <div className="button">
             <Tooltip arrow placement="left" title="Remove player">
-              <IconButton aria-label="Remove player" component="span" onClick={this.props.onRemovePlayerClicked}>
+              <IconButton
+                color="warning"
+                aria-label="Remove player"
+                component="span"
+                onClick={this.props.onRemovePlayerClicked}
+              >
                 <PersonRemove />
               </IconButton>
             </Tooltip>
@@ -50,3 +58,5 @@ export default class CanvasSidebarPlayerCard extends PureComponent<Props> {
     );
   }
 }
+
+export default withTheme(PlayerCard);

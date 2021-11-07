@@ -1,14 +1,16 @@
-import './canvasSidebar.css';
-import { ChevronLeft, ChevronRight, Settings } from '@mui/icons-material';
-import { Drawer, IconButton, Tooltip } from '@mui/material';
-import CanvasSidebarFooter from '../CanvasSidebarFooter/CanvasSidebarFooter';
-import CanvasSidebarHeader from '../CanvasSidebarHeader/CanvasSidebarHeader';
-import CanvasSidebarPlayerList from '../CanvasSidebarPlayerList/CanvasSidebarPlayerList';
+import './sidebar.css';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Drawer, IconButton } from '@mui/material';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import PlayerList from '../PlayerList/PlayerList';
 import { Component } from 'react';
-import Dialog from '../Dialog/Dialog';
-import { User } from '../../types';
+import Dialog from '../../Dialog/Dialog';
+import { User } from '../../../types';
+import { MuiTheme } from '../../../theme';
+import { withTheme } from '@mui/styles';
 
-interface Props {
+interface Props extends MuiTheme {
   currentUserId: number;
   isAdmin: boolean;
   onInvitePlayerClicked: (username: string) => void;
@@ -27,10 +29,10 @@ interface State {
   sidebarOpen: boolean;
   settingsOpen: boolean;
 }
-export default class CanvasSidebar extends Component<Props, State> {
+class Sidebar extends Component<Props, State> {
   state: State = {
     showUserAlreadyInGameModal: false,
-    sidebarOpen: true,
+    sidebarOpen: false,
     settingsOpen: false,
   };
 
@@ -51,13 +53,19 @@ export default class CanvasSidebar extends Component<Props, State> {
     }));
   };
 
+  toggleSettingsOpen = (): void => {
+    this.setState((prevState: State) => ({
+      settingsOpen: !prevState.settingsOpen,
+    }));
+  };
+
   render(): JSX.Element {
     return (
-      <div className="canvas-sidebar">
+      <div className="canvas-sidebar" style={{ backgroundColor: this.props.theme.palette.primary }}>
         <IconButton
           className="open-close-button"
           style={{
-            right: this.state.sidebarOpen ? '22.5%' : '0%',
+            right: this.state.sidebarOpen ? '20%' : '0%',
           }}
           aria-label={`${this.state.sidebarOpen ? 'Close' : 'Open'} the sidebar`}
           component="span"
@@ -66,39 +74,14 @@ export default class CanvasSidebar extends Component<Props, State> {
           {this.state.sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
         </IconButton>
         <Drawer anchor="right" className="container" open={this.state.sidebarOpen} variant="persistent">
-          {this.props.isAdmin && (
-            <div className="navbar">
-              {this.state.settingsOpen ? (
-                <Tooltip arrow placement="left" title="Close game settings">
-                  <IconButton
-                    aria-label="Close game settings"
-                    component="span"
-                    className="temp"
-                    onClick={() => this.setState({ settingsOpen: false })}
-                  >
-                    <ChevronLeft />
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                <Tooltip arrow placement="left" title="Open game settings">
-                  <IconButton
-                    aria-label="Open game settings"
-                    component="span"
-                    className="temp"
-                    onClick={() => this.setState({ settingsOpen: true })}
-                  >
-                    <Settings />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </div>
-          )}
-          <CanvasSidebarHeader
+          <Header
+            isAdmin={this.props.isAdmin}
             exposeSettings={this.state.settingsOpen}
             title={this.props.gameTitle}
+            onSettingsToggleClicked={this.toggleSettingsOpen}
             onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
           />
-          <CanvasSidebarPlayerList
+          <PlayerList
             currentUserId={this.props.currentUserId}
             gameMasterIds={this.props.gameMasterIds}
             exposeSettings={this.state.settingsOpen}
@@ -108,7 +91,7 @@ export default class CanvasSidebar extends Component<Props, State> {
             onRemovePlayerClicked={this.props.onRemovePlayerClicked}
           />
           {this.state.settingsOpen && (
-            <CanvasSidebarFooter onInvitePlayerClicked={this.handleInviteUserClicked} gameId={this.props.gameId} />
+            <Footer onInvitePlayerClicked={this.handleInviteUserClicked} gameId={this.props.gameId} />
           )}
           <Dialog
             description="You cannot add the same player twice."
@@ -121,3 +104,5 @@ export default class CanvasSidebar extends Component<Props, State> {
     );
   }
 }
+
+export default withTheme(Sidebar);

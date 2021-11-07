@@ -1,10 +1,18 @@
 import './styles.css';
 import gridImage from './grid.jpg';
 import React from 'react';
-import CanvasInternalToolbar from '../CanvasInternalToolbar';
+import Sidebar from '../LeftSidebar';
 import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
-import { GETgameById, GETnodesInGame, GETuserById } from '../../mock-backend';
+import {
+  DELETEnode,
+  GETgameById,
+  GETgmIds,
+  GETnewNodeId,
+  GETnodesInGameVisibleToUser,
+  GETuserById,
+  POSTnodeToGame,
+} from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
 
@@ -20,9 +28,7 @@ export default class CanvasInternal extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.nodeManager.addOnUpdateEvent(() => this.setState({}));
-
-    const game = GETgameById(props.currentGameId);
-    for (const node of GETnodesInGame(game.id)) {
+    for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
       this.nodeManager.createNode(node.id, node);
     }
   }
@@ -48,9 +54,28 @@ export default class CanvasInternal extends React.Component<Props> {
     this.setState({});
   };
 
-  render(): JSX.Element {
-    const array = this.nodeManager.allNodes.reverse();
+  handleRemoveNodeClicked = (nodeId: number): void => {
+    DELETEnode(nodeId);
+    this.nodeManager.removeNode(nodeId);
+  };
 
+  handleAddNodeClicked = (): void => {
+    const id = GETnewNodeId();
+    const newNode = {
+      id: id,
+      name: 'Default' + id,
+      image: '/images/default.jpg',
+      imageAlt: 'Default',
+      subnodes: [],
+      informationLevels: {},
+      editors: GETgmIds(this.props.currentGameId),
+      type: 'default',
+    } as Node;
+    POSTnodeToGame(newNode, this.props.currentGameId);
+    this.nodeManager.createNode(newNode.id, newNode);
+  };
+
+  render(): JSX.Element {
     return (
       <div>
         <div
@@ -61,36 +86,53 @@ export default class CanvasInternal extends React.Component<Props> {
           onPointerLeave={this.nodeManager.onRelease}
           onWheel={this.nodeManager.onWheel}
         >
-          <div className="c" style={{ transform: `scale(${this.nodeManager.scale})` }}>
-            <img
-              id="img"
-              src={gridImage}
-              style={{ left: `${this.nodeManager.getFinalX()}px`, top: `${this.nodeManager.getFinalY()}px` }}
-            />
+          <div className="offSet">
+            <div className="c" style={{ transform: `scale(${this.nodeManager.scale})` }}>
+              <div className="imgContainer">
+                <img
+                  id="img"
+                  src={gridImage}
+                  style={{ left: `${this.nodeManager.getFinalX()}px`, top: `${this.nodeManager.getFinalY()}px` }}
+                />
+              </div>
 
-            {array.map((node) => (
-              <CanvasInternalNode
-                key={node.id}
-                xPos={node.xPos}
-                yPos={node.yPos}
-                nodeWidth={node.width}
-                nodeHeight={node.height}
-                id={node.id}
-                dataNode={node.dataNode}
-                onCloseClicked={() => this.nodeManager.removeNode(node.id)}
-                onImageClicked={(id) => {
-                  this.activeNode = id;
-                  this.setState({});
-                }}
-              />
-            ))}
+              {this.nodeManager.getAllNodes().map((node) => {
+                if (!node.isVisible) {
+                  return;
+                } else {
+                  return (
+                    <CanvasInternalNode
+                      key={node.id}
+                      xPos={node.getRenderX()}
+                      yPos={node.getRenderY()}
+                      nodeWidth={node.width}
+                      nodeHeight={node.height}
+                      id={node.id}
+                      dataNode={node.dataNode}
+                      onCloseClicked={() => {
+                        this.handleRemoveNodeClicked(node.id);
+                      }}
+                      onImageClicked={(id) => {
+                        this.activeNode = id;
+                        this.setState({});
+                      }}
+                    />
+                  );
+                }
+              })}
+            </div>
           </div>
         </div>
-        <CanvasInternalToolbar
-          onCenterClicked={this.nodeManager.setCenter}
-          onAddClicked={this.nodeManager.createNodeDefault}
+        <Sidebar
+          nodeManager={this.nodeManager}
+          setActiveNodeCallback={(id) => {
+            this.activeNode = id;
+            this.setState({});
+          }}
+          onCenterNodeViewClicked={this.nodeManager.setCenter}
+          onAddNodeClicked={this.handleAddNodeClicked}
+          onRemoveNodeClicked={this.handleRemoveNodeClicked}
         />
-
         {this.activeNode !== -1 ? (
           <div className="nodeview-container">
             <NodeView
