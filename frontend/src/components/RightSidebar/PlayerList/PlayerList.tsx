@@ -1,8 +1,8 @@
-import './canvasSidebarPlayerList.css';
-import CanvasSidebarPlayerCard from '../CanvasSidebarPlayerCard/CanvasSidebarPlayerCard';
+import './playerList.css';
+import PlayerCard from '../PlayerCard/PlayerCard';
 import { Component } from 'react';
-import Dialog from '../Dialog/Dialog';
-import { User } from '../../types';
+import Dialog from '../../Dialog/Dialog';
+import { User } from '../../../types';
 
 interface Props {
   currentUserId: number;
@@ -21,7 +21,7 @@ interface State {
   showDemoteLastGmModal: boolean;
 }
 
-export default class CanvasSidebarPlayerList extends Component<Props, State> {
+export default class PlayerList extends Component<Props, State> {
   state: State = {
     showDemoteLastGmModal: false,
   };
@@ -86,7 +86,7 @@ export default class CanvasSidebarPlayerList extends Component<Props, State> {
           const isCurrentPlayer = user.id === this.props.currentUserId;
           const isGameMaster = this.props.gameMasterIds.includes(user.id);
           return (
-            <CanvasSidebarPlayerCard
+            <PlayerCard
               key={user.id}
               exposeSettings={this.props.exposeSettings}
               promotable={!isGameMaster}

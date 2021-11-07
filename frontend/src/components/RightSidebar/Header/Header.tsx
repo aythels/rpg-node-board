@@ -1,8 +1,8 @@
-import './canvasSidebarHeader.css';
+import './header.css';
 import { ChangeEvent, Component, KeyboardEvent } from 'react';
 import { Done, Edit, ChevronLeft, Settings } from '@mui/icons-material';
 import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
-import { MuiTheme } from '../../theme';
+import { MuiTheme } from '../../../theme';
 import { withTheme } from '@mui/styles';
 
 interface Props extends MuiTheme {
@@ -18,7 +18,7 @@ interface State {
   title: string;
 }
 
-class CanvasSidebarHeader extends Component<Props, State> {
+class Header extends Component<Props, State> {
   state: State = {
     editingTitle: false,
     title: this.props.title,
@@ -126,4 +126,4 @@ class CanvasSidebarHeader extends Component<Props, State> {
   }
 }
 
-export default withTheme(CanvasSidebarHeader);
+export default withTheme(Header);

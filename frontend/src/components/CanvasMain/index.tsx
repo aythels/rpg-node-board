@@ -12,7 +12,7 @@ import {
 } from '../../mock-backend';
 import { Game } from '../../types';
 import Dialog from '../Dialog/Dialog';
-import CanvasSidebar from '../CanvasSidebar/CanvasSidebar';
+import RightSidebar from '../RightSidebar/Sidebar/Sidebar';
 import CanvasInternal from '../CanvasInternal';
 
 interface Props {
@@ -106,7 +106,7 @@ export default class CanvasMain extends React.Component<Props, State> {
       <div>
         <CanvasInternal currentUserId={this.props.currentUserId} currentGameId={this.props.currentGameId} />
 
-        <CanvasSidebar
+        <RightSidebar
           currentUserId={this.props.currentUserId}
           gameId={1}
           gameMasterIds={this.state.game.gms}
