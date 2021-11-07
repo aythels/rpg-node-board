@@ -261,7 +261,7 @@ let globalGames: Game[] = [
   {
     id: 1,
     nodes: [1, 2, 3, 4],
-    players: [1],
+    players: [1, 3, 4, 5],
     gms: [2],
     users: [1, 2, 3, 4, 5],
     title: 'CLICK ME!',
@@ -271,7 +271,7 @@ let globalGames: Game[] = [
   {
     id: 2,
     nodes: [1, 2],
-    players: [1],
+    players: [1, 3, 4, 5],
     gms: [2],
     users: [1, 2, 3, 4, 5],
     title: 'Filler game 1',
@@ -281,7 +281,7 @@ let globalGames: Game[] = [
   {
     id: 3,
     nodes: [1],
-    players: [1],
+    players: [1, 3, 4, 5],
     gms: [2],
     users: [1, 2, 3, 4, 5],
     title: 'Filler game 2',
@@ -291,7 +291,7 @@ let globalGames: Game[] = [
   {
     id: 4,
     nodes: [1, 2],
-    players: [1],
+    players: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     gms: [2],
     title: 'Filler game 3',
     imgpath: '/ryerson.jpg',
@@ -309,6 +309,11 @@ export const GETuserByUsername = (username: string): User | undefined => {
 export const GETplayers = (gameId: number): User[] => {
   const game = GETgameById(gameId);
   return game.users.map(GETuserById);
+};
+
+export const GETgmIds = (gameId: number): number[] => {
+  const game = GETgameById(gameId);
+  return game.gms;
 };
 
 export const POSTaddPlayerToGame = (playerId: number, gameId: number): void => {
@@ -338,8 +343,6 @@ export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): vo
   game.gms = game.gms.filter((id) => id !== userId);
 };
 
-// Functions mocking backend behaviour:
-
 // This mock-db method will CERTAINLY be changed.
 export const VerifyLogin = (username: string, password: string): boolean => {
   return globalUsers.filter((user) => user.username === username && user.password === password).length == 1;
@@ -367,10 +370,10 @@ export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnod
 
 export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
   const subnode = globalSubnodes.filter((subnode) => subnode.id === id)[0];
-  console.log(newContent);
+  // console.log(newContent);
   subnode.content = subnode.content.compose(newContent);
   // console.log(subnode.content.compose(newContent));
-  console.log(subnode.content);
+  // console.log(subnode.content);
 };
 
 export const POSTsubnode = (subnode: Subnode): void => {
@@ -389,11 +392,7 @@ export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
 
 export const GETnodesInGame = (gameId: number): Node[] => {
   const game = globalGames.filter((game) => game.id === gameId)[0];
-  const nodes = [];
-  for (const nodeid of game.nodes) {
-    nodes.push(globalNodes[nodeid - 1]);
-  }
-  return nodes;
+  return globalNodes.filter((node) => game.nodes.includes(node.id));
 };
 
 export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
@@ -411,10 +410,16 @@ export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Nod
 };
 
 let NEXT_SUBNODE = globalSubnodes.length;
+let NEXT_NODE = globalNodes.length;
 
 export const GETnewSubnodeId = (): number => {
   NEXT_SUBNODE += 1;
   return NEXT_SUBNODE;
+};
+
+export const GETnewNodeId = (): number => {
+  NEXT_NODE += 1;
+  return NEXT_NODE;
 };
 
 export const GETeditorsForNode = (nodeId: number): User[] => {
@@ -424,7 +429,6 @@ export const GETeditorsForNode = (nodeId: number): User[] => {
 };
 
 export const GETplayersInGame = (gameId: number): User[] => {
-  // const node = globalNodes.filter((node) => node.id === nodeId)[0];
   const game = globalGames.filter((game) => game.id === gameId)[0];
   const userIds = game.players;
   const users = globalUsers.filter((user) => userIds.includes(user.id));
@@ -460,6 +464,12 @@ export const POSTnode = (node: Node): void => {
   console.log('New value for node is:', newNode);
 };
 
+export const POSTnodeToGame = (node: Node, gameId: number): void => {
+  globalNodes.push(node);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
+  game.nodes.push(node.id);
+};
+
 export const POSTuser = (user: User): void => {
   const existingUser = globalUsers.filter((u) => u.id === user.id)[0];
   const index = globalUsers.indexOf(existingUser);
@@ -476,4 +486,12 @@ export const POSTremoveGame = (id: number): void => {
   console.log('Games before', globalGames);
   globalGames = globalGames.filter((game) => game.id !== id);
   console.log('Games after', globalGames);
+};
+
+export const DELETEnode = (nodeId: number): void => {
+  // Note, in actual db should also recursively delete subnodes
+  globalNodes.filter((node) => node.id !== nodeId);
+  for (const game of globalGames) {
+    game.nodes = game.nodes.filter((node) => node !== nodeId);
+  }
 };

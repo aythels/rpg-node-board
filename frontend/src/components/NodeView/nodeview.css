@@ -28,7 +28,7 @@
   box-sizing: border-box;
   position: absolute;
   background-color: white;
-  z-index: 2000;
+  z-index: 1201;
   width: 100%;
   min-height: 100vh;
   padding: 1rem;

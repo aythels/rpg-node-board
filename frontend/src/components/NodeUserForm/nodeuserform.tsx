@@ -56,6 +56,7 @@ export default class NodeUserForm extends Component<Props, State> {
     const subnodes = GETsubnodesByNodeId(node.id);
     const editors = GETeditorsForNode(node.id);
     const players = GETplayersInGame(game.id);
+    const editorIds = editors.map((editor) => editor.id);
     this.state = {
       game: game,
       node: node,
@@ -64,7 +65,7 @@ export default class NodeUserForm extends Component<Props, State> {
       closeCallback: props.closeCallback,
       submitCallback: props.submitCallback,
       editors: editors,
-      players: players,
+      players: players.filter((player) => !editorIds.includes(player.id)),
       addEditorAnchorEl: null,
     };
   }
@@ -215,10 +216,16 @@ export default class NodeUserForm extends Component<Props, State> {
                     </div>
                   );
                 })}
-                <IconButton aria-label="Add new editor" onClick={this.openNewEditorMenu}>
+                <IconButton
+                  aria-label="Add new editor"
+                  onClick={(e) => {
+                    this.openNewEditorMenu(e);
+                  }}
+                >
                   <Add />
                 </IconButton>
                 <Menu
+                  className="nodeview-menu-popup"
                   anchorEl={this.state.addEditorAnchorEl as Element}
                   open={Boolean(this.state.addEditorAnchorEl)}
                   onClose={this.closeNewEditorMenu}
