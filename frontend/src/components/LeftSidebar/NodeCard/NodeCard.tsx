@@ -9,12 +9,12 @@ interface Props {
   onDoubleClick: () => void;
   onVisibilityToggled: () => void;
   onNavigateToNodeClicked: () => void;
-  onDeleteNodeClicked: () => void;
+  onRemoveNodeClicked: () => void;
 }
 
 export default class NodeCard extends PureComponent<Props> {
   render(): JSX.Element {
-    const { visible, caption, onDoubleClick, onVisibilityToggled, onNavigateToNodeClicked, onDeleteNodeClicked } =
+    const { visible, caption, onDoubleClick, onVisibilityToggled, onNavigateToNodeClicked, onRemoveNodeClicked } =
       this.props;
 
     return (
@@ -37,7 +37,7 @@ export default class NodeCard extends PureComponent<Props> {
           </IconButton>
         </Tooltip>
         <Tooltip arrow title="Delete node">
-          <IconButton color="warning" aria-label="Delete node" onClick={onDeleteNodeClicked}>
+          <IconButton color="warning" aria-label="Delete node" onClick={onRemoveNodeClicked}>
             <Delete />
           </IconButton>
         </Tooltip>

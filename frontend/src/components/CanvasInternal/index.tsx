@@ -54,12 +54,12 @@ export default class CanvasInternal extends React.Component<Props> {
     this.setState({});
   };
 
-  removeNode = (nodeId: number): void => {
+  handleRemoveNodeClicked = (nodeId: number): void => {
     DELETEnode(nodeId);
     this.nodeManager.removeNode(nodeId);
   };
 
-  createBlankNode = (): void => {
+  handleAddNodeClicked = (): void => {
     const id = GETnewNodeId();
     const newNode = {
       id: id,
@@ -107,7 +107,7 @@ export default class CanvasInternal extends React.Component<Props> {
                     id={node.id}
                     dataNode={node.dataNode}
                     onCloseClicked={() => {
-                      this.removeNode(node.id);
+                      this.handleRemoveNodeClicked(node.id);
                     }}
                     onImageClicked={(id) => {
                       this.activeNode = id;
@@ -125,9 +125,9 @@ export default class CanvasInternal extends React.Component<Props> {
             this.activeNode = id;
             this.setState({});
           }}
-          onCenterClicked={this.nodeManager.setCenter}
-          onAddClicked={this.createBlankNode}
-          closeCallback={this.removeNode}
+          onCenterNodeViewClicked={this.nodeManager.setCenter}
+          onAddNodeClicked={this.handleAddNodeClicked}
+          onRemoveNodeClicked={this.handleRemoveNodeClicked}
         />
 
         {this.activeNode !== -1 ? (

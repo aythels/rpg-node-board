@@ -10,9 +10,9 @@ interface Props extends MuiTheme {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   nodeManager: any;
   setActiveNodeCallback: (id: number) => void;
-  onCenterClicked: () => void;
-  onAddClicked: () => void;
-  closeCallback: (id: number) => void;
+  onCenterNodeViewClicked: () => void;
+  onAddNodeClicked: () => void;
+  onRemoveNodeClicked: (id: number) => void;
 }
 
 interface State {
@@ -36,7 +36,8 @@ class Sidebar extends React.Component<Props, State> {
   };
 
   render(): JSX.Element {
-    const { nodeManager, setActiveNodeCallback, onCenterClicked, onAddClicked, closeCallback } = this.props;
+    const { nodeManager, setActiveNodeCallback, onCenterNodeViewClicked, onAddNodeClicked, onRemoveNodeClicked } =
+      this.props;
 
     return (
       <div className="left-sidebar">
@@ -59,7 +60,7 @@ class Sidebar extends React.Component<Props, State> {
                   nodeManager.update();
                 }}
                 onNavigateToNodeClicked={() => nodeManager.centerNode(node.id)}
-                onDeleteNodeClicked={() => closeCallback(node.id)}
+                onRemoveNodeClicked={() => onRemoveNodeClicked(node.id)}
               />
             ))}
           </div>
@@ -70,10 +71,10 @@ class Sidebar extends React.Component<Props, State> {
             left: this.state.isOpen ? '20%' : '0%',
           }}
         >
-          <IconButton aria-label="Center node view" onClick={onCenterClicked}>
+          <IconButton aria-label="Center node view" onClick={onCenterNodeViewClicked}>
             <CenterFocusStrong />
           </IconButton>
-          <IconButton aria-label="Add a new node" onClick={onAddClicked}>
+          <IconButton aria-label="Add a new node" onClick={onAddNodeClicked}>
             <Add />
           </IconButton>
           <IconButton aria-label={`${this.state.isOpen ? 'Close' : 'Open'} the sidebar`} onClick={this.onToggleSideBar}>
