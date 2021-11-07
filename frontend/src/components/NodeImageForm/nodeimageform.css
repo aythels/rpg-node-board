@@ -1,13 +1,13 @@
-.upload-new-image input {
+.custom-modal .upload-new-image input {
   width: 100%;
 }
 
-.image-preview-full {
+.custom-modal .image-preview-full {
   margin-top: 1rem;
   width: 100%;
 }
 
-.image-collection {
+.custom-modal .image-collection {
   display: flex;
   gap: 0.5rem;
   /* overflow-x: scroll; */
@@ -15,26 +15,26 @@
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.image-collection::-webkit-scrollbar {
+.custom-modal .image-collection::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.image-collection {
+.custom-modal .image-collection {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
 
-.image-collection__image {
+.custom-modal .image-collection__image {
   width: 10rem;
 }
 
-.image-collection__image img:hover {
+.custom-modal .image-collection__image img:hover {
   cursor: pointer;
   filter: grayscale(50%) brightness(50%);
 }
 
-.image-collection__image img {
+.custom-modal .image-collection__image img {
   width: 100%;
   border-radius: 1rem;
 }

@@ -150,7 +150,7 @@ export default class SubnodeView extends Component<Props, State> {
   render(): JSX.Element {
     const subnode = this.state.subnode;
     return (
-      <div className="subnode">
+      <div className="subnodeview">
         <h2>{subnode.name}</h2>
         <div id={'editor-' + this.state.subnode.id} />
       </div>
