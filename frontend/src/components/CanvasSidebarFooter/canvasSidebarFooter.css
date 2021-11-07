@@ -1,11 +1,10 @@
 .canvas-sidebar-footer {
-  background-color: lightgray;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: auto;
+  border-top: 1px solid #9ea7aa;
 }
 
 .canvas-sidebar-footer .text-field__wrapper {
@@ -15,16 +14,13 @@
   align-items: center;
 }
 
-.canvas-sidebar-footer .text-field {
-  width: 100%;
-}
-
 .canvas-sidebar-footer .delete-button {
-  width: 100%;
   margin-top: 0.5rem;
-  background-color: rgb(158, 30, 30) !important;
 }
 
-.canvas-sidebar-footer .delete-button:hover {
-  background-color: darkred !important;
+.MuiFormLabel-root.Mui-focused {
+  color: black !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: black !important;
 }

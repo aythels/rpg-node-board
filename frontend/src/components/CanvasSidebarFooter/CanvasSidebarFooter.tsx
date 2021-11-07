@@ -4,8 +4,10 @@ import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../Dialog/Dialog';
 import { POSTremoveGame } from '../../mock-backend';
+import { MuiTheme } from '../../theme';
+import { withTheme } from '@mui/styles';
 
-interface Props {
+interface Props extends MuiTheme {
   onInvitePlayerClicked: (username: string) => void;
   gameId: number;
 }
@@ -15,7 +17,7 @@ interface State {
   showDeleteServerDialog: boolean;
 }
 
-export default class CanvasSidebarFooter extends Component<Props, State> {
+class CanvasSidebarFooter extends Component<Props, State> {
   state: State = {
     inviteName: '',
     showDeleteServerDialog: false,
@@ -30,8 +32,12 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
       <div className="canvas-sidebar-footer">
         <div className="text-field__wrapper">
           <TextField
+            style={{
+              color: '#000 !important',
+            }}
+            fullWidth
             autoComplete="off"
-            className="text-field"
+            color="primary"
             id="outlined-basic"
             label="Enter player name"
             value={this.state.inviteName}
@@ -56,6 +62,8 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
           </Tooltip>
         </div>
         <Button
+          fullWidth
+          color="warning"
           aria-label="delete game server"
           className="delete-button"
           startIcon={<Delete />}
@@ -70,7 +78,7 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
           header="Delete server?"
           open={this.state.showDeleteServerDialog}
           onAgree={() => POSTremoveGame(this.props.gameId)}
-          onAgreeRedirectTo="." // TODO: update target
+          onAgreeRedirectTo="/games"
           onClose={() => this.setState({ showDeleteServerDialog: false })}
           onDisagree={() => this.setState({ showDeleteServerDialog: false })}
         />
@@ -78,3 +86,5 @@ export default class CanvasSidebarFooter extends Component<Props, State> {
     );
   }
 }
+
+export default withTheme(CanvasSidebarFooter);
