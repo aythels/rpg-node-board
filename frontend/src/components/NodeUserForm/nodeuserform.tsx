@@ -190,7 +190,7 @@ export default class NodeUserForm extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="modal" onClick={this.handleModalClick}>
+      <div className="modal custom-modal nodeuserform" onClick={this.handleModalClick}>
         <form onSubmit={this.handleSubmit} className="modal-content-wrapper">
           <div className="modal__header">
             <p>Node Permissions</p>
@@ -256,7 +256,7 @@ export default class NodeUserForm extends Component<Props, State> {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Username</TableCell>
-                    <TableCell align="right">Level</TableCell>
+                    <TableCell align="right">Information Level</TableCell>
                     <TableCell align="right">Visible Subnodes</TableCell>
                   </TableRow>
                 </TableHead>

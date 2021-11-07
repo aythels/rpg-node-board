@@ -1,4 +1,4 @@
-.modal {
+.custom-modal {
   z-index: 5;
   top: 0;
   left: 0;
@@ -10,13 +10,13 @@
   transition: ease 0.5s all;
 }
 
-.modal input {
+.custom-modal input {
   border: none;
   text-align: center;
   width: 2rem;
 }
 
-.button-group {
+.custom-modal .button-group {
   padding-top: 1rem;
   display: flex;
   justify-content: center;
@@ -24,7 +24,7 @@
   gap: 1rem;
 }
 
-.modal-content-wrapper {
+.custom-modal .modal-content-wrapper {
   background-color: white;
   width: 80%;
   max-width: 40rem;
@@ -41,29 +41,29 @@
   overflow-x: hidden;
 }
 
-.--wide {
+.custom-modal .--wide {
   max-width: 80rem;
 }
 
-.modal__header {
+.custom-modal .modal__header {
   display: flex;
   width: 100%;
   border-bottom: 1px solid black;
 }
 
-.modal__header p {
+.custom-modal .modal__header p {
   margin: 0;
   text-align: center;
   font-size: 2rem;
 }
 
-.modal__body {
+.custom-modal .modal__body {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.modal__footer {
+.custom-modal .modal__footer {
   padding-top: 1rem;
   display: flex;
   width: 100%;
@@ -71,26 +71,26 @@
   justify-content: space-between;
 }
 
-.users-box {
+.custom-modal .users-box {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.users-box__user {
+.custom-modal .users-box__user {
   display: inline-flex;
   align-items: center;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 1.5rem;
 }
 
-.users-box__user p {
+.custom-modal .users-box__user p {
   padding: 0.2rem 0.5rem 0.2rem 1rem;
   text-align: center;
   margin: 0;
 }
 
-.users-box__user button {
+.custom-modal .users-box__user button {
   padding: 0 0.5rem;
   border-radius: inherit;
   background-color: inherit;
@@ -99,24 +99,19 @@
   border: none;
 }
 
-.users-box__user button:hover {
+.custom-modal .users-box__user button:hover {
   cursor: pointer;
 }
 
-.users-box__user button:disabled {
+.custom-modal .users-box__user button:disabled {
   cursor: default;
 }
 
-.no-bottom-margin {
+.custom-modal .no-bottom-margin {
   margin-bottom: 0;
 }
 
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
+.custom-modal input[type='number']::-webkit-inner-spin-button,
+.custom-modal input[type='number']::-webkit-outer-spin-button {
   opacity: 1;
 }
-
-/* .nodeview-menu-popup {
-  position: absolute;
-  z-index: 2001;
-} */
