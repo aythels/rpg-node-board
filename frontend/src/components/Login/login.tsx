@@ -11,6 +11,7 @@ import { createBrowserHistory } from 'history';
 interface LoginState {
   username: string;
   password: string;
+  invalid: boolean;
 }
 
 export default class Login extends Component<Record<string, unknown>, LoginState> {
@@ -19,13 +20,16 @@ export default class Login extends Component<Record<string, unknown>, LoginState
     this.state = {
       username: '',
       password: '',
+      invalid: false,
     };
   }
 
   checkPassword = (): void => {
     console.log(this.state);
+    console.log(this.props);
     if (!VerifyLogin(this.state.username, this.state.password)) {
-      console.log('naope');
+      console.log('login or password is invalid');
+      this.setState({ invalid: true });
     } else {
       //route the user to the correct screen.
       // as referenced in README, we will be changing how we are doing this for phase 2, once we have a server etc
@@ -47,17 +51,29 @@ export default class Login extends Component<Record<string, unknown>, LoginState
         style={{ minHeight: '100vh' }}
       >
         <Grid item>
-          <TextField label="Username" onChange={(event) => this.setState({ username: event.target.value })}></TextField>
+          <TextField
+            label="Username"
+            error={this.state.invalid}
+            helperText={this.state.invalid ? 'Username or Password are invalid' : ''}
+            onChange={(event) => this.setState({ username: event.target.value })}
+          ></TextField>
         </Grid>
         <Grid item>
           <TextField
             label="Password"
             type="password"
+            error={this.state.invalid}
+            helperText={this.state.invalid ? 'Username or Password are invalid' : ''}
             onChange={(event) => this.setState({ password: event.target.value })}
           ></TextField>
         </Grid>
         <Grid item>
-          <Button color="primary" variant="contained" type="submit" onClick={this.checkPassword}>
+          <Button
+            color={this.state.invalid ? 'error' : 'primary'}
+            variant="contained"
+            type="submit"
+            onClick={this.checkPassword}
+          >
             Log In
           </Button>
         </Grid>
