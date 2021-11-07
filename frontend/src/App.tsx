@@ -35,7 +35,7 @@ function App(): JSX.Element {
   });
 
   const currentGameId = 1;
-  const currentUserId = 2;
+  const currentUserId = 1;
 
   return (
     <ThemeProvider theme={customTheme}>
