@@ -19,12 +19,6 @@ function App(): JSX.Element {
         black: '#000',
         white: '#fff',
       },
-      secondary: {
-        light: '#fff',
-        main: '#cfd8dc',
-        dark: '#9ea7aa',
-        contrastText: '#000',
-      },
       error: {
         light: '#ffe97d',
         main: '#ffb74d',
@@ -35,7 +29,7 @@ function App(): JSX.Element {
         light: '#ff867c',
         main: '#ef5350',
         dark: '#b61827',
-        contrastText: '#000',
+        contrastText: '#fff',
       },
     },
   });
