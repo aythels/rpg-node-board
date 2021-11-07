@@ -256,7 +256,7 @@ export default class NodeUserForm extends Component<Props, State> {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Username</TableCell>
-                    <TableCell align="right">Level</TableCell>
+                    <TableCell align="right">Information Level</TableCell>
                     <TableCell align="right">Visible Subnodes</TableCell>
                   </TableRow>
                 </TableHead>

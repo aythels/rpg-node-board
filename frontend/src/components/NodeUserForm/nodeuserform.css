@@ -80,7 +80,7 @@
 .custom-modal .users-box__user {
   display: inline-flex;
   align-items: center;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 1.5rem;
 }
 
