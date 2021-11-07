@@ -1,14 +1,18 @@
-import './UserDashboard.css';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { GameRow } from '../GameRow/gamerow';
-import { PureComponent } from 'react';
+import { Component } from 'react';
+import { GETuserById } from '../../mock-backend';
 
-export default class UserDashboard extends PureComponent {
+interface Props {
+  userID: number;
+}
+export default class UserDashboard extends Component<Props> {
   render(): JSX.Element {
     return (
-      <div className="wrapper">
-        <GameRow userID={1} />
+      <div>
+        <h1>Welcome, {GETuserById(this.props.userID).username} </h1>
+        <GameRow userID={this.props.userID} />
       </div>
     );
   }

@@ -2,6 +2,7 @@ import './styles.css';
 import React from 'react';
 import { Node } from '../../types';
 import { Delete, Launch } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
 
 interface Props {
   xPos: number;
@@ -35,12 +36,16 @@ export default class CanvasInternalNode extends React.Component<Props> {
           <div className="node-text-div">{dataNode.name}</div>
         </div>
         <div className="node__footer">
-          <button className="node-button" onClick={onCloseClicked}>
-            <Delete />
-          </button>
-          <button className="node-button" onClick={() => onImageClicked(id)}>
-            <Launch />
-          </button>
+          <Tooltip title="Permanently delete this node">
+            <button className="node-button" onClick={onCloseClicked}>
+              <Delete />
+            </button>
+          </Tooltip>
+          <Tooltip title="View this node">
+            <button className="node-button" onClick={() => onImageClicked(id)}>
+              <Launch />
+            </button>
+          </Tooltip>
         </div>
       </div>
     );
