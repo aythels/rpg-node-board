@@ -16,7 +16,7 @@ After logging in as 'admin', click on a game card. This will bring you to the ma
 You can add new nodes by clicking on the plus button at the top-left of the page.
 
 ### User Functionalities
-After logging in as 'user', the process is similar to that of an admin with a few noticable differences. First, the user expectedly does not have access to the button that enables user editing. Furthermore, only nodes that the user has been given permission to view appear on the canvas, and the user is not permitted to create new nodes. The user can still drag nodes around and open up their respective NodeView, which will open with only the subnodes that the user has permission to view, and no menu buttons. The user can still type in the Quill editor to updated nodes that they have been given permission to edit, and the user can still click on text links to open up new NodeViews.
+After logging in as 'user', the process is similar to that of an admin with a few noticable differences. First, the user expectedly does not have access to the button that enables user editing. Furthermore, only nodes that the user has been given permission to view appear on the canvas, and the user is not permitted to create new nodes. The user can still drag nodes around and open up their respective NodeView, which will open with only the subnodes that the user has permission to view, and no menu buttons. The user can still type in the Quill editor to update nodes that they have been given permission to edit, and the user can still click on text links to open up new NodeViews.
 
 ## Frontend
 
