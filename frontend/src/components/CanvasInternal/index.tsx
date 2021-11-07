@@ -86,37 +86,41 @@ export default class CanvasInternal extends React.Component<Props> {
           onPointerLeave={this.nodeManager.onRelease}
           onWheel={this.nodeManager.onWheel}
         >
-          <div className="c" style={{ transform: `scale(${this.nodeManager.scale})` }}>
-            <img
-              id="img"
-              src={gridImage}
-              style={{ left: `${this.nodeManager.getFinalX()}px`, top: `${this.nodeManager.getFinalY()}px` }}
-            />
+          <div className="offSet">
+            <div className="c" style={{ transform: `scale(${this.nodeManager.scale})` }}>
+              <div className="imgContainer">
+                <img
+                  id="img"
+                  src={gridImage}
+                  style={{ left: `${this.nodeManager.getFinalX()}px`, top: `${this.nodeManager.getFinalY()}px` }}
+                />
+              </div>
 
-            {this.nodeManager.getAllNodes().map((node) => {
-              if (!node.isVisible) {
-                return;
-              } else {
-                return (
-                  <CanvasInternalNode
-                    key={node.id}
-                    xPos={node.xPos}
-                    yPos={node.yPos}
-                    nodeWidth={node.width}
-                    nodeHeight={node.height}
-                    id={node.id}
-                    dataNode={node.dataNode}
-                    onCloseClicked={() => {
-                      this.handleRemoveNodeClicked(node.id);
-                    }}
-                    onImageClicked={(id) => {
-                      this.activeNode = id;
-                      this.setState({});
-                    }}
-                  />
-                );
-              }
-            })}
+              {this.nodeManager.getAllNodes().map((node) => {
+                if (!node.isVisible) {
+                  return;
+                } else {
+                  return (
+                    <CanvasInternalNode
+                      key={node.id}
+                      xPos={node.getRenderX()}
+                      yPos={node.getRenderY()}
+                      nodeWidth={node.width}
+                      nodeHeight={node.height}
+                      id={node.id}
+                      dataNode={node.dataNode}
+                      onCloseClicked={() => {
+                        this.handleRemoveNodeClicked(node.id);
+                      }}
+                      onImageClicked={(id) => {
+                        this.activeNode = id;
+                        this.setState({});
+                      }}
+                    />
+                  );
+                }
+              })}
+            </div>
           </div>
         </div>
         <Sidebar
@@ -129,7 +133,6 @@ export default class CanvasInternal extends React.Component<Props> {
           onAddNodeClicked={this.handleAddNodeClicked}
           onRemoveNodeClicked={this.handleRemoveNodeClicked}
         />
-
         {this.activeNode !== -1 ? (
           <div className="nodeview-container">
             <NodeView
