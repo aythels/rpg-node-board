@@ -28,6 +28,11 @@ export default class LeftSidebar extends React.Component<Props, State> {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  sortNodes = (nodes: any): any => {
+    return [...nodes].sort((a, b) => a.dataNode.name.localeCompare(b.dataNode.name));
+  };
+
   render(): JSX.Element {
     const { nodeManager, setActiveNodeCallback, onCenterClicked, onAddClicked, closeCallback } = this.props;
 
@@ -36,7 +41,7 @@ export default class LeftSidebar extends React.Component<Props, State> {
         <Drawer className="container" anchor="left" open={this.state.isOpen} variant="persistent">
           <div className="node-list">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {nodeManager.getAllNodes().map((node: any) => (
+            {this.sortNodes(nodeManager.getAllNodes()).map((node: any) => (
               <NodeCard
                 key={node.id}
                 visible={node.isVisible}
