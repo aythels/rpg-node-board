@@ -92,9 +92,6 @@ export default class NodeImageForm extends Component<Props, State> {
     return (
       <div className="custom-modal" onClick={this.handleModalClick}>
         <form onSubmit={this.handleSubmit} className="modal-content-wrapper --wide">
-          <div className="modal__header">
-            <p>Current Image</p>
-          </div>
           <div className="modal__body">
             <div className="modal__body__section">
               <img className="image-preview-full" src={this.state.node.image}></img>
