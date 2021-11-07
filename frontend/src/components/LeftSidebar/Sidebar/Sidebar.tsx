@@ -1,10 +1,12 @@
 import './sidebar.css';
 import React from 'react';
 import NodeCard from '../NodeCard/NodeCard';
-import { Drawer, IconButton } from '@mui/material';
+import { Drawer, IconButton, Typography } from '@mui/material';
 import { Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { withTheme } from '@emotion/react';
+import { MuiTheme } from '../../../theme';
 
-interface Props {
+interface Props extends MuiTheme {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   nodeManager: any;
   setActiveNodeCallback: (id: number) => void;
@@ -17,7 +19,7 @@ interface State {
   isOpen: boolean;
 }
 
-export default class LeftSidebar extends React.Component<Props, State> {
+class Sidebar extends React.Component<Props, State> {
   state: State = {
     isOpen: true,
   };
@@ -39,6 +41,11 @@ export default class LeftSidebar extends React.Component<Props, State> {
     return (
       <div className="left-sidebar">
         <Drawer className="container" anchor="left" open={this.state.isOpen} variant="persistent">
+          <div className="header" style={{ backgroundColor: this.props.theme.palette.primary.light }}>
+            <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
+              Node Overview
+            </Typography>
+          </div>
           <div className="node-list">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {this.sortNodes(nodeManager.getAllNodes()).map((node: any) => (
@@ -77,3 +84,5 @@ export default class LeftSidebar extends React.Component<Props, State> {
     );
   }
 }
+
+export default withTheme(Sidebar);
