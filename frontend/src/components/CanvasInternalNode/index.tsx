@@ -20,6 +20,7 @@ export default class CanvasInternalNode extends React.Component<Props> {
 
     return (
       <div
+        node-id={id}
         className="node"
         onDoubleClick={() => onImageClicked(id)}
         style={{

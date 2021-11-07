@@ -19,7 +19,7 @@ export default class CanvasInternalToolbar extends React.Component<Props, State>
   state: State = {
     openLeftPos: 0,
     closeLeftPos: -240,
-    isOpen: true,
+    isOpen: false,
   };
 
   onToggleSideBar = (): void => {
@@ -61,10 +61,10 @@ export default class CanvasInternalToolbar extends React.Component<Props, State>
           <button className="btn" onClick={onAddClicked} type="button">
             +
           </button>
-          <button className="btn" id="sideBarToggleButton" onClick={this.onToggleSideBar} type="button">
-            {this.state.isOpen ? <span>≪</span> : <span>≫</span>}
-          </button>
         </div>
+        <button className="btn" id="sideBarToggleButton" onClick={this.onToggleSideBar} type="button">
+          {this.state.isOpen ? <span>≪</span> : <span>≫</span>}
+        </button>
       </div>
     );
   }

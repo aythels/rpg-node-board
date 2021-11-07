@@ -30,7 +30,7 @@ interface State {
 export default class CanvasSidebar extends Component<Props, State> {
   state: State = {
     showUserAlreadyInGameModal: false,
-    sidebarOpen: true,
+    sidebarOpen: false,
     settingsOpen: false,
   };
 
