@@ -5,12 +5,6 @@
   margin: 0.5rem;
 }
 
-.canvas-sidebar .navbar {
-  display: flex;
-  flex-direction: row;
-  margin: 0.5rem 0.5rem 0rem 0.5rem;
-}
-
 .canvas-sidebar .container {
   overflow: hidden;
   display: flex;

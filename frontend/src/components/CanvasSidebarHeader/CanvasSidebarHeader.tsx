@@ -62,73 +62,69 @@ class CanvasSidebarHeader extends Component<Props, State> {
   render(): JSX.Element {
     return (
       <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.light }}>
-        {this.props.isAdmin && (
-          <div className="navbar">
-            <Tooltip arrow placement="left" title="Close game settings">
-              <IconButton
-                aria-label="Close game settings"
-                component="span"
-                className="temp"
-                onClick={this.props.onSettingsToggleClicked}
-              >
-                {this.props.exposeSettings ? <ChevronLeft /> : <Settings />}
-              </IconButton>
-            </Tooltip>
-          </div>
+        {this.props.isAdmin && !this.state.editingTitle && (
+          <Tooltip arrow placement="left" title="Close game settings">
+            <IconButton
+              aria-label="Close game settings"
+              component="span"
+              className="temp"
+              onClick={this.props.onSettingsToggleClicked}
+            >
+              {this.props.exposeSettings ? <ChevronLeft /> : <Settings />}
+            </IconButton>
+          </Tooltip>
         )}
-        <div className="title__wrapper">
-          <div className="title">
-            {this.props.exposeSettings && this.state.editingTitle ? (
-              <TextField
-                fullWidth
-                autoComplete="off"
-                className="title"
-                id="outlined-basic"
-                value={this.state.title}
-                variant="outlined"
-                onChange={this.handleTitleChanged}
-                onKeyPress={this.handleSubmitTitleKeyPress}
-              />
-            ) : (
-              <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
-                {this.state.title}
-              </Typography>
-            )}
-          </div>
-          {this.props.exposeSettings && (
-            <div className="button">
-              {this.state.editingTitle ? (
-                <>
-                  <Tooltip arrow title="Submit new title">
-                    <IconButton
-                      aria-label="Submit edited game name"
-                      component="span"
-                      disabled={!this.state.title}
-                      onClick={this.handleSubmitTitleClicked}
-                    >
-                      <Done />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip arrow title="Discard changes">
-                    <IconButton
-                      aria-label="Stop editing game name and discard changes"
-                      component="span"
-                      onClick={this.handleCancelEditClicked}
-                    >
-                      <Close />
-                    </IconButton>
-                  </Tooltip>
-                </>
-              ) : (
-                <Tooltip arrow title="Edit game title">
-                  <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>
-                    <Edit />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </div>
+        <div className="title">
+          {this.props.exposeSettings && this.state.editingTitle ? (
+            <TextField
+              fullWidth
+              autoComplete="off"
+              className="title"
+              id="outlined-basic"
+              value={this.state.title}
+              variant="outlined"
+              onChange={this.handleTitleChanged}
+              onKeyPress={this.handleSubmitTitleKeyPress}
+            />
+          ) : (
+            <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
+              {this.state.title}
+            </Typography>
           )}
         </div>
+        {this.props.exposeSettings && (
+          <div className="button">
+            {this.state.editingTitle ? (
+              <div className="button-group">
+                <Tooltip arrow placement="left" title="Submit new title">
+                  <IconButton
+                    aria-label="Submit edited game name"
+                    component="span"
+                    disabled={!this.state.title}
+                    onClick={this.handleSubmitTitleClicked}
+                  >
+                    <Done />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip arrow placement="left" title="Discard changes">
+                  <IconButton
+                    aria-label="Stop editing game name and discard changes"
+                    component="span"
+                    onClick={this.handleCancelEditClicked}
+                  >
+                    <Close />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            ) : (
+              <Tooltip arrow title="Edit game title">
+                <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
       </div>
     );
   }

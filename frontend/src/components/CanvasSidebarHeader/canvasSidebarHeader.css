@@ -1,10 +1,5 @@
 .canvas-sidebar-header {
   display: flex;
-  flex-direction: column;
-}
-
-.canvas-sidebar-header .title__wrapper {
-  display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0.5rem;
@@ -13,9 +8,17 @@
 .canvas-sidebar-header .title {
   flex-grow: 1;
   min-width: 0;
+  margin: 0.5rem;
 }
 
 .canvas-sidebar-header .button {
   margin-left: auto;
   white-space: nowrap;
+  margin: 0.5rem;
+}
+
+.canvas-sidebar-header .button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
