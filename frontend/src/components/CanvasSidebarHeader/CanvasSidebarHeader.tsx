@@ -61,7 +61,7 @@ class CanvasSidebarHeader extends Component<Props, State> {
 
   render(): JSX.Element {
     return (
-      <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.dark }}>
+      <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.light }}>
         {this.props.isAdmin && (
           <div className="navbar">
             <Tooltip arrow placement="left" title="Close game settings">

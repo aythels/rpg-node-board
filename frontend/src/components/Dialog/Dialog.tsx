@@ -25,6 +25,7 @@ export default class Dialog extends PureComponent<Props> {
     return (
       // Code retrieved from: https://mui.com/components/modal/#BasicModal.tsx
       <MuiDialog
+        color="primary"
         aria-describedby="alert-dialog-description"
         aria-labelledby="alert-dialog-title"
         open={this.props.open}

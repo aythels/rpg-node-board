@@ -10,10 +10,10 @@ function App(): JSX.Element {
     // Note: to be edited later
     palette: {
       primary: {
-        light: '#fff',
-        main: '#e2e2e2',
-        dark: '#c2c2c2',
-        contrastText: '#000',
+        light: '#a4a4a4',
+        main: '#757575',
+        dark: '#494949',
+        contrastText: '#fff',
       },
       common: {
         black: '#000',

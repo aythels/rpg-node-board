@@ -17,9 +17,9 @@ interface Props extends MuiTheme {
 }
 class CanvasSidebarPlayerCard extends PureComponent<Props> {
   render(): JSX.Element {
-    const { exposeSettings, promotable, removable, user, theme } = this.props;
+    const { exposeSettings, promotable, removable, user } = this.props;
     return (
-      <div className="canvas-sidebar-player-card" style={{ backgroundColor: theme.palette.primary.light }}>
+      <div className="canvas-sidebar-player-card">
         <Tooltip arrow placement="left" title={promotable ? 'Promote to game master' : 'Demote to regular player'}>
           <IconButton
             aria-label={
