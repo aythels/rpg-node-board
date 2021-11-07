@@ -1,6 +1,6 @@
 import './leftSidebar.css';
 import React from 'react';
-import CanvasInternalToolbarEntry from '../../CanvasInternalToolbarEntry/CanvasInternalToolbarEntry';
+import NodeCard from '../NodeCard/NodeCard';
 import { Drawer, IconButton } from '@mui/material';
 import { Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
 
@@ -44,7 +44,7 @@ export default class LeftSidebar extends React.Component<Props, State> {
       >
         <Drawer className="temp" anchor="left" open={this.state.isOpen} variant="persistent">
           {nodeManager.getAllNodes().map((node: any) => (
-            <CanvasInternalToolbarEntry
+            <NodeCard
               key={node.id}
               node={node}
               entryDBClickCallback={() => setActiveNodeCallback(node.id)}
@@ -54,7 +54,7 @@ export default class LeftSidebar extends React.Component<Props, State> {
               }}
               navigateCallback={() => nodeManager.centerNode(node.id)}
               closeCallback={() => this.props.closeCallback(node.id)}
-            ></CanvasInternalToolbarEntry>
+            />
           ))}
         </Drawer>
         <div
