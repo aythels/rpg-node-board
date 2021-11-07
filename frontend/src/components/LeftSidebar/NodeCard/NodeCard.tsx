@@ -19,7 +19,7 @@ export default class NodeCard extends PureComponent<Props> {
 
     return (
       <div className="node-card" onDoubleClick={onDoubleClick}>
-        <Typography className="title" variant="body1" component="div" align="center" noWrap={true}>
+        <Typography className="title" variant="body1" component="div" noWrap={true}>
           {caption}
         </Typography>
         <Tooltip arrow title={`Make node ${visible ? 'invisible' : 'visible'}`}>
