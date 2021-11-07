@@ -1,5 +1,5 @@
 import './playerCard.css';
-import { Avatar, IconButton, Tooltip } from '@mui/material';
+import { Avatar, IconButton, Tooltip, Typography } from '@mui/material';
 import { Person, PersonOutline, PersonRemove } from '@mui/icons-material';
 import { PureComponent } from 'react';
 import { User } from '../../../types';
@@ -34,14 +34,21 @@ class PlayerCard extends PureComponent<Props> {
             {promotable ? <PersonOutline /> : <Person />}
           </IconButton>
         </Tooltip>
-        <Avatar alt={user.username} src={user.profilePicture}>
+        <Avatar color="primary" alt={user.username} src={user.profilePicture}>
           {user.username.charAt(0).toUpperCase()}
         </Avatar>
-        <div className="name">{`@${user.username}`}</div>
+        <Typography className="name" variant="body1" component="div" noWrap={true}>
+          {`@${user.username}`}
+        </Typography>
         {exposeSettings && removable && (
           <div className="button">
             <Tooltip arrow placement="left" title="Remove player">
-              <IconButton aria-label="Remove player" component="span" onClick={this.props.onRemovePlayerClicked}>
+              <IconButton
+                color="warning"
+                aria-label="Remove player"
+                component="span"
+                onClick={this.props.onRemovePlayerClicked}
+              >
                 <PersonRemove />
               </IconButton>
             </Tooltip>
