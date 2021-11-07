@@ -106,18 +106,26 @@ export default class NodeView extends Component<Props, State> {
     if (GETuserCanEditNode(this.state.user.id, this.state.node.id)) {
       return (
         <ButtonGroup>
-          <Button onClick={this.handleEditModalOpen}>
-            <EditIcon />
-          </Button>
-          <Button onClick={this.handleUsersModalOpen}>
-            <PeopleAltIcon />
-          </Button>
-          <Button onClick={this.handleImageModalOpen}>
-            <InsertPhotoIcon />
-          </Button>
-          <Button onClick={() => this.props.closeCallback(this.state.node)}>
-            <Close />
-          </Button>
+          <Tooltip title="Node Info">
+            <Button onClick={this.handleEditModalOpen}>
+              <EditIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Node Permissions">
+            <Button onClick={this.handleUsersModalOpen}>
+              <PeopleAltIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Node Image">
+            <Button onClick={this.handleImageModalOpen}>
+              <InsertPhotoIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Close">
+            <Button onClick={() => this.props.closeCallback(this.state.node)}>
+              <Close />
+            </Button>
+          </Tooltip>
         </ButtonGroup>
       );
     } else {

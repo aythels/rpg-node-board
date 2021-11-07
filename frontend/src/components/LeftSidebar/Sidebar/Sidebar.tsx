@@ -1,7 +1,7 @@
 import './sidebar.css';
 import React from 'react';
 import NodeCard from '../NodeCard/NodeCard';
-import { Drawer, IconButton, Typography } from '@mui/material';
+import { Drawer, IconButton, Tooltip, Typography } from '@mui/material';
 import { Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { withTheme } from '@emotion/react';
 import { MuiTheme } from '../../../theme';
@@ -71,12 +71,16 @@ class Sidebar extends React.Component<Props, State> {
             left: this.state.isOpen ? '20%' : '0%',
           }}
         >
-          <IconButton aria-label="Center node view" onClick={onCenterNodeViewClicked}>
-            <CenterFocusStrong />
-          </IconButton>
-          <IconButton aria-label="Add a new node" onClick={onAddNodeClicked}>
-            <Add />
-          </IconButton>
+          <Tooltip title="Center node view" placement="right">
+            <IconButton aria-label="Center node view" onClick={onCenterNodeViewClicked}>
+              <CenterFocusStrong />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Add a new node" placement="right">
+            <IconButton aria-label="Add a new node" onClick={onAddNodeClicked}>
+              <Add />
+            </IconButton>
+          </Tooltip>
           <IconButton aria-label={`${this.state.isOpen ? 'Close' : 'Open'} the sidebar`} onClick={this.onToggleSideBar}>
             {this.state.isOpen ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>

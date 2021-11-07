@@ -37,7 +37,7 @@ export default class NodeCard extends PureComponent<Props> {
           </IconButton>
         </Tooltip>
         <Tooltip arrow title="Delete node">
-          <IconButton color="warning" aria-label="Delete node" onClick={onRemoveNodeClicked}>
+          <IconButton color="error" aria-label="Delete node" onClick={onRemoveNodeClicked}>
             <Delete />
           </IconButton>
         </Tooltip>
