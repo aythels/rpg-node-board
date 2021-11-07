@@ -1,7 +1,5 @@
-import { Button, Grid } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Grid } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { GameRow } from '../GameRow/gamerow';
 import Typography from '@mui/material/Typography';
 import { Component } from 'react';
