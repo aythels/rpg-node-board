@@ -103,7 +103,7 @@ export const NodeManager = function () {
     const deltaX = finalX - node.xPos;
     const deltaY = finalY - node.yPos;
 
-    animate(finalX, finalY, deltaX - node.width / 2, deltaY - node.height / 2, (x, y) => {
+    animate(finalX, finalY, deltaX, deltaY, (x, y) => {
       _this.setAllPos(x, y);
     });
   };
