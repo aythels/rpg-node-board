@@ -33,15 +33,17 @@ export default class CanvasInternalNode extends React.Component<Props> {
         }}
       >
         <div className="node__header">
-          <div className="node-text-div">{dataNode.name}</div>
+          <div className="node-text-div" node-id={id}>
+            {dataNode.name}
+          </div>
         </div>
         <div className="node__footer">
-          <Tooltip title="Permanently delete this node">
+          <Tooltip title="Delete node">
             <button className="node-button" onClick={onCloseClicked}>
               <Delete />
             </button>
           </Tooltip>
-          <Tooltip title="View this node">
+          <Tooltip title="View node">
             <button className="node-button" onClick={() => onImageClicked(id)}>
               <Launch />
             </button>

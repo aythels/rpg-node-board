@@ -4,12 +4,7 @@ import Quill from 'quill';
 import Delta from 'quill-delta';
 import NodeLinkBlot from '../../blots/NodeLink';
 import { Game, Subnode, User, Node } from '../../types';
-import {
-  GETnodesInGame,
-  GETnodesInGameVisibleToUser,
-  GETuserCanEditSubnode,
-  POSTsubnodeContent,
-} from '../../mock-backend';
+import { GETnodesInGameVisibleToUser, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
 
 interface Props {
   game: Game;
