@@ -1,4 +1,4 @@
-import './leftSidebar.css';
+import './sidebar.css';
 import React from 'react';
 import NodeCard from '../NodeCard/NodeCard';
 import { Drawer, IconButton } from '@mui/material';
@@ -42,20 +42,22 @@ export default class LeftSidebar extends React.Component<Props, State> {
           left: `${this.state.isOpen ? this.state.openLeftPos : this.state.closeLeftPos}px`,
         }}
       >
-        <Drawer className="temp" anchor="left" open={this.state.isOpen} variant="persistent">
-          {nodeManager.getAllNodes().map((node: any) => (
-            <NodeCard
-              key={node.id}
-              node={node}
-              entryDBClickCallback={() => setActiveNodeCallback(node.id)}
-              visibleCallback={() => {
-                node.isVisible = !node.isVisible;
-                nodeManager.update();
-              }}
-              navigateCallback={() => nodeManager.centerNode(node.id)}
-              closeCallback={() => this.props.closeCallback(node.id)}
-            />
-          ))}
+        <Drawer className="container" anchor="left" open={this.state.isOpen} variant="persistent">
+          <div className="node-list">
+            {nodeManager.getAllNodes().map((node: any) => (
+              <NodeCard
+                key={node.id}
+                node={node}
+                entryDBClickCallback={() => setActiveNodeCallback(node.id)}
+                visibleCallback={() => {
+                  node.isVisible = !node.isVisible;
+                  nodeManager.update();
+                }}
+                navigateCallback={() => nodeManager.centerNode(node.id)}
+                closeCallback={() => this.props.closeCallback(node.id)}
+              />
+            ))}
+          </div>
         </Drawer>
         <div
           className="vertical-toolbar"

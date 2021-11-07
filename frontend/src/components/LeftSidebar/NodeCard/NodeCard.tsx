@@ -21,13 +21,9 @@ export default class NodeCard extends PureComponent<Props> {
           {node.dataNode.name}
         </Typography>
 
-        <Tooltip arrow title="Bring node into view">
-          <IconButton style={{ marginLeft: 'auto' }} aria-label="Bring node into view" onClick={navigateCallback}>
-            <CenterFocusStrong />
-          </IconButton>
-        </Tooltip>
         <Tooltip arrow title={`Make node ${node.isVisible ? 'invisible' : 'visible'}`}>
           <IconButton
+            style={{ marginLeft: 'auto' }}
             aria-label={`Make node ${node.isVisible ? 'invisible' : 'visible'}`}
             onClick={() => {
               visibleCallback();
@@ -38,8 +34,13 @@ export default class NodeCard extends PureComponent<Props> {
             {node.isVisible ? <Visibility /> : <VisibilityOff />}
           </IconButton>
         </Tooltip>
+        <Tooltip arrow title="Bring node into view">
+          <IconButton aria-label="Bring node into view" onClick={navigateCallback}>
+            <CenterFocusStrong />
+          </IconButton>
+        </Tooltip>
         <Tooltip arrow title="Delete node">
-          <IconButton aria-label="Delete node" onClick={closeCallback}>
+          <IconButton color="warning" aria-label="Delete node" onClick={closeCallback}>
             <Delete />
           </IconButton>
         </Tooltip>
