@@ -307,40 +307,58 @@ export const GETuserByUsername = (username: string): User | undefined => {
 };
 
 export const GETplayers = (gameId: number): User[] => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   return game.users.map(GETuserById);
 };
 
 export const GETgmIds = (gameId: number): number[] => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   return game.gms;
 };
 
 export const POSTaddPlayerToGame = (playerId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.players.push(playerId);
   game.users.push(playerId);
+
+  const player = globalUsers.filter((user) => user.id === playerId)[0];
+  player.games.push(gameId);
 };
 
 export const POSTremovePlayerFromGame = (playerId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.players = game.players.filter((id) => id !== playerId);
   game.users = game.users.filter((id) => id !== playerId);
+
+  const player = globalUsers.filter((user) => user.id === playerId)[0];
+  player.games = player.games.filter((id) => id !== gameId);
 };
 
 export const POSTupdateGameName = (gameId: number, newTitle: string): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.title = newTitle;
 };
 
 export const POSTpromoteUserToGameMaster = (userId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.gms.push(userId);
+  game.players = game.players.filter((id) => id !== userId);
+  game.nodes.forEach((nodeId) => {
+    const node = globalNodes.filter((node) => node.id === nodeId)[0];
+    if (!node.editors.includes(userId)) {
+      node.editors.push(userId);
+    }
+  });
 };
 
 export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
-  const game = GETgameById(gameId);
+  const game = globalGames.filter((game) => game.id === gameId)[0];
   game.gms = game.gms.filter((id) => id !== userId);
+  game.players.push(userId);
+  game.nodes.forEach((nodeId) => {
+    const node = globalNodes.filter((node) => node.id === nodeId)[0];
+    node.editors = node.editors.filter((editorId) => editorId !== userId);
+  });
 };
 
 // This mock-db method will CERTAINLY be changed.
@@ -481,11 +499,11 @@ export const POSTuser = (user: User): void => {
   console.log('New value for node is:', newUser);
 };
 
-export const POSTremoveGame = (id: number): void => {
-  console.log('Removing game with ID ', id);
-  console.log('Games before', globalGames);
-  globalGames = globalGames.filter((game) => game.id !== id);
-  console.log('Games after', globalGames);
+export const POSTremoveGame = (gameId: number): void => {
+  globalGames = globalGames.filter((game) => game.id !== gameId);
+  globalUsers.forEach((user: User) => {
+    user.games = user.games.filter((id) => id !== gameId);
+  });
 };
 
 export const DELETEnode = (nodeId: number): void => {
