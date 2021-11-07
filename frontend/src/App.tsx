@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
-import Home from './components/Home';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain';
@@ -43,7 +42,6 @@ function App(): JSX.Element {
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" render={() => <Home />} />
           <Route
             exact
             path="/canvasAdmin"
@@ -62,7 +60,7 @@ function App(): JSX.Element {
           <Route exact path="/gamesAdmin" render={() => <UserDashboard userID={adminID} />} />
           <Route exact path="/gamesUser" render={() => <UserDashboard userID={userID} />} />
 
-          <Route exact path="/login" render={() => <Login />} />
+          <Route exact path="/" render={() => <Login />} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
