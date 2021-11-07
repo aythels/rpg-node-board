@@ -11,7 +11,7 @@ interface GameDisplayProps {
 
 export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) => {
   const games = GETgamesByUserID(userID); //TODO pass user id in.
-  console.log(games);
+  // console.log(games);
   return (
     <div style={{ width: '100%' }}>
       <Box

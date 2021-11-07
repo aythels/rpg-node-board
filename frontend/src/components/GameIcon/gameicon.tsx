@@ -23,8 +23,8 @@ interface GameDisplayProps {
 // eslint-disable-next-line react/prop-types
 export const GameIcon: React.FunctionComponent<GameDisplayProps> = ({ name, path, userID, gameID }) => {
   const img_path = '/images/' + path;
-  console.log(img_path);
-  console.log(GETuserIsGMInGame(userID, gameID));
+  // console.log(img_path);
+  // console.log(GETuserIsGMInGame(userID, gameID));
   const canvasLink = GETuserIsGMInGame(userID, gameID) ? 'canvasAdmin' : 'canvasUser';
   return (
     <Card
