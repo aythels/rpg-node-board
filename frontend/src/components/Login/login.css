@@ -3,7 +3,7 @@
 }
 
 .login-background {
-  animation: logingradient 60s ease infinite;
+  animation: logingradient 90s ease infinite;
 }
 
 @keyframes logingradient {
