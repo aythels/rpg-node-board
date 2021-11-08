@@ -8,7 +8,10 @@
 - *Note:* There are other users that exist in the data to demonstrate some of the functionality of the views, but they should not be accessed.
 
 ### Note on Hardcoded Values
-Our phase 1 project does not utilize any external data source. Rather, we created the `mock-backend.ts` file, which includes all of the hardcoded JS values that are used throughout the frontend. Any line in the code that calls a function exported from `mock-backend.ts` will, in later phases, send an equivalent request to the actual backend. Therefore, function calls such as `GETnodesInGame()` and `GETuserCanEditNode()` should be treated as equivalent to having a comment above them saying "// code below requires server call".
+Our phase 1 project does not utilize any external data source. Rather, we created the `mock-backend.ts` file, which includes all of the hardcoded JS values that are used throughout the frontend. Any line in the code that calls a function exported from `mock-backend.ts` will, in later phases, send an equivalent request to the actual backend. Therefore, function calls such as `GETnodesInGame()` and `GETuserCanEditNode()` should be treated as equivalent to having a comment above them saying "// code below requires server call". 
+
+### Note on routing/state
+We are still undecided on how to store state (i.e. giving them via  react-router) or by using a solution like redux. Once we begin integrating a live database, we will compare the solutions and go from there. Because of this, we only have a rudimentary global state propogation currently, and the state of some pages may not appear to be as a direct result of others.
 
 ### Admin Functionalities
 After logging in as 'admin', click on a game card (*Note: the "CLICK" game is the one that is actually set up with data -- the other games should not be clicked*). This will bring you to the main view of the app (canvas). From here, you can click on the gear button at the top of the righthand sidebar to enable user editing (the ability to add/remove users, promote a player to a game master, change the game name, and delete the game). 
