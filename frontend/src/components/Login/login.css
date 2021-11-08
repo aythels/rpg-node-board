@@ -1,3 +1,19 @@
 .wrapper {
   margin: 1rem;
 }
+
+.login-background {
+  animation: logingradient 30s ease infinite;
+}
+
+@keyframes logingradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 50% 50%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
