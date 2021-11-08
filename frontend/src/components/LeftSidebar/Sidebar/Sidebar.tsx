@@ -2,9 +2,10 @@ import './sidebar.css';
 import React from 'react';
 import NodeCard from '../NodeCard/NodeCard';
 import { Drawer, IconButton, Tooltip, Typography } from '@mui/material';
-import { Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { ExitToApp, Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { withTheme } from '@emotion/react';
 import { MuiTheme } from '../../../theme';
+import Dialog from '../../Dialog/Dialog';
 
 interface Props extends MuiTheme {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,15 +14,18 @@ interface Props extends MuiTheme {
   onCenterNodeViewClicked: () => void;
   onAddNodeClicked: () => void;
   onRemoveNodeClicked: (id: number) => void;
+  isAdmin: boolean;
 }
 
 interface State {
   isOpen: boolean;
+  showLeaveGameDialog: boolean;
 }
 
 class Sidebar extends React.Component<Props, State> {
   state: State = {
     isOpen: true,
+    showLeaveGameDialog: false,
   };
 
   onToggleSideBar = (): void => {
@@ -66,7 +70,19 @@ class Sidebar extends React.Component<Props, State> {
           </div>
         </Drawer>
         <div
-          className="vertical-toolbar"
+          className="top-toolbar"
+          style={{
+            left: this.state.isOpen ? '20%' : '0%',
+          }}
+        >
+          <Tooltip className="first-button" title="Leave game" placement="right">
+            <IconButton aria-label="Lave game" onClick={() => this.setState({ showLeaveGameDialog: true })}>
+              <ExitToApp />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <div
+          className="bottom-toolbar"
           style={{
             left: this.state.isOpen ? '20%' : '0%',
           }}
@@ -85,6 +101,15 @@ class Sidebar extends React.Component<Props, State> {
             {this.state.isOpen ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </div>
+        <Dialog
+          header="Are you sure you wish to leave the game?"
+          description="Doing so will redirect you to game overview."
+          open={this.state.showLeaveGameDialog}
+          onClose={() => this.setState({ showLeaveGameDialog: false })}
+          onAgree={() => this.setState({ showLeaveGameDialog: false })}
+          onAgreeRedirectTo={this.props.isAdmin ? '/gamesAdmin' : '/gamesUser'}
+          onDisagree={() => this.setState({ showLeaveGameDialog: false })}
+        />
       </div>
     );
   }

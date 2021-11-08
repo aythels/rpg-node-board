@@ -1,11 +1,19 @@
-.left-sidebar .vertical-toolbar {
+.left-sidebar .top-toolbar {
   position: absolute;
-  bottom: 0;
   transition: all 0.15s ease-out;
+  margin: 0.5rem;
+  top: 0;
+}
+
+.left-sidebar .bottom-toolbar {
+  position: absolute;
+  transition: all 0.15s ease-out;
+  margin: 0.5rem;
+  bottom: 0;
+
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin: 0.5rem;
 }
 
 .left-sidebar .header {
