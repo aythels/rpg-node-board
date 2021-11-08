@@ -35,6 +35,7 @@ export const GameIcon: React.FunctionComponent<GameDisplayProps> = ({ name, path
         m: 1,
         textAlign: 'center',
       }}
+      style={{ boxShadow: '0.1rem 0.1rem 0.7rem' }}
     >
       <CardActionArea
         component={Link}
