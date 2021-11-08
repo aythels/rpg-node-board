@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import { Component } from 'react';
 import './UserDashboard.css';
 import { GETuserById } from '../../mock-backend';
+import { IconButton } from '@mui/material';
 
 interface Props {
   userID: number;
@@ -47,7 +48,9 @@ export default class UserDashboard extends Component<Props> {
             }}
           >
             <Tooltip title="Account Settings" placement="left">
-              <SettingsIcon sx={{ fontSize: '4rem' }} />
+              <IconButton color="primary" href="/settings">
+                <SettingsIcon sx={{ fontSize: '4rem' }} href="/settings" />
+              </IconButton>
             </Tooltip>
           </Grid>
           <Grid

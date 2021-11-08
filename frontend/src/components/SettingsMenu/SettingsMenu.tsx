@@ -13,10 +13,11 @@ import Paper from '@mui/material/Paper';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 import { GETuserById } from '../../mock-backend';
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, Tooltip } from '@mui/material';
 import { Component } from 'react';
 import React from 'react';
 import { useTheme } from '@mui/styles';
+import { IconButton } from '@mui/material';
 
 export const SettingsMenu: React.FunctionComponent = () => {
   const user = GETuserById(1);
@@ -34,11 +35,21 @@ export const SettingsMenu: React.FunctionComponent = () => {
 
   return (
     <div className="padded_div">
-      <div className="back-button">
-        <Button variant="contained" color="primary" href="/gamesUser">
-          Back to user profile
-        </Button>
-      </div>
+      <Grid
+        item
+        style={{
+          position: 'absolute',
+          margin: '1rem',
+          top: '0',
+          right: '0',
+        }}
+      >
+        <Tooltip title="Account Dashboard" placement="left">
+          <IconButton color="primary" href="/gamesUser">
+            <ArrowBackIcon sx={{ fontSize: '4rem' }} href="/settings" />
+          </IconButton>
+        </Tooltip>
+      </Grid>
       <Grid
         container
         spacing={2}
