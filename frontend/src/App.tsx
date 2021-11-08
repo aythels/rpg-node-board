@@ -3,6 +3,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain';
+import { SettingsMenu } from './components/SettingsMenu/SettingsMenu';
 
 function App(): JSX.Element {
   const customTheme = createTheme({
@@ -59,7 +60,7 @@ function App(): JSX.Element {
 
           <Route exact path="/gamesAdmin" render={() => <UserDashboard userID={adminID} />} />
           <Route exact path="/gamesUser" render={() => <UserDashboard userID={userID} />} />
-
+          <Route exact path="/settings" render={() => <SettingsMenu />} />
           <Route exact path="/" render={() => <Login />} />
         </Switch>
       </BrowserRouter>
