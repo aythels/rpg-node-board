@@ -26,11 +26,16 @@ export const SettingsMenu: React.FunctionComponent = () => {
   const [editedUserData, seteditedUserData] = React.useState({
     username: user.username,
     email: user.email,
-    // password: user.password,
+    password: user.password,
+    secondPassword: user.password,
   });
 
   const same = (): boolean => {
-    return editedUserData.email === user.email && editedUserData.username === user.username;
+    return (
+      editedUserData.email === user.email &&
+      editedUserData.username === user.username &&
+      editedUserData.password === user.password
+    );
   };
 
   return (
@@ -81,6 +86,26 @@ export const SettingsMenu: React.FunctionComponent = () => {
             // error={this.state.invalid}
             helperText={editedUserData.username === user.username ? '' : 'Modified'}
             onChange={(event) => seteditedUserData({ ...editedUserData, username: event.target.value })}
+          ></TextField>
+        </Grid>
+        <Grid item>
+          <TextField
+            label="New Password"
+            // defaultValue={user.username}
+            // error={this.state.invalid}
+            type="password"
+            helperText={editedUserData.password === user.password ? '' : 'Modified'}
+            onChange={(event) => seteditedUserData({ ...editedUserData, password: event.target.value })}
+          ></TextField>
+        </Grid>
+        <Grid item>
+          <TextField
+            label="Confirm Password"
+            // defaultValue={user.username}
+            error={editedUserData.password != editedUserData.secondPassword && editedUserData.password != user.password}
+            type="password"
+            helperText={editedUserData.password === editedUserData.secondPassword ? '' : 'Passwords do not match'}
+            onChange={(event) => seteditedUserData({ ...editedUserData, secondPassword: event.target.value })}
           ></TextField>
         </Grid>
         <Grid item direction="row" justifyContent="center" alignItems="center">
