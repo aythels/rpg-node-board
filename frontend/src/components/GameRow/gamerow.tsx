@@ -21,7 +21,11 @@ export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) =
           flexWrap: 'wrap',
           p: 1,
           m: 1,
-          bgcolor: 'background.paper',
+          bgcolor: 'transparent',
+        }}
+        style={{
+          margin: '0 auto',
+          justifyContent: 'center',
         }}
       >
         {games.map((game) => (

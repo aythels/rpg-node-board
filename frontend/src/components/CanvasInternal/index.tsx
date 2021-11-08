@@ -109,7 +109,7 @@ export default class CanvasInternal extends React.Component<Props> {
                     width: `10000px`,
                     height: `10000px`,
                     backgroundColor: `white`,
-                    opacity: `0.8`,
+                    opacity: `0.5`,
                     backgroundImage: `linear-gradient(#d2d3e1 4.4px, transparent 4.4px),
     linear-gradient(90deg, #d2d3e1 4.4px, transparent 4.4px), linear-gradient(#d2d3e1 2.2px, transparent 2.2px),
     linear-gradient(90deg, #d2d3e1 2.2px, #ffffff 2.2px)`,
