@@ -147,6 +147,7 @@ export default class CanvasInternal extends React.Component<Props> {
           </div>
         </div>
         <Sidebar
+          isAdmin={GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)}
           nodeManager={this.nodeManager}
           setActiveNodeCallback={(id) => {
             this.activeNode = id;

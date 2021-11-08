@@ -2,9 +2,10 @@ import './sidebar.css';
 import React from 'react';
 import NodeCard from '../NodeCard/NodeCard';
 import { Drawer, IconButton, Tooltip, Typography } from '@mui/material';
-import { Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { ArrowBack, Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { withTheme } from '@emotion/react';
 import { MuiTheme } from '../../../theme';
+import { Link } from 'react-router-dom';
 
 interface Props extends MuiTheme {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,6 +14,7 @@ interface Props extends MuiTheme {
   onCenterNodeViewClicked: () => void;
   onAddNodeClicked: () => void;
   onRemoveNodeClicked: (id: number) => void;
+  isAdmin: boolean;
 }
 
 interface State {
@@ -66,7 +68,21 @@ class Sidebar extends React.Component<Props, State> {
           </div>
         </Drawer>
         <div
-          className="vertical-toolbar"
+          className="top-toolbar"
+          style={{
+            left: this.state.isOpen ? '20%' : '0%',
+          }}
+        >
+          <Tooltip className="first-button" title="Leave game" placement="right">
+            <Link style={{ textDecoration: 'none' }} to={this.props.isAdmin ? '/gamesAdmin' : '/gamesUser'}>
+              <IconButton aria-label="Lave game">
+                <ArrowBack />
+              </IconButton>
+            </Link>
+          </Tooltip>
+        </div>
+        <div
+          className="bottom-toolbar"
           style={{
             left: this.state.isOpen ? '20%' : '0%',
           }}
