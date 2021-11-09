@@ -6,31 +6,31 @@
   overflow: hidden;
 }
 
-.offSet {
+.centerOffSet-container {
   position: absolute;
   top: 50%;
   left: 50%;
-  /*
-  position: absolute;
-  top: 50%;
-  left: 50%;*/
 }
 
-.c {
-  user-select: none;
+.scale-container {
   transform-origin: top left;
   transform: scale(1);
 }
 
-.imgContainer {
+.grid-container {
   transform: translate(-50%, -50%);
-}
-
-#img {
   pointer-events: none;
   user-select: none;
   position: relative;
-  width: 1000px;
+  width: 7000px;
+  height: 7000px;
+  background-color: white;
+  background-image: linear-gradient(#d2d3e1 4.4px, transparent 4.4px),
+    linear-gradient(90deg, #d2d3e1 4.4px, transparent 4.4px), linear-gradient(#d2d3e1 2.2px, transparent 2.2px),
+    linear-gradient(90deg, #d2d3e1 2.2px, #ffffff 2.2px);
+  background-size: 110px 110px, 110px 110px, 22px 22px, 22px 22px;
+  background-position: -4.4px -4.4px, -4.4px -4.4px, -2.2px -2.2px, -2.2px -2.2px;
+  opacity: 0.5;
 }
 
 .nodeview-container {

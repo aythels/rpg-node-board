@@ -98,26 +98,15 @@ export default class CanvasInternal extends React.Component<Props> {
           onPointerLeave={this.nodeManager.onRelease}
           onWheel={this.nodeManager.onWheel}
         >
-          <div className="offSet">
-            <div className="c" style={{ transform: `scale(${this.nodeManager.scale})` }}>
-              <div className="imgContainer">
-                <div
-                  id="img"
-                  style={{
-                    left: `${this.nodeManager.getFinalX()}px`,
-                    top: `${this.nodeManager.getFinalY()}px`,
-                    width: `10000px`,
-                    height: `10000px`,
-                    backgroundColor: `white`,
-                    opacity: `0.5`,
-                    backgroundImage: `linear-gradient(#d2d3e1 4.4px, transparent 4.4px),
-    linear-gradient(90deg, #d2d3e1 4.4px, transparent 4.4px), linear-gradient(#d2d3e1 2.2px, transparent 2.2px),
-    linear-gradient(90deg, #d2d3e1 2.2px, #ffffff 2.2px)`,
-                    backgroundSize: `110px 110px, 110px 110px, 22px 22px, 22px 22px`,
-                    backgroundPosition: `-4.4px -4.4px, -4.4px -4.4px, -2.2px -2.2px, -2.2px -2.2px`,
-                  }}
-                />
-              </div>
+          <div className="centerOffSet-container">
+            <div className="scale-container" style={{ transform: `scale(${this.nodeManager.scale})` }}>
+              <div
+                className="grid-container"
+                style={{
+                  left: `${this.nodeManager.getFinalX()}px`,
+                  top: `${this.nodeManager.getFinalY()}px`,
+                }}
+              />
 
               {this.nodeManager.getAllNodes().map((node) => {
                 if (!node.isVisible) {
