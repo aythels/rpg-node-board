@@ -16,6 +16,7 @@ import {
 import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
 import { Alert, AlertTitle } from '@mui/material';
+import CanvasInternalTransform from '../CanvasInternalTransform';
 
 interface Props {
   currentGameId: number;
@@ -29,7 +30,6 @@ export default class CanvasInternal extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props);
-    this.nodeManager.addOnUpdateEvent(() => this.setState({}));
     for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
       this.nodeManager.createNode(node.id, node);
     }
@@ -85,56 +85,22 @@ export default class CanvasInternal extends React.Component<Props> {
     } as Node;
     POSTnodeToGame(newNode, this.props.currentGameId);
     this.nodeManager.createNode(newNode.id, newNode);
+    this.setState({});
   };
 
   render(): JSX.Element {
     return (
       <div>
-        <div
-          className="w"
-          onPointerDown={this.nodeManager.onPress}
-          onPointerMove={this.nodeManager.onMove}
-          onPointerUp={this.nodeManager.onRelease}
-          onPointerLeave={this.nodeManager.onRelease}
-          onWheel={this.nodeManager.onWheel}
-        >
-          <div className="centerOffSet-container">
-            <div className="scale-container" style={{ transform: `scale(${this.nodeManager.scale})` }}>
-              <div
-                className="grid-container"
-                style={{
-                  left: `${this.nodeManager.getFinalX()}px`,
-                  top: `${this.nodeManager.getFinalY()}px`,
-                }}
-              />
-
-              {this.nodeManager.getAllNodes().map((node) => {
-                if (!node.isVisible) {
-                  return;
-                } else {
-                  return (
-                    <CanvasInternalNode
-                      key={node.id}
-                      xPos={node.getRenderX()}
-                      yPos={node.getRenderY()}
-                      nodeWidth={node.width}
-                      nodeHeight={node.height}
-                      id={node.id}
-                      dataNode={node.dataNode}
-                      onCloseClicked={() => {
-                        this.handleRemoveNodeClicked(node.id);
-                      }}
-                      onImageClicked={(id) => {
-                        this.activeNode = id;
-                        this.setState({});
-                      }}
-                    />
-                  );
-                }
-              })}
-            </div>
-          </div>
-        </div>
+        <CanvasInternalTransform
+          nodeManager={this.nodeManager}
+          onCloseClicked={(id) => {
+            this.handleRemoveNodeClicked(id);
+          }}
+          onOpenClicked={(id) => {
+            this.activeNode = id;
+            this.setState({});
+          }}
+        />
         <Sidebar
           isAdmin={GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)}
           nodeManager={this.nodeManager}
