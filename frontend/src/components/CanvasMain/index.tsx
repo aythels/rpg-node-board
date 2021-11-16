@@ -14,10 +14,14 @@ import { Game } from '../../types';
 import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
 import CanvasInternal from '../CanvasInternal';
+import { connect } from 'react-redux';
+import { addPlayer } from '../../state/action-creators';
 
 interface Props {
   currentUserId: number;
   currentGameId: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addPlayer: any;
 }
 
 interface State {
@@ -25,7 +29,7 @@ interface State {
   showUserNotFoundModal: boolean;
 }
 
-export default class CanvasMain extends React.Component<Props, State> {
+class CanvasMainBase extends React.Component<Props, State> {
   state: State = {
     game: GETgameById(this.props.currentGameId),
     showUserNotFoundModal: false,
@@ -34,6 +38,7 @@ export default class CanvasMain extends React.Component<Props, State> {
   handleInvitePlayerClicked = (username: string): void => {
     const user = GETuserByUsername(username);
     if (user) {
+      this.props.addPlayer(user.id);
       this.setState(
         (prevState: State) => ({
           game: {
@@ -130,3 +135,5 @@ export default class CanvasMain extends React.Component<Props, State> {
     );
   }
 }
+
+export default connect(null, { addPlayer })(CanvasMainBase);
