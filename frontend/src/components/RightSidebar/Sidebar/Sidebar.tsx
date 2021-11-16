@@ -9,8 +9,11 @@ import Dialog from '../../Dialog/Dialog';
 import { User } from '../../../types';
 import { MuiTheme } from '../../../theme';
 import { withTheme } from '@mui/styles';
+import { RootState } from '../../../state/reducers';
+import { connect } from 'react-redux';
+import { GETuserById } from '../../../mock-backend';
 
-interface Props extends MuiTheme {
+interface ExternalProps {
   currentUserId: number;
   isAdmin: boolean;
   onInvitePlayerClicked: (username: string) => void;
@@ -19,17 +22,22 @@ interface Props extends MuiTheme {
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;
   gameId: number;
-  users: User[];
   gameTitle: string;
   gameMasterIds: number[];
 }
+
+interface ReduxProps {
+  users: User[];
+}
+
+interface Props extends ExternalProps, ReduxProps, MuiTheme {}
 
 interface State {
   showUserAlreadyInGameModal: boolean;
   sidebarOpen: boolean;
   settingsOpen: boolean;
 }
-class Sidebar extends Component<Props, State> {
+class SidebarBase extends Component<Props, State> {
   state: State = {
     showUserAlreadyInGameModal: false,
     sidebarOpen: true,
@@ -105,4 +113,11 @@ class Sidebar extends Component<Props, State> {
   }
 }
 
-export default withTheme(Sidebar);
+const mapStateToProps = (state: RootState): ReduxProps => {
+  console.log('here');
+  return {
+    users: state.game.users.map(GETuserById),
+  };
+};
+
+export default connect(mapStateToProps)(withTheme(SidebarBase));

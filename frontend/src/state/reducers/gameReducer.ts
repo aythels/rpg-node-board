@@ -4,15 +4,13 @@ import { Game } from '../../types';
 import { ActionType } from '../action-types/index';
 import { Action } from '../actions';
 
-const initialState: Game | null = null;
+// TODO: this hack ok?
+const initialState: Game = {} as Game;
 
-const reducer = (state: Game | null = initialState, action: Action): Game | null => {
+// TODO: clean up using immer
+const reducer = (state: Game = initialState, action: Action): Game => {
   switch (action.type) {
     case ActionType.ADD_PLAYER:
-      // TODO: clean up using the tool that allows in-place editing
-      if (!state) {
-        return initialState;
-      }
       const newState: Game = {
         ...state,
         players: [...state.players, action.payload],

@@ -117,7 +117,6 @@ class CanvasMainBase extends React.Component<Props, State> {
           gameMasterIds={this.state.game.gms}
           gameTitle={this.state.game.title}
           isAdmin={this.state.game.gms.includes(this.props.currentUserId)}
-          users={this.state.game.users.map(GETuserById)}
           onDemotePlayerClicked={this.handleDemotePlayerClicked}
           onInvitePlayerClicked={this.handleInvitePlayerClicked}
           onPromotePlayerClicked={this.handlePromotePlayerClicked}
