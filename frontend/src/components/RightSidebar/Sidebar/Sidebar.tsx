@@ -9,9 +9,9 @@ import Dialog from '../../Dialog/Dialog';
 import { User } from '../../../types';
 import { MuiTheme } from '../../../theme';
 import { withTheme } from '@mui/styles';
-import { RootState } from '../../../state/reducers';
+import { RootState } from '../../../state/rootReducer';
 import { connect } from 'react-redux';
-import { GETuserById } from '../../../mock-backend';
+import { selectUsers } from '../../../state/slices/gameSlice';
 
 interface ExternalProps {
   currentUserId: number;
@@ -114,9 +114,8 @@ class SidebarBase extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState): ReduxProps => {
-  console.log('here');
   return {
-    users: state.game.users.map(GETuserById),
+    users: selectUsers(state),
   };
 };
 

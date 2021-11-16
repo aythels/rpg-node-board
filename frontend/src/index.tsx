@@ -4,8 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { store } from './state';
-import { fetchGame } from './state/reducers/gameReducer';
+import { store } from './state/store';
+import { fetchGame } from './state/slices/gameSlice';
 
 // TODO: move to a more appropriate place - run this after the game ID has been determined (1 corresponds to admin - admin)
 store.dispatch(fetchGame(1));

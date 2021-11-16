@@ -2,7 +2,6 @@ import './styles.css';
 import React from 'react';
 import {
   GETgameById,
-  GETuserById,
   GETuserByUsername,
   POSTaddPlayerToGame,
   POSTdemoteGameMasterToPlayer,
@@ -15,7 +14,7 @@ import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
 import CanvasInternal from '../CanvasInternal';
 import { connect } from 'react-redux';
-import { addPlayer } from '../../state/action-creators';
+import { addPlayer } from '../../state/slices/gameSlice';
 
 interface Props {
   currentUserId: number;
