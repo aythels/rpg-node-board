@@ -4,6 +4,8 @@ import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain';
 import { SettingsMenu } from './components/SettingsMenu/SettingsMenu';
+import { fetchGame } from './state/slices/gameSlice';
+import { store } from './state/store';
 
 function App(): JSX.Element {
   const customTheme = createTheme({
@@ -38,6 +40,8 @@ function App(): JSX.Element {
   const currentGameId = 1;
   const userID = 1;
   const adminID = 2;
+
+  store.dispatch(fetchGame(currentGameId));
 
   return (
     <ThemeProvider theme={customTheme}>

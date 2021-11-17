@@ -70,6 +70,7 @@ export const selectUsers: any = createSelector(
 // Async calls
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchGame = (gameId: number): any => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     const game = GETgameById(gameId);
     dispatch(gameLoaded(game));
