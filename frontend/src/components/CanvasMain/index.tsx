@@ -2,11 +2,8 @@ import './styles.css';
 import React from 'react';
 import {
   GETgameById,
-  GETuserByUsername,
-  POSTaddPlayerToGame,
   POSTdemoteGameMasterToPlayer,
   POSTpromoteUserToGameMaster,
-  POSTremovePlayerFromGame,
   POSTupdateGameName,
 } from '../../mock-backend';
 import { Game } from '../../types';
@@ -34,44 +31,6 @@ class CanvasMainBase extends React.Component<Props, State> {
   state: State = {
     game: GETgameById(this.props.currentGameId),
     showUserNotFoundModal: false,
-  };
-
-  // Ported to Redux
-  handleInvitePlayerClicked = (username: string): void => {
-    const user = GETuserByUsername(username);
-    if (user) {
-      this.props.addPlayer(user.id);
-      this.setState(
-        (prevState: State) => ({
-          game: {
-            ...prevState.game,
-            players: [...prevState.game.players, user.id],
-            users: [...prevState.game.users, user.id],
-          },
-        }),
-        () => POSTaddPlayerToGame(user.id, this.state.game.id),
-      );
-    } else {
-      this.setState({
-        showUserNotFoundModal: true,
-      });
-    }
-  };
-
-  // Ported to Redux
-  handleRemovePlayerClicked = (playerId: number): void => {
-    this.props.removePlayer(playerId);
-    this.setState(
-      (prevState: State) => ({
-        game: {
-          ...prevState.game,
-          players: prevState.game.players.filter((id) => id !== playerId),
-          gms: prevState.game.gms.filter((id) => id !== playerId),
-          users: prevState.game.users.filter((id) => id !== playerId),
-        },
-      }),
-      () => POSTremovePlayerFromGame(playerId, this.state.game.id),
-    );
   };
 
   handleSubmitGameTitleClicked = (newTitle: string): void => {

@@ -56,24 +56,39 @@ const gameSlice = createSlice({
   },
 });
 export default gameSlice.reducer;
-export const { addPlayer, gameLoaded, removePlayer, hideUserAlreadyAddedDialog } = gameSlice.actions;
+export const { gameLoaded, hideUserAlreadyAddedDialog } = gameSlice.actions;
 
-// Selectors
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const selectUsers: any = createSelector(
-  (state: RootState): Game => state.game.gameInstance,
-  (game: Game): User[] => {
-    return Object.keys(game).length === 0 ? [] : game.users.map(GETuserById);
-  },
-);
-
-// Async calls
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// Thunks (async calls)
 export const fetchGame = (gameId: number): any => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     const game = GETgameById(gameId);
     dispatch(gameLoaded(game));
   };
   return fetchGameThunk;
 };
+
+export const addPlayer = (name: string): any => {
+  const addPlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    dispatch(gameSlice.actions.addPlayer(name));
+    // TODO: make async call
+    // POSTaddPlayerToGame();
+  };
+  return addPlayerThunk;
+};
+
+export const removePlayer = (id: number): any => {
+  const removePlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    dispatch(gameSlice.actions.removePlayer(id));
+    // TODO: make async call
+    // POSTremovePlayerFromGame(...);
+  };
+  return removePlayerThunk;
+};
+
+// Selectors
+export const selectUsers: any = createSelector(
+  (state: RootState): Game => state.game.gameInstance,
+  (game: Game): User[] => {
+    return Object.keys(game).length === 0 ? [] : game.users.map(GETuserById);
+  },
+);
