@@ -3,16 +3,26 @@ import PlayerCard from '../PlayerCard/PlayerCard';
 import { Component } from 'react';
 import Dialog from '../../Dialog/Dialog';
 import { User } from '../../../types';
+import { connect } from 'react-redux';
+import { removePlayer } from '../../../state/slices/gameSlice';
+import { RootState } from '../../../state/rootReducer';
+import { selectUsers } from '../../../state/slices/gameSlice';
 
-interface Props {
+interface ExternalProps {
   currentUserId: number;
   exposeSettings: boolean;
-  users: User[];
-  gameMasterIds: number[];
-  onRemovePlayerClicked: (id: number) => void;
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  removePlayer: any;
 }
+
+interface ReduxProps {
+  users: User[];
+  gameMasterIds: number[];
+}
+
+interface Props extends ExternalProps, ReduxProps {}
 
 interface State {
   playerToRemove?: number;
@@ -21,14 +31,14 @@ interface State {
   showDemoteLastGmModal: boolean;
 }
 
-export default class PlayerList extends Component<Props, State> {
+class PlayerListBase extends Component<Props, State> {
   state: State = {
     showDemoteLastGmModal: false,
   };
 
   handlePlayerRemove = (): void => {
     if (this.state.playerToRemove) {
-      this.props.onRemovePlayerClicked(this.state.playerToRemove);
+      this.props.removePlayer(this.state.playerToRemove);
       this.setState({ playerToRemove: undefined });
     }
   };
@@ -132,3 +142,10 @@ export default class PlayerList extends Component<Props, State> {
     );
   }
 }
+
+const mapStateToProps = (state: RootState): ReduxProps => ({
+  gameMasterIds: state.game.gameInstance.gms,
+  users: selectUsers(state),
+});
+
+export default connect(mapStateToProps, { removePlayer })(PlayerListBase);

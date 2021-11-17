@@ -14,13 +14,15 @@ import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
 import CanvasInternal from '../CanvasInternal';
 import { connect } from 'react-redux';
-import { addPlayer } from '../../state/slices/gameSlice';
+import { addPlayer, removePlayer } from '../../state/slices/gameSlice';
 
 interface Props {
   currentUserId: number;
   currentGameId: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addPlayer: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  removePlayer: any;
 }
 
 interface State {
@@ -34,6 +36,7 @@ class CanvasMainBase extends React.Component<Props, State> {
     showUserNotFoundModal: false,
   };
 
+  // Ported to Redux
   handleInvitePlayerClicked = (username: string): void => {
     const user = GETuserByUsername(username);
     if (user) {
@@ -55,7 +58,9 @@ class CanvasMainBase extends React.Component<Props, State> {
     }
   };
 
+  // Ported to Redux
   handleRemovePlayerClicked = (playerId: number): void => {
+    this.props.removePlayer(playerId);
     this.setState(
       (prevState: State) => ({
         game: {
@@ -117,9 +122,7 @@ class CanvasMainBase extends React.Component<Props, State> {
           gameTitle={this.state.game.title}
           isAdmin={this.state.game.gms.includes(this.props.currentUserId)}
           onDemotePlayerClicked={this.handleDemotePlayerClicked}
-          onInvitePlayerClicked={this.handleInvitePlayerClicked}
           onPromotePlayerClicked={this.handlePromotePlayerClicked}
-          onRemovePlayerClicked={this.handleRemovePlayerClicked}
           onSubmitGameTitleClicked={this.handleSubmitGameTitleClicked}
         />
 
@@ -134,4 +137,4 @@ class CanvasMainBase extends React.Component<Props, State> {
   }
 }
 
-export default connect(null, { addPlayer })(CanvasMainBase);
+export default connect(null, { addPlayer, removePlayer })(CanvasMainBase);

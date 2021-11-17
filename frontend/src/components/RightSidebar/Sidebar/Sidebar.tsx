@@ -5,19 +5,12 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import PlayerList from '../PlayerList/PlayerList';
 import { Component } from 'react';
-import Dialog from '../../Dialog/Dialog';
-import { User } from '../../../types';
 import { MuiTheme } from '../../../theme';
 import { withTheme } from '@mui/styles';
-import { RootState } from '../../../state/rootReducer';
-import { connect } from 'react-redux';
-import { selectUsers } from '../../../state/slices/gameSlice';
 
 interface ExternalProps {
   currentUserId: number;
   isAdmin: boolean;
-  onInvitePlayerClicked: (username: string) => void;
-  onRemovePlayerClicked: (id: number) => void;
   onSubmitGameTitleClicked: (newTitle: string) => void;
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;
@@ -26,33 +19,16 @@ interface ExternalProps {
   gameMasterIds: number[];
 }
 
-interface ReduxProps {
-  users: User[];
-}
-
-interface Props extends ExternalProps, ReduxProps, MuiTheme {}
+interface Props extends ExternalProps, MuiTheme {}
 
 interface State {
-  showUserAlreadyInGameModal: boolean;
   sidebarOpen: boolean;
   settingsOpen: boolean;
 }
 class SidebarBase extends Component<Props, State> {
   state: State = {
-    showUserAlreadyInGameModal: false,
     sidebarOpen: true,
     settingsOpen: false,
-  };
-
-  handleInviteUserClicked = (username: string): void => {
-    const alreadyAdded = this.props.users.find((user: User) => user.username === username);
-    if (alreadyAdded) {
-      this.setState({
-        showUserAlreadyInGameModal: true,
-      });
-    } else {
-      this.props.onInvitePlayerClicked(username);
-    }
   };
 
   toggleSidebarOpen = (): void => {
@@ -91,32 +67,15 @@ class SidebarBase extends Component<Props, State> {
           />
           <PlayerList
             currentUserId={this.props.currentUserId}
-            gameMasterIds={this.props.gameMasterIds}
             exposeSettings={this.state.settingsOpen}
-            users={this.props.users}
             onDemotePlayerClicked={this.props.onDemotePlayerClicked}
             onPromotePlayerClicked={this.props.onPromotePlayerClicked}
-            onRemovePlayerClicked={this.props.onRemovePlayerClicked}
           />
-          {this.state.settingsOpen && (
-            <Footer onInvitePlayerClicked={this.handleInviteUserClicked} gameId={this.props.gameId} />
-          )}
-          <Dialog
-            description="You cannot add the same player twice."
-            header="This player is already in the game!"
-            open={this.state.showUserAlreadyInGameModal}
-            onClose={() => this.setState({ showUserAlreadyInGameModal: false })}
-          />
+          {this.state.settingsOpen && <Footer />}
         </Drawer>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: RootState): ReduxProps => {
-  return {
-    users: selectUsers(state),
-  };
-};
-
-export default connect(mapStateToProps)(withTheme(SidebarBase));
+export default withTheme(SidebarBase);

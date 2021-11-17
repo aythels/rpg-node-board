@@ -4,20 +4,30 @@ import { ChangeEvent, Component } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../../Dialog/Dialog';
 import { DELETEGame } from '../../../mock-backend';
-import { MuiTheme } from '../../../theme';
-import { withTheme } from '@mui/styles';
+import { connect } from 'react-redux';
+import { addPlayer, hideUserAlreadyAddedDialog } from '../../../state/slices/gameSlice';
+import { RootState } from '../../../state/rootReducer';
 
-interface Props extends MuiTheme {
-  onInvitePlayerClicked: (username: string) => void;
-  gameId: number;
+interface ExternalProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addPlayer: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  hideUserAlreadyAddedDialog: any;
 }
+
+interface ReduxProps {
+  gameId: number;
+  showUserAlreadyAddedDialog: boolean;
+}
+
+interface Props extends ExternalProps, ReduxProps {}
 
 interface State {
   inviteName: string;
   showDeleteServerDialog: boolean;
 }
 
-class Footer extends Component<Props, State> {
+class FooterBase extends Component<Props, State> {
   state: State = {
     inviteName: '',
     showDeleteServerDialog: false,
@@ -46,7 +56,7 @@ class Footer extends Component<Props, State> {
             onKeyPress={(event) => {
               if (event.key === 'Enter') {
                 event.preventDefault();
-                this.props.onInvitePlayerClicked(this.state.inviteName);
+                this.props.addPlayer(this.state.inviteName);
               }
             }}
           />
@@ -55,7 +65,7 @@ class Footer extends Component<Props, State> {
               aria-label="Invite player to the game"
               component="span"
               disabled={!this.state.inviteName}
-              onClick={() => this.props.onInvitePlayerClicked(this.state.inviteName)}
+              onClick={() => this.props.addPlayer(this.state.inviteName)}
             >
               <PersonAdd />
             </IconButton>
@@ -84,9 +94,20 @@ class Footer extends Component<Props, State> {
           onClose={() => this.setState({ showDeleteServerDialog: false })}
           onDisagree={() => this.setState({ showDeleteServerDialog: false })}
         />
+        <Dialog
+          description="You cannot add the same player twice."
+          header="This player is already in the game!"
+          open={this.props.showUserAlreadyAddedDialog}
+          onClose={() => this.props.hideUserAlreadyAddedDialog()}
+        />
       </div>
     );
   }
 }
 
-export default withTheme(Footer);
+const mapStateToProps = (state: RootState): ReduxProps => ({
+  gameId: state.game.gameInstance.id,
+  showUserAlreadyAddedDialog: state.game.showUserAlreadyAddedDialog,
+});
+
+export default connect(mapStateToProps, { addPlayer, hideUserAlreadyAddedDialog })(FooterBase);
