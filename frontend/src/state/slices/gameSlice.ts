@@ -63,6 +63,9 @@ const gameSlice = createSlice({
       const index = state.gameInstance.nodes.findIndex((node) => node.id === action.payload.id);
       state.gameInstance.nodes[index] = action.payload;
     },
+    setGameTitle: (state: GameState, action: PayloadAction<string>) => {
+      state.gameInstance.title = action.payload;
+    },
   },
 });
 export default gameSlice.reducer;
@@ -104,6 +107,15 @@ export const updateNode = (gameId: number, node: Node): any => {
     dispatch(gameSlice.actions.updateNode(node));
   };
   return updateNodeThunk;
+};
+
+export const setGameTitle = (newTitle: string): any => {
+  const setGameTitleThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    dispatch(gameSlice.actions.setGameTitle(newTitle));
+    // TODO: make async call
+    // POSTupdateGameName(game id, title)
+  };
+  return setGameTitleThunk;
 };
 
 // Selectors

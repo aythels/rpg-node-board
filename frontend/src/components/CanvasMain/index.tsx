@@ -1,11 +1,6 @@
 import './styles.css';
 import React from 'react';
-import {
-  GETgameById,
-  POSTdemoteGameMasterToPlayer,
-  POSTpromoteUserToGameMaster,
-  POSTupdateGameName,
-} from '../../mock-backend';
+import { GETgameById, POSTdemoteGameMasterToPlayer, POSTpromoteUserToGameMaster } from '../../mock-backend';
 import { Game } from '../../types';
 import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
@@ -31,18 +26,6 @@ class CanvasMainBase extends React.Component<Props, State> {
   state: State = {
     game: GETgameById(this.props.currentGameId),
     showUserNotFoundModal: false,
-  };
-
-  handleSubmitGameTitleClicked = (newTitle: string): void => {
-    this.setState(
-      (prevState: State) => ({
-        game: {
-          ...prevState.game,
-          title: newTitle,
-        },
-      }),
-      () => POSTupdateGameName(this.state.game.id, newTitle),
-    );
   };
 
   handlePromotePlayerClicked = (id: number): void => {
@@ -78,11 +61,9 @@ class CanvasMainBase extends React.Component<Props, State> {
           currentUserId={this.props.currentUserId}
           gameId={this.state.game.id}
           gameMasterIds={this.state.game.gms}
-          gameTitle={this.state.game.title}
           isAdmin={this.state.game.gms.includes(this.props.currentUserId)}
           onDemotePlayerClicked={this.handleDemotePlayerClicked}
           onPromotePlayerClicked={this.handlePromotePlayerClicked}
-          onSubmitGameTitleClicked={this.handleSubmitGameTitleClicked}
         />
 
         <Dialog
