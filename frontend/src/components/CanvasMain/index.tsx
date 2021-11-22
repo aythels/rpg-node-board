@@ -1,10 +1,7 @@
-/* eslint-disable */
-/* tslint-disable */
-
 import './styles.css';
 import React from 'react';
-import { GETgameById } from '../../mock-backend';
-import { Game } from '../../types';
+import { GETgameById, PATCHdemoteGameMasterToPlayer, PATCHpromoteUserToGameMaster } from '../../mock-backend';
+import { Game, UserPermission, UserPermissionRecord } from '../../types';
 import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
 import CanvasInternal from '../CanvasInternal';
@@ -32,27 +29,15 @@ class CanvasMainBase extends React.Component<Props, State> {
   };
 
   handlePromotePlayerClicked = (id: number): void => {
-    this.setState(
-      (prevState: State) => ({
-        game: {
-          ...prevState.game,
-          gms: [...prevState.game.gms, id],
-        },
-      }),
-      // () => POSTpromoteUserToGameMaster(id, this.state.game.id), // TODO:
-    );
+    const upr = this.state.game.users.find((entry: any) => entry.userId === id) as UserPermissionRecord;
+    upr.permission = UserPermission.gameMaster;
+    this.setState({}, () => PATCHpromoteUserToGameMaster(id, this.state.game.id));
   };
 
   handleDemotePlayerClicked = (id: number): void => {
-    this.setState(
-      (prevState: State) => ({
-        game: {
-          ...prevState.game,
-          gms: prevState.game.gms.filter((gmId: number) => gmId !== id),
-        },
-      }),
-      // () => POSTdemoteGameMasterToPlayer(id, this.state.game.id), // TODO:
-    );
+    const upr = this.state.game.users.find((entry: any) => entry.userId === id) as UserPermissionRecord;
+    upr.permission = UserPermission.player;
+    this.setState({}, () => PATCHdemoteGameMasterToPlayer(id, this.state.game.id));
   };
 
   render(): JSX.Element {
@@ -63,8 +48,13 @@ class CanvasMainBase extends React.Component<Props, State> {
         <RightSidebar
           currentUserId={this.props.currentUserId}
           gameId={this.state.game.id}
-          gameMasterIds={this.state.game.gms}
-          isAdmin={this.state.game.gms.includes(this.props.currentUserId)}
+          gameMasterIds={this.state.game.users
+            .filter((e: any) => e.permission === UserPermission.gameMaster)
+            .map((e: any) => e.userId)}
+          isAdmin={this.state.game.users
+            .filter((e: any) => e.permission === UserPermission.gameMaster)
+            .map((e: any) => e.userId)
+            .includes(this.props.currentUserId)}
           onDemotePlayerClicked={this.handleDemotePlayerClicked}
           onPromotePlayerClicked={this.handlePromotePlayerClicked}
         />

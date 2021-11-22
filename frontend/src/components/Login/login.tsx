@@ -2,7 +2,7 @@ import './login.css';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import { Component } from 'react';
 import React from 'react';
-import { VerifyLogin } from '../../mock-backend';
+import { GETloginVerification } from '../../mock-backend';
 import { createBrowserHistory } from 'history';
 
 interface LoginState {
@@ -24,7 +24,7 @@ export default class Login extends Component<Record<string, unknown>, LoginState
   checkPassword = (): void => {
     console.log(this.state);
     console.log(this.props);
-    if (!VerifyLogin(this.state.username, this.state.password)) {
+    if (!GETloginVerification(this.state.username, this.state.password)) {
       console.log('login or password is invalid');
       this.setState({ invalid: true });
     } else {

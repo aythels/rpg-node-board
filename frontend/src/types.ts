@@ -3,9 +3,7 @@ import Delta from 'quill-delta';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 
-// Interfaces go here:
-
-interface InfoLevel {
+export interface InfoLevel {
   userId: number;
   infoLevel: number;
 }
