@@ -1,5 +1,5 @@
-import { Component, SyntheticEvent, useState } from 'react';
-import { Game, InfoLevel, Node, Subnode, User } from '../../types';
+import { SyntheticEvent, useState } from 'react';
+import { InfoLevel, Node, User } from '../../types';
 import {
   Button,
   IconButton,
@@ -19,59 +19,16 @@ import { RootState } from '../../state/rootReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
 import cloneDeep from 'lodash.clonedeep';
-import { GETuserIsGMInGame } from '../../mock-backend';
+import { GETuserById, GETuserIsGMInGame } from '../../mock-backend';
 import { setIsEditModalOpen, setIsUsersModalOpen } from '../../state/slices/nodeviewSlice';
-
-// interface Props {
-//   gameId: number;
-//   nodeId: number;
-//   userId: number;
-//   closeCallback: () => void;
-//   // eslint-disable-next-line no-unused-vars
-//   submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
-// }
-
-// interface State {
-//   game: Game;
-//   node: Node;
-//   user: User;
-//   subnodes: Subnode[];
-//   closeCallback: () => void;
-//   // eslint-disable-next-line no-unused-vars
-//   submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
-//   editors: User[];
-//   players: User[];
-//   addEditorAnchorEl: EventTarget | null;
-// }
 
 const NodeUserForm = (): JSX.Element => {
   const game = useSelector((state: RootState) => state.game.gameInstance);
-  const user = useSelector((state: RootState) => state.user.userInstance);
+  // const user = useSelector((state: RootState) => state.user.userInstance);
   const node = selectActiveNode();
   const [tempNode, setTempNode] = useState(cloneDeep(node) as Node);
   const dispatch = useDispatch();
   const [addEditorAnchorEl, setAddEditorAnchorEl] = useState(null as EventTarget | null);
-  // constructor(props: Props) {
-  //   super(props);
-  //   const game = GETgameById(props.gameId);
-  //   const node = GETnodeById(props.nodeId);
-  //   const user = GETuserById(props.userId);
-  //   const subnodes = GETsubnodesByNodeId(node.id);
-  //   const editors = GETeditorsForNode(node.id);
-  //   const players = GETplayersInGame(game.id);
-  //   const editorIds = editors.map((editor) => editor.id);
-  //   this.state = {
-  //     game: game,
-  //     node: node,
-  //     user: user,
-  //     subnodes: subnodes,
-  //     closeCallback: props.closeCallback,
-  //     submitCallback: props.submitCallback,
-  //     editors: editors,
-  //     players: players.filter((player) => !editorIds.includes(player.id)),
-  //     addEditorAnchorEl: null,
-  //   };
-  // }
 
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;
@@ -199,22 +156,25 @@ const NodeUserForm = (): JSX.Element => {
           <div className="modal__body__section">
             <h4>Editors</h4>
             <div className="users-box">
-              {tempNode.editors.map((editor) => {
+              {game.users.map((entry) => {
                 // TODO: Use user style from sidebar
-                return (
-                  <div className="users-box__user" key={uid(editor)}>
-                    <p>{editor.username}</p>
-                    <button
-                      aria-label="Remove user as editor"
-                      disabled={GETuserIsGMInGame(editor.id, this.state.game.id) /* TODO: Change this to Redux */}
-                      onClick={() => {
-                        removeEditor(editor);
-                      }}
-                    >
-                      <Close />
-                    </button>
-                  </div>
-                );
+                if (tempNode.editors.includes(entry.userId)) {
+                  const editor = GETuserById(entry.userId); // TODO: use Redux for this
+                  return (
+                    <div className="users-box__user" key={uid(editor)}>
+                      <p>{editor.username}</p>
+                      <button
+                        aria-label="Remove user as editor"
+                        disabled={GETuserIsGMInGame(editor.id, game.id)}
+                        onClick={() => {
+                          removeEditor(editor);
+                        }}
+                      >
+                        <Close />
+                      </button>
+                    </div>
+                  );
+                }
               })}
               <IconButton
                 aria-label="Add new editor"
@@ -232,20 +192,23 @@ const NodeUserForm = (): JSX.Element => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
-                {tempNode.players.map((player) => {
-                  return (
-                    <MenuItem key={uid(player)}>
-                      <div className="users-box__user">
-                        <button
-                          onClick={() => {
-                            addEditor(player);
-                          }}
-                        >
-                          <p>{player.username}</p>
-                        </button>
-                      </div>
-                    </MenuItem>
-                  );
+                {game.users.map((entry) => {
+                  if (!tempNode.editors.includes(entry.userId)) {
+                    const player = GETuserById(entry.userId); // TODO: use Redux for this
+                    return (
+                      <MenuItem key={uid(player)}>
+                        <div className="users-box__user">
+                          <button
+                            onClick={() => {
+                              addEditor(player);
+                            }}
+                          >
+                            <p>{player.username}</p>
+                          </button>
+                        </div>
+                      </MenuItem>
+                    );
+                  }
                 })}
               </Menu>
             </div>
@@ -261,26 +224,29 @@ const NodeUserForm = (): JSX.Element => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tempNode.players.map((player) => {
-                  return (
-                    <TableRow key={uid(player)}>
-                      <TableCell align="left" component="th" scope="row">
-                        {player.username}
-                      </TableCell>
-                      <TableCell align="right">
-                        <input
-                          type="number"
-                          step="1"
-                          min="0"
-                          value={getInfoLevelValue(player)}
-                          onChange={(event) => {
-                            handleInformationLevelChange(event, player);
-                          }}
-                        ></input>
-                      </TableCell>
-                      {renderVisibleSubnodeNames(player)}
-                    </TableRow>
-                  );
+                {game.users.map((entry) => {
+                  if (!tempNode.editors.includes(entry.userId)) {
+                    const player = GETuserById(entry.userId);
+                    return (
+                      <TableRow key={uid(player)}>
+                        <TableCell align="left" component="th" scope="row">
+                          {player.username}
+                        </TableCell>
+                        <TableCell align="right">
+                          <input
+                            type="number"
+                            step="1"
+                            min="0"
+                            value={getInfoLevelValue(player.id)}
+                            onChange={(event) => {
+                              handleInformationLevelChange(event, player);
+                            }}
+                          ></input>
+                        </TableCell>
+                        {renderVisibleSubnodeNames(player.id)}
+                      </TableRow>
+                    );
+                  }
                 })}
               </TableBody>
             </Table>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
-import { GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
+import { DELETEplayerFromGame, GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
 import { Game, Node, User, UserPermission } from '../../types';
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
@@ -117,7 +117,7 @@ export const setGameTitle = (newTitle: string): any => {
 export const selectUsers: any = createSelector(
   (state: RootState): Game => state.game.gameInstance,
   (game: Game): User[] => {
-    return Object.keys(game).length === 0 ? [] : game.users.map(GETuserById);
+    return Object.keys(game).length === 0 ? [] : game.users.map((record) => GETuserById(record.userId));
   },
 );
 
