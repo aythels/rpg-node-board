@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
 import { Game, Node, Subnode, User, UserPermission } from '../../types';
 
-import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
 import Delta from 'quill-delta';
 
@@ -95,6 +95,7 @@ export const { gameLoaded, hideUserAlreadyAddedDialog } = gameSlice.actions;
 
 export const fetchGame = (gameId: number): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    console.log('Fetching game');
     const game = GETgameById(gameId);
     dispatch(gameLoaded(game));
   };
@@ -158,24 +159,25 @@ export const setGameTitle = (newTitle: string): any => {
 };
 
 // Selectors
-export const selectUsers: any = createSelector(
+export const selectUsers: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
   (game: Game): User[] => {
     return Object.keys(game).length === 0 ? [] : game.users.map((record) => GETuserById(record.userId));
   },
 );
 
-export const selectVisibleNodes: any = createSelector(
+export const selectVisibleNodes: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
   (state: RootState): User => state.user.userInstance,
   (game: Game, user: User): Node[] => {
     return game.nodes.filter((node) => {
-      node.informationLevels.filter((i) => i.userId === user.id)[0].infoLevel > 0;
+      const match = node.informationLevels.find((i) => i.userId === user.id);
+      return match && match.infoLevel > 0;
     });
   },
 );
 
-export const selectActiveNode: any = createSelector(
+export const selectActiveNode: any = createDraftSafeSelector(
   (state: RootState): Node[] => state.game.gameInstance.nodes,
   (state: RootState): number => state.nodeview.activeNode, // this seems bad to do
   (nodes: Node[], activeNodeId: number): Node => {
@@ -183,7 +185,7 @@ export const selectActiveNode: any = createSelector(
   },
 );
 
-export const selectPlayers: any = createSelector(
+export const selectPlayers: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
   (game: Game): User[] => {
     // TODO: either async or store users in game state
@@ -191,7 +193,7 @@ export const selectPlayers: any = createSelector(
   },
 );
 
-export const selectGameMasters: any = createSelector(
+export const selectGameMasters: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
   (game: Game): User[] => {
     // TODO: either async or store users in game state

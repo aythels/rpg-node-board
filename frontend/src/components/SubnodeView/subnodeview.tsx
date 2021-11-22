@@ -101,7 +101,7 @@ const SubnodeView = (props: Props): JSX.Element => {
       editor.formatText(0, editor.getLength(), 'nodelink', false);
 
       // Add in new links:
-      const nodes = selectVisibleNodes();
+      const nodes = useSelector((state) => selectVisibleNodes(state));
       const currentText = editor.getText();
       const links: TextLink[] = [];
       const names = [];

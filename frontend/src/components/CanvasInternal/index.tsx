@@ -8,13 +8,23 @@ import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
 import { Alert, AlertTitle } from '@mui/material';
 import { selectVisibleNodes } from '../../state/slices/gameSlice';
+import { connect } from 'react-redux';
+import { RootState } from '../../state/rootReducer';
 
-interface Props {
+interface ExternalProps {
   currentGameId: number;
   currentUserId: number;
 }
 
-export default class CanvasInternal extends React.Component<Props> {
+interface ReduxProps {
+  visibleNodes: Node[];
+}
+
+interface Props extends ExternalProps, ReduxProps {}
+
+// Note: before you refactor to a functional component make sure you know what you
+// are doing - the setState({}) trick won't work on a functional component
+class CanvasInternalBase extends React.Component<Props> {
   nodeManager = new NodeManager();
   activeNode = -1;
   activeAlert = false;
@@ -22,7 +32,7 @@ export default class CanvasInternal extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.nodeManager.addOnUpdateEvent(() => this.setState({}));
-    for (const node of selectVisibleNodes(props.currentGameId, props.currentUserId)) {
+    for (const node of this.props.visibleNodes) {
       this.nodeManager.createNode(node.id, node);
     }
   }
@@ -172,3 +182,9 @@ export default class CanvasInternal extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: RootState): ReduxProps => ({
+  visibleNodes: selectVisibleNodes(state),
+});
+
+export default connect(mapStateToProps)(CanvasInternalBase);

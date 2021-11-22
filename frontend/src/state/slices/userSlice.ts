@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import { GETuserById } from '../../mock-backend';
+import { GETuserByUsername } from '../../mock-backend';
 import { User } from '../../types';
 
 interface UserState {
@@ -16,6 +16,7 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     loginUser: (state: UserState, action: PayloadAction<User>) => {
+      console.log('Logging in user');
       state.userInstance = action.payload;
     },
     addImage: (state: UserState, action: PayloadAction<string>) => {
@@ -28,10 +29,9 @@ export default userSlice.reducer;
 export const { addImage } = userSlice.actions;
 
 // Thunks
-// TODO: actual log-in
-export const loginUser = (userId: number): any => {
+export const loginUser = (username: string): any => {
   const loginUserThunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    const user = GETuserById(userId);
+    const user = GETuserByUsername(username);
     dispatch(userSlice.actions.loginUser(user));
   };
   return loginUserThunk;
