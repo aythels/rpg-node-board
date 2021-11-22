@@ -33,17 +33,7 @@ class CanvasMainBase extends React.Component<Props, State> {
       <div>
         <CanvasInternal currentUserId={this.props.currentUserId} currentGameId={this.props.currentGameId} />
 
-        <RightSidebar
-          currentUserId={this.props.currentUserId}
-          gameId={this.state.game.id}
-          gameMasterIds={this.state.game.users
-            .filter((e: any) => e.permission === UserPermission.gameMaster)
-            .map((e: any) => e.userId)}
-          isAdmin={this.state.game.users
-            .filter((e: any) => e.permission === UserPermission.gameMaster)
-            .map((e: any) => e.userId)
-            .includes(this.props.currentUserId)}
-        />
+        <RightSidebar />
 
         <Dialog
           description="Please try again."

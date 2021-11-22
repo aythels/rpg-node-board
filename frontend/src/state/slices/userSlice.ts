@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
+import { createDraftSafeSelector, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import { GETuserByUsername } from '../../mock-backend';
-import { User } from '../../types';
+import { User, UserPermission, UserPermissionRecord } from '../../types';
+import { RootState } from '../rootReducer';
 
 interface UserState {
   userInstance: User;
@@ -38,3 +39,15 @@ export const loginUser = (username: string): any => {
 };
 
 // Selectors
+export const selectIsGameMaster: any = createDraftSafeSelector(
+  (state: RootState): UserPermissionRecord[] => state.game.gameInstance.users,
+  (state: RootState): number => state.user.userInstance.id,
+  (records: UserPermissionRecord[], userId: number): boolean => {
+    const userRecord = records.find((record) => record.userId === userId);
+    if (userRecord) {
+      return userRecord.permission === UserPermission.gameMaster;
+    } else {
+      return false;
+    }
+  },
+);
