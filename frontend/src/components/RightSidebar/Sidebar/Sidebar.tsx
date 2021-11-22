@@ -6,17 +6,12 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import PlayerList from '../PlayerList/PlayerList';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../state/rootReducer';
-import { selectIsGameMaster } from '../../../state/slices/userSlice';
 
 const RightSidebar = (): JSX.Element => {
   const theme = useTheme<Theme>();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
-
-  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
   const toggleSidebarOpen = (): void => {
     setSidebarOpen((prevSidebarOpen: boolean) => !prevSidebarOpen);
@@ -40,8 +35,7 @@ const RightSidebar = (): JSX.Element => {
         {sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
       </IconButton>
       <Drawer anchor="right" className="container" open={sidebarOpen} variant="persistent">
-        {/* TODO:isAdmin is necessary here? */}
-        <Header isAdmin={isGameMaster} exposeSettings={settingsOpen} onSettingsToggleClicked={toggleSettingsOpen} />
+        <Header exposeSettings={settingsOpen} onSettingsToggleClicked={toggleSettingsOpen} />
         <PlayerList exposeSettings={settingsOpen} />
         {settingsOpen && <Footer />}
       </Drawer>

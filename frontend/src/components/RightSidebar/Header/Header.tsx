@@ -6,10 +6,9 @@ import { Done, Edit, ChevronLeft, Settings } from '@mui/icons-material';
 import { IconButton, TextField, Theme, Tooltip, Typography } from '@mui/material';
 import { setGameTitle } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
-
+import { selectIsGameMaster } from '../../../state/slices/userSlice';
 interface Props {
   exposeSettings: boolean;
-  isAdmin: boolean;
   onSettingsToggleClicked: () => void;
 }
 
@@ -17,6 +16,7 @@ const Header = (props: Props): JSX.Element => {
   const theme = useTheme<Theme>();
   const dispatch = useDispatch();
 
+  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState(useSelector((state: RootState) => state.game.gameInstance.title));
   const [prevTitle, setPrevTitle] = useState('');
@@ -34,8 +34,6 @@ const Header = (props: Props): JSX.Element => {
   const handleSubmitTitle = (): void => {
     setEditingTitle(false);
     dispatch(setGameTitle(title));
-    // TODO: redux call
-    // props.onSubmitGameTitleClicked(this.state.title);
   };
 
   const handleCancelEdit = (): void => {
@@ -60,7 +58,7 @@ const Header = (props: Props): JSX.Element => {
 
   return (
     <div className="canvas-sidebar-header" style={{ backgroundColor: theme.palette.primary.light }}>
-      {props.isAdmin && !editingTitle && (
+      {isGameMaster && !editingTitle && (
         <Tooltip arrow title={props.exposeSettings ? 'Close game settings' : 'Open game settings'}>
           <IconButton
             aria-label="Close game settings"
