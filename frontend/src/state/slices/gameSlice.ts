@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
-import { GETgameById, GETuserById, GETuserByUsername } from '../../mock-backend';
-import { Game, User } from '../../types';
+import { GETgameById, GETnodeById, GETuserById, GETuserByUsername } from '../../mock-backend';
+import { Game, Node, User } from '../../types';
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
 
@@ -12,11 +13,13 @@ interface GameState {
   gameInstance: Game;
   status: AsyncStatus;
   showUserAlreadyAddedDialog: boolean;
+  activeNode: Node;
 }
 const initialState: GameState = {
   gameInstance: {} as Game, // TODO: get rid of this hack by treating the "undefined" case, too
   status: AsyncStatus.Loading,
   showUserAlreadyAddedDialog: false,
+  activeNode: {} as Node,
 };
 
 // Reducer
@@ -90,5 +93,15 @@ export const selectUsers: any = createSelector(
   (state: RootState): Game => state.game.gameInstance,
   (game: Game): User[] => {
     return Object.keys(game).length === 0 ? [] : game.users.map(GETuserById);
+  },
+);
+
+export const selectVisibleNodes: any = createSelector(
+  (state: RootState): Game => state.game.gameInstance,
+  (state: RootState): User => state.user.userInstance,
+  (game: Game, user: User): Node[] => {
+    return game.nodes.map(GETnodeById).filter((node) => {
+      node.informationLevels.filter((i) => i.userId === user.id)[0].infoLevel > 0;
+    });
   },
 );

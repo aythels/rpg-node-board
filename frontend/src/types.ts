@@ -5,13 +5,18 @@ import Delta from 'quill-delta';
 
 // Interfaces go here:
 
+interface InfoLevel {
+  userId: number;
+  infoLevel: number;
+}
+
 export interface Node {
   id: number;
   name: string;
   image: string;
   imageAlt: string;
   subnodes: number[];
-  informationLevels: { [userid: number]: number };
+  informationLevels: InfoLevel[];
   editors: number[];
   type: string;
 }
