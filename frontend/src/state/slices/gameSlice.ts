@@ -86,7 +86,6 @@ const gameSlice = createSlice({
       state.gameInstance.title = action.payload;
     },
     updatePlayerPermission: (state: GameState, action: PayloadAction<[number, UserPermission]>) => {
-      console.log(action.payload);
       const [userId, newPermission] = action.payload;
       const user = state.gameInstance.users.find((user) => user.userId === userId);
       if (user) {

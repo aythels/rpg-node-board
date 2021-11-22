@@ -1,75 +1,62 @@
 import './playerList.css';
 import PlayerCard from '../PlayerCard/PlayerCard';
-import { Component } from 'react';
+import { useState } from 'react';
 import Dialog from '../../Dialog/Dialog';
 import { User, UserPermission } from '../../../types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { removePlayer, selectGameMasters, updatePlayerPermission } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
 import { selectUsers } from '../../../state/slices/gameSlice';
 
-interface ExternalProps {
+interface Props {
   exposeSettings: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  removePlayer: any;
-  updatePlayerPermission: any;
 }
 
-interface ReduxProps {
-  currentUserId: number;
-  users: User[];
-  gameMasterIds: number[];
-}
+const PlayerList = (props: Props): JSX.Element => {
+  const [playerToRemove, setPlayerToRemove] = useState<number | undefined>(undefined);
+  const [playerToDemote, setPlayerToDemote] = useState<number | undefined>(undefined);
+  const [playerToPromote, setPlayerToPromote] = useState<number | undefined>(undefined);
+  const [showDemoteLastGmModal, setShowDemoteLastGmModal] = useState(false);
 
-interface Props extends ExternalProps, ReduxProps {}
+  const dispatch = useDispatch();
 
-interface State {
-  playerToRemove?: number;
-  playerToDemote?: number;
-  playerToPromote?: number;
-  showDemoteLastGmModal: boolean;
-}
+  // TODO: work with User objects if we store User in UserPermissionRecord
+  // TODO: pass fn directly?
+  const gameMasterIds = useSelector((state: RootState) => selectGameMasters(state));
+  const users = useSelector((state: RootState) => selectUsers(state));
+  const currentUserId = useSelector((state: RootState) => state.user.userInstance.id);
 
-class PlayerListBase extends Component<Props, State> {
-  state: State = {
-    showDemoteLastGmModal: false,
-  };
-
-  handlePlayerRemove = (): void => {
-    if (this.state.playerToRemove) {
-      this.props.removePlayer(this.state.playerToRemove);
-      this.setState({ playerToRemove: undefined });
+  const handlePlayerRemove = (): void => {
+    if (playerToRemove) {
+      dispatch(removePlayer(playerToRemove));
+      setPlayerToRemove(undefined);
     }
   };
 
-  handlePlayerPromote = (): void => {
-    if (this.state.playerToPromote) {
-      this.props.updatePlayerPermission([this.state.playerToPromote, UserPermission.gameMaster]);
-      this.setState({ playerToPromote: undefined });
+  const handlePlayerPromote = (): void => {
+    if (playerToPromote) {
+      dispatch(updatePlayerPermission([playerToPromote, UserPermission.gameMaster]));
+      setPlayerToPromote(undefined);
     }
   };
 
-  handlePlayerDemote = (): void => {
-    if (this.state.playerToDemote) {
-      this.props.updatePlayerPermission([this.state.playerToDemote, UserPermission.player]);
-      this.setState({ playerToDemote: undefined });
+  const handlePlayerDemote = (): void => {
+    if (playerToDemote) {
+      dispatch(updatePlayerPermission([playerToDemote, UserPermission.player]));
+      setPlayerToDemote(undefined);
     }
   };
 
-  handlePlayerDemoteRequested = (id: number): void => {
-    const isLastGameMaster = this.props.gameMasterIds.length === 1;
+  const handlePlayerDemoteRequested = (id: number): void => {
+    const isLastGameMaster = gameMasterIds.length === 1;
     if (isLastGameMaster) {
-      this.setState({
-        showDemoteLastGmModal: true,
-      });
+      setShowDemoteLastGmModal(true);
     } else {
-      this.setState({
-        playerToDemote: id,
-      });
+      setPlayerToDemote(id);
     }
   };
 
-  prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
+  const prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
     const A_BEFORE_B = -1;
     const B_BEFORE_A = 1;
     const gms = new Set(gameMasterIds);
@@ -86,67 +73,59 @@ class PlayerListBase extends Component<Props, State> {
     });
   };
 
-  render(): JSX.Element {
-    const users = this.prioritizeGameMasters(this.props.gameMasterIds, this.props.users);
+  // TODO: use memo
+  // const users = prioritizeGameMasters(props.gameMasterIds, props.users);
 
-    return (
-      <div className="canvas-sidebar-player-list">
-        {users.map((user: User) => {
-          const isCurrentPlayer = user.id === this.props.currentUserId;
-          const isGameMaster = this.props.gameMasterIds.includes(user.id);
-          return (
-            <PlayerCard
-              key={user.id}
-              user={user}
-              exposeSettings={this.props.exposeSettings}
-              promotable={!isGameMaster}
-              removable={!isGameMaster && !isCurrentPlayer}
-              onDemotePlayerClicked={() => this.handlePlayerDemoteRequested(user.id)}
-              onPromotePlayerClicked={() => this.setState({ playerToPromote: user.id })}
-              onRemovePlayerClicked={() => this.setState({ playerToRemove: user.id })}
-            />
-          );
-        })}
-        <Dialog
-          description="Doing so will prevent them from re-joining the game."
-          header="Remove player?"
-          open={this.state.playerToRemove !== undefined}
-          onAgree={this.handlePlayerRemove}
-          onClose={() => this.setState({ playerToRemove: undefined })}
-          onDisagree={() => this.setState({ playerToRemove: undefined })}
-        />
-        <Dialog
-          description="Doing so will grant them game master privileges."
-          header="Promote player to game master?"
-          open={this.state.playerToPromote !== undefined}
-          onAgree={this.handlePlayerPromote}
-          onClose={() => this.setState({ playerToPromote: undefined })}
-          onDisagree={() => this.setState({ playerToPromote: undefined })}
-        />
-        <Dialog
-          description="Doing so will take game master privileges from them."
-          header="Demote game master to regular player?"
-          open={this.state.playerToDemote !== undefined}
-          onAgree={this.handlePlayerDemote}
-          onClose={() => this.setState({ playerToDemote: undefined })}
-          onDisagree={() => this.setState({ playerToDemote: undefined })}
-        />
-        <Dialog
-          description="A game must have at least one game master at all times."
-          header="Cannot demote last game master"
-          open={this.state.showDemoteLastGmModal}
-          onClose={() => this.setState({ showDemoteLastGmModal: false })}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="canvas-sidebar-player-list">
+      {users.map((user: User) => {
+        const isCurrentPlayer = user.id === currentUserId;
+        const isGameMaster = gameMasterIds.includes(user.id);
+        return (
+          <PlayerCard
+            key={user.id}
+            user={user}
+            exposeSettings={props.exposeSettings}
+            promotable={!isGameMaster}
+            removable={!isGameMaster && !isCurrentPlayer}
+            onDemotePlayerClicked={() => handlePlayerDemoteRequested(user.id)}
+            onPromotePlayerClicked={() => setPlayerToPromote(user.id)}
+            onRemovePlayerClicked={() => setPlayerToRemove(user.id)}
+          />
+        );
+      })}
+      <Dialog
+        description="Doing so will prevent them from re-joining the game."
+        header="Remove player?"
+        open={playerToRemove !== undefined}
+        onAgree={handlePlayerRemove}
+        onClose={() => setPlayerToRemove(undefined)}
+        onDisagree={() => setPlayerToRemove(undefined)}
+      />
+      <Dialog
+        description="Doing so will grant them game master privileges."
+        header="Promote player to game master?"
+        open={playerToPromote !== undefined}
+        onAgree={handlePlayerPromote}
+        onClose={() => setPlayerToPromote(undefined)}
+        onDisagree={() => setPlayerToPromote(undefined)}
+      />
+      <Dialog
+        description="Doing so will take game master privileges from them."
+        header="Demote game master to regular player?"
+        open={playerToDemote !== undefined}
+        onAgree={handlePlayerDemote}
+        onClose={() => setPlayerToDemote(undefined)}
+        onDisagree={() => setPlayerToDemote(undefined)}
+      />
+      <Dialog
+        description="A game must have at least one game master at all times."
+        header="Cannot demote last game master"
+        open={showDemoteLastGmModal}
+        onClose={() => setShowDemoteLastGmModal(false)}
+      />
+    </div>
+  );
+};
 
-const mapStateToProps = (state: RootState): ReduxProps => ({
-  // TODO: work with User objects if we store User in UserPermissionRecord
-  gameMasterIds: selectGameMasters(state),
-  users: selectUsers(state),
-  currentUserId: state.user.userInstance.id,
-});
-
-export default connect(mapStateToProps, { removePlayer, updatePlayerPermission })(PlayerListBase);
+export default PlayerList;
