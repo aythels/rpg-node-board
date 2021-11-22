@@ -18,10 +18,14 @@ const userSlice = createSlice({
     loginUser: (state: UserState, action: PayloadAction<User>) => {
       state.userInstance = action.payload;
     },
+    addImage: (state: UserState, action: PayloadAction<string>) => {
+      state.userInstance.images.push(action.payload);
+    },
   },
 });
 
 export default userSlice.reducer;
+export const { addImage } = userSlice.actions;
 
 // Thunks
 // TODO: actual log-in
