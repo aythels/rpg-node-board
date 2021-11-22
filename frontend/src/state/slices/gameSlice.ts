@@ -13,13 +13,11 @@ interface GameState {
   gameInstance: Game;
   status: AsyncStatus;
   showUserAlreadyAddedDialog: boolean;
-  activeNode: number; // Should be ID (normalized data)
 }
 const initialState: GameState = {
   gameInstance: {} as Game, // TODO: get rid of this hack by treating the "undefined" case, too
   status: AsyncStatus.Loading,
   showUserAlreadyAddedDialog: false,
-  activeNode: -1,
 };
 
 // Reducer
@@ -56,9 +54,6 @@ const gameSlice = createSlice({
       state.gameInstance = action.payload;
       state.status = AsyncStatus.Idle;
     },
-    setActiveNode: (state: GameState, action: PayloadAction<number>) => {
-      state.activeNode = action.payload;
-    },
     updateNode: (state: GameState, action: PayloadAction<Node>) => {
       const index = state.gameInstance.nodes.findIndex((node) => node.id === action.payload.id);
       state.gameInstance.nodes[index] = action.payload;
@@ -69,7 +64,7 @@ const gameSlice = createSlice({
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, hideUserAlreadyAddedDialog, setActiveNode } = gameSlice.actions;
+export const { gameLoaded, hideUserAlreadyAddedDialog } = gameSlice.actions;
 
 // Thunks (async calls)
 // should we use createAsyncThunk() here?
