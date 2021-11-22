@@ -364,7 +364,7 @@ export const POSTnode = (node: Node, gameId: number): void => {
   game.nodes.push(node);
 };
 
-/* PATCH */
+/* PATCH & PUT */
 
 export const PATCHaddPlayerToGame = (playerId: number, gameId: number): void => {
   const game = globalGames.find((game) => game.id === gameId) as Game;
@@ -406,6 +406,19 @@ export const PATCHdemoteGameMasterToPlayer = (userId: number, gameId: number): v
 export const PATCHgameName = (gameId: number, newTitle: string): void => {
   const game = globalGames.find((game) => game.id === gameId) as Game;
   game.title = newTitle;
+};
+
+export const PUTnode = (gameId: number, newNode: Node): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const nodeToReplace = game.nodes.find((node) => node.id === newNode.id) as Node;
+  game.nodes[game.nodes.indexOf(nodeToReplace)] = newNode;
+};
+
+export const PUTsubnode = (gameId: number, nodeId: number, newSubnode: Subnode): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const node = game.nodes.find((node) => node.id === nodeId) as Node;
+  const subnodeToReplace = node.subnodes.find((subnode) => subnode.id === newSubnode.id) as Subnode;
+  node.subnodes[node.subnodes.indexOf(subnodeToReplace)] = newSubnode;
 };
 
 /* DELETE */
@@ -474,6 +487,10 @@ export const PUTuser = (user: User): void => {
     globalUsers[index] = cloneDeep(user);
   }
 };
+
+/* DELETE */
+
+/* These functions will be deleted as Redux should make them unnecessary */
 
 // export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
 //   const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
