@@ -11,11 +11,9 @@ import { withTheme } from '@mui/styles';
 interface ExternalProps {
   currentUserId: number;
   isAdmin: boolean;
-  onSubmitGameTitleClicked: (newTitle: string) => void;
   onPromotePlayerClicked: (id: number) => void;
   onDemotePlayerClicked: (id: number) => void;
   gameId: number;
-  gameTitle: string;
   gameMasterIds: number[];
 }
 
@@ -61,9 +59,7 @@ class SidebarBase extends Component<Props, State> {
           <Header
             isAdmin={this.props.isAdmin}
             exposeSettings={this.state.settingsOpen}
-            title={this.props.gameTitle}
             onSettingsToggleClicked={this.toggleSettingsOpen}
-            onSubmitGameTitleClicked={this.props.onSubmitGameTitleClicked}
           />
           <PlayerList
             currentUserId={this.props.currentUserId}

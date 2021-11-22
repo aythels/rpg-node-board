@@ -56,6 +56,9 @@ const gameSlice = createSlice({
       state.gameInstance = action.payload;
       state.status = AsyncStatus.Idle;
     },
+    setGameTitle: (state: GameState, action: PayloadAction<string>) => {
+      state.gameInstance.title = action.payload;
+    },
   },
 });
 export default gameSlice.reducer;
@@ -86,6 +89,15 @@ export const removePlayer = (id: number): any => {
     // POSTremovePlayerFromGame(...);
   };
   return removePlayerThunk;
+};
+
+export const setGameTitle = (newTitle: string): any => {
+  const setGameTitleThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    dispatch(gameSlice.actions.setGameTitle(newTitle));
+    // TODO: make async call
+    // POSTupdateGameName(game id, title)
+  };
+  return setGameTitleThunk;
 };
 
 // Selectors
