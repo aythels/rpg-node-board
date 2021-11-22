@@ -1,9 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
-import { DELETEplayerFromGame, GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
-import { Game, Node, User, UserPermission } from '../../types';
+import {
+  // DELETEplayerFromGame,
+  GETgameById,
+  GETuserById,
+  GETuserByUsername,
+  PUTnode,
+  // PUTsubnode,
+} from '../../mock-backend';
+import { Game, Node, Subnode, User, UserPermission } from '../../types';
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
+import Delta from 'quill-delta';
 
 enum AsyncStatus {
   Loading,
@@ -20,6 +28,17 @@ const initialState: GameState = {
   showUserAlreadyAddedDialog: false,
 };
 
+interface SubnodeUpdate {
+  nodeId: number;
+  subnodeId: number;
+  change: Delta;
+}
+
+interface SubnodeCreation {
+  nodeId: number;
+  subnode: Subnode;
+}
+
 // Reducer
 const gameSlice = createSlice({
   name: 'game',
@@ -32,20 +51,17 @@ const gameSlice = createSlice({
       // directly in the game instance
       const user = GETuserByUsername(username);
       if (user) {
-        if (state.gameInstance.users.includes(user.id)) {
+        if (state.gameInstance.users.map((entry) => entry.userId).includes(user.id)) {
           state.showUserAlreadyAddedDialog = true;
         } else {
           // TODO: add normalization
-          state.gameInstance.players.push(user.id);
-          state.gameInstance.users.push(user.id);
+          state.gameInstance.users.push({ userId: user.id, permission: UserPermission.player });
         }
       }
     },
     removePlayer: (state: GameState, action: PayloadAction<number>) => {
       const isNotThePlayer = (id: number) => id !== action.payload;
-      state.gameInstance.players = state.gameInstance.players.filter(isNotThePlayer);
-      state.gameInstance.users = state.gameInstance.users.filter(isNotThePlayer);
-      state.gameInstance.gms = state.gameInstance.gms.filter(isNotThePlayer);
+      state.gameInstance.users = state.gameInstance.users.filter((entry) => isNotThePlayer(entry.userId));
     },
     hideUserAlreadyAddedDialog: (state: GameState) => {
       state.showUserAlreadyAddedDialog = false;
@@ -57,6 +73,18 @@ const gameSlice = createSlice({
     updateNode: (state: GameState, action: PayloadAction<Node>) => {
       const index = state.gameInstance.nodes.findIndex((node) => node.id === action.payload.id);
       state.gameInstance.nodes[index] = action.payload;
+    },
+    updateSubnode: (state: GameState, action: PayloadAction<SubnodeUpdate>) => {
+      const nodeToUpdate = state.gameInstance.nodes.find((node) => node.id === action.payload.nodeId) as Node;
+      const subnodeToUpdate = nodeToUpdate.subnodes.find(
+        (subnode) => subnode.id === action.payload.subnodeId,
+      ) as Subnode;
+      subnodeToUpdate.content.compose(action.payload.change);
+      // Does doing this update state? ^
+    },
+    addSubnode: (state: GameState, action: PayloadAction<SubnodeCreation>) => {
+      const nodeToUpdate = state.gameInstance.nodes.find((node) => node.id === action.payload.nodeId) as Node;
+      nodeToUpdate.subnodes.push(action.payload.subnode);
     },
     setGameTitle: (state: GameState, action: PayloadAction<string>) => {
       state.gameInstance.title = action.payload;
@@ -104,6 +132,25 @@ export const updateNode = (gameId: number, node: Node): any => {
   return updateNodeThunk;
 };
 
+// all of these args make me think that this is NOT the way to do this
+export const updateSubnode = (gameId: number, nodeId: number, subnodeId: number, change: Delta): any => {
+  const updateSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    dispatch(gameSlice.actions.updateSubnode({ nodeId: nodeId, subnodeId: subnodeId, change: change }));
+    // TODO: make async call
+    // PUTsubnode(gameId, nodeId, ...)
+  };
+  return updateSubnodeThunk;
+};
+
+export const addSubnode = (gameId: number, nodeId: number, subnode: Subnode): any => {
+  const addSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    // TODO: async call
+    // POSTsubnode(gameId, nodeId, ...)
+    dispatch(gameSlice.actions.addSubnode({ nodeId: nodeId, subnode: subnode }));
+  };
+  return addSubnodeThunk;
+};
+
 export const setGameTitle = (newTitle: string): any => {
   const setGameTitleThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.setGameTitle(newTitle));
@@ -133,7 +180,7 @@ export const selectVisibleNodes: any = createSelector(
 
 export const selectActiveNode: any = createSelector(
   (state: RootState): Node[] => state.game.gameInstance.nodes,
-  (state: RootState): number => state.game.activeNode,
+  (state: RootState): number => state.nodeview.activeNode, // this seems bad to do
   (nodes: Node[], activeNodeId: number): Node => {
     return nodes.find((node) => node.id === activeNodeId) as Node;
   },

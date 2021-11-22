@@ -27,8 +27,11 @@ const nodeviewSlice = createSlice({
     setIsImageModalOpen: (state: NodeviewState, action: PayloadAction<boolean>) => {
       state.isImageModalOpen = action.payload;
     },
+    setActiveNode: (state: NodeviewState, action: PayloadAction<number>) => {
+      state.activeNode = action.payload;
+    },
   },
 });
 
 export default nodeviewSlice.reducer;
-export const { setIsEditModalOpen, setIsImageModalOpen, setIsUsersModalOpen } = nodeviewSlice.actions;
+export const { setIsEditModalOpen, setIsImageModalOpen, setIsUsersModalOpen, setActiveNode } = nodeviewSlice.actions;
