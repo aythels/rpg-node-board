@@ -1,6 +1,9 @@
+/* eslint-disable */
+/* tslint-disable */
+
 import './styles.css';
 import React from 'react';
-import { GETgameById, POSTdemoteGameMasterToPlayer, POSTpromoteUserToGameMaster } from '../../mock-backend';
+import { GETgameById } from '../../mock-backend';
 import { Game } from '../../types';
 import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
@@ -18,7 +21,7 @@ interface Props {
 }
 
 interface State {
-  game: Game;
+  game: any;
   showUserNotFoundModal: boolean;
 }
 
@@ -36,7 +39,7 @@ class CanvasMainBase extends React.Component<Props, State> {
           gms: [...prevState.game.gms, id],
         },
       }),
-      () => POSTpromoteUserToGameMaster(id, this.state.game.id),
+      // () => POSTpromoteUserToGameMaster(id, this.state.game.id), // TODO:
     );
   };
 
@@ -45,10 +48,10 @@ class CanvasMainBase extends React.Component<Props, State> {
       (prevState: State) => ({
         game: {
           ...prevState.game,
-          gms: prevState.game.gms.filter((gmId) => gmId !== id),
+          gms: prevState.game.gms.filter((gmId: number) => gmId !== id),
         },
       }),
-      () => POSTdemoteGameMasterToPlayer(id, this.state.game.id),
+      // () => POSTdemoteGameMasterToPlayer(id, this.state.game.id), // TODO:
     );
   };
 

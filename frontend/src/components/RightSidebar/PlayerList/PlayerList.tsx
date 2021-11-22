@@ -2,7 +2,7 @@ import './playerList.css';
 import PlayerCard from '../PlayerCard/PlayerCard';
 import { Component } from 'react';
 import Dialog from '../../Dialog/Dialog';
-import { User } from '../../../types';
+import { User, UserPermission } from '../../../types';
 import { connect } from 'react-redux';
 import { removePlayer } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
@@ -144,7 +144,9 @@ class PlayerListBase extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState): ReduxProps => ({
-  gameMasterIds: state.game.gameInstance.gms,
+  gameMasterIds: state.game.gameInstance.users
+    .filter((u) => u.permission === UserPermission.gameMaster)
+    .map((u) => u.userId),
   users: selectUsers(state),
 });
 

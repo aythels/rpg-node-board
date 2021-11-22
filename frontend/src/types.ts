@@ -31,6 +31,7 @@ export interface Subnode {
 }
 
 export enum UserPermission {
+  // TODO: make types uppercase
   // owner,
   gameMaster,
   player,
