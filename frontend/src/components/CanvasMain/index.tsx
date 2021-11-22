@@ -28,18 +28,6 @@ class CanvasMainBase extends React.Component<Props, State> {
     showUserNotFoundModal: false,
   };
 
-  handlePromotePlayerClicked = (id: number): void => {
-    const upr = this.state.game.users.find((entry: any) => entry.userId === id) as UserPermissionRecord;
-    upr.permission = UserPermission.gameMaster;
-    this.setState({}, () => PATCHpromoteUserToGameMaster(id, this.state.game.id));
-  };
-
-  handleDemotePlayerClicked = (id: number): void => {
-    const upr = this.state.game.users.find((entry: any) => entry.userId === id) as UserPermissionRecord;
-    upr.permission = UserPermission.player;
-    this.setState({}, () => PATCHdemoteGameMasterToPlayer(id, this.state.game.id));
-  };
-
   render(): JSX.Element {
     return (
       <div>
@@ -55,8 +43,6 @@ class CanvasMainBase extends React.Component<Props, State> {
             .filter((e: any) => e.permission === UserPermission.gameMaster)
             .map((e: any) => e.userId)
             .includes(this.props.currentUserId)}
-          onDemotePlayerClicked={this.handleDemotePlayerClicked}
-          onPromotePlayerClicked={this.handlePromotePlayerClicked}
         />
 
         <Dialog

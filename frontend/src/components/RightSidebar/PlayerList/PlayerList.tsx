@@ -2,22 +2,21 @@ import './playerList.css';
 import PlayerCard from '../PlayerCard/PlayerCard';
 import { Component } from 'react';
 import Dialog from '../../Dialog/Dialog';
-import { User } from '../../../types';
+import { User, UserPermission } from '../../../types';
 import { connect } from 'react-redux';
-import { removePlayer, selectGameMasters } from '../../../state/slices/gameSlice';
+import { removePlayer, selectGameMasters, updatePlayerPermission } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
 import { selectUsers } from '../../../state/slices/gameSlice';
 
 interface ExternalProps {
-  currentUserId: number;
   exposeSettings: boolean;
-  onPromotePlayerClicked: (id: number) => void;
-  onDemotePlayerClicked: (id: number) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   removePlayer: any;
+  updatePlayerPermission: any;
 }
 
 interface ReduxProps {
+  currentUserId: number;
   users: User[];
   gameMasterIds: number[];
 }
@@ -45,14 +44,14 @@ class PlayerListBase extends Component<Props, State> {
 
   handlePlayerPromote = (): void => {
     if (this.state.playerToPromote) {
-      this.props.onPromotePlayerClicked(this.state.playerToPromote);
+      this.props.updatePlayerPermission([this.state.playerToPromote, UserPermission.gameMaster]);
       this.setState({ playerToPromote: undefined });
     }
   };
 
   handlePlayerDemote = (): void => {
     if (this.state.playerToDemote) {
-      this.props.onDemotePlayerClicked(this.state.playerToDemote);
+      this.props.updatePlayerPermission([this.state.playerToDemote, UserPermission.player]);
       this.setState({ playerToDemote: undefined });
     }
   };
@@ -98,10 +97,10 @@ class PlayerListBase extends Component<Props, State> {
           return (
             <PlayerCard
               key={user.id}
+              user={user}
               exposeSettings={this.props.exposeSettings}
               promotable={!isGameMaster}
               removable={!isGameMaster && !isCurrentPlayer}
-              user={user}
               onDemotePlayerClicked={() => this.handlePlayerDemoteRequested(user.id)}
               onPromotePlayerClicked={() => this.setState({ playerToPromote: user.id })}
               onRemovePlayerClicked={() => this.setState({ playerToRemove: user.id })}
@@ -144,8 +143,10 @@ class PlayerListBase extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState): ReduxProps => ({
+  // TODO: work with User objects if we store User in UserPermissionRecord
   gameMasterIds: selectGameMasters(state),
   users: selectUsers(state),
+  currentUserId: state.user.userInstance.id,
 });
 
-export default connect(mapStateToProps, { removePlayer })(PlayerListBase);
+export default connect(mapStateToProps, { removePlayer, updatePlayerPermission })(PlayerListBase);

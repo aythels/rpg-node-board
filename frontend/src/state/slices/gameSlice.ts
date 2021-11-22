@@ -85,6 +85,14 @@ const gameSlice = createSlice({
     setGameTitle: (state: GameState, action: PayloadAction<string>) => {
       state.gameInstance.title = action.payload;
     },
+    updatePlayerPermission: (state: GameState, action: PayloadAction<[number, UserPermission]>) => {
+      console.log(action.payload);
+      const [userId, newPermission] = action.payload;
+      const user = state.gameInstance.users.find((user) => user.userId === userId);
+      if (user) {
+        user.permission = newPermission;
+      }
+    },
   },
 });
 export default gameSlice.reducer;
@@ -156,6 +164,16 @@ export const setGameTitle = (newTitle: string): any => {
     // POSTupdateGameName(game id, title)
   };
   return setGameTitleThunk;
+};
+
+export const updatePlayerPermission = (payload: [number, UserPermission]): any => {
+  const updatePlayerPermissionThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    dispatch(gameSlice.actions.updatePlayerPermission(payload));
+    // TODO: make async call to:
+    // PATCHpromoteUserToGameMaster
+    // PATCHdemoteGameMasterToPlayer
+  };
+  return updatePlayerPermissionThunk;
 };
 
 // Selectors
