@@ -51,3 +51,8 @@ export const selectIsGameMaster: any = createDraftSafeSelector(
     }
   },
 );
+
+export const selectIsLoggedIn: any = createDraftSafeSelector(
+  (state: RootState): User => state.user.userInstance,
+  (user: User): boolean => Object.keys(user).length > 0,
+);

@@ -2,17 +2,19 @@ import './login.css';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { GETloginVerification } from '../../mock-backend';
-import { createBrowserHistory } from 'history';
-import { loginUser } from '../../state/slices/userSlice';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { loginUser, selectIsGameMaster, selectIsLoggedIn } from '../../state/slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { RootState } from '../../state/rootReducer';
 
 const Login = (): JSX.Element => {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [invalid, setInvalid] = useState(false);
-
-  const dispatch = useDispatch();
+  const loggedIn = useSelector((state: RootState) => selectIsLoggedIn(state));
+  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
   const checkPassword = async (): Promise<void> => {
     if (!GETloginVerification(username, password)) {
@@ -21,15 +23,12 @@ const Login = (): JSX.Element => {
     } else {
       console.log('starting login');
       await dispatch(loginUser(username));
-      //route the user to the correct screen.
-      // as referenced in README, we will be changing how we are doing this for phase 2, once we have a server etc
-      // const history = createBrowserHistory();
-      // history.push(username === 'admin' ? '/gamesAdmin' : '/gamesUser');
-      // history.go(0);
     }
   };
 
-  return (
+  return loggedIn ? (
+    <Redirect push to={isGameMaster ? '/gamesAdmin' : '/gamesUser'} />
+  ) : (
     <div>
       <div
         className="login-background"
@@ -90,10 +89,6 @@ const Login = (): JSX.Element => {
           <Button color={invalid ? 'error' : 'primary'} variant="contained" type="submit" onClick={checkPassword}>
             Log In
           </Button>
-          {/* TODO: temp */}
-          <Link style={{ textDecoration: 'none' }} to="/canvasAdmin">
-            <Button>Yes</Button>
-          </Link>
         </Grid>
       </Grid>
     </div>
