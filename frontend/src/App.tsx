@@ -3,7 +3,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain/CanvasMain';
-import { SettingsMenu } from './components/SettingsMenu/SettingsMenu';
+import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 import { fetchGame } from './state/slices/gameSlice';
 import { store } from './state/store';
 
@@ -49,7 +49,7 @@ function App(): JSX.Element {
           <Route exact path="/gamesAdmin" component={UserDashboard} />
           <Route exact path="/gamesUser" component={UserDashboard} />
           <Route exact path="/settings" component={SettingsMenu} />
-          <Route exact path="/" render={Login} />
+          <Route exact path="/" component={Login} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
