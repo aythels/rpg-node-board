@@ -23,12 +23,13 @@ import { GETuserById, GETuserIsGMInGame } from '../../mock-backend';
 import { setIsEditModalOpen, setIsUsersModalOpen } from '../../state/slices/nodeviewSlice';
 
 const NodeUserForm = (): JSX.Element => {
-  const game = useSelector((state: RootState) => state.game.gameInstance);
   // const user = useSelector((state: RootState) => state.user.userInstance);
-  const node = selectActiveNode();
-  const [tempNode, setTempNode] = useState(cloneDeep(node) as Node);
   const dispatch = useDispatch();
+
   const [addEditorAnchorEl, setAddEditorAnchorEl] = useState(null as EventTarget | null);
+  const game = useSelector((state: RootState) => state.game.gameInstance);
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
+  const [tempNode, setTempNode] = useState(cloneDeep(node) as Node);
 
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;

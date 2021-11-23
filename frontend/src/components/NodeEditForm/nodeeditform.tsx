@@ -7,14 +7,15 @@ import { uid } from 'react-uid';
 import { RootState } from '../../state/rootReducer';
 import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
 import { setIsEditModalOpen } from '../../state/slices/nodeviewSlice';
-import { Subnode } from '../../types';
+import { Node, Subnode } from '../../types';
 import './nodeeditform.css';
 
 const NodeEditForm = (): JSX.Element => {
-  const game = useSelector((state: RootState) => state.game.gameInstance);
-  const node = selectActiveNode();
-  const [tempNode, setTempNode] = useState(cloneDeep(node));
   const dispatch = useDispatch();
+
+  const game = useSelector((state: RootState) => state.game.gameInstance);
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
+  const [tempNode, setTempNode] = useState(cloneDeep(node));
 
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;

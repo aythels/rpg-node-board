@@ -8,14 +8,16 @@ import { RootState } from '../../state/rootReducer';
 import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
 import { setIsEditModalOpen, setIsImageModalOpen } from '../../state/slices/nodeviewSlice';
 import { addImage } from '../../state/slices/userSlice';
+import { Node } from '../../types';
 import './nodeimageform.css';
 
 const NodeImageForm = (): JSX.Element => {
+  const dispatch = useDispatch();
+
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const user = useSelector((state: RootState) => state.user.userInstance);
-  const node = selectActiveNode();
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
   const [tempNode, setTempNode] = useState(cloneDeep(node));
-  const dispatch = useDispatch();
 
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;

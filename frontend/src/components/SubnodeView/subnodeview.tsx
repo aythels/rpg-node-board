@@ -48,7 +48,7 @@ interface Props {
 const SubnodeView = (props: Props): JSX.Element => {
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const user = useSelector((state: RootState) => state.user.userInstance);
-  const node = selectActiveNode() as Node;
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
   const [editor, setEditor] = useState(null as Quill | null);
   const [change, setChange] = useState(new Delta());
   const [autoSaver, setAutoSaver] = useState(null as NodeJS.Timeout | null);

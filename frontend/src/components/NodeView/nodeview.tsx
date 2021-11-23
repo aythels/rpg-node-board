@@ -25,7 +25,7 @@ import {
 const NodeView = (): JSX.Element => {
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const user = useSelector((state: RootState) => state.user.userInstance);
-  const node = selectActiveNode() as Node;
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
   const isEditModalOpen = useSelector((state: RootState) => state.nodeview.isEditModalOpen);
   const isUsersModalOpen = useSelector((state: RootState) => state.nodeview.isUsersModalOpen);
   const isImageModalOpen = useSelector((state: RootState) => state.nodeview.isImageModalOpen);
