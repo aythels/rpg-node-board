@@ -1,24 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createDraftSafeSelector, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import { GETuserByUsername } from '../../mock-backend';
-import { User, UserPermission, UserPermissionRecord } from '../../types';
+import { GETgamesByUserID, GETuserByUsername } from '../../mock-backend';
+import { Game, User, UserPermission, UserPermissionRecord } from '../../types';
 import { RootState } from '../rootReducer';
 
 interface UserState {
   userInstance: User;
+  games: Game[];
 }
 
 const initialState: UserState = {
   userInstance: {} as User, //TODO: fix hack
+  games: [],
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    loginUser: (state: UserState, action: PayloadAction<User>) => {
-      console.log('Logging in user');
-      state.userInstance = action.payload;
+    loginUser: (state: UserState, action: PayloadAction<[User, Game[]]>) => {
+      const [user, games] = action.payload;
+      state.userInstance = user;
+      state.games = games;
     },
     addImage: (state: UserState, action: PayloadAction<string>) => {
       state.userInstance.images.push(action.payload);
@@ -33,7 +36,8 @@ export const { addImage } = userSlice.actions;
 export const loginUser = (username: string): any => {
   const loginUserThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     const user = GETuserByUsername(username);
-    dispatch(userSlice.actions.loginUser(user));
+    const games = GETgamesByUserID(user.id);
+    dispatch(userSlice.actions.loginUser([user, games]));
   };
   return loginUserThunk;
 };

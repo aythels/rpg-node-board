@@ -1,17 +1,14 @@
-/* eslint-disable sort-imports */
 import Box from '@mui/material/Box';
 import { uid } from 'react-uid';
-import React from 'react';
 import { GameIcon } from '../GameIcon/gameicon';
-import { GETgamesByUserID } from '../../mock-backend';
+import { useSelector } from 'react-redux';
+import { Game } from '../../types';
+import { RootState } from '../../state/rootReducer';
 
-interface GameDisplayProps {
-  userID: number;
-}
+const GameRow = (): JSX.Element => {
+  const user = useSelector((state: RootState) => state.user.userInstance);
+  const games = useSelector((state: RootState) => state.user.games);
 
-export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) => {
-  const games = GETgamesByUserID(userID); //TODO pass user id in.
-  // console.log(games);
   return (
     <div style={{ width: '100%' }}>
       <Box
@@ -28,10 +25,13 @@ export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) =
           justifyContent: 'center',
         }}
       >
-        {games.map((game) => (
-          <GameIcon name={game.title} path={game.imgpath} userID={userID} gameID={game.id} key={uid(game)} />
+        {/* TODO: make sure we have a uniform approach to how we set keys - a lib or just id? */}
+        {games.map((game: Game) => (
+          // TODO: check if is gm here by looking over game users, finding, checking permission
+          <GameIcon name={game.title} path={game.imgpath} userID={user.id} gameID={game.id} key={uid(game)} />
         ))}
       </Box>
     </div>
   );
 };
+export default GameRow;

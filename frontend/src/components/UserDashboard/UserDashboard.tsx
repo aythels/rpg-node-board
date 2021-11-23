@@ -4,8 +4,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Typography from '@mui/material/Typography';
 import { IconButton } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { GameRow } from '../GameRow/gamerow';
 import { RootState } from '../../state/rootReducer';
+import GameRow from '../GameRow/GameRow';
 
 const UserDashboard = (): JSX.Element => {
   const user = useSelector((state: RootState) => state.user.userInstance);
@@ -73,7 +73,7 @@ const UserDashboard = (): JSX.Element => {
           >
             <b>{user.username}</b>&apos;s games
           </Typography>
-          <GameRow userID={user.id} />
+          <GameRow />
         </Grid>
       </Grid>
     </div>
