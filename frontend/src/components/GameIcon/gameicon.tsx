@@ -3,7 +3,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { Game } from '../../types';
 import { fetchGame } from '../../state/slices/gameSlice';
 import { useDispatch } from 'react-redux';
