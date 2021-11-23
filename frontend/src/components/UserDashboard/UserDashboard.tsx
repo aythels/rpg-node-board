@@ -6,6 +6,7 @@ import { IconButton } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
 import GameRow from '../GameRow/GameRow';
+import { Link } from 'react-router-dom';
 
 const UserDashboard = (): JSX.Element => {
   const user = useSelector((state: RootState) => state.user.userInstance);
@@ -46,9 +47,11 @@ const UserDashboard = (): JSX.Element => {
           }}
         >
           <Tooltip title="Account Settings" placement="left">
-            <IconButton color="primary" href="/settings">
-              <SettingsIcon sx={{ fontSize: '4rem' }} href="/settings" />
-            </IconButton>
+            <Link style={{ textDecoration: 'none' }} to="/settings">
+              <IconButton color="primary">
+                <SettingsIcon sx={{ fontSize: '4rem' }} />
+              </IconButton>
+            </Link>
           </Tooltip>
         </Grid>
         <Grid
