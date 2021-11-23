@@ -11,16 +11,11 @@ import { selectVisibleNodes } from '../../state/slices/gameSlice';
 import { connect } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
 
-interface ExternalProps {
+interface Props {
+  visibleNodes: Node[];
   currentGameId: number;
   currentUserId: number;
 }
-
-interface ReduxProps {
-  visibleNodes: Node[];
-}
-
-interface Props extends ExternalProps, ReduxProps {}
 
 // Note: before you refactor to a functional component make sure you know what you
 // are doing - the setState({}) trick won't work on a functional component
@@ -183,8 +178,10 @@ class CanvasInternalBase extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState): ReduxProps => ({
+const mapStateToProps = (state: RootState): Props => ({
   visibleNodes: selectVisibleNodes(state),
+  currentUserId: state.user.userInstance.id,
+  currentGameId: state.game.gameInstance.id,
 });
 
 export default connect(mapStateToProps)(CanvasInternalBase);
