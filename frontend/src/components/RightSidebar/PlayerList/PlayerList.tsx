@@ -20,11 +20,9 @@ const PlayerList = (props: Props): JSX.Element => {
 
   const dispatch = useDispatch();
 
-  // TODO: work with User objects if we store User in UserPermissionRecord
-  // TODO: pass fn directly?
-  const gameMasterIds = useSelector((state: RootState) => selectGameMasters(state));
+  const gameMasters = useSelector((state: RootState) => selectGameMasters(state));
   const users = useSelector((state: RootState) => selectUsers(state));
-  const currentUserId = useSelector((state: RootState) => state.user.userInstance.id);
+  const currentUser = useSelector((state: RootState) => state.user.userInstance);
 
   const handlePlayerRemove = (): void => {
     if (playerToRemove) {
@@ -48,7 +46,7 @@ const PlayerList = (props: Props): JSX.Element => {
   };
 
   const handlePlayerDemoteRequested = (id: number): void => {
-    const isLastGameMaster = gameMasterIds.length === 1;
+    const isLastGameMaster = gameMasters.length === 1;
     if (isLastGameMaster) {
       setShowDemoteLastGmModal(true);
     } else {
@@ -56,22 +54,22 @@ const PlayerList = (props: Props): JSX.Element => {
     }
   };
 
-  const prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
-    const A_BEFORE_B = -1;
-    const B_BEFORE_A = 1;
-    const gms = new Set(gameMasterIds);
-    return [...allUsers].sort((a: User, b: User) => {
-      const isGameMasterA = gms.has(a.id);
-      const isGameMasterB = gms.has(b.id);
-      if (isGameMasterA === isGameMasterB) {
-        return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
-      } else if (isGameMasterA && !isGameMasterB) {
-        return A_BEFORE_B;
-      } else {
-        return B_BEFORE_A;
-      }
-    });
-  };
+  // const prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
+  //   const A_BEFORE_B = -1;
+  //   const B_BEFORE_A = 1;
+  //   const gms = new Set(gameMasterIds);
+  //   return [...allUsers].sort((a: User, b: User) => {
+  //     const isGameMasterA = gms.has(a.id);
+  //     const isGameMasterB = gms.has(b.id);
+  //     if (isGameMasterA === isGameMasterB) {
+  //       return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
+  //     } else if (isGameMasterA && !isGameMasterB) {
+  //       return A_BEFORE_B;
+  //     } else {
+  //       return B_BEFORE_A;
+  //     }
+  //   });
+  // };
 
   // TODO: use memo
   // const users = prioritizeGameMasters(props.gameMasterIds, props.users);
@@ -79,8 +77,8 @@ const PlayerList = (props: Props): JSX.Element => {
   return (
     <div className="canvas-sidebar-player-list">
       {users.map((user: User) => {
-        const isCurrentPlayer = user.id === currentUserId;
-        const isGameMaster = gameMasterIds.includes(user.id);
+        const isCurrentPlayer = user.id === currentUser.id;
+        const isGameMaster = gameMasters.some((gm: User) => gm.id === user.id);
         return (
           <PlayerCard
             key={user.id}
