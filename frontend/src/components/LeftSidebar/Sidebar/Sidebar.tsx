@@ -107,7 +107,7 @@ class Sidebar extends React.Component<Props, State> {
           open={this.state.showLeaveGameDialog}
           onClose={() => this.setState({ showLeaveGameDialog: false })}
           onAgree={() => this.setState({ showLeaveGameDialog: false })}
-          onAgreeRedirectTo={this.props.isAdmin ? '/gamesAdmin' : '/gamesUser'}
+          onAgreeRedirectTo="/games"
           onDisagree={() => this.setState({ showLeaveGameDialog: false })}
         />
       </div>

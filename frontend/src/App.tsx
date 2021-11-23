@@ -4,12 +4,9 @@ import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain/CanvasMain';
 import SettingsMenu from './components/SettingsMenu/SettingsMenu';
-import { fetchGame } from './state/slices/gameSlice';
-import { store } from './state/store';
 
 function App(): JSX.Element {
   const customTheme = createTheme({
-    // Note: to be edited later
     palette: {
       primary: {
         light: '#a4a4a4',
@@ -36,18 +33,12 @@ function App(): JSX.Element {
     },
   });
 
-  // NOTE: this type of routing is temporary, and will be replaced in phase 2, most likely using some state management solution like redux.
-  const currentGameId = 1;
-  store.dispatch(fetchGame(currentGameId));
-
   return (
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/canvasAdmin" component={CanvasMain} />
-          <Route exact path="/canvasUser" component={CanvasMain} />
-          <Route exact path="/gamesAdmin" component={UserDashboard} />
-          <Route exact path="/gamesUser" component={UserDashboard} />
+          <Route exact path="/canvas" component={CanvasMain} />
+          <Route exact path="/games" component={UserDashboard} />
           <Route exact path="/settings" component={SettingsMenu} />
           <Route exact path="/" component={Login} />
         </Switch>

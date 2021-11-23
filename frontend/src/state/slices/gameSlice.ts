@@ -8,18 +8,18 @@ import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/to
 import { RootState } from '../rootReducer';
 import Delta from 'quill-delta';
 
-enum AsyncStatus {
+export enum GameLoadingStatus {
   Loading,
   Idle,
 }
 interface GameState {
   gameInstance: Game;
-  status: AsyncStatus;
+  status: GameLoadingStatus;
   showUserAlreadyAddedDialog: boolean;
 }
 const initialState: GameState = {
   gameInstance: {} as Game, // TODO: get rid of this hack by treating the "undefined" case, too
-  status: AsyncStatus.Loading,
+  status: GameLoadingStatus.Loading,
   showUserAlreadyAddedDialog: false,
 };
 
@@ -62,7 +62,7 @@ const gameSlice = createSlice({
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
       state.gameInstance = action.payload;
-      state.status = AsyncStatus.Idle;
+      state.status = GameLoadingStatus.Idle;
     },
     updateNode: (state: GameState, action: PayloadAction<Node>) => {
       const index = state.gameInstance.nodes.findIndex((node) => node.id === action.payload.id);
@@ -102,7 +102,8 @@ export const fetchGame = (gameId: number): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     console.log('Fetching game');
     const game = GETgameById(gameId);
-    dispatch(gameLoaded(game));
+    // TODO: remove timeout
+    setTimeout(() => dispatch(gameLoaded(game)), 1000);
   };
   return fetchGameThunk;
 };

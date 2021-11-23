@@ -72,7 +72,7 @@ const Footer = (): JSX.Element => {
         onAgree={() => {
           DELETEGame(gameId);
         }}
-        onAgreeRedirectTo="/gamesAdmin"
+        onAgreeRedirectTo="/games"
         onClose={() => setShowDeleteServerDialog(false)}
         onDisagree={() => setShowDeleteServerDialog(false)}
       />

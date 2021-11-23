@@ -2,7 +2,7 @@ import './login.css';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { GETloginVerification } from '../../mock-backend';
-import { loginUser, selectIsGameMaster, selectIsLoggedIn } from '../../state/slices/userSlice';
+import { loginUser, selectIsLoggedIn } from '../../state/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { RootState } from '../../state/rootReducer';
@@ -14,7 +14,6 @@ const Login = (): JSX.Element => {
   const [password, setPassword] = useState('');
   const [invalid, setInvalid] = useState(false);
   const loggedIn = useSelector((state: RootState) => selectIsLoggedIn(state));
-  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
   const checkPassword = async (): Promise<void> => {
     if (!GETloginVerification(username, password)) {
@@ -27,7 +26,7 @@ const Login = (): JSX.Element => {
   };
 
   return loggedIn ? (
-    <Redirect push to={isGameMaster ? '/gamesAdmin' : '/gamesUser'} />
+    <Redirect push to="/games" />
   ) : (
     <div>
       <div
