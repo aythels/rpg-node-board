@@ -62,8 +62,8 @@ function App(): JSX.Element {
           </Route> */}
           {/* <Route path="/canvas" component={CanvasMain} /> */}
 
-          <Route exact path="/gamesAdmin" render={() => <UserDashboard userID={adminID} />} />
-          <Route exact path="/gamesUser" render={() => <UserDashboard userID={userID} />} />
+          <Route exact path="/gamesAdmin" component={UserDashboard} />
+          <Route exact path="/gamesUser" component={UserDashboard} />
           <Route exact path="/settings" render={() => <SettingsMenu />} />
           <Route exact path="/" render={() => <Login />} />
         </Switch>
