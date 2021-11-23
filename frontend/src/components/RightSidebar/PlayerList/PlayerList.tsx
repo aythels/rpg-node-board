@@ -1,6 +1,6 @@
 import './playerList.css';
 import PlayerCard from '../PlayerCard/PlayerCard';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Dialog from '../../Dialog/Dialog';
 import { User, UserPermission } from '../../../types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,29 +54,30 @@ const PlayerList = (props: Props): JSX.Element => {
     }
   };
 
-  // const prioritizeGameMasters = (gameMasterIds: number[], allUsers: User[]): User[] => {
-  //   const A_BEFORE_B = -1;
-  //   const B_BEFORE_A = 1;
-  //   const gms = new Set(gameMasterIds);
-  //   return [...allUsers].sort((a: User, b: User) => {
-  //     const isGameMasterA = gms.has(a.id);
-  //     const isGameMasterB = gms.has(b.id);
-  //     if (isGameMasterA === isGameMasterB) {
-  //       return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
-  //     } else if (isGameMasterA && !isGameMasterB) {
-  //       return A_BEFORE_B;
-  //     } else {
-  //       return B_BEFORE_A;
-  //     }
-  //   });
-  // };
+  const prioritizeGameMasters = (gameMasters: User[], allUsers: User[]): User[] => {
+    const A_BEFORE_B = -1;
+    const B_BEFORE_A = 1;
+    const gameMasterIds = new Set(gameMasters.map((gm) => gm.id));
+    return [...allUsers].sort((a: User, b: User) => {
+      const isGameMasterA = gameMasterIds.has(a.id);
+      const isGameMasterB = gameMasterIds.has(b.id);
+      if (isGameMasterA === isGameMasterB) {
+        return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
+      } else if (isGameMasterA && !isGameMasterB) {
+        return A_BEFORE_B;
+      } else {
+        return B_BEFORE_A;
+      }
+    });
+  };
 
-  // TODO: use memo
-  // const users = prioritizeGameMasters(props.gameMasterIds, props.users);
+  const sortedUsers = useMemo(() => {
+    return prioritizeGameMasters(gameMasters, users);
+  }, [gameMasters, users]);
 
   return (
     <div className="canvas-sidebar-player-list">
-      {users.map((user: User) => {
+      {sortedUsers.map((user: User) => {
         const isCurrentPlayer = user.id === currentUser.id;
         const isGameMaster = gameMasters.some((gm: User) => gm.id === user.id);
         return (
