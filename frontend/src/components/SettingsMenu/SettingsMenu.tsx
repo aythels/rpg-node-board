@@ -37,7 +37,7 @@ const SettingsMenu = (): JSX.Element => {
         }}
       >
         <Tooltip title="Account Dashboard" placement="left">
-          <Link style={{ textDecoration: 'none' }} to="/gamesUser">
+          <Link style={{ textDecoration: 'none' }} to="/games">
             <IconButton color="primary">
               <ArrowBackIcon sx={{ fontSize: '4rem' }} />
             </IconButton>
