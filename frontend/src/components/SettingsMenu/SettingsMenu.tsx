@@ -97,12 +97,10 @@ const SettingsMenu = (): JSX.Element => {
             onChange={(event) => setEditedUserData({ ...editedUserData, secondPassword: event.target.value })}
           ></TextField>
         </Grid>
-        <Grid item direction="row" justifyContent="center" alignItems="center">
-          <div>
-            <Button variant="contained" disabled={same()} color="primary">
-              Submit Changes
-            </Button>
-          </div>
+        <Grid item>
+          <Button variant="contained" disabled={same()} color="primary">
+            Submit Changes
+          </Button>
         </Grid>
       </Grid>
       <Grid item justifyContent="flex-end">
