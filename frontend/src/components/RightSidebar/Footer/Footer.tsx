@@ -9,12 +9,12 @@ import { addPlayer, hideUserAlreadyAddedDialog } from '../../../state/slices/gam
 import { RootState } from '../../../state/rootReducer';
 
 const Footer = (): JSX.Element => {
+  const dispatch = useDispatch();
+
   const [inviteName, setInviteName] = useState('');
   const [showDeleteServerDialog, setShowDeleteServerDialog] = useState(false);
-
   const gameId = useSelector((state: RootState) => state.game.gameInstance.id);
   const showUserAlreadyAddedDialog = useSelector((state: RootState) => state.game.showUserAlreadyAddedDialog);
-  const dispatch = useDispatch();
 
   const handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
     setInviteName(event.target.value);
@@ -80,7 +80,7 @@ const Footer = (): JSX.Element => {
         description="You cannot add the same player twice."
         header="This player is already in the game!"
         open={showUserAlreadyAddedDialog}
-        onClose={dispatch(hideUserAlreadyAddedDialog)}
+        onClose={() => dispatch(hideUserAlreadyAddedDialog())}
       />
     </div>
   );

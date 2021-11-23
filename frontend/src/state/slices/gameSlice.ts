@@ -40,8 +40,6 @@ const gameSlice = createSlice({
   initialState: initialState,
   reducers: {
     addPlayer: (state: GameState, action: PayloadAction<User>) => {
-      // TODO: we cannot call the backend like this - fix this by storing users
-      // directly in the game instance
       const user = action.payload;
       if (user) {
         if (state.gameInstance.users.find((u) => u.userId === user.id)) {
