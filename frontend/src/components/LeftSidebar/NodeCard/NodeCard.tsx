@@ -2,6 +2,8 @@ import './nodeCard.css';
 import { PureComponent } from 'react';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import { CenterFocusStrong, Delete, Visibility, VisibilityOff } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../state/rootReducer';
 
 interface Props {
   caption: string;
@@ -12,36 +14,38 @@ interface Props {
   onRemoveNodeClicked: () => void;
 }
 
-export default class NodeCard extends PureComponent<Props> {
-  render(): JSX.Element {
-    const { visible, caption, onDoubleClick, onVisibilityToggled, onNavigateToNodeClicked, onRemoveNodeClicked } =
-      this.props;
+const NodeCard = (props: Props): JSX.Element => {
+  const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
+  console.log('update');
 
-    return (
-      <div className="node-card" onDoubleClick={onDoubleClick}>
-        <Typography className="title" variant="body1" component="div" noWrap={true}>
-          {caption}
-        </Typography>
-        <Tooltip arrow title={`Make node ${visible ? 'invisible' : 'visible'}`}>
-          <IconButton
-            style={{ marginLeft: 'auto' }}
-            aria-label={`Make node ${visible ? 'invisible' : 'visible'}`}
-            onClick={onVisibilityToggled}
-          >
-            {visible ? <Visibility /> : <VisibilityOff />}
-          </IconButton>
-        </Tooltip>
-        <Tooltip arrow title="Navigate to node">
-          <IconButton aria-label="Navigate to node" onClick={onNavigateToNodeClicked}>
-            <CenterFocusStrong />
-          </IconButton>
-        </Tooltip>
-        <Tooltip arrow title="Delete node">
-          <IconButton color="error" aria-label="Delete node" onClick={onRemoveNodeClicked}>
-            <Delete />
-          </IconButton>
-        </Tooltip>
-      </div>
-    );
-  }
-}
+  const { visible, caption, onDoubleClick, onVisibilityToggled, onNavigateToNodeClicked, onRemoveNodeClicked } = props;
+
+  return (
+    <div className="node-card" onDoubleClick={onDoubleClick}>
+      <Typography className="title" variant="body1" component="div" noWrap={true}>
+        {caption}
+      </Typography>
+      <Tooltip arrow title={`Make node ${visible ? 'invisible' : 'visible'}`}>
+        <IconButton
+          style={{ marginLeft: 'auto' }}
+          aria-label={`Make node ${visible ? 'invisible' : 'visible'}`}
+          onClick={onVisibilityToggled}
+        >
+          {visible ? <Visibility /> : <VisibilityOff />}
+        </IconButton>
+      </Tooltip>
+      <Tooltip arrow title="Navigate to node">
+        <IconButton aria-label="Navigate to node" onClick={onNavigateToNodeClicked}>
+          <CenterFocusStrong />
+        </IconButton>
+      </Tooltip>
+      <Tooltip arrow title="Delete node">
+        <IconButton color="error" aria-label="Delete node" onClick={onRemoveNodeClicked}>
+          <Delete />
+        </IconButton>
+      </Tooltip>
+    </div>
+  );
+};
+
+export default NodeCard;

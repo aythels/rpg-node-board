@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
 
-import { GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
+import { PATCHnode, GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
 import { Game, Node, Subnode, User, UserPermission } from '../../types';
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
@@ -68,6 +68,27 @@ const gameSlice = createSlice({
       const index = state.gameInstance.nodes.findIndex((node) => node.id === action.payload.id);
       state.gameInstance.nodes[index] = action.payload;
     },
+    updateNodePos: (state: GameState, action: PayloadAction<[Node, number, number]>) => {
+      const [node, x, y] = action.payload;
+      const index = state.gameInstance.nodes.findIndex((n) => n.id === node.id);
+      state.gameInstance.nodes[index].x = x;
+      state.gameInstance.nodes[index].y = y;
+    },
+    activateNode: (state: GameState, action: PayloadAction<Node>) => {
+      // This is just calling deleteNode and addNode reducer
+      const index = state.gameInstance.nodes.findIndex((n) => n.id === action.payload.id);
+      if (index > -1) {
+        state.gameInstance.nodes.splice(index, 1);
+        state.gameInstance.nodes.unshift(action.payload);
+      }
+    },
+    deleteNode: (state: GameState, action: PayloadAction<Node>) => {
+      const index = state.gameInstance.nodes.findIndex((n) => n.id === action.payload.id);
+      if (index > -1) state.gameInstance.nodes.splice(index, 1);
+    },
+    addNode: (state: GameState, action: PayloadAction<Node>) => {
+      state.gameInstance.nodes.unshift(action.payload);
+    },
     updateSubnode: (state: GameState, action: PayloadAction<SubnodeUpdate>) => {
       const nodeToUpdate = state.gameInstance.nodes.find((node) => node.id === action.payload.nodeId) as Node;
       const subnodeToUpdate = nodeToUpdate.subnodes.find(
@@ -93,10 +114,19 @@ const gameSlice = createSlice({
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, hideUserAlreadyAddedDialog } = gameSlice.actions;
+export const { gameLoaded, hideUserAlreadyAddedDialog, activateNode, updateNodePos } = gameSlice.actions;
 
 // Thunks (async calls)
 // should we use createAsyncThunk() here?
+
+export const createNode = (gameId: number): any => {
+  const thunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    const node = PATCHnode(gameId); //async
+    dispatch(gameSlice.actions.addNode(node));
+  };
+
+  return thunk;
+};
 
 export const fetchGame = (gameId: number): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {

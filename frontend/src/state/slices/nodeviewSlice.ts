@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { uniqWith } from 'lodash';
 
 interface NodeviewState {
   activeNode: number;
+  canvasX: number;
+  canvasY: number;
+  canvasScale: number;
   isEditModalOpen: boolean;
   isUsersModalOpen: boolean;
   isImageModalOpen: boolean;
@@ -9,6 +13,9 @@ interface NodeviewState {
 
 const initialState: NodeviewState = {
   activeNode: -1,
+  canvasX: 0,
+  canvasY: 0,
+  canvasScale: 1,
   isEditModalOpen: false,
   isUsersModalOpen: false,
   isImageModalOpen: false,
@@ -30,8 +37,23 @@ const nodeviewSlice = createSlice({
     setActiveNode: (state: NodeviewState, action: PayloadAction<number>) => {
       state.activeNode = action.payload;
     },
+    setCanvasPos: (state: NodeviewState, action: PayloadAction<[number, number]>) => {
+      const [x, y] = action.payload;
+      state.canvasX = x;
+      state.canvasY = y;
+    },
+    setCanvasScale: (state: NodeviewState, action: PayloadAction<number>) => {
+      state.canvasScale = action.payload;
+    },
   },
 });
 
 export default nodeviewSlice.reducer;
-export const { setIsEditModalOpen, setIsImageModalOpen, setIsUsersModalOpen, setActiveNode } = nodeviewSlice.actions;
+export const {
+  setIsEditModalOpen,
+  setIsImageModalOpen,
+  setIsUsersModalOpen,
+  setActiveNode,
+  setCanvasPos,
+  setCanvasScale,
+} = nodeviewSlice.actions;

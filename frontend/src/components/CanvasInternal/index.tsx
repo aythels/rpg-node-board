@@ -18,8 +18,52 @@ interface Props {
   currentUserId: number;
 }
 
+/*
+const CanvasInternalBase = (): JSX.Element => {
+  const activeNode = useSelector((state: RootState) => state.nodeview.activeNode);
+
+  return (
+    <div>
+      <CanvasInternalTransform />
+      <Sidebar
+        isAdmin={GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)}
+        nodeManager={this.nodeManager}
+        setActiveNodeCallback={(id) => {
+          this.activeNode = id;
+          this.setState({});
+        }}
+        onCenterNodeViewClicked={this.nodeManager.setCenter}
+        onAddNodeClicked={this.handleAddNodeClicked}
+        onRemoveNodeClicked={this.handleRemoveNodeClicked}
+      />
+      {this.activeNode !== -1 ? (
+        <div className="nodeview-container">
+          <NodeView />
+        </div>
+      ) : null}
+      <div className="alert-container">
+        {this.activeAlert ? (
+          <Alert
+            severity="error"
+            onClose={() => {
+              this.activeAlert = false;
+              this.setState({});
+            }}
+          >
+            <AlertTitle>ERROR</AlertTitle>
+            <p>You do not have permission to do that.</p>
+          </Alert>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
+export default CanvasInternalBase;*/
+
 // Note: before you refactor to a functional component make sure you know what you
 // are doing - the setState({}) trick won't work on a functional component
+
 class CanvasInternalBase extends React.Component<Props> {
   nodeManager = new NodeManager();
   activeNode = -1;
@@ -80,6 +124,8 @@ class CanvasInternalBase extends React.Component<Props> {
       informationLevels: [],
       editors: GETgmIds(this.props.currentGameId),
       type: 'default',
+      x: 0,
+      y: 0,
     } as Node;
     POSTnode(newNode, this.props.currentGameId);
     this.nodeManager.createNode(newNode.id, newNode);
@@ -89,16 +135,7 @@ class CanvasInternalBase extends React.Component<Props> {
   render(): JSX.Element {
     return (
       <div>
-        <CanvasInternalTransform
-          nodeManager={this.nodeManager}
-          onCloseClicked={(id) => {
-            this.handleRemoveNodeClicked(id);
-          }}
-          onOpenClicked={(id) => {
-            this.activeNode = id;
-            this.setState({});
-          }}
-        />
+        <CanvasInternalTransform />
         <Sidebar
           isAdmin={GETuserIsGMInGame(this.props.currentUserId, this.props.currentGameId)}
           nodeManager={this.nodeManager}

@@ -5,6 +5,15 @@ import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain/CanvasMain';
 import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 
+/* REMOVE BEFORE COMMIT */
+import { fetchGame } from './state/slices/gameSlice';
+import { store } from './state';
+import { loginUser } from './state/slices/userSlice';
+
+store.dispatch(loginUser('admin'));
+store.dispatch(fetchGame(1));
+/* REMOVE BEFORE COMMIT */
+
 function App(): JSX.Element {
   const customTheme = createTheme({
     palette: {
