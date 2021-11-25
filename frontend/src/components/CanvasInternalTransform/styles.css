@@ -1,0 +1,34 @@
+.transform-wrapper {
+  margin: 0rem;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.centerOffSet-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.scale-container {
+  transform-origin: top left;
+  transform: scale(1);
+}
+
+.grid-container {
+  pointer-events: none;
+  user-select: none;
+  transform: translate(-50%, -50%);
+  position: relative;
+  width: 7000px;
+  height: 7000px;
+  background-color: white;
+  background-image: linear-gradient(#d2d3e1 4.4px, transparent 4.4px),
+    linear-gradient(90deg, #d2d3e1 4.4px, transparent 4.4px), linear-gradient(#d2d3e1 2.2px, transparent 2.2px),
+    linear-gradient(90deg, #d2d3e1 2.2px, #ffffff 2.2px);
+  background-size: 110px 110px, 110px 110px, 22px 22px, 22px 22px;
+  background-position: -4.4px -4.4px, -4.4px -4.4px, -2.2px -2.2px, -2.2px -2.2px;
+  opacity: 0.5;
+}

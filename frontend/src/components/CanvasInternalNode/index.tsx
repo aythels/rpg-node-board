@@ -12,18 +12,18 @@ interface Props {
   id: number;
   dataNode: Node;
   onCloseClicked: () => void;
-  onImageClicked: (id: number) => void;
+  onOpenClicked: () => void;
 }
 
 export default class CanvasInternalNode extends React.Component<Props> {
   render(): JSX.Element {
-    const { xPos, yPos, nodeWidth, nodeHeight, id, dataNode, onCloseClicked, onImageClicked } = this.props;
+    const { xPos, yPos, nodeWidth, nodeHeight, id, dataNode, onCloseClicked, onOpenClicked } = this.props;
 
     return (
       <div
         node-id={id}
         className="node"
-        onDoubleClick={() => onImageClicked(id)}
+        onDoubleClick={onOpenClicked}
         style={{
           left: `${xPos}px`,
           top: `${yPos}px`,
@@ -44,7 +44,7 @@ export default class CanvasInternalNode extends React.Component<Props> {
             </button>
           </Tooltip>
           <Tooltip title="View node">
-            <button className="node-button" onClick={() => onImageClicked(id)}>
+            <button className="node-button" onClick={onOpenClicked}>
               <Launch />
             </button>
           </Tooltip>
