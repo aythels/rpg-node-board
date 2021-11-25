@@ -1,19 +1,8 @@
 import './nodeview.css';
-import { Component, FormEvent, SyntheticEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import SubnodeView from '../SubnodeView/subnodeview';
 import { uid } from 'react-uid';
-import {
-  GETnewSubnodeId,
-  // GETgameById,
-  // GETnodeById,
-  GETsubnodesVisibleToUser,
-  // GETuserById,
-  GETuserCanEditNode,
-  POSTnode,
-  POSTsubnode,
-} from '../../mock-backend';
-import { Game, Node, Subnode, User } from '../../types';
-import { cloneDeep } from 'lodash';
+import { InfoLevel, Node, Subnode } from '../../types';
 import { ButtonGroup, Button, TextField, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -23,106 +12,51 @@ import NodeEditForm from '../NodeEditForm/nodeeditform';
 import NodeImageForm from '../NodeImageForm/nodeimageform';
 import { Add, Close } from '@mui/icons-material';
 import Delta from 'quill-delta';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../state/rootReducer';
+import { addSubnode, selectActiveNode } from '../../state/slices/gameSlice';
+import {
+  setIsEditModalOpen,
+  setIsImageModalOpen,
+  setIsUsersModalOpen,
+  setActiveNode,
+} from '../../state/slices/nodeviewSlice';
 
-interface Props {
-  node: Node;
-  user: User;
-  game: Game;
-  closeCallback: (node: Node) => void;
-  onLinkClick: (id: number, node: Node) => void;
-}
+const NodeView = (): JSX.Element => {
+  const game = useSelector((state: RootState) => state.game.gameInstance);
+  const user = useSelector((state: RootState) => state.user.userInstance);
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
+  const isEditModalOpen = useSelector((state: RootState) => state.nodeview.isEditModalOpen);
+  const isUsersModalOpen = useSelector((state: RootState) => state.nodeview.isUsersModalOpen);
+  const isImageModalOpen = useSelector((state: RootState) => state.nodeview.isImageModalOpen);
 
-interface State {
-  node: Node;
-  user: User;
-  game: Game;
-  subnodes: Subnode[];
-  editModalOpen: boolean;
-  usersModalOpen: boolean;
-  imageModalOpen: boolean;
-  newSubnodeName: string;
-  newSubnodeType: string;
-  newSubnodeInfoLevel: string;
-}
+  const [newSubnodeName, setNewSubnodeName] = useState('');
+  const [newSubnodeType, setNewSubnodeType] = useState('');
+  const [newSubnodeInfoLevel, setNewSubnodeInfoLevel] = useState('');
 
-export default class NodeView extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const node = props.node; //GETnodeById(props.nodeId);
-    const user = props.user; //GETuserById(props.userId);
-    const subnodes = GETsubnodesVisibleToUser(node.id, user.id);
-    const game = props.game; //GETgameById(props.gameId);
-    this.state = {
-      node: node,
-      user: user,
-      game: game,
-      subnodes: subnodes,
-      editModalOpen: false,
-      usersModalOpen: false,
-      imageModalOpen: false,
-      newSubnodeName: '',
-      newSubnodeType: '',
-      newSubnodeInfoLevel: '',
-    };
-  }
+  const dispatch = useDispatch();
 
-  handleEditModalOpen = (): void => {
-    this.setState({
-      editModalOpen: true,
-    });
-  };
-
-  handleUsersModalOpen = (): void => {
-    this.setState({
-      usersModalOpen: true,
-    });
-  };
-
-  handleImageModalOpen = (): void => {
-    this.setState({
-      imageModalOpen: true,
-    });
-  };
-
-  handleEditModalClose = (): void => {
-    this.setState({
-      editModalOpen: false,
-    });
-  };
-
-  handleUsersModalClose = (): void => {
-    this.setState({
-      usersModalOpen: false,
-    });
-  };
-
-  handleImageModalClose = (): void => {
-    this.setState({
-      imageModalOpen: false,
-    });
-  };
-
-  renderMenu = (): JSX.Element | null => {
-    if (GETuserCanEditNode(this.state.user.id, this.state.node.id)) {
+  const renderMenu = (): JSX.Element | null => {
+    if (node.editors.includes(user.id)) {
       return (
         <ButtonGroup>
           <Tooltip title="Node Info">
-            <Button onClick={this.handleEditModalOpen}>
+            <Button onClick={() => dispatch(setIsEditModalOpen(true))}>
               <EditIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Node Permissions">
-            <Button onClick={this.handleUsersModalOpen}>
+            <Button onClick={() => dispatch(setIsUsersModalOpen(true))}>
               <PeopleAltIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Node Image">
-            <Button onClick={this.handleImageModalOpen}>
+            <Button onClick={() => dispatch(setIsImageModalOpen(true))}>
               <InsertPhotoIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Close">
-            <Button onClick={() => this.props.closeCallback(this.state.node)}>
+            <Button onClick={() => dispatch(setActiveNode(-1))}>
               <Close />
             </Button>
           </Tooltip>
@@ -131,7 +65,7 @@ export default class NodeView extends Component<Props, State> {
     } else {
       return (
         <ButtonGroup>
-          <Button onClick={() => this.props.closeCallback(this.state.node)}>
+          <Button onClick={() => dispatch(setActiveNode(-1))}>
             <Close />
           </Button>
         </ButtonGroup>
@@ -139,176 +73,97 @@ export default class NodeView extends Component<Props, State> {
     }
   };
 
-  saveNodeState = (): void => {
-    POSTnode(this.state.node);
-  };
-
-  handleUsersFormSubmit = (e: SyntheticEvent, node: Node): void => {
-    if (!e.defaultPrevented) {
-      e.preventDefault();
-    }
-    console.log('Updating permissions for node ' + this.state.node.name);
-    this.setState(
-      {
-        node: cloneDeep(node),
-      },
-      this.saveNodeState,
-    );
-    this.handleUsersModalClose();
-  };
-
-  handleEditFormSubmit = (e: SyntheticEvent, node: Node): void => {
-    if (!e.defaultPrevented) {
-      e.preventDefault();
-    }
-    console.log('Updating settings for node ' + this.state.node.name);
-    this.setState(
-      {
-        node: cloneDeep(node),
-      },
-      this.saveNodeState,
-    );
-    this.handleEditModalClose();
-  };
-
-  handleImageFormSubmit = (e: SyntheticEvent, node: Node): void => {
-    if (!e.defaultPrevented) {
-      e.preventDefault();
-    }
-    console.log('Updating image for node ' + this.state.node.name);
-    this.setState(
-      {
-        node: cloneDeep(node),
-      },
-      this.saveNodeState,
-    );
-    this.handleImageModalClose();
-  };
-
-  addNewSubnode = (e: FormEvent): void => {
+  const addNewSubnode = (e: FormEvent): void => {
     e.preventDefault();
-    POSTsubnode({
-      id: GETnewSubnodeId(),
-      node_id: this.state.node.id,
-      name: this.state.newSubnodeName,
-      type: this.state.newSubnodeType,
-      informationLevel: parseInt(this.state.newSubnodeInfoLevel),
-      editors: this.state.node.editors,
+    const newSubnode = {
+      id: Math.ceil(Math.random() * 1000), //TODO: handle ID creation in database? !IMPORTANT
+      name: newSubnodeName,
+      type: newSubnodeType,
+      informationLevel: parseInt(newSubnodeInfoLevel),
+      editors: node.editors,
       content: new Delta(),
-    });
-    this.setState({
-      subnodes: GETsubnodesVisibleToUser(this.state.node.id, this.state.user.id),
-    });
+    };
+    dispatch(addSubnode(game.id, node.id, newSubnode));
   };
 
-  renderSubnodes = (): JSX.Element => {
-    const subnodes = this.state.subnodes;
+  const renderSubnodes = (): JSX.Element => {
     return (
       <div className="subnodes">
-        {subnodes.map((subnode) => (
-          <SubnodeView
-            subnode={subnode}
-            game={this.props.game}
-            node={this.state.node}
-            user={this.state.user}
-            key={uid(subnode)}
-            onLinkClick={this.props.onLinkClick}
-          />
-        ))}
+        {node.subnodes.map((subnode: Subnode) => {
+          const infoLevel = node.informationLevels.find((i) => i.userId === user.id) as InfoLevel;
+          if (subnode.informationLevel >= infoLevel.infoLevel) {
+            return <SubnodeView subnode={subnode} key={uid(subnode)} />;
+          }
+        })}
       </div>
     );
   };
 
-  render(): JSX.Element {
-    const node = this.state.node;
-    return (
-      <div className="nodeview">
-        <div className="node-header">
-          <div className="node-topline">
-            <p>
-              {node.name} &#8211; <span className="node__type">{node.type}</span>
-            </p>
-            {this.renderMenu()}
-          </div>
-          <img className="node-header-image" src={node.image} alt={node.imageAlt}></img>
+  return (
+    <div className="nodeview">
+      <div className="node-header">
+        <div className="node-topline">
+          <p>
+            {node.name} &#8211; <span className="node__type">{node.type}</span>
+          </p>
+          {renderMenu()}
         </div>
-        {this.state.editModalOpen ? (
-          <NodeEditForm
-            nodeId={this.state.node.id}
-            userId={this.state.user.id}
-            gameId={this.state.game.id}
-            closeCallback={this.handleEditModalClose}
-            submitCallback={this.handleEditFormSubmit}
-          />
-        ) : null}
-        {this.state.usersModalOpen ? (
-          <NodeUserForm
-            nodeId={this.state.node.id}
-            userId={this.state.user.id}
-            gameId={this.state.game.id}
-            closeCallback={this.handleUsersModalClose}
-            submitCallback={this.handleUsersFormSubmit}
-          />
-        ) : null}
-        {this.state.imageModalOpen ? (
-          <NodeImageForm
-            nodeId={this.state.node.id}
-            userId={this.state.user.id}
-            gameId={this.state.game.id}
-            closeCallback={this.handleImageModalClose}
-            submitCallback={this.handleImageFormSubmit}
-          />
-        ) : null}
-        {this.renderSubnodes()}
-        {GETuserCanEditNode(this.state.user.id, this.state.node.id) ? (
-          <div className="new-subnode-wrapper">
-            <h2>Add new subnode</h2>
-            <form
-              className="new-subnode"
-              onSubmit={(e) => {
-                this.addNewSubnode(e);
-              }}
-            >
-              <Tooltip title="Add new subnode">
-                <Button type="submit">
-                  <Add />
-                </Button>
-              </Tooltip>
-              <TextField
-                required
-                label="Name"
-                value={this.state.newSubnodeName}
-                onChange={(event) => {
-                  this.setState({ newSubnodeName: event.target.value });
-                }}
-              ></TextField>
-              <TextField
-                required
-                label="Type"
-                value={this.state.newSubnodeType}
-                onChange={(event) => {
-                  this.setState({ newSubnodeType: event.target.value });
-                }}
-              ></TextField>
-              <TextField
-                required
-                type="number"
-                InputProps={{
-                  inputProps: {
-                    min: 0,
-                    step: 1,
-                  },
-                }}
-                label="Information Level"
-                value={this.state.newSubnodeInfoLevel}
-                onChange={(event) => {
-                  this.setState({ newSubnodeInfoLevel: event.target.value });
-                }}
-              ></TextField>
-            </form>
-          </div>
-        ) : null}
+        <img className="node-header-image" src={node.image} alt={node.imageAlt}></img>
       </div>
-    );
-  }
-}
+      {isEditModalOpen ? <NodeEditForm /> : null}
+      {isUsersModalOpen ? <NodeUserForm /> : null}
+      {isImageModalOpen ? <NodeImageForm /> : null}
+      {renderSubnodes()}
+      {node.editors.includes(user.id) ? (
+        <div className="new-subnode-wrapper">
+          <h2>Add new subnode</h2>
+          <form
+            className="new-subnode"
+            onSubmit={(e) => {
+              addNewSubnode(e);
+            }}
+          >
+            <Tooltip title="Add new subnode">
+              <Button type="submit">
+                <Add />
+              </Button>
+            </Tooltip>
+            <TextField
+              required
+              label="Name"
+              value={newSubnodeName}
+              onChange={(event) => {
+                setNewSubnodeName(event.target.value);
+              }}
+            ></TextField>
+            <TextField
+              required
+              label="Type"
+              value={newSubnodeType}
+              onChange={(event) => {
+                setNewSubnodeType(event.target.value);
+              }}
+            ></TextField>
+            <TextField
+              required
+              type="number"
+              InputProps={{
+                inputProps: {
+                  min: 0,
+                  step: 1,
+                },
+              }}
+              label="Information Level"
+              value={newSubnodeInfoLevel}
+              onChange={(event) => {
+                setNewSubnodeInfoLevel(event.target.value);
+              }}
+            ></TextField>
+          </form>
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
+export default NodeView;

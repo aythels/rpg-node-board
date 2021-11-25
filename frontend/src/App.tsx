@@ -2,12 +2,11 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
-import CanvasMain from './components/CanvasMain';
-import { SettingsMenu } from './components/SettingsMenu/SettingsMenu';
+import CanvasMain from './components/CanvasMain/CanvasMain';
+import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 
 function App(): JSX.Element {
   const customTheme = createTheme({
-    // Note: to be edited later
     palette: {
       primary: {
         light: '#a4a4a4',
@@ -34,34 +33,14 @@ function App(): JSX.Element {
     },
   });
 
-  // NOTE: this type of routing is temporary, and will be replaced in phase 2, most likely using some state management solution like redux.
-  const currentGameId = 1;
-  const userID = 1;
-  const adminID = 2;
-
   return (
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
         <Switch>
-          <Route
-            exact
-            path="/canvasAdmin"
-            render={() => <CanvasMain currentUserId={adminID} currentGameId={currentGameId} />}
-          />
-          <Route
-            exact
-            path="/canvasUser"
-            render={() => <CanvasMain currentUserId={userID} currentGameId={currentGameId} />}
-          />
-          {/* <Route path="/canvas">
-            <CanvasMain currentUserId={currentUserId} currentGameId={currentGameId} />
-          </Route> */}
-          {/* <Route path="/canvas" component={CanvasMain} /> */}
-
-          <Route exact path="/gamesAdmin" render={() => <UserDashboard userID={adminID} />} />
-          <Route exact path="/gamesUser" render={() => <UserDashboard userID={userID} />} />
-          <Route exact path="/settings" render={() => <SettingsMenu />} />
-          <Route exact path="/" render={() => <Login />} />
+          <Route exact path="/canvas" component={CanvasMain} />
+          <Route exact path="/games" component={UserDashboard} />
+          <Route exact path="/settings" component={SettingsMenu} />
+          <Route exact path="/" component={Login} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

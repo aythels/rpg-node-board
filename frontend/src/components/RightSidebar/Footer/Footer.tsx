@@ -1,92 +1,89 @@
 import './footer.css';
 import { Button, TextField, IconButton, Tooltip } from '@mui/material';
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../../Dialog/Dialog';
 import { DELETEGame } from '../../../mock-backend';
-import { MuiTheme } from '../../../theme';
-import { withTheme } from '@mui/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { addPlayer, hideUserAlreadyAddedDialog } from '../../../state/slices/gameSlice';
+import { RootState } from '../../../state/rootReducer';
 
-interface Props extends MuiTheme {
-  onInvitePlayerClicked: (username: string) => void;
-  gameId: number;
-}
+const Footer = (): JSX.Element => {
+  const dispatch = useDispatch();
 
-interface State {
-  inviteName: string;
-  showDeleteServerDialog: boolean;
-}
+  const [inviteName, setInviteName] = useState('');
+  const [showDeleteServerDialog, setShowDeleteServerDialog] = useState(false);
+  const gameId = useSelector((state: RootState) => state.game.gameInstance.id);
+  const showUserAlreadyAddedDialog = useSelector((state: RootState) => state.game.showUserAlreadyAddedDialog);
 
-class Footer extends Component<Props, State> {
-  state: State = {
-    inviteName: '',
-    showDeleteServerDialog: false,
+  const handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
+    setInviteName(event.target.value);
   };
 
-  handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ inviteName: event.target.value });
-  };
-
-  render(): JSX.Element {
-    return (
-      <div className="canvas-sidebar-footer">
-        <div className="text-field__wrapper">
-          <TextField
-            style={{
-              color: '#000 !important',
-            }}
-            fullWidth
-            autoComplete="off"
-            color="primary"
-            id="outlined-basic"
-            label="Enter player name"
-            value={this.state.inviteName}
-            variant="outlined"
-            onChange={this.handleInviteNameChanged}
-            onKeyPress={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                this.props.onInvitePlayerClicked(this.state.inviteName);
-              }
-            }}
-          />
-          <Tooltip arrow title="Invite player">
-            <IconButton
-              aria-label="Invite player to the game"
-              component="span"
-              disabled={!this.state.inviteName}
-              onClick={() => this.props.onInvitePlayerClicked(this.state.inviteName)}
-            >
-              <PersonAdd />
-            </IconButton>
-          </Tooltip>
-        </div>
-        <Button
-          fullWidth
-          color="error"
-          aria-label="delete game server"
-          className="delete-button"
-          startIcon={<Delete />}
-          variant="contained"
-          onClick={() => this.setState({ showDeleteServerDialog: true })}
-        >
-          Delete Game
-        </Button>
-
-        <Dialog
-          description="Doing so will immediately end the session and remove the game from the server."
-          header="Delete server?"
-          open={this.state.showDeleteServerDialog}
-          onAgree={() => {
-            DELETEGame(this.props.gameId);
+  return (
+    <div className="canvas-sidebar-footer">
+      <div className="text-field__wrapper">
+        <TextField
+          style={{
+            color: '#000 !important',
           }}
-          onAgreeRedirectTo="/gamesAdmin"
-          onClose={() => this.setState({ showDeleteServerDialog: false })}
-          onDisagree={() => this.setState({ showDeleteServerDialog: false })}
+          fullWidth
+          autoComplete="off"
+          color="primary"
+          id="outlined-basic"
+          label="Enter player name"
+          value={inviteName}
+          variant="outlined"
+          onChange={handleInviteNameChanged}
+          onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              dispatch(addPlayer(inviteName));
+            }
+          }}
         />
+        <Tooltip arrow title="Invite player">
+          <IconButton
+            aria-label="Invite player to the game"
+            component="span"
+            disabled={!inviteName}
+            onClick={() => dispatch(addPlayer(inviteName))}
+          >
+            <PersonAdd />
+          </IconButton>
+        </Tooltip>
       </div>
-    );
-  }
-}
+      <Button
+        fullWidth
+        color="error"
+        aria-label="delete game server"
+        className="delete-button"
+        startIcon={<Delete />}
+        variant="contained"
+        onClick={() => setShowDeleteServerDialog(true)}
+      >
+        Delete Game
+      </Button>
 
-export default withTheme(Footer);
+      <Dialog
+        description="Doing so will immediately end the session and remove the game from the server."
+        header="Delete server?"
+        open={showDeleteServerDialog}
+        onAgree={() => {
+          DELETEGame(gameId);
+        }}
+        onAgreeRedirectTo="/games"
+        onClose={() => setShowDeleteServerDialog(false)}
+        onDisagree={() => setShowDeleteServerDialog(false)}
+      />
+      <Dialog
+        description="You cannot add the same player twice."
+        header="This player is already in the game!"
+        open={showUserAlreadyAddedDialog}
+        onClose={() => dispatch(hideUserAlreadyAddedDialog())}
+      />
+    </div>
+  );
+};
+
+export default Footer;

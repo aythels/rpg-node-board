@@ -1,38 +1,36 @@
 import './styles.css';
 import React from 'react';
 import Sidebar from '../LeftSidebar';
-import CanvasInternalNode from '../CanvasInternalNode';
+// import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
-import {
-  DELETEnode,
-  GETgameById,
-  GETgmIds,
-  GETnewNodeId,
-  GETnodesInGameVisibleToUser,
-  GETuserById,
-  GETuserIsGMInGame,
-  POSTnodeToGame,
-} from '../../mock-backend';
+import { DELETEnodeFromGame, GETgmIds, GETuserIsGMInGame, POSTnode } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
 import { Node } from '../../types';
 import { Alert, AlertTitle } from '@mui/material';
+import { selectVisibleNodes } from '../../state/slices/gameSlice';
+import { connect } from 'react-redux';
+import { RootState } from '../../state/rootReducer';
 import CanvasInternalTransform from '../CanvasInternalTransform';
 
 interface Props {
+  visibleNodes: Node[];
   currentGameId: number;
   currentUserId: number;
 }
 
-export default class CanvasInternal extends React.Component<Props> {
+// Note: before you refactor to a functional component make sure you know what you
+// are doing - the setState({}) trick won't work on a functional component
+class CanvasInternalBase extends React.Component<Props> {
   nodeManager = new NodeManager();
   activeNode = -1;
   activeAlert = false;
 
   constructor(props: Props) {
     super(props);
-    for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
-      this.nodeManager.createNode(node.id, node);
-    }
+    // TODO: Refactor
+    // for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
+    //   this.nodeManager.createNode(node.id, node);
+    // }
   }
 
   getActiveNodeFromNodeManager = (): Node => {
@@ -62,7 +60,7 @@ export default class CanvasInternal extends React.Component<Props> {
       this.setState({});
       return;
     }
-    DELETEnode(nodeId);
+    DELETEnodeFromGame(this.props.currentGameId, nodeId);
     this.nodeManager.removeNode(nodeId);
   };
 
@@ -72,18 +70,18 @@ export default class CanvasInternal extends React.Component<Props> {
       this.setState({});
       return;
     }
-    const id = GETnewNodeId();
+    const id = Math.ceil(Math.random() * 1000); //TODO: handle ID creation in database? !IMPORTANT
     const newNode = {
       id: id,
       name: 'Default' + id,
       image: '/images/default.jpg',
       imageAlt: 'Default',
       subnodes: [],
-      informationLevels: {},
+      informationLevels: [],
       editors: GETgmIds(this.props.currentGameId),
       type: 'default',
     } as Node;
-    POSTnodeToGame(newNode, this.props.currentGameId);
+    POSTnode(newNode, this.props.currentGameId);
     this.nodeManager.createNode(newNode.id, newNode);
     this.setState({});
   };
@@ -114,13 +112,7 @@ export default class CanvasInternal extends React.Component<Props> {
         />
         {this.activeNode !== -1 ? (
           <div className="nodeview-container">
-            <NodeView
-              node={this.getActiveNodeFromNodeManager()}
-              user={GETuserById(this.props.currentUserId)}
-              game={GETgameById(this.props.currentGameId)}
-              onLinkClick={this.handleNodeLinkClick}
-              closeCallback={this.handleNodeviewSave}
-            />
+            <NodeView />
           </div>
         ) : null}
         <div className="alert-container">
@@ -141,3 +133,11 @@ export default class CanvasInternal extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: RootState): Props => ({
+  visibleNodes: selectVisibleNodes(state),
+  currentUserId: state.user.userInstance.id,
+  currentGameId: state.game.gameInstance.id,
+});
+
+export default connect(mapStateToProps)(CanvasInternalBase);

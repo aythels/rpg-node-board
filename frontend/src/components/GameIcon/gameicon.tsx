@@ -1,31 +1,21 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable sort-imports */
-import { Game } from '../../types';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
-import { GETuserIsGMInGame } from '../../mock-backend';
+import { Game } from '../../types';
+import { fetchGame } from '../../state/slices/gameSlice';
+import { useDispatch } from 'react-redux';
 
-interface GameDisplayProps {
-  name: string;
-  path: string;
-  userID: number;
-  gameID: number;
+interface Props {
+  game: Game;
 }
-// eslint-disable-next-line react/prop-types
-export const GameIcon: React.FunctionComponent<GameDisplayProps> = ({ name, path, userID, gameID }) => {
-  const img_path = '/images/' + path;
-  // console.log(img_path);
-  // console.log(GETuserIsGMInGame(userID, gameID));
-  const canvasLink = GETuserIsGMInGame(userID, gameID) ? 'canvasAdmin' : 'canvasUser';
+
+export const GameIcon = (props: Props): JSX.Element => {
+  const dispatch = useDispatch();
+
+  const imgPath = '/images/' + props.game.imgpath; // TODO: use server URL
+
   return (
     <Card
       sx={{
@@ -37,18 +27,12 @@ export const GameIcon: React.FunctionComponent<GameDisplayProps> = ({ name, path
       }}
       style={{ boxShadow: '0.1rem 0.1rem 0.7rem' }}
     >
-      <CardActionArea
-        component={Link}
-        to={canvasLink}
-        // state: { currentUserId: { userID }, currentGameID: { gameID } },
-        // state: { currentUserId: 1, currentGameID: 1 },
-      >
-        <CardMedia component="img" height="100" width="100" src={img_path} alt="Game Icon" />
+      <CardActionArea onClick={() => dispatch(fetchGame(props.game.id))} component={Link} to="/canvas">
+        <CardMedia component="img" height="100" width="100" src={imgPath} alt="Game Icon" />
         <Typography variant="h5" component="div">
-          {name}
+          {props.game.title}
         </Typography>
       </CardActionArea>
     </Card>
   );
 };
-// currentUserId={currentUserId} currentGameId={currentGameId}

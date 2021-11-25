@@ -2,153 +2,148 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import Delta from 'quill-delta';
-import { Node, Subnode, Game, User } from './types';
-import CloneDeep from 'lodash.clonedeep';
+import { Node, Subnode, Game, User, UserPermission, UserPermissionRecord } from './types';
+import cloneDeep from 'lodash.clonedeep';
 
-// Hardcoded variables go here:
-const globalSubnodes = [
-  {
-    id: 1,
-    node_id: 1,
-    informationLevel: 1,
-    editors: [2],
-    type: 'description',
-    name: 'Description',
-    content: new Delta({
-      ops: [
-        { insert: 'A vast sky. The ' },
-        { attributes: { nodelink: '3' }, insert: 'Lonely Path' },
-        { insert: ' can be found here.\n' },
-      ],
-    }),
-  } as Subnode,
-  {
-    id: 2,
-    node_id: 1,
-    informationLevel: 2,
-    editors: [2],
-    type: 'event',
-    name: 'Sky is Falling',
-    content: new Delta({ ops: [{ insert: 'The sky is falling!' }] }),
-  },
-  {
-    id: 3,
-    node_id: 1,
-    informationLevel: 1,
-    editors: [1, 2, 3, 4, 5],
-    type: 'notes',
-    name: 'Notes',
-    content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
-  },
-  {
-    id: 4,
-    node_id: 2,
-    informationLevel: 1,
-    editors: [2],
-    type: 'description',
-    name: 'Description',
-    content: new Delta({
-      ops: [
-        { insert: 'A place of great knowledge. Near by ' },
-        { attributes: { nodelink: '4' }, insert: 'St. George' },
-        { insert: '.\n' },
-      ],
-    }),
-  },
-  {
-    id: 5,
-    node_id: 3,
-    informationLevel: 1,
-    editors: [2],
-    type: 'description',
-    name: 'Description',
-    content: new Delta({
-      ops: [
-        { insert: 'Somewhere to walk underneath ' },
-        { attributes: { nodelink: '1' }, insert: 'The Soaring Skies' },
-        { insert: '.' },
-      ],
-    }),
-  },
-  {
-    id: 6,
-    node_id: 4,
-    informationLevel: 1,
-    editors: [2],
-    type: 'description',
-    name: 'Description',
-    content: new Delta({
-      ops: [
-        { insert: 'The center of UofT. Near ' },
-        { attributes: { nodelink: '2' }, insert: 'Museum' },
-        { insert: '.' },
-      ],
-    }),
-  },
-];
+const theSoaringSkies = {
+  id: 1,
+  name: 'The Soaring Skies',
+  image: '/images/sky.jpg',
+  imageAlt: '',
+  informationLevels: [
+    { userId: 1, infoLevel: 0 },
+    { userId: 3, infoLevel: 1 },
+    { userId: 4, infoLevel: 1 },
+    { userId: 5, infoLevel: 2 },
+  ],
+  subnodes: [
+    {
+      id: 1,
+      informationLevel: 1,
+      editors: [2],
+      type: 'description',
+      name: 'Description',
+      content: new Delta({
+        ops: [
+          { insert: 'A vast sky. The ' },
+          { attributes: { nodelink: '3' }, insert: 'Lonely Path' },
+          { insert: ' can be found here.\n' },
+        ],
+      }),
+    },
+    {
+      id: 2,
+      informationLevel: 2,
+      editors: [2],
+      type: 'event',
+      name: 'Sky is Falling',
+      content: new Delta({ ops: [{ insert: 'The sky is falling!' }] }),
+    },
+    {
+      id: 3,
+      informationLevel: 1,
+      editors: [1, 2, 3, 4, 5],
+      type: 'notes',
+      name: 'Notes',
+      content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
+    },
+  ],
+  editors: [2, 1],
+  type: 'location',
+};
 
-const globalNodes = [
-  {
-    id: 1,
-    name: 'The Soaring Skies',
-    image: '/images/sky.jpg',
-    imageAlt: '',
-    informationLevels: {
-      1: 0,
-      3: 1,
-      4: 1,
-      5: 2,
+const museum = {
+  id: 2,
+  name: 'Museum',
+  image: '/images/museum.jpg',
+  imageAlt: '',
+  informationLevels: [
+    { userId: 1, infoLevel: 0 },
+    { userId: 3, infoLevel: 1 },
+    { userId: 4, infoLevel: 0 },
+    { userId: 5, infoLevel: 2 },
+  ],
+  subnodes: [
+    {
+      id: 4,
+      informationLevel: 1,
+      editors: [2],
+      type: 'description',
+      name: 'Description',
+      content: new Delta({
+        ops: [
+          { insert: 'A place of great knowledge. Near by ' },
+          { attributes: { nodelink: '4' }, insert: 'St. George' },
+          { insert: '.\n' },
+        ],
+      }),
     },
-    subnodes: [],
-    editors: [2, 1],
-    type: 'location',
-  } as Node,
-  {
-    id: 2,
-    name: 'Museum',
-    image: '/images/museum.jpg',
-    imageAlt: '',
-    informationLevels: {
-      1: 0,
-      3: 1,
-      4: 0,
-      5: 2,
+  ],
+  editors: [2],
+  type: 'location',
+};
+
+const lonelyPath = {
+  id: 3,
+  name: 'Lonely Path',
+  image: '/images/path.jpg',
+  imageAlt: '',
+  informationLevels: [
+    { userId: 1, infoLevel: 0 },
+    { userId: 3, infoLevel: 1 },
+    { userId: 4, infoLevel: 1 },
+    { userId: 5, infoLevel: 2 },
+  ],
+  subnodes: [
+    {
+      id: 5,
+      informationLevel: 1,
+      editors: [2],
+      type: 'description',
+      name: 'Description',
+      content: new Delta({
+        ops: [
+          { insert: 'Somewhere to walk underneath ' },
+          { attributes: { nodelink: '1' }, insert: 'The Soaring Skies' },
+          { insert: '.' },
+        ],
+      }),
     },
-    subnodes: [],
-    editors: [2],
-    type: 'location',
-  },
-  {
-    id: 3,
-    name: 'Lonely Path',
-    image: '/images/path.jpg',
-    imageAlt: '',
-    informationLevels: {
-      1: 0,
-      3: 1,
-      4: 1,
-      5: 2,
+  ],
+  editors: [2],
+  type: 'location',
+};
+
+const stGeorge = {
+  id: 4,
+  name: 'St. George',
+  image: '/images/stgeorge.jpg',
+  imageAlt: '',
+  informationLevels: [
+    { userId: 1, infoLevel: 0 },
+    { userId: 3, infoLevel: 0 },
+    { userId: 4, infoLevel: 1 },
+    { userId: 5, infoLevel: 2 },
+  ],
+  subnodes: [
+    {
+      id: 6,
+      informationLevel: 1,
+      editors: [2],
+      type: 'description',
+      name: 'Description',
+      content: new Delta({
+        ops: [
+          { insert: 'The center of UofT. Near ' },
+          { attributes: { nodelink: '2' }, insert: 'Museum' },
+          { insert: '.' },
+        ],
+      }),
     },
-    subnodes: [],
-    editors: [2],
-    type: 'location',
-  },
-  {
-    id: 4,
-    name: 'St. George',
-    image: '/images/stgeorge.jpg',
-    imageAlt: '',
-    informationLevels: {
-      1: 0,
-      3: 0,
-      4: 1,
-      5: 2,
-    },
-    subnodes: [],
-    editors: [2],
-    type: 'location',
-  },
-];
+  ],
+  editors: [2],
+  type: 'location',
+};
 
 const globalUsers: User[] = [
   {
@@ -174,7 +169,7 @@ const globalUsers: User[] = [
     username: 'user2',
     password: 'user2',
     email: 'user2@user.com',
-    games: [1],
+    games: [1, 2],
     images: ['/images/stgeorge.jpg', '/images/path.jpg', '/images/museum.jpg', '/images/sky.jpg'],
     profilePicture: '/images/profile_picture_2.png',
   },
@@ -183,7 +178,7 @@ const globalUsers: User[] = [
     username: 'user3',
     password: 'user3',
     email: 'user3@user.com',
-    games: [1],
+    games: [1, 2],
     images: [],
     profilePicture: '/images/profile_picture_4.png',
   },
@@ -260,243 +255,187 @@ const globalUsers: User[] = [
 let globalGames: Game[] = [
   {
     id: 1,
-    nodes: [1, 2, 3, 4],
-    players: [1, 3, 4, 5],
-    gms: [2],
-    users: [1, 2, 3, 4, 5],
-    title: 'CLICK ME!',
+    nodes: [theSoaringSkies, museum, lonelyPath, stGeorge],
+    users: [
+      {
+        userId: 1,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 2,
+        permission: UserPermission.gameMaster,
+      },
+      {
+        userId: 3,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 4,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 5,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 6,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 7,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 8,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 9,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 10,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 11,
+        permission: UserPermission.player,
+      },
+      {
+        userId: 12,
+        permission: UserPermission.player,
+      },
+    ],
+    title: 'A Game!',
     imgpath: '/uoft.png',
     settings: {},
   },
   {
     id: 2,
-    nodes: [1, 2],
-    players: [1, 3, 4, 5],
-    gms: [2],
-    users: [1, 2, 3, 4, 5],
+    nodes: [theSoaringSkies, lonelyPath],
+    users: [
+      {
+        userId: 3,
+        permission: UserPermission.gameMaster,
+      },
+      {
+        userId: 4,
+        permission: UserPermission.gameMaster,
+      },
+    ],
     title: 'Filler game 1',
     imgpath: '/ryerson.jpg',
     settings: {},
   },
-  {
-    id: 3,
-    nodes: [1],
-    players: [1, 3, 4, 5],
-    gms: [2],
-    users: [1, 2, 3, 4, 5],
-    title: 'Filler game 2',
-    imgpath: '/ryerson.jpg',
-    settings: {},
-  },
-  {
-    id: 4,
-    nodes: [1, 2],
-    players: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    gms: [2],
-    title: 'Filler game 3',
-    imgpath: '/ryerson.jpg',
-    users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    settings: {},
-  },
 ];
 
-// Functions mocking backend behaviour go here:
+/* GAME FUNCTIONS */
 
-export const GETuserByUsername = (username: string): User | undefined => {
-  return globalUsers.find((user) => user.username == username);
+/* GET */
+
+export const GETgameById = (gameId: number): Game => {
+  const globalGamesCopy = cloneDeep(globalGames);
+  return globalGamesCopy.find((game) => game.id === gameId) as Game;
 };
 
 export const GETplayers = (gameId: number): User[] => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  return game.users.map(GETuserById);
+  const game = GETgameById(gameId);
+  return game
+    ? game.users.filter((user) => user.permission === UserPermission.player).map((u) => GETuserById(u.userId))
+    : [];
+};
+
+export const GETgms = (gameId: number): User[] => {
+  const game = GETgameById(gameId);
+  return game
+    ? game.users.filter((user) => user.permission === UserPermission.gameMaster).map((u) => GETuserById(u.userId))
+    : [];
 };
 
 export const GETgmIds = (gameId: number): number[] => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  return game.gms;
+  const gms = GETgms(gameId);
+  return gms.map((gm) => gm.id);
 };
 
-export const POSTaddPlayerToGame = (playerId: number, gameId: number): void => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  game.players.push(playerId);
-  game.users.push(playerId);
+/* POST */
 
-  const player = globalUsers.filter((user) => user.id === playerId)[0];
-  player.games.push(gameId);
+export const POSTnode = (node: Node, gameId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  game.nodes.push(node);
 };
 
-export const POSTremovePlayerFromGame = (playerId: number, gameId: number): void => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  game.players = game.players.filter((id) => id !== playerId);
-  game.users = game.users.filter((id) => id !== playerId);
+/* PATCH & PUT */
 
-  const player = globalUsers.filter((user) => user.id === playerId)[0];
-  player.games = player.games.filter((id) => id !== gameId);
+export const PATCHaddPlayerToGame = (playerId: number, gameId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const player = globalUsers.find((user) => user.id === playerId) as User;
+  game.users.push({
+    userId: player.id,
+    permission: UserPermission.player,
+  });
+  player.games.push(game.id);
+  for (const node of game.nodes) {
+    node.informationLevels.push({
+      userId: playerId,
+      infoLevel: 0,
+    });
+  }
 };
 
-export const POSTupdateGameName = (gameId: number, newTitle: string): void => {
+export const PATCHpromoteUserToGameMaster = (userId: number, gameId: number): void => {
   const game = globalGames.filter((game) => game.id === gameId)[0];
-  game.title = newTitle;
-};
-
-export const POSTpromoteUserToGameMaster = (userId: number, gameId: number): void => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  game.gms.push(userId);
-  game.players = game.players.filter((id) => id !== userId);
-  game.nodes.forEach((nodeId) => {
-    const node = globalNodes.filter((node) => node.id === nodeId)[0];
+  const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
+  userPermissionRecord.permission = UserPermission.gameMaster;
+  for (const node of game.nodes) {
     if (!node.editors.includes(userId)) {
       node.editors.push(userId);
     }
-  });
-};
-
-export const POSTdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  game.gms = game.gms.filter((id) => id !== userId);
-  game.players.push(userId);
-  game.nodes.forEach((nodeId) => {
-    const node = globalNodes.filter((node) => node.id === nodeId)[0];
-    node.editors = node.editors.filter((editorId) => editorId !== userId);
-  });
-};
-
-// This mock-db method will CERTAINLY be changed.
-export const VerifyLogin = (username: string, password: string): boolean => {
-  return globalUsers.filter((user) => user.username === username && user.password === password).length == 1;
-};
-
-export const GETnodeById = (id: number): Node => {
-  return CloneDeep(globalNodes.filter((node) => node.id === id)[0]);
-};
-
-export const GETuserById = (id: number): User => {
-  return CloneDeep(globalUsers.filter((user) => user.id === id)[0]);
-};
-
-export const GETsubnodesVisibleToUser = (nodeId: number, userId: number): Subnode[] => {
-  const node = globalNodes.filter((node) => node.id === nodeId)[0] as Node;
-  const allSubnodes = globalSubnodes.filter((subnode) => subnode.node_id === nodeId);
-  let visibleSubodes;
-  if (node.editors.includes(userId)) {
-    visibleSubodes = allSubnodes;
-  } else {
-    visibleSubodes = allSubnodes.filter((subnode) => subnode.informationLevel <= node.informationLevels[userId]);
   }
-  return CloneDeep(visibleSubodes);
 };
 
-export const POSTsubnodeContent = (id: number, newContent: Delta): void => {
-  const subnode = globalSubnodes.filter((subnode) => subnode.id === id)[0];
-  // console.log(newContent);
-  subnode.content = subnode.content.compose(newContent);
-  // console.log(subnode.content.compose(newContent));
-  // console.log(subnode.content);
-};
-
-export const POSTsubnode = (subnode: Subnode): void => {
-  globalSubnodes.push(CloneDeep(subnode));
-};
-
-export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
-  const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
-  return CloneDeep(subnode.editors.includes(userId));
-};
-
-export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
-  const node = globalNodes.filter((node) => node.id === nodeId)[0];
-  return CloneDeep(node.editors.includes(userId));
-};
-
-export const GETnodesInGame = (gameId: number): Node[] => {
+export const PATCHdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
   const game = globalGames.filter((game) => game.id === gameId)[0];
-  return globalNodes.filter((node) => game.nodes.includes(node.id));
-};
-
-export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
-  const allNodes = GETnodesInGame(gameId);
-  const nodes = allNodes.filter((node) => {
-    if (node.editors.includes(userId)) {
-      return true;
-    } else if (node.informationLevels[userId]) {
-      return node.informationLevels[userId] > 0;
-    } else {
-      return false;
-    }
-  });
-  return nodes;
-};
-
-let NEXT_SUBNODE = globalSubnodes.length;
-let NEXT_NODE = globalNodes.length;
-
-export const GETnewSubnodeId = (): number => {
-  NEXT_SUBNODE += 1;
-  return NEXT_SUBNODE;
-};
-
-export const GETnewNodeId = (): number => {
-  NEXT_NODE += 1;
-  return NEXT_NODE;
-};
-
-export const GETeditorsForNode = (nodeId: number): User[] => {
-  const node = globalNodes.filter((node) => node.id === nodeId)[0];
-  const users = globalUsers.filter((user) => node.editors.includes(user.id));
-  return CloneDeep(users);
-};
-
-export const GETplayersInGame = (gameId: number): User[] => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  const userIds = game.players;
-  const users = globalUsers.filter((user) => userIds.includes(user.id));
-  return CloneDeep(users);
-};
-
-export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  return CloneDeep(game.gms.includes(userId));
-};
-
-export const GETgamesByUserID = (userID: number): Game[] => {
-  return CloneDeep(globalGames.filter((game) => game.users.includes(userID)));
-};
-
-export const GETgameById = (gameId: number): Game => {
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  return CloneDeep(game);
-};
-
-export const GETsubnodesByNodeId = (nodeId: number): Subnode[] => {
-  return CloneDeep(globalSubnodes.filter((subnode) => subnode.node_id === nodeId));
-};
-
-export const POSTnode = (node: Node): void => {
-  const existingNode = globalNodes.filter((n) => n.id === node.id)[0];
-  const index = globalNodes.indexOf(existingNode);
-  if (index !== -1) {
-    globalNodes[index] = CloneDeep(node);
+  const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
+  userPermissionRecord.permission = UserPermission.player;
+  for (const node of game.nodes) {
+    // NOTE: this may not be ideal in all cases
+    node.editors.filter((id) => id !== userId);
   }
-  // FOR DEBUG:
-  const newNode = globalNodes.filter((n) => n.id === node.id)[0] as Node;
-  console.log('New value for node is:', newNode);
 };
 
-export const POSTnodeToGame = (node: Node, gameId: number): void => {
-  globalNodes.push(node);
-  const game = globalGames.filter((game) => game.id === gameId)[0];
-  game.nodes.push(node.id);
+export const PATCHgameName = (gameId: number, newTitle: string): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  game.title = newTitle;
 };
 
-export const POSTuser = (user: User): void => {
-  const existingUser = globalUsers.filter((u) => u.id === user.id)[0];
-  const index = globalUsers.indexOf(existingUser);
-  if (index !== -1) {
-    globalUsers[index] = CloneDeep(user);
+export const PUTnode = (gameId: number, newNode: Node): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const nodeToReplace = game.nodes.find((node) => node.id === newNode.id) as Node;
+  game.nodes[game.nodes.indexOf(nodeToReplace)] = newNode;
+};
+
+export const PUTsubnode = (gameId: number, nodeId: number, newSubnode: Subnode): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const node = game.nodes.find((node) => node.id === nodeId) as Node;
+  const subnodeToReplace = node.subnodes.find((subnode) => subnode.id === newSubnode.id) as Subnode;
+  node.subnodes[node.subnodes.indexOf(subnodeToReplace)] = newSubnode;
+};
+
+/* DELETE */
+
+export const DELETEplayerFromGame = (playerId: number, gameId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const player = globalUsers.find((user) => user.id === playerId) as User;
+  game.users.filter((u) => u.userId !== player.id);
+  player.games.filter((g) => g !== game.id);
+  for (const node of game.nodes) {
+    node.informationLevels.filter((i) => i.userId !== playerId);
   }
-  // FOR DEBUG:
-  const newUser = globalUsers.filter((u) => u.id === user.id)[0] as User;
-  console.log('New value for node is:', newUser);
+};
+
+export const DELETEnodeFromGame = (gameId: number, nodeId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  game.nodes.filter((node) => node.id !== nodeId);
 };
 
 export const DELETEGame = (gameId: number): void => {
@@ -506,10 +445,101 @@ export const DELETEGame = (gameId: number): void => {
   }
 };
 
-export const DELETEnode = (nodeId: number): void => {
-  // Note, in actual db should also recursively delete subnodes
-  globalNodes.filter((node) => node.id !== nodeId);
-  for (const game of globalGames) {
-    game.nodes = game.nodes.filter((node) => node !== nodeId);
+// USER FUNCTIONS:
+
+/* GET */
+
+export const GETuserById = (id: number): User => {
+  const globalUsersCopy = cloneDeep(globalUsers);
+  return globalUsersCopy.find((user) => user.id === id) as User;
+};
+
+export const GETuserByUsername = (username: string): User => {
+  const globalUsersCopy = cloneDeep(globalUsers);
+  return globalUsersCopy.find((user) => user.username == username) as User;
+};
+
+// This mock-db method will CERTAINLY be changed.
+export const GETloginVerification = (username: string, password: string): boolean => {
+  const globalUsersCopy = cloneDeep(globalUsers);
+  return globalUsersCopy.filter((user) => user.username === username && user.password === password).length == 1;
+};
+
+export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
+  const game = GETgameById(gameId);
+  const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
+  return userPermissionRecord.permission === UserPermission.gameMaster;
+};
+
+export const GETgamesByUserID = (userID: number): Game[] => {
+  const user = GETuserById(userID);
+  return user.games.map((gameId) => GETgameById(gameId));
+};
+
+/* POST */
+
+/* PATCH & PUT */
+
+export const PUTuser = (user: User): void => {
+  const existingUser = globalUsers.find((u) => u.id === user.id) as User;
+  const index = globalUsers.indexOf(existingUser);
+  if (index !== -1) {
+    globalUsers[index] = cloneDeep(user);
   }
 };
+
+/* DELETE */
+
+/* These functions will be deleted as Redux should make them unnecessary */
+
+// export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
+//   const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
+//   return CloneDeep(subnode.editors.includes(userId));
+// };
+
+// export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
+//   const node = globalNodes.filter((node) => node.id === nodeId)[0];
+//   return CloneDeep(node.editors.includes(userId));
+// };
+
+// export const GETnodesInGame = (gameId: number): Node[] => {
+//   const game = globalGames.filter((game) => game.id === gameId)[0];
+//   return globalNodes.filter((node) => game.nodes.includes(node.id));
+// };
+
+// export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
+//   const allNodes = GETnodesInGame(gameId);
+//   const nodes = allNodes.filter((node) => {
+//     if (node.editors.includes(userId)) {
+//       return true;
+//     } else if (node.informationLevels[userId]) {
+//       return node.informationLevels[userId] > 0;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return nodes;
+// };
+
+// let NEXT_SUBNODE = globalSubnodes.length;
+// let NEXT_NODE = globalNodes.length;
+
+// export const GETnewSubnodeId = (): number => {
+//   NEXT_SUBNODE += 1;
+//   return NEXT_SUBNODE;
+// };
+
+// export const GETnewNodeId = (): number => {
+//   NEXT_NODE += 1;
+//   return NEXT_NODE;
+// };
+
+// export const GETeditorsForNode = (nodeId: number): User[] => {
+//   const node = globalNodes.filter((node) => node.id === nodeId)[0];
+//   const users = globalUsers.filter((user) => node.editors.includes(user.id));
+//   return CloneDeep(users);
+// };
+
+// export const GETsubnodesByNodeId = (nodeId: number): Subnode[] => {
+//   return CloneDeep(globalSubnodes.filter((subnode) => subnode.node_id === nodeId));
+// };

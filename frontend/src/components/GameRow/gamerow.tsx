@@ -1,17 +1,12 @@
-/* eslint-disable sort-imports */
 import Box from '@mui/material/Box';
-import { uid } from 'react-uid';
-import React from 'react';
-import { GameIcon } from '../GameIcon/gameicon';
-import { GETgamesByUserID } from '../../mock-backend';
+import { GameIcon } from '../GameIcon/GameIcon';
+import { useSelector } from 'react-redux';
+import { Game } from '../../types';
+import { RootState } from '../../state/rootReducer';
 
-interface GameDisplayProps {
-  userID: number;
-}
+const GameRow = (): JSX.Element => {
+  const games: Game[] = useSelector((state: RootState) => state.user.games);
 
-export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) => {
-  const games = GETgamesByUserID(userID); //TODO pass user id in.
-  // console.log(games);
   return (
     <div style={{ width: '100%' }}>
       <Box
@@ -28,10 +23,11 @@ export const GameRow: React.FunctionComponent<GameDisplayProps> = ({ userID }) =
           justifyContent: 'center',
         }}
       >
-        {games.map((game) => (
-          <GameIcon name={game.title} path={game.imgpath} userID={userID} gameID={game.id} key={uid(game)} />
+        {games.map((game: Game) => (
+          <GameIcon key={game.id} game={game} />
         ))}
       </Box>
     </div>
   );
 };
+export default GameRow;

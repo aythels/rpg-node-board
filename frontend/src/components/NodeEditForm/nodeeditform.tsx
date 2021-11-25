@@ -1,154 +1,119 @@
 import { DeleteForever, SaveRounded, Menu } from '@mui/icons-material';
 import { Button, Tooltip } from '@mui/material';
-import { Component, SyntheticEvent } from 'react';
+import { cloneDeep } from 'lodash';
+import { SyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { uid } from 'react-uid';
-import { GETgameById, GETnodeById, GETsubnodesByNodeId, GETuserById } from '../../mock-backend';
-import { Game, Node, Subnode, User } from '../../types';
+import { RootState } from '../../state/rootReducer';
+import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
+import { setIsEditModalOpen } from '../../state/slices/nodeviewSlice';
+import { Node, Subnode } from '../../types';
 import './nodeeditform.css';
 
-interface Props {
-  gameId: number;
-  nodeId: number;
-  userId: number;
-  closeCallback: () => void;
-  // eslint-disable-next-line no-unused-vars
-  submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
-}
+const NodeEditForm = (): JSX.Element => {
+  const dispatch = useDispatch();
 
-interface State {
-  game: Game;
-  node: Node;
-  user: User;
-  subnodes: Subnode[];
-  closeCallback: () => void;
-  // eslint-disable-next-line no-unused-vars
-  submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
-}
+  const game = useSelector((state: RootState) => state.game.gameInstance);
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
+  const [tempNode, setTempNode] = useState(cloneDeep(node));
 
-export default class NodeEditForm extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const game = GETgameById(props.gameId);
-    const node = GETnodeById(props.nodeId);
-    const user = GETuserById(props.userId);
-    const subnodes = GETsubnodesByNodeId(node.id);
-    this.state = {
-      game: game,
-      node: node,
-      user: user,
-      subnodes: subnodes,
-      closeCallback: props.closeCallback,
-      submitCallback: props.submitCallback,
-    };
-  }
-
-  handleModalClick = (e: SyntheticEvent): void => {
+  const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;
     if (target.className == 'modal') {
-      this.handleClose();
+      dispatch(setIsEditModalOpen(false));
     }
   };
 
-  handleClose = (): void => {
-    this.state.closeCallback();
-  };
-
-  handleSubmit = (e: SyntheticEvent): void => {
+  const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    const node = this.state.node;
-    this.validate() ? this.state.submitCallback(e, node) : console.log('Validation failed.');
+    if (validate()) {
+      dispatch(updateNode(game.id, tempNode)); // TODO: async
+      dispatch(setIsEditModalOpen(false));
+    } else {
+      console.log('Validation failed.');
+    }
   };
 
-  handleNameChange = (e: SyntheticEvent): void => {
+  const handleNameChange = (e: SyntheticEvent): void => {
     const target = e.target as HTMLInputElement;
-    const node = this.state.node;
-    node.name = target.value;
-    this.setState({
-      node: node,
-    });
+    setTempNode({ ...tempNode, name: target.value });
   };
 
-  validate = (): boolean => {
-    const node = this.state.node;
+  const validate = (): boolean => {
     let validation = true;
-    validation = validation ? this.validateName(node.name) : false;
-    validation = validation ? this.validateType(node.type) : false;
+    validation = validation ? validateName(tempNode.name) : false;
+    validation = validation ? validateType(tempNode.type) : false;
     return validation;
   };
 
-  validateType = (type: string): boolean => {
+  const validateType = (type: string): boolean => {
     // Validation: Not empty string
     return type != '';
   };
 
-  validateName = (name: string): boolean => {
+  const validateName = (name: string): boolean => {
     // NOTE: we shoudl also validate names (and evrything else) server-side -- this is just for better UX
     // Validation: Not empty string
     return name != '';
   };
 
-  handleTypeChange = (e: SyntheticEvent): void => {
+  const handleTypeChange = (e: SyntheticEvent): void => {
     const target = e.target as HTMLInputElement;
-    const node = this.state.node;
-    node.type = target.value; // TODO: Change to Game.Types enum (customizable but with good default values)
-    this.setState({
-      node: node,
-    });
+    setTempNode({ ...tempNode, type: target.value }); // TODO: setup Type enum
   };
 
-  // TODO: allow subnode name and type changes in this menu
   // TODO: allow subnode reorganization via dragging
 
-  render(): JSX.Element {
-    return (
-      <div className="custom-modal" onClick={this.handleModalClick}>
-        <form onSubmit={this.handleSubmit} className="modal-content-wrapper">
-          <div className="modal__body">
-            <div className="modal__body__section">
-              <div className="input-line-wrapper">
-                <span className="input-label">Title</span>
-                <input type="text" value={this.state.node.name} onChange={this.handleNameChange}></input>
-              </div>
-              <div className="input-line-wrapper">
-                <span className="input-label">Type</span>
-                <input type="text" value={this.state.node.type} onChange={this.handleTypeChange}></input>
-              </div>
+  return (
+    <div className="custom-modal" onClick={handleModalClick}>
+      <form onSubmit={handleSubmit} className="modal-content-wrapper">
+        <div className="modal__body">
+          <div className="modal__body__section">
+            <div className="input-line-wrapper">
+              <span className="input-label">Title</span>
+              <input type="text" value={tempNode.name} onChange={handleNameChange}></input>
             </div>
-            <div className="modal__body__section">
-              <h4>Subnodes</h4>
-              <div className="subnode-organization-menu">
-                {this.state.subnodes.map((subnode) => {
-                  return (
-                    <div className="subnode-organization-menu__subnode" key={uid(subnode)}>
-                      <Menu />
-                      <span>{subnode.name} &#8211; </span>
-                      <span>
-                        <i>{subnode.type}</i>
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="input-line-wrapper">
+              <span className="input-label">Type</span>
+              <input type="text" value={tempNode.type} onChange={handleTypeChange}></input>
             </div>
           </div>
-          <div className="modal__footer">
-            <div>
-              <Tooltip title="Discard Changes">
-                <Button color="error" variant="contained" onClick={this.handleClose}>
-                  <DeleteForever />
-                </Button>
-              </Tooltip>
-            </div>
-            <div>
-              <Tooltip title="Save Changes">
-                <Button type="submit" variant="contained" color="success">
-                  <SaveRounded />
-                </Button>
-              </Tooltip>
+          <div className="modal__body__section">
+            <h4>Subnodes</h4>
+            <div className="subnode-organization-menu">
+              {tempNode.subnodes.map((subnode: Subnode) => {
+                return (
+                  <div className="subnode-organization-menu__subnode" key={uid(subnode)}>
+                    <Menu />
+                    <span>{subnode.name} &#8211; </span>
+                    <span>
+                      <i>{subnode.type}</i>
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
-        </form>
-      </div>
-    );
-  }
-}
+        </div>
+        <div className="modal__footer">
+          <div>
+            <Tooltip title="Discard Changes">
+              <Button color="error" variant="contained" onClick={() => dispatch(setIsEditModalOpen(false))}>
+                <DeleteForever />
+              </Button>
+            </Tooltip>
+          </div>
+          <div>
+            <Tooltip title="Save Changes">
+              <Button type="submit" variant="contained" color="success">
+                <SaveRounded />
+              </Button>
+            </Tooltip>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default NodeEditForm;

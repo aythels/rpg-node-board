@@ -1,27 +1,13 @@
 import './subnodeview.css';
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import Quill from 'quill';
 import Delta from 'quill-delta';
 import NodeLinkBlot from '../../blots/NodeLink';
-import { Game, Subnode, User, Node } from '../../types';
-import { GETnodesInGameVisibleToUser, GETuserCanEditSubnode, POSTsubnodeContent } from '../../mock-backend';
-
-interface Props {
-  game: Game;
-  node: Node;
-  subnode: Subnode;
-  user: User;
-  key: string;
-  onLinkClick: (id: number, node: Node) => void;
-}
-
-interface State {
-  subnode: Subnode;
-  user: User;
-  editor: Quill | null;
-  change: Delta;
-  autosaver: NodeJS.Timeout | null;
-}
+import { Subnode, Node } from '../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../state/rootReducer';
+import { selectActiveNode, selectVisibleNodes, updateSubnode } from '../../state/slices/gameSlice';
+import { setActiveNode } from '../../state/slices/nodeviewSlice';
 
 const autosaveFrequency = 1 * 1000;
 
@@ -55,28 +41,33 @@ interface TextLink {
   id: number;
 }
 
-export default class SubnodeView extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    // Set state with info from backend
-    this.state = {
-      subnode: props.subnode,
-      user: props.user,
-      editor: null,
-      change: new Delta(),
-      autosaver: null,
+interface Props {
+  subnode: Subnode;
+}
+
+const SubnodeView = (props: Props): JSX.Element => {
+  const game = useSelector((state: RootState) => state.game.gameInstance);
+  const user = useSelector((state: RootState) => state.user.userInstance);
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
+  const [editor, setEditor] = useState(null as Quill | null);
+  const [change, setChange] = useState(new Delta());
+  const [autoSaver, setAutoSaver] = useState(null as NodeJS.Timeout | null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    loadEditor();
+    return () => {
+      if (autoSaver) {
+        clearInterval(autoSaver);
+      }
     };
-  }
+  }, []);
 
-  componentDidMount = (): void => {
-    this.loadEditor();
-  };
-
-  loadEditor = (): void => {
-    const readOnly = !GETuserCanEditSubnode(this.state.user.id, this.state.subnode.id);
+  const loadEditor = (): void => {
+    const readOnly = !props.subnode.editors.includes(user.id);
     const toolbar = readOnly ? false : standardEditorToolbar;
 
-    const editor = new Quill('#editor-' + this.state.subnode.id, {
+    const editor = new Quill('#editor-' + props.subnode.id, {
       modules: {
         toolbar: toolbar,
       },
@@ -84,30 +75,34 @@ export default class SubnodeView extends Component<Props, State> {
       readOnly: readOnly,
       theme: 'snow',
     });
-    editor.setContents(this.state.subnode.content, 'api');
+    editor.setContents(props.subnode.content, 'api');
     editor.on('text-change', (delta) => {
-      this.setState({ change: this.state.change.compose(delta) });
+      // this.setState({ change: this.state.change.compose(delta) });
+      setChange(change.compose(delta));
     });
-    this.setState(
-      {
-        editor: editor,
-        // Start autosaving
-        autosaver: setInterval(this.saveEditorChanges, autosaveFrequency),
-      },
-      () => {
-        this.updateNodeTextLinks();
-      },
-    );
+    setEditor(editor);
+    setAutoSaver(setInterval(saveEditorChanges, autosaveFrequency));
+    updateNodeTextLinks();
+    // this.setState(
+    //   {
+    //     editor: editor,
+    //     // Start autosaving
+    //     autosaver: ,
+    //   },
+    //   () => {
+    //     this.updateNodeTextLinks();
+    //   },
+    // );
   };
 
-  updateNodeTextLinks = (): void => {
-    if (this.state.editor) {
+  const updateNodeTextLinks = (): void => {
+    if (editor) {
       // Remove outdated links
-      this.state.editor.formatText(0, this.state.editor.getLength(), 'nodelink', false);
+      editor.formatText(0, editor.getLength(), 'nodelink', false);
 
       // Add in new links:
-      const nodes = GETnodesInGameVisibleToUser(this.props.game.id, this.props.user.id);
-      const currentText = this.state.editor.getText();
+      const nodes = useSelector((state) => selectVisibleNodes(state));
+      const currentText = editor.getText();
       const links: TextLink[] = [];
       const names = [];
       for (const node of nodes) {
@@ -119,7 +114,7 @@ export default class SubnodeView extends Component<Props, State> {
         }
       }
       for (const link of links) {
-        this.state.editor.formatText(link.location, link.length, 'nodelink', link.id, 'api');
+        editor.formatText(link.location, link.length, 'nodelink', link.id, 'api');
       }
 
       // Add onclick behaviour
@@ -127,33 +122,28 @@ export default class SubnodeView extends Component<Props, State> {
       for (const nodeLink of nodeLinks) {
         nodeLink.addEventListener('click', () => {
           const linkId = nodeLink.getAttribute('linkid');
-          if (linkId) this.props.onLinkClick(parseInt(linkId), this.props.node);
+          if (linkId) dispatch(setActiveNode(parseInt(linkId)));
         });
       }
     }
   };
 
-  componentWillUnmount = (): void => {
-    if (this.state.autosaver) {
-      clearInterval(this.state.autosaver);
+  const saveEditorChanges = (): void => {
+    if (editor && change.length() > 0) {
+      // POSTsubnodeContent(subnode.id, change); // TODO: Use Redux
+      dispatch(updateSubnode(game.id, node.id, props.subnode.id, change));
+      setChange(new Delta());
+      updateNodeTextLinks();
+      // this.setState({ change: new Delta() }, this.updateNodeTextLinks);
     }
   };
 
-  saveEditorChanges = (): void => {
-    if (this.state.editor && this.state.change.length() > 0) {
-      // console.log('Saving changes for subnode ' + this.state.subnode.id, this.state.change);
-      POSTsubnodeContent(this.state.subnode.id, this.state.change);
-      this.setState({ change: new Delta() }, this.updateNodeTextLinks);
-    }
-  };
+  return (
+    <div className="subnodeview">
+      <h2>{props.subnode.name}</h2>
+      <div id={'editor-' + props.subnode.id} />
+    </div>
+  );
+};
 
-  render(): JSX.Element {
-    const subnode = this.state.subnode;
-    return (
-      <div className="subnodeview">
-        <h2>{subnode.name}</h2>
-        <div id={'editor-' + this.state.subnode.id} />
-      </div>
-    );
-  }
-}
+export default SubnodeView;

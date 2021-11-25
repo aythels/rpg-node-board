@@ -1,129 +1,117 @@
 import './header.css';
-import { ChangeEvent, Component, KeyboardEvent } from 'react';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTheme } from '@mui/styles';
 import { Done, Edit, ChevronLeft, Settings } from '@mui/icons-material';
-import { IconButton, TextField, Tooltip, Typography } from '@mui/material';
-import { MuiTheme } from '../../../theme';
-import { withTheme } from '@mui/styles';
-
-interface Props extends MuiTheme {
+import { IconButton, TextField, Theme, Tooltip, Typography } from '@mui/material';
+import { setGameTitle } from '../../../state/slices/gameSlice';
+import { RootState } from '../../../state/rootReducer';
+import { selectIsGameMaster } from '../../../state/slices/userSlice';
+interface Props {
   exposeSettings: boolean;
-  onSubmitGameTitleClicked: (newTitle: string) => void;
-  title: string;
-  isAdmin: boolean;
   onSettingsToggleClicked: () => void;
 }
 
-interface State {
-  editingTitle: boolean;
-  title: string;
-}
+const Header = (props: Props): JSX.Element => {
+  const theme = useTheme<Theme>();
+  const dispatch = useDispatch();
 
-class Header extends Component<Props, State> {
-  state: State = {
-    editingTitle: false,
-    title: this.props.title,
-  };
-  prevTitle = '';
+  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [title, setTitle] = useState(useSelector((state: RootState) => state.game.gameInstance.title));
+  const [prevTitle, setPrevTitle] = useState('');
 
   // Handlers related to game title
-  handleTitleChanged = (event: ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ title: event.target.value });
+  const handleTitleChanged = (event: ChangeEvent<HTMLInputElement>): void => {
+    setTitle(event.target.value);
   };
 
-  handleEditTitleClicked = (): void => {
-    this.prevTitle = this.state.title;
-    this.setState({
-      editingTitle: true,
-    });
+  const handleEditTitleClicked = (): void => {
+    setPrevTitle(title);
+    setEditingTitle(true);
   };
 
-  handleSubmitTitle = (): void => {
-    this.setState({
-      editingTitle: false,
-    });
-    this.props.onSubmitGameTitleClicked(this.state.title);
+  const handleSubmitTitle = (): void => {
+    setEditingTitle(false);
+    dispatch(setGameTitle(title));
   };
 
-  handleCancelEdit = (): void => {
-    this.setState({
-      title: this.prevTitle,
-      editingTitle: false,
-    });
-    this.prevTitle = '';
+  const handleCancelEdit = (): void => {
+    setTitle(prevTitle);
+    setEditingTitle(false);
+    setPrevTitle('');
   };
 
-  handleTitleTextFieldKeyPress = (event: KeyboardEvent<Element>): void => {
+  const handleTitleTextFieldKeyPress = (event: KeyboardEvent<Element>): void => {
     switch (event.key) {
       case 'Enter':
         event.preventDefault();
-        this.handleSubmitTitle();
+        handleSubmitTitle();
         break;
       case 'Esc': // IE/Edge specific value
       case 'Escape':
         event.preventDefault();
-        this.handleCancelEdit();
+        handleCancelEdit();
         break;
     }
   };
 
-  render(): JSX.Element {
-    return (
-      <div className="canvas-sidebar-header" style={{ backgroundColor: this.props.theme.palette.primary.light }}>
-        {this.props.isAdmin && !this.state.editingTitle && (
-          <Tooltip arrow title={this.props.exposeSettings ? 'Close game settings' : 'Open game settings'}>
-            <IconButton
-              aria-label="Close game settings"
-              component="span"
-              className="temp"
-              onClick={this.props.onSettingsToggleClicked}
-            >
-              {this.props.exposeSettings ? <ChevronLeft /> : <Settings />}
-            </IconButton>
-          </Tooltip>
-        )}
-        <div className="title">
-          {this.props.exposeSettings && this.state.editingTitle ? (
-            <TextField
-              fullWidth
-              autoComplete="off"
-              className="title"
-              id="outlined-basic"
-              value={this.state.title}
-              variant="outlined"
-              onChange={this.handleTitleChanged}
-              onKeyDown={this.handleTitleTextFieldKeyPress}
-            />
-          ) : (
-            <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
-              {this.state.title}
-            </Typography>
-          )}
-        </div>
-        {this.props.exposeSettings && (
-          <div className="button">
-            {this.state.editingTitle ? (
-              <Tooltip arrow title="Submit new title">
-                <IconButton
-                  aria-label="Submit edited game name"
-                  component="span"
-                  disabled={!this.state.title}
-                  onClick={this.handleSubmitTitle}
-                >
-                  <Done />
-                </IconButton>
-              </Tooltip>
-            ) : (
-              <Tooltip arrow title="Edit game title">
-                <IconButton aria-label="Edit game title" component="span" onClick={this.handleEditTitleClicked}>
-                  <Edit />
-                </IconButton>
-              </Tooltip>
-            )}
-          </div>
+  return (
+    <div className="canvas-sidebar-header" style={{ backgroundColor: theme.palette.primary.light }}>
+      {isGameMaster && !editingTitle && (
+        <Tooltip arrow title={props.exposeSettings ? 'Close game settings' : 'Open game settings'}>
+          <IconButton
+            aria-label="Close game settings"
+            component="span"
+            className="temp"
+            onClick={props.onSettingsToggleClicked}
+          >
+            {props.exposeSettings ? <ChevronLeft /> : <Settings />}
+          </IconButton>
+        </Tooltip>
+      )}
+      <div className="title">
+        {props.exposeSettings && editingTitle ? (
+          <TextField
+            fullWidth
+            autoComplete="off"
+            className="title"
+            id="outlined-basic"
+            value={title}
+            variant="outlined"
+            onChange={handleTitleChanged}
+            onKeyDown={handleTitleTextFieldKeyPress}
+          />
+        ) : (
+          <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
+            {title}
+          </Typography>
         )}
       </div>
-    );
-  }
-}
+      {props.exposeSettings && (
+        <div className="button">
+          {editingTitle ? (
+            <Tooltip arrow title="Submit new title">
+              <IconButton
+                aria-label="Submit edited game name"
+                component="span"
+                disabled={!title}
+                onClick={handleSubmitTitle}
+              >
+                <Done />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip arrow title="Edit game title">
+              <IconButton aria-label="Edit game title" component="span" onClick={handleEditTitleClicked}>
+                <Edit />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default withTheme(Header);
+export default Header;

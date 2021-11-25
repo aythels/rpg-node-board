@@ -1,159 +1,118 @@
 import { DeleteForever, SaveRounded } from '@mui/icons-material';
 import { Button, Tooltip } from '@mui/material';
-import { Component, SyntheticEvent } from 'react';
+import cloneDeep from 'lodash.clonedeep';
+import { SyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { uid } from 'react-uid';
-import { GETgameById, GETnodeById, GETsubnodesByNodeId, GETuserById, POSTuser } from '../../mock-backend';
-import { Game, Node, Subnode, User } from '../../types';
+import { RootState } from '../../state/rootReducer';
+import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
+import { setIsEditModalOpen, setIsImageModalOpen } from '../../state/slices/nodeviewSlice';
+import { addImage } from '../../state/slices/userSlice';
+import { Node } from '../../types';
 import './nodeimageform.css';
 
-interface Props {
-  gameId: number;
-  nodeId: number;
-  userId: number;
-  closeCallback: () => void;
-  // eslint-disable-next-line no-unused-vars
-  submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
-}
+const NodeImageForm = (): JSX.Element => {
+  const dispatch = useDispatch();
 
-interface State {
-  game: Game;
-  node: Node;
-  user: User;
-  subnodes: Subnode[];
-  closeCallback: () => void;
-  // eslint-disable-next-line no-unused-vars
-  submitCallback: (arg0: SyntheticEvent, arg1: Node) => void;
-}
+  const game = useSelector((state: RootState) => state.game.gameInstance);
+  const user = useSelector((state: RootState) => state.user.userInstance);
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
+  const [tempNode, setTempNode] = useState(cloneDeep(node));
 
-export default class NodeImageForm extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const game = GETgameById(props.gameId);
-    const node = GETnodeById(props.nodeId);
-    const user = GETuserById(props.userId);
-    const subnodes = GETsubnodesByNodeId(node.id);
-    this.state = {
-      game: game,
-      node: node,
-      user: user,
-      subnodes: subnodes,
-      closeCallback: props.closeCallback,
-      submitCallback: props.submitCallback,
-    };
-  }
-
-  handleModalClick = (e: SyntheticEvent): void => {
+  const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;
     if (target.className == 'modal') {
-      this.handleClose();
+      dispatch(setIsEditModalOpen(false));
     }
   };
 
-  handleClose = (): void => {
-    this.state.closeCallback();
-  };
-
-  handleSubmit = (e: SyntheticEvent): void => {
+  const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    const node = this.state.node;
-    this.state.submitCallback(e, node);
+    dispatch(updateNode(game.id, tempNode)); // TODO: async
+    dispatch(setIsEditModalOpen(false));
   };
 
-  handleNewImageUpload = (e: SyntheticEvent): void => {
+  const handleNewImageUpload = (e: SyntheticEvent): void => {
     // TODO: This will need extensive changes in phase 2
     const target = e.target as HTMLInputElement;
-    console.log(target.value);
-    const path = '/images/' + this.extractFakeImagePath(target.value);
-    const user = this.state.user;
-    user.images.push(path);
-    this.setState(
-      {
-        user: user,
-      },
-      () => {
-        POSTuser(this.state.user);
-      },
-    );
+    const path = '/images/' + extractFakeImagePath(target.value);
+    dispatch(addImage(path));
   };
 
-  extractFakeImagePath = (path: string): string => {
+  const extractFakeImagePath = (path: string): string => {
     return path.slice(path.lastIndexOf('\\') + 1);
   };
 
-  changeImage = (image: string): void => {
-    const node = this.state.node;
-    node.image = image;
-    this.setState({
-      node: node,
-    });
+  const changeImage = (image: string): void => {
+    setTempNode({ ...tempNode, image: image });
   };
 
-  render(): JSX.Element {
-    return (
-      <div className="custom-modal" onClick={this.handleModalClick}>
-        <form onSubmit={this.handleSubmit} className="modal-content-wrapper --wide">
-          <div className="modal__body">
-            <div className="modal__body__section">
-              <img className="image-preview-full" src={this.state.node.image}></img>
+  return (
+    <div className="custom-modal" onClick={handleModalClick}>
+      <form onSubmit={handleSubmit} className="modal-content-wrapper --wide">
+        <div className="modal__body">
+          <div className="modal__body__section">
+            <img className="image-preview-full" src={tempNode.image}></img>
+          </div>
+          <div className="modal__body__section">
+            <h4>Thumbnail</h4>
+          </div>
+          <div className="modal__body__section">
+            <h4>Your Images</h4>
+            <div className="image-collection">
+              {user.images.map((image) => {
+                return (
+                  <div className="image-collection__image" key={uid(image)}>
+                    <img
+                      src={image}
+                      onClick={() => {
+                        changeImage(image);
+                      }}
+                    ></img>
+                  </div>
+                );
+              })}
             </div>
-            <div className="modal__body__section">
-              <h4>Thumbnail</h4>
-            </div>
-            <div className="modal__body__section">
-              <h4>Your Images</h4>
-              <div className="image-collection">
-                {this.state.user.images.map((image) => {
-                  return (
-                    <div className="image-collection__image" key={uid(image)}>
-                      <img
-                        src={image}
-                        onClick={() => {
-                          this.changeImage(image);
-                        }}
-                      ></img>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="modal__body__section">
-              <h4>Stock Images</h4>
-              <div className="image-collection">
-                <div className="image-collection__image">
-                  <img
-                    src="/images/default.jpg"
-                    onClick={() => {
-                      this.changeImage('/images/default.jpg');
-                    }}
-                  ></img>
-                </div>
-              </div>
-            </div>
-            <div className="modal__body__section">
-              <h4>Upload New Image</h4>
-              <div className="upload-new-image">
-                <input type="file" onChange={this.handleNewImageUpload} />
+          </div>
+          <div className="modal__body__section">
+            <h4>Stock Images</h4>
+            <div className="image-collection">
+              <div className="image-collection__image">
+                <img
+                  src="/images/default.jpg"
+                  onClick={() => {
+                    changeImage('/images/default.jpg');
+                  }}
+                ></img>
               </div>
             </div>
           </div>
-          <div className="modal__footer">
-            <div>
-              <Tooltip title="Discard Changes">
-                <Button color="error" variant="contained" onClick={this.handleClose}>
-                  <DeleteForever />
-                </Button>
-              </Tooltip>
-            </div>
-            <div>
-              <Tooltip title="Save Changes">
-                <Button type="submit" variant="contained" color="success">
-                  <SaveRounded />
-                </Button>
-              </Tooltip>
+          <div className="modal__body__section">
+            <h4>Upload New Image</h4>
+            <div className="upload-new-image">
+              <input type="file" onChange={handleNewImageUpload} />
             </div>
           </div>
-        </form>
-      </div>
-    );
-  }
-}
+        </div>
+        <div className="modal__footer">
+          <div>
+            <Tooltip title="Discard Changes">
+              <Button color="error" variant="contained" onClick={() => dispatch(setIsImageModalOpen(false))}>
+                <DeleteForever />
+              </Button>
+            </Tooltip>
+          </div>
+          <div>
+            <Tooltip title="Save Changes">
+              <Button type="submit" variant="contained" color="success">
+                <SaveRounded />
+              </Button>
+            </Tooltip>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default NodeImageForm;
