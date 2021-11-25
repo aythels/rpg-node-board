@@ -43,9 +43,7 @@ export interface UserPermissionRecord {
 export interface Game {
   id: number;
   title: string;
-  imgpath: string; //path to image from /public/images/path. includes filetype e.g. .jpg
-  // TODO: instead of players, gms and users store an augmented list of users, where each user has an assigned role
-  // TODO: store objects rather than IDs?
+  imgpath: string; //TODO: actually handle images
   nodes: Node[];
   users: UserPermissionRecord[];
   settings: Record<string, unknown>;
