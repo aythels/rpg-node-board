@@ -6,113 +6,89 @@ import { ExitToApp, Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@m
 import { withTheme } from '@emotion/react';
 import { MuiTheme } from '../../../theme';
 import Dialog from '../../Dialog/Dialog';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../state/rootReducer';
+import { Node } from '../../../types';
+import { createNode } from '../../../state/slices/gameSlice';
+import { store } from '../../../state/';
+import { setIsEditPermissionsModalOpen } from '../../../state/slices/nodeviewSlice';
 
-interface Props extends MuiTheme {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  nodeManager: any;
-  setActiveNodeCallback: (id: number) => void;
-  onCenterNodeViewClicked: () => void;
-  onAddNodeClicked: () => void;
-  onRemoveNodeClicked: (id: number) => void;
-  isAdmin: boolean;
-}
+type Props = MuiTheme;
 
-interface State {
-  isOpen: boolean;
-  showLeaveGameDialog: boolean;
-}
+const Sidebar = (props: Props): JSX.Element => {
+  const [isOpen, setIsOpen] = React.useState(true);
+  const [leaveGameDialogue, setLeaveGameDialogue] = React.useState(false);
+  const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
+  const gameId = useSelector((state: RootState) => state.game.gameInstance.id);
+  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
 
-class Sidebar extends React.Component<Props, State> {
-  state: State = {
-    isOpen: true,
-    showLeaveGameDialog: false,
+  const sortNodes = (allNodes: Node[]): Node[] => {
+    return [...allNodes].sort((a, b) => a.name.localeCompare(b.name));
   };
 
-  onToggleSideBar = (): void => {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  sortNodes = (nodes: any): any => {
-    return [...nodes].sort((a, b) => a.dataNode.name.localeCompare(b.dataNode.name));
-  };
-
-  render(): JSX.Element {
-    const { nodeManager, setActiveNodeCallback, onCenterNodeViewClicked, onAddNodeClicked, onRemoveNodeClicked } =
-      this.props;
-
-    return (
-      <div className="left-sidebar">
-        <Drawer className="container" anchor="left" open={this.state.isOpen} variant="persistent">
-          <div className="header" style={{ backgroundColor: this.props.theme.palette.primary.light }}>
-            <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
-              Node Overview
-            </Typography>
-          </div>
-          <div className="node-list">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {this.sortNodes(nodeManager.getAllNodes()).map((node: any) => (
-              <NodeCard
-                key={node.id}
-                visible={node.isVisible}
-                caption={node.dataNode.name}
-                onDoubleClick={() => setActiveNodeCallback(node.id)}
-                onVisibilityToggled={() => {
-                  node.isVisible = !node.isVisible;
-                  nodeManager.update();
-                }}
-                onNavigateToNodeClicked={() => nodeManager.centerNode(node.id)}
-                onRemoveNodeClicked={() => onRemoveNodeClicked(node.id)}
-              />
-            ))}
-          </div>
-        </Drawer>
-        <div
-          className="top-toolbar"
-          style={{
-            left: this.state.isOpen ? '20%' : '0%',
-          }}
-        >
-          <Tooltip className="first-button" title="Leave game" placement="right">
-            <IconButton aria-label="Lave game" onClick={() => this.setState({ showLeaveGameDialog: true })}>
-              <ExitToApp />
-            </IconButton>
-          </Tooltip>
+  return (
+    <div className="left-sidebar">
+      <Drawer className="container" anchor="left" open={isOpen} variant="persistent">
+        <div className="header" style={{ backgroundColor: props.theme.palette.primary.light }}>
+          <Typography className="title" variant="h6" component="div" align="center" noWrap={true}>
+            Node Overview
+          </Typography>
         </div>
-        <div
-          className="bottom-toolbar"
-          style={{
-            left: this.state.isOpen ? '20%' : '0%',
-          }}
-        >
-          <Tooltip title="Center node view" placement="right">
-            <IconButton aria-label="Center node view" onClick={onCenterNodeViewClicked}>
-              <CenterFocusStrong />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Add a new node" placement="right">
-            <IconButton aria-label="Add a new node" onClick={onAddNodeClicked}>
-              <Add />
-            </IconButton>
-          </Tooltip>
-          <IconButton aria-label={`${this.state.isOpen ? 'Close' : 'Open'} the sidebar`} onClick={this.onToggleSideBar}>
-            {this.state.isOpen ? <ChevronLeft /> : <ChevronRight />}
+        <div className="node-list">
+          {sortNodes(allNodes).map((node: Node) => (
+            <NodeCard key={node.id} node={node} />
+          ))}
+        </div>
+      </Drawer>
+      <div
+        className="top-toolbar"
+        style={{
+          left: isOpen ? '20%' : '0%',
+        }}
+      >
+        <Tooltip className="first-button" title="Leave game" placement="right">
+          <IconButton aria-label="Lave game" onClick={() => setLeaveGameDialogue(true)}>
+            <ExitToApp />
           </IconButton>
-        </div>
-        <Dialog
-          header="Are you sure you wish to leave the game?"
-          description="Doing so will redirect you to game overview."
-          open={this.state.showLeaveGameDialog}
-          onClose={() => this.setState({ showLeaveGameDialog: false })}
-          onAgree={() => this.setState({ showLeaveGameDialog: false })}
-          onAgreeRedirectTo="/games"
-          onDisagree={() => this.setState({ showLeaveGameDialog: false })}
-        />
+        </Tooltip>
       </div>
-    );
-  }
-}
+      <div
+        className="bottom-toolbar"
+        style={{
+          left: isOpen ? '20%' : '0%',
+        }}
+      >
+        <Tooltip title="Center node view" placement="right">
+          <IconButton aria-label="Center node view" onClick={() => console.log('center clicked, fix this part')}>
+            <CenterFocusStrong />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Add a new node" placement="right">
+          <IconButton
+            aria-label="Add a new node"
+            onClick={() => {
+              if (isAdmin) store.dispatch(createNode(gameId));
+              else store.dispatch(setIsEditPermissionsModalOpen(true));
+            }}
+          >
+            <Add />
+          </IconButton>
+        </Tooltip>
+        <IconButton aria-label={`${isOpen ? 'Close' : 'Open'} the sidebar`} onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <ChevronLeft /> : <ChevronRight />}
+        </IconButton>
+      </div>
+      <Dialog
+        header="Are you sure you wish to leave the game?"
+        description="Doing so will redirect you to game overview."
+        open={leaveGameDialogue}
+        onClose={() => setLeaveGameDialogue(false)}
+        onAgree={() => setLeaveGameDialogue(false)}
+        onAgreeRedirectTo="/games"
+        onDisagree={() => setLeaveGameDialogue(false)}
+      />
+    </div>
+  );
+};
 
 export default withTheme(Sidebar);

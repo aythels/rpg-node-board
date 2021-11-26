@@ -4,7 +4,10 @@ import { Node } from '../../types';
 import { Delete, Launch } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import { store } from '../../state/';
-import { setActiveNode } from '../../state/slices/nodeviewSlice';
+import { setActiveNode, setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
+import { deleteNode } from '../../state/slices/gameSlice';
+import { RootState } from '../../state/rootReducer';
+import { useSelector } from 'react-redux';
 
 interface Props {
   node: Node;
@@ -14,6 +17,7 @@ interface Props {
 
 const CanvasInternalNode = (props: Props): JSX.Element => {
   const { node, nodeWidth, nodeHeight } = props;
+  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
 
   return (
     <div
@@ -35,7 +39,13 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
       </div>
       <div className="node__footer">
         <Tooltip title="Delete node">
-          <button className="node-button" onClick={() => store.dispatch(setActiveNode(-1))}>
+          <button
+            className="node-button"
+            onClick={() => {
+              if (isAdmin) store.dispatch(deleteNode(node));
+              else store.dispatch(setIsEditPermissionsModalOpen(true));
+            }}
+          >
             <Delete />
           </button>
         </Tooltip>

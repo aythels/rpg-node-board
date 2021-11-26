@@ -374,8 +374,8 @@ export const POSTnode = (node: Node, gameId: number): void => {
 
 export const PATCHnode = (gameId: number): Node => {
   const node = {
-    id: 4,
-    name: 'St. George',
+    id: GETgameById(gameId).nodes.length + 1,
+    name: 'Untitled',
     image: '/images/stgeorge.jpg',
     imageAlt: '',
     informationLevels: [
@@ -384,22 +384,7 @@ export const PATCHnode = (gameId: number): Node => {
       { userId: 4, infoLevel: 1 },
       { userId: 5, infoLevel: 2 },
     ],
-    subnodes: [
-      {
-        id: 6,
-        informationLevel: 1,
-        editors: [2],
-        type: 'description',
-        name: 'Description',
-        content: new Delta({
-          ops: [
-            { insert: 'The center of UofT. Near ' },
-            { attributes: { nodelink: '2' }, insert: 'Museum' },
-            { insert: '.' },
-          ],
-        }),
-      },
-    ],
+    subnodes: [],
     editors: [2],
     type: 'location',
     x: 0,

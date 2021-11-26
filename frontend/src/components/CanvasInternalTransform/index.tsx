@@ -7,6 +7,7 @@ import { Node } from '../../types';
 import { NodeManager } from './NodeManager';
 import { updateNode, updateNodePos } from '../../state/slices/gameSlice';
 import { store } from '../../state/';
+import { deleteNode } from '../../state/slices/gameSlice';
 
 const nodeManager = new NodeManager();
 
@@ -21,6 +22,7 @@ const CanvasInternalTransform = (): JSX.Element => {
   const canvasY = useSelector((state: RootState) => state.nodeview.canvasY);
   const width = nodeManager.nodeWidth;
   const height = nodeManager.nodeHeight;
+  const invisibleNodes = useSelector((state: RootState) => state.nodeview.invisibleNodes);
 
   return (
     <div
@@ -42,11 +44,8 @@ const CanvasInternalTransform = (): JSX.Element => {
           />
 
           {[...allNodes].reverse().map((node: Node) => {
-            if (false) {
-              return;
-            } else {
-              return <CanvasInternalNode key={node.id} node={node} nodeWidth={width} nodeHeight={height} />;
-            }
+            const visible = !invisibleNodes.some((id) => id === node.id);
+            if (visible) return <CanvasInternalNode key={node.id} node={node} nodeWidth={width} nodeHeight={height} />;
           })}
         </div>
       </div>

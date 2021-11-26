@@ -114,7 +114,7 @@ const gameSlice = createSlice({
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, hideUserAlreadyAddedDialog, activateNode, updateNodePos } = gameSlice.actions;
+export const { gameLoaded, hideUserAlreadyAddedDialog, activateNode, updateNodePos, deleteNode } = gameSlice.actions;
 
 // Thunks (async calls)
 // should we use createAsyncThunk() here?
