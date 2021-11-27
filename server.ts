@@ -37,6 +37,14 @@ app.use(
   }),
 );
 
+// Serve the static files from the React app
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+// Fallback route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
+});
+
 /*************************************************/
 // Express server listening...
 const port = process.env.PORT || 5000;
