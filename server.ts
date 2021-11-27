@@ -1,8 +1,7 @@
-'use strict';
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose from './db/mongoose';
+import mongoose from 'mongoose';
 import session from 'express-session';
 
 // starting the express server
