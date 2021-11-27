@@ -9,6 +9,7 @@ const app = express();
 
 // mongoose and mongo connection
 mongoose.set('bufferCommands', false); // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
+
 // These options were included in the example code but cause Typescript errors:
 // mongoose.set("useFindAndModify", false); // for some deprecation issues
 
