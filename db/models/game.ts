@@ -1,8 +1,9 @@
 import { Schema } from 'mongoose';
 import { Game } from '../../frontend/src/types'; // TODO: fix where the types file is
 import mongoose from '../mongoose';
+import { NodeSchema } from './node';
 
-const schema = new Schema<Game>({
+export const GameSchema = new Schema<Game>({
   title: {
     type: String,
     required: true,
@@ -10,8 +11,23 @@ const schema = new Schema<Game>({
     trim: true,
   },
   // TODO: Add Image
+  nodes: [NodeSchema],
+  users: [
+    {
+      user: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+      },
+      permission: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
+  settings: {
+    type: String, //JSON
+    required: true,
+  },
 });
 
-const GameModel = mongoose.model('Game', schema);
-
-module.exports = { GameModel };
+export const GameModel = mongoose.model('Game', GameSchema);

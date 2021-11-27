@@ -2,7 +2,7 @@ import { Schema } from 'mongoose';
 import { Subnode } from '../../frontend/src/types'; // TODO: fix where the types file is
 import mongoose from '../mongoose';
 
-const schema = new Schema<Subnode>({
+export const SubnodeSchema = new Schema<Subnode>({
   name: {
     type: String,
     required: true,
@@ -11,20 +11,16 @@ const schema = new Schema<Subnode>({
     type: Number,
     required: true,
   },
-  editors: [
-    {
-      type: [mongoose.Schema.Types.ObjectId],
-    },
-  ],
+  editors: [mongoose.Types.ObjectId],
   type: {
     type: String,
     required: true,
   },
   content: {
-    type: mongoose.Schema.Types.String,
+    type: mongoose.Schema.Types.String, //JSON / Delta
   },
 });
 
-const SubnodeModel = mongoose.model('Subnode', schema);
+export const SubnodeModel = mongoose.model('Subnode', SubnodeSchema);
 
-module.exports = { SubnodeModel };
+// module.exports = { SubnodeModel, SubnodeSchema };
