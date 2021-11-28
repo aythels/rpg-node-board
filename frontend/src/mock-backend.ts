@@ -50,6 +50,8 @@ const theSoaringSkies = {
   ],
   editors: [2, 1],
   type: 'location',
+  x: 0,
+  y: 0,
 };
 
 const museum = {
@@ -81,6 +83,8 @@ const museum = {
   ],
   editors: [2],
   type: 'location',
+  x: 0,
+  y: 0,
 };
 
 const lonelyPath = {
@@ -112,6 +116,8 @@ const lonelyPath = {
   ],
   editors: [2],
   type: 'location',
+  x: 0,
+  y: 0,
 };
 
 const stGeorge = {
@@ -143,6 +149,8 @@ const stGeorge = {
   ],
   editors: [2],
   type: 'location',
+  x: 0,
+  y: 0,
 };
 
 const globalUsers: User[] = [
@@ -362,6 +370,30 @@ export const GETgmIds = (gameId: number): number[] => {
 export const POSTnode = (node: Node, gameId: number): void => {
   const game = globalGames.find((game) => game.id === gameId) as Game;
   game.nodes.push(node);
+};
+
+export const PATCHnode = (gameId: number): Node => {
+  const node = {
+    id: GETgameById(gameId).nodes.length + 1,
+    name: 'Untitled',
+    image: '/images/stgeorge.jpg',
+    imageAlt: '',
+    informationLevels: [
+      { userId: 1, infoLevel: 0 },
+      { userId: 3, infoLevel: 0 },
+      { userId: 4, infoLevel: 1 },
+      { userId: 5, infoLevel: 2 },
+    ],
+    subnodes: [],
+    editors: [2],
+    type: 'location',
+    x: 0,
+    y: 0,
+  };
+
+  POSTnode(node, gameId);
+
+  return node;
 };
 
 /* PATCH & PUT */

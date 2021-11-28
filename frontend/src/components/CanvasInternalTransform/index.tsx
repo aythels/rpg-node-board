@@ -1,63 +1,56 @@
 import './styles.css';
 import React from 'react';
 import CanvasInternalNode from '../CanvasInternalNode';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../state/rootReducer';
+import { Node } from '../../types';
+import { NodeManager } from './NodeManager';
+import { updateNode, updateNodePos } from '../../state/slices/gameSlice';
+import { store } from '../../state/';
+import { deleteNode } from '../../state/slices/gameSlice';
 
-interface Props {
-  nodeManager: any;
-  onCloseClicked: (id: number) => void;
-  onOpenClicked: (id: number) => void;
-}
+const nodeManager = new NodeManager();
 
-export default class CanvasInternalTransform extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.props.nodeManager.addOnUpdateEvent(() => this.setState({}));
-  }
+const CanvasInternalTransform = (): JSX.Element => {
+  // const node = nodes[0];
+  //store.dispatch(updateNode(gameId, node));
+  // store.dispatch(updateNodePos([node, 100, 100]));
 
-  render(): JSX.Element {
-    const { nodeManager, onCloseClicked, onOpenClicked } = this.props;
+  const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
+  const scale = useSelector((state: RootState) => state.nodeview.canvasScale);
+  const canvasX = useSelector((state: RootState) => state.nodeview.canvasX);
+  const canvasY = useSelector((state: RootState) => state.nodeview.canvasY);
+  const width = nodeManager.nodeWidth;
+  const height = nodeManager.nodeHeight;
+  const invisibleNodes = useSelector((state: RootState) => state.nodeview.invisibleNodes);
 
-    return (
-      <div
-        className="transform-wrapper"
-        onPointerDown={nodeManager.onPress}
-        onPointerMove={nodeManager.onMove}
-        onPointerUp={nodeManager.onRelease}
-        onPointerLeave={nodeManager.onRelease}
-        onWheel={nodeManager.onWheel}
-      >
-        <div className="centerOffSet-container">
-          <div className="scale-container" style={{ transform: `scale(${nodeManager.scale})` }}>
-            <div
-              className="grid-container"
-              style={{
-                left: `${nodeManager.getFinalX()}px`,
-                top: `${nodeManager.getFinalY()}px`,
-              }}
-            />
+  return (
+    <div
+      className="transform-wrapper"
+      onPointerDown={nodeManager.onPress}
+      onPointerMove={nodeManager.onMove}
+      onPointerUp={nodeManager.onRelease}
+      onPointerLeave={nodeManager.onRelease}
+      onWheel={nodeManager.onWheel}
+    >
+      <div className="centerOffSet-container">
+        <div className="scale-container" style={{ transform: `scale(${scale})` }}>
+          <div
+            className="grid-container"
+            style={{
+              left: `${canvasX}px`,
+              top: `${canvasY}px`,
+            }}
+          />
 
-            {nodeManager.getAllNodes().map((node: any) => {
-              if (!node.isVisible) {
-                return;
-              } else {
-                return (
-                  <CanvasInternalNode
-                    key={node.id}
-                    xPos={node.getRenderX()}
-                    yPos={node.getRenderY()}
-                    nodeWidth={node.width}
-                    nodeHeight={node.height}
-                    id={node.id}
-                    dataNode={node.dataNode}
-                    onCloseClicked={() => onCloseClicked(node.id)}
-                    onOpenClicked={() => onOpenClicked(node.id)}
-                  />
-                );
-              }
-            })}
-          </div>
+          {[...allNodes].reverse().map((node: Node) => {
+            const visible = !invisibleNodes.some((id) => id === node.id);
+            if (visible) return <CanvasInternalNode key={node.id} node={node} nodeWidth={width} nodeHeight={height} />;
+          })}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export default CanvasInternalTransform;

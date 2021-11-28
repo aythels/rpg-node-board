@@ -17,6 +17,8 @@ export interface Node {
   informationLevels: InfoLevel[];
   editors: number[];
   type: string;
+  x: number;
+  y: number;
 }
 
 export interface Subnode {

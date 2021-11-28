@@ -3,53 +3,60 @@ import React from 'react';
 import { Node } from '../../types';
 import { Delete, Launch } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
+import { store } from '../../state/';
+import { setActiveNode, setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
+import { deleteNode } from '../../state/slices/gameSlice';
+import { RootState } from '../../state/rootReducer';
+import { useSelector } from 'react-redux';
 
 interface Props {
-  xPos: number;
-  yPos: number;
+  node: Node;
   nodeWidth: number;
   nodeHeight: number;
-  id: number;
-  dataNode: Node;
-  onCloseClicked: () => void;
-  onOpenClicked: () => void;
 }
 
-export default class CanvasInternalNode extends React.Component<Props> {
-  render(): JSX.Element {
-    const { xPos, yPos, nodeWidth, nodeHeight, id, dataNode, onCloseClicked, onOpenClicked } = this.props;
+const CanvasInternalNode = (props: Props): JSX.Element => {
+  const { node, nodeWidth, nodeHeight } = props;
+  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
 
-    return (
-      <div
-        node-id={id}
-        className="node"
-        onDoubleClick={onOpenClicked}
-        style={{
-          left: `${xPos}px`,
-          top: `${yPos}px`,
-          width: `${nodeWidth}px`,
-          height: `${nodeHeight}px`,
-          backgroundImage: `url(${dataNode.image})`,
-        }}
-      >
-        <div className="node__header">
-          <div className="node-text-div" node-id={id}>
-            {dataNode.name}
-          </div>
-        </div>
-        <div className="node__footer">
-          <Tooltip title="Delete node">
-            <button className="node-button" onClick={onCloseClicked}>
-              <Delete />
-            </button>
-          </Tooltip>
-          <Tooltip title="View node">
-            <button className="node-button" onClick={onOpenClicked}>
-              <Launch />
-            </button>
-          </Tooltip>
+  return (
+    <div
+      className="node"
+      node-id={node.id}
+      onDoubleClick={() => store.dispatch(setActiveNode(node.id))}
+      style={{
+        left: `${node.x}px`,
+        top: `${node.y}px`,
+        width: `${nodeWidth}px`,
+        height: `${nodeHeight}px`,
+        backgroundImage: `url(${node.image})`,
+      }}
+    >
+      <div className="node__header">
+        <div className="node-text-div" node-id={node.id}>
+          {node.name}
         </div>
       </div>
-    );
-  }
-}
+      <div className="node__footer">
+        <Tooltip title="Delete node">
+          <button
+            className="node-button"
+            onClick={() => {
+              if (isAdmin) store.dispatch(deleteNode(node));
+              else store.dispatch(setIsEditPermissionsModalOpen(true));
+            }}
+          >
+            <Delete />
+          </button>
+        </Tooltip>
+        <Tooltip title="View node">
+          <button className="node-button" onClick={() => store.dispatch(setActiveNode(node.id))}>
+            <Launch />
+          </button>
+        </Tooltip>
+      </div>
+    </div>
+  );
+};
+
+export default CanvasInternalNode;
