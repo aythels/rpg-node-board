@@ -75,9 +75,9 @@ const SubnodeView = (props: Props): JSX.Element => {
     updateNodeTextLinks();
   }, [isEditorLoaded]);
 
-  useEffect(() => {
-    console.log(change);
-  }, [change]);
+  // useEffect(() => {
+  //   console.log(change);
+  // }, [change]);
 
   const loadEditor = (): void => {
     const readOnly = !props.subnode.editors.includes(user.id);
