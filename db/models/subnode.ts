@@ -22,5 +22,3 @@ export const SubnodeSchema = new Schema<Subnode>({
 });
 
 export const SubnodeModel = mongoose.model('Subnode', SubnodeSchema);
-
-// module.exports = { SubnodeModel, SubnodeSchema };

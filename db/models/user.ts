@@ -2,7 +2,7 @@ import mongoose from '../mongoose';
 import { Schema } from 'mongoose';
 import { User } from '../../frontend/src/types'; // TODO: fix where the types file is
 
-const UserSchema = new Schema<User>({
+export const UserSchema = new Schema<User>({
   username: {
     type: String,
     required: true,
@@ -24,6 +24,4 @@ const UserSchema = new Schema<User>({
   // TODO: add images, pfp
 });
 
-const UserModel = mongoose.model('User', UserSchema);
-
-module.exports = { UserModel, UserSchema };
+export const UserModel = mongoose.model('User', UserSchema);
