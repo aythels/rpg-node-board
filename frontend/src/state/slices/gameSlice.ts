@@ -26,7 +26,7 @@ const initialState: GameState = {
 interface SubnodeUpdate {
   nodeId: number;
   subnodeId: number;
-  change: Delta;
+  content: Delta;
 }
 
 interface SubnodeCreation {
@@ -94,7 +94,7 @@ const gameSlice = createSlice({
       const subnodeToUpdate = nodeToUpdate.subnodes.find(
         (subnode) => subnode.id === action.payload.subnodeId,
       ) as Subnode;
-      subnodeToUpdate.content.compose(action.payload.change);
+      subnodeToUpdate.content = action.payload.content;
       // Does doing this update state? ^
     },
     addSubnode: (state: GameState, action: PayloadAction<SubnodeCreation>) => {
@@ -167,9 +167,9 @@ export const updateNode = (gameId: number, node: Node): any => {
 };
 
 // all of these args make me think that this is NOT the way to do this
-export const updateSubnode = (gameId: number, nodeId: number, subnodeId: number, change: Delta): any => {
+export const updateSubnode = (gameId: number, nodeId: number, subnodeId: number, content: Delta): any => {
   const updateSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    dispatch(gameSlice.actions.updateSubnode({ nodeId: nodeId, subnodeId: subnodeId, change: change }));
+    dispatch(gameSlice.actions.updateSubnode({ nodeId: nodeId, subnodeId: subnodeId, content: content }));
     // TODO: make async call
     // PUTsubnode(gameId, nodeId, ...)
   };
