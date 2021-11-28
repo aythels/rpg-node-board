@@ -132,6 +132,8 @@ const SubnodeView = (props: Props): JSX.Element => {
     }
   };
 
+  // TODO: Fix autosave, stop re-rendering
+
   const saveEditorChanges = (): void => {
     if (editor) {
       // POSTsubnodeContent(subnode.id, change); // TODO: Use Redux
