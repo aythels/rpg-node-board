@@ -12,6 +12,7 @@ const theSoaringSkies = {
   imageAlt: '',
   informationLevels: [
     { userId: 1, infoLevel: 0 },
+    { userId: 2, infoLevel: 2 },
     { userId: 3, infoLevel: 1 },
     { userId: 4, infoLevel: 1 },
     { userId: 5, infoLevel: 2 },
@@ -61,6 +62,7 @@ const museum = {
   imageAlt: '',
   informationLevels: [
     { userId: 1, infoLevel: 0 },
+    { userId: 2, infoLevel: 2 },
     { userId: 3, infoLevel: 1 },
     { userId: 4, infoLevel: 0 },
     { userId: 5, infoLevel: 2 },
@@ -94,6 +96,7 @@ const lonelyPath = {
   imageAlt: '',
   informationLevels: [
     { userId: 1, infoLevel: 0 },
+    { userId: 2, infoLevel: 2 },
     { userId: 3, infoLevel: 1 },
     { userId: 4, infoLevel: 1 },
     { userId: 5, infoLevel: 2 },
@@ -127,6 +130,7 @@ const stGeorge = {
   imageAlt: '',
   informationLevels: [
     { userId: 1, infoLevel: 0 },
+    { userId: 2, infoLevel: 2 },
     { userId: 3, infoLevel: 0 },
     { userId: 4, infoLevel: 1 },
     { userId: 5, infoLevel: 2 },
@@ -283,34 +287,6 @@ let globalGames: Game[] = [
       },
       {
         userId: 5,
-        permission: UserPermission.player,
-      },
-      {
-        userId: 6,
-        permission: UserPermission.player,
-      },
-      {
-        userId: 7,
-        permission: UserPermission.player,
-      },
-      {
-        userId: 8,
-        permission: UserPermission.player,
-      },
-      {
-        userId: 9,
-        permission: UserPermission.player,
-      },
-      {
-        userId: 10,
-        permission: UserPermission.player,
-      },
-      {
-        userId: 11,
-        permission: UserPermission.player,
-      },
-      {
-        userId: 12,
         permission: UserPermission.player,
       },
     ],

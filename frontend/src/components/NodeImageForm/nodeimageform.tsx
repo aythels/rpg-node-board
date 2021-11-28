@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { uid } from 'react-uid';
 import { RootState } from '../../state/rootReducer';
 import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
-import { setIsEditModalOpen, setIsImageModalOpen } from '../../state/slices/nodeviewSlice';
+import { setIsImageModalOpen } from '../../state/slices/nodeviewSlice';
 import { addImage } from '../../state/slices/userSlice';
 import { Node } from '../../types';
 import './nodeimageform.css';
@@ -22,14 +22,14 @@ const NodeImageForm = (): JSX.Element => {
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;
     if (target.className == 'modal') {
-      dispatch(setIsEditModalOpen(false));
+      dispatch(setIsImageModalOpen(false));
     }
   };
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
     dispatch(updateNode(game.id, tempNode)); // TODO: async
-    dispatch(setIsEditModalOpen(false));
+    dispatch(setIsImageModalOpen(false));
   };
 
   const handleNewImageUpload = (e: SyntheticEvent): void => {

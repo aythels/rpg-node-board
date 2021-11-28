@@ -1,13 +1,8 @@
 import './styles.css';
 import React from 'react';
 import Sidebar from '../LeftSidebar/Sidebar/Sidebar';
-// import CanvasInternalNode from '../CanvasInternalNode';
-import { DELETEnodeFromGame, GETgmIds, GETuserIsGMInGame, POSTnode } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
-import { Node } from '../../types';
 import { Alert, AlertTitle } from '@mui/material';
-import { selectVisibleNodes } from '../../state/slices/gameSlice';
-import { connect } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
 import CanvasInternalTransform from '../CanvasInternalTransform';
 import { useSelector } from 'react-redux';
