@@ -132,7 +132,8 @@ const SubnodeView = (props: Props): JSX.Element => {
     }
   };
 
-  // TODO: Fix autosave, stop re-rendering
+  // TODO: Fix autosave, stop re-rendering on update
+  // Idea: save contents locally in state every few seconds, only push on deliberate saves or on exit
 
   const saveEditorChanges = (): void => {
     if (editor) {
