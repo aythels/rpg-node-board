@@ -1,3 +1,4 @@
+import { Binary } from 'bson';
 import { Schema } from 'mongoose';
 import { Game } from '../../frontend/src/types'; // TODO: fix where the types file is
 import mongoose from '../mongoose';
@@ -10,7 +11,10 @@ export const GameSchema = new Schema<Game>({
     minlength: 1,
     trim: true,
   },
-  // TODO: Add Image
+  image: {
+    type: Binary,
+    required: false,
+  },
   nodes: [NodeSchema],
   users: [
     {
@@ -21,6 +25,10 @@ export const GameSchema = new Schema<Game>({
       permission: {
         type: Number,
         required: true,
+      },
+      nickname: {
+        type: String,
+        required: false,
       },
     },
   ],

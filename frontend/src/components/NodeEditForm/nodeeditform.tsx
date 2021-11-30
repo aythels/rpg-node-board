@@ -52,7 +52,7 @@ const NodeEditForm = (): JSX.Element => {
   };
 
   const validateName = (name: string): boolean => {
-    // NOTE: we shoudl also validate names (and evrything else) server-side -- this is just for better UX
+    // TODO: add redux uniqueness validation
     // Validation: Not empty string
     return name != '';
   };
