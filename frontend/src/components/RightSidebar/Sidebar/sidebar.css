@@ -15,3 +15,7 @@
 .canvas-sidebar .container .MuiDrawer-paper {
   width: 20%;
 }
+/* Not sure why this is necessary */
+.canvas-sidebar .MuiDrawer-root {
+  padding: 0;
+}
