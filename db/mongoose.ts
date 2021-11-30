@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 
 /* Connnect to our database */
 // Get the URI of the local database, or the one specified on deployment.
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/';
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/RpgAPI';
 
 mongoose.connect(mongoURI, {
   // These options were included in the example code but cause Typescript errors:
