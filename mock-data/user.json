@@ -1,0 +1,98 @@
+[
+  {
+    "_id": 1,
+    "username": "user",
+    "password": "user",
+    "email": "user@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 2,
+    "username": "admin",
+    "password": "admin",
+    "email": "admin@admin.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 3,
+    "username": "user2",
+    "password": "user2",
+    "email": "user2@user.com",
+    "games": [1, 2],
+    "images": []
+  },
+  {
+    "_id": 4,
+    "username": "user3",
+    "password": "user3",
+    "email": "user3@user.com",
+    "games": [1, 2],
+    "images": []
+  },
+  {
+    "_id": 5,
+    "username": "user4",
+    "password": "user4",
+    "email": "user4@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 6,
+    "username": "user5",
+    "password": "user5",
+    "email": "user5@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 7,
+    "username": "user6",
+    "password": "user6",
+    "email": "user6@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 8,
+    "username": "user7",
+    "password": "user7",
+    "email": "user7@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 9,
+    "username": "user8",
+    "password": "user8",
+    "email": "user8@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 10,
+    "username": "user8",
+    "password": "user8",
+    "email": "user8@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 11,
+    "username": "user9",
+    "password": "user9",
+    "email": "user9@user.com",
+    "games": [1],
+    "images": []
+  },
+  {
+    "_id": 12,
+    "username": "user10",
+    "password": "user10",
+    "email": "user10@user.com",
+    "games": [1],
+    "images": []
+  }
+]

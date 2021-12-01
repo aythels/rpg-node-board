@@ -1,0 +1,204 @@
+[
+  {
+    "_id": 100,
+    "nodes": [
+      {
+        "_id": 201,
+        "name": "The Soaring Skies",
+        "informationLevels": [
+          { "user": 1, "infoLevel": 0 },
+          { "user": 3, "infoLevel": 1 },
+          { "user": 4, "infoLevel": 1 },
+          { "user": 5, "infoLevel": 2 }
+        ],
+        "subnodes": [
+          {
+            "_id": 301,
+            "informationLevel": 1,
+            "editors": [2],
+            "type": "description",
+            "name": "Description",
+            "content": {
+              "ops": [
+                { "insert": "A vast sky. The " },
+                { "attributes": { "nodelink": 203 }, "insert": "Lonely Path" },
+                { "insert": " can be found here.\n" }
+              ]
+            }
+          },
+          {
+            "_id": 302,
+            "informationLevel": 2,
+            "editors": [2],
+            "type": "event",
+            "name": "Sky is Falling",
+            "content": { "ops": [{ "insert": "The sky is falling!" }] }
+          },
+          {
+            "_id": 303,
+            "informationLevel": 1,
+            "editors": [1, 2, 3, 4, 5],
+            "type": "notes",
+            "name": "Notes",
+            "content": { "ops": [{ "insert": "wow sure looks cool!" }] }
+          }
+        ],
+        "editors": [2, 1],
+        "type": "location"
+      },
+      {
+        "_id": 202,
+        "name": "Museum",
+        "informationLevels": [
+          { "user": 1, "infoLevel": 0 },
+          { "user": 3, "infoLevel": 1 },
+          { "user": 4, "infoLevel": 0 },
+          { "user": 5, "infoLevel": 2 }
+        ],
+        "subnodes": [
+          {
+            "_id": 304,
+            "informationLevel": 1,
+            "editors": [2],
+            "type": "description",
+            "name": "Description",
+            "content": {
+              "ops": [
+                { "insert": "A place of great knowledge. Near by " },
+                { "attributes": { "nodelink": 204 }, "insert": "St. George" },
+                { "insert": ".\n" }
+              ]
+            }
+          }
+        ],
+        "editors": [2],
+        "type": "location"
+      },
+      {
+        "_id": 203,
+        "name": "Lonely Path",
+        "informationLevels": [
+          { "user": 1, "infoLevel": 0 },
+          { "user": 3, "infoLevel": 1 },
+          { "user": 4, "infoLevel": 1 },
+          { "user": 5, "infoLevel": 2 }
+        ],
+        "subnodes": [
+          {
+            "_id": 305,
+            "informationLevel": 1,
+            "editors": [2],
+            "type": "description",
+            "name": "Description",
+            "content": {
+              "ops": [
+                { "insert": "Somewhere to walk underneath " },
+                { "attributes": { "nodelink": 201 }, "insert": "The Soaring Skies" },
+                { "insert": "." }
+              ]
+            }
+          }
+        ],
+        "editors": [2],
+        "type": "location"
+      },
+      {
+        "_id": 204,
+        "name": "St. George",
+        "informationLevels": [
+          { "user": 1, "infoLevel": 0 },
+          { "user": 3, "infoLevel": 0 },
+          { "user": 4, "infoLevel": 1 },
+          { "user": 5, "infoLevel": 2 }
+        ],
+        "subnodes": [
+          {
+            "_id": 306,
+            "informationLevel": 1,
+            "editors": [2],
+            "type": "description",
+            "name": "Description",
+            "content": {
+              "ops": [
+                { "insert": "The center of UofT. Near " },
+                { "attributes": { "nodelink": 202 }, "insert": "Museum" },
+                { "insert": "." }
+              ]
+            }
+          }
+        ],
+        "editors": [2],
+        "type": "location"
+      }
+    ],
+    "users": [
+      {
+        "user": 1,
+        "permission": 1,
+        "nickname": "test nickname"
+      },
+      {
+        "user": 2,
+        "permission": 0
+      },
+      {
+        "user": 3,
+        "permission": 1
+      },
+      {
+        "user": 4,
+        "permission": 1
+      },
+      {
+        "user": 5,
+        "permission": 1
+      },
+      {
+        "user": 6,
+        "permission": 1
+      },
+      {
+        "user": 7,
+        "permission": 1
+      },
+      {
+        "user": 8,
+        "permission": 1
+      },
+      {
+        "user": 9,
+        "permission": 1
+      },
+      {
+        "user": 10,
+        "permission": 1
+      },
+      {
+        "user": 11,
+        "permission": 1
+      },
+      {
+        "user": 12,
+        "permission": 1
+      }
+    ],
+    "title": "A Game!",
+    "settings": {}
+  },
+  {
+    "_id": 101,
+    "nodes": [],
+    "users": [
+      {
+        "user": 3,
+        "permission": 0
+      },
+      {
+        "user": 4,
+        "permission": 0
+      }
+    ],
+    "title": "Filler game 1",
+    "settings": {}
+  }
+]
