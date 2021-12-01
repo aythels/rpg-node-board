@@ -3,4 +3,5 @@
 
    ```
    mongoimport --db=RpgAPI --type=json --jsonArray --collection=user --file=mock-data/user.json
+   mongoimport --db=RpgAPI --type=json --jsonArray --collection=game --file=mock-data/game.json
    ```
