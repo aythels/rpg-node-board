@@ -1,7 +1,6 @@
 import mongoose from '../mongoose';
 import { Schema } from 'mongoose';
 import { User } from '../../frontend/src/types'; // TODO: fix where the types file is
-import { Binary } from 'bson';
 
 export const UserSchema = new Schema<User>({
   username: {
@@ -17,7 +16,7 @@ export const UserSchema = new Schema<User>({
     required: true,
   },
   profilePicture: {
-    type: Binary,
+    type: String, // base 64
     required: false,
   },
   games: [
@@ -28,7 +27,7 @@ export const UserSchema = new Schema<User>({
   ],
   images: [
     {
-      type: Binary,
+      type: [String], // base 64
       required: true,
     },
   ],

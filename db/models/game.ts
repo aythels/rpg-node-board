@@ -1,4 +1,3 @@
-import { Binary } from 'bson';
 import { Schema } from 'mongoose';
 import { Game } from '../../frontend/src/types'; // TODO: fix where the types file is
 import mongoose from '../mongoose';
@@ -12,7 +11,7 @@ export const GameSchema = new Schema<Game>({
     trim: true,
   },
   image: {
-    type: Binary,
+    type: String, // base64
     required: false,
   },
   nodes: [NodeSchema],

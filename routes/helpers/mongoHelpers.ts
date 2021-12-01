@@ -13,6 +13,6 @@ export const mongoChecker = (req: Request, res: Response, next: NextFunction): v
 };
 
 // Checks for first error returned by promise rejection if Mongo database suddenly disconnects
-export const isMongoError = (error): boolean => {
+export const isMongoError = (error: any): boolean => {
   return typeof error === 'object' && error !== null && error.name === 'MongoNetworkError';
 };
