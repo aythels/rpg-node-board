@@ -11,7 +11,7 @@ import { setActiveNode } from '../../state/slices/nodeviewSlice';
 import { Button } from '@mui/material';
 import { Save } from '@mui/icons-material';
 
-const autosaveFrequency = 1 * 1000;
+//const autosaveFrequency = 1 * 1000;
 
 const standardEditorToolbar = [
   [

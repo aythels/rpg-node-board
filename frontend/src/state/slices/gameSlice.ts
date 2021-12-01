@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
 
-import { PATCHnode, GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
+import { GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
 import { Game, Node, Subnode, User, UserPermission } from '../../types';
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
@@ -26,7 +26,7 @@ const initialState: GameState = {
 interface SubnodeUpdate {
   nodeId: number;
   subnodeId: number;
-  content: Delta;
+  change: Delta;
 }
 
 interface SubnodeCreation {
@@ -68,33 +68,12 @@ const gameSlice = createSlice({
       const index = state.gameInstance.nodes.findIndex((node) => node.id === action.payload.id);
       state.gameInstance.nodes[index] = action.payload;
     },
-    updateNodePos: (state: GameState, action: PayloadAction<[Node, number, number]>) => {
-      const [node, x, y] = action.payload;
-      const index = state.gameInstance.nodes.findIndex((n) => n.id === node.id);
-      state.gameInstance.nodes[index].x = x;
-      state.gameInstance.nodes[index].y = y;
-    },
-    activateNode: (state: GameState, action: PayloadAction<Node>) => {
-      // This is just calling deleteNode and addNode reducer
-      const index = state.gameInstance.nodes.findIndex((n) => n.id === action.payload.id);
-      if (index > -1) {
-        state.gameInstance.nodes.splice(index, 1);
-        state.gameInstance.nodes.unshift(action.payload);
-      }
-    },
-    deleteNode: (state: GameState, action: PayloadAction<Node>) => {
-      const index = state.gameInstance.nodes.findIndex((n) => n.id === action.payload.id);
-      if (index > -1) state.gameInstance.nodes.splice(index, 1);
-    },
-    addNode: (state: GameState, action: PayloadAction<Node>) => {
-      state.gameInstance.nodes.unshift(action.payload);
-    },
     updateSubnode: (state: GameState, action: PayloadAction<SubnodeUpdate>) => {
       const nodeToUpdate = state.gameInstance.nodes.find((node) => node.id === action.payload.nodeId) as Node;
       const subnodeToUpdate = nodeToUpdate.subnodes.find(
         (subnode) => subnode.id === action.payload.subnodeId,
       ) as Subnode;
-      subnodeToUpdate.content = action.payload.content;
+      subnodeToUpdate.content.compose(action.payload.change);
       // Does doing this update state? ^
     },
     addSubnode: (state: GameState, action: PayloadAction<SubnodeCreation>) => {
@@ -114,19 +93,10 @@ const gameSlice = createSlice({
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, hideUserAlreadyAddedDialog, activateNode, updateNodePos, deleteNode } = gameSlice.actions;
+export const { gameLoaded, hideUserAlreadyAddedDialog } = gameSlice.actions;
 
 // Thunks (async calls)
 // should we use createAsyncThunk() here?
-
-export const createNode = (gameId: number): any => {
-  const thunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    const node = PATCHnode(gameId); //async
-    dispatch(gameSlice.actions.addNode(node));
-  };
-
-  return thunk;
-};
 
 export const fetchGame = (gameId: number): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
@@ -167,9 +137,9 @@ export const updateNode = (gameId: number, node: Node): any => {
 };
 
 // all of these args make me think that this is NOT the way to do this
-export const updateSubnode = (gameId: number, nodeId: number, subnodeId: number, content: Delta): any => {
+export const updateSubnode = (gameId: number, nodeId: number, subnodeId: number, change: Delta): any => {
   const updateSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    dispatch(gameSlice.actions.updateSubnode({ nodeId: nodeId, subnodeId: subnodeId, content: content }));
+    dispatch(gameSlice.actions.updateSubnode({ nodeId: nodeId, subnodeId: subnodeId, change: change }));
     // TODO: make async call
     // PUTsubnode(gameId, nodeId, ...)
   };
@@ -227,6 +197,7 @@ export const selectActiveNode: any = createDraftSafeSelector(
   (state: RootState): Node[] => state.game.gameInstance.nodes,
   (state: RootState): number => state.nodeview.activeNode, // this seems bad to do
   (nodes: Node[], activeNodeId: number): Node => {
+    console.log(nodes);
     return nodes.find((node) => node.id === activeNodeId) as Node;
   },
 );
