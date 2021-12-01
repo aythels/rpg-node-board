@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
+import { userRouter } from './routes';
 
 // starting the express server
 const app = express();
@@ -11,7 +12,7 @@ const app = express();
 mongoose.set('bufferCommands', false); // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
 // These options were included in the example code but cause Typescript errors:
-// mongoose.set("useFindAndModify", false); // for some deprecation issues
+// mongoose.set('useFindAndModify', false); // for some deprecation issues
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 app.use(bodyParser.json());
@@ -44,6 +45,9 @@ app.use(express.static(path.join(__dirname, 'frontend/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
 });
+
+// Add routes
+app.use('/api', userRouter);
 
 /*************************************************/
 // Express server listening...
