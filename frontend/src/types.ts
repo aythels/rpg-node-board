@@ -11,8 +11,8 @@ export interface InfoLevel {
 export interface Node {
   id: number;
   name: string;
-  image: any;
-  thumbnailImage: any;
+  image?: any;
+  thumbnailImage?: any;
   imageAlt: string;
   subnodes: Subnode[];
   informationLevels: InfoLevel[];
@@ -44,8 +44,7 @@ export interface UserPermissionRecord {
 export interface Game {
   id: number;
   title: string;
-  imgpath: string; //TODO: actually handle images
-  image: any;
+  image?: any;
   nodes: Node[];
   users: UserPermissionRecord[];
   settings: Record<string, unknown>;
@@ -57,9 +56,8 @@ export interface User {
   password: string; // FOR NOW
   email: string; // FOR NOW
   games: number[];
-  pfp: any;
-  profilePicture?: string;
-  images: string[]; // FOR NOW
+  profilePicture?: any;
+  images: any[]; // FOR NOW
 }
 
 export enum DefaultNodeTypes {
