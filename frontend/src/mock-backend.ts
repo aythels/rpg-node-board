@@ -226,208 +226,208 @@ let globalGames: Game[] = [
 
 /* GET */
 
-// export const GETgameById = (gameId: number): Game => {
-//   const globalGamesCopy = cloneDeep(globalGames);
-//   return globalGamesCopy.find((game) => game.id === gameId) as Game;
+export const GETgameById = (gameId: number): Game => {
+  const globalGamesCopy = cloneDeep(globalGames);
+  return globalGamesCopy.find((game) => game.id === gameId) as Game;
+};
+
+export const GETplayers = (gameId: number): User[] => {
+  const game = GETgameById(gameId);
+  return game
+    ? game.users.filter((user) => user.permission === UserPermission.player).map((u) => GETuserById(u.userId))
+    : [];
+};
+
+export const GETgms = (gameId: number): User[] => {
+  const game = GETgameById(gameId);
+  return game
+    ? game.users.filter((user) => user.permission === UserPermission.gameMaster).map((u) => GETuserById(u.userId))
+    : [];
+};
+
+export const GETgmIds = (gameId: number): number[] => {
+  const gms = GETgms(gameId);
+  return gms.map((gm) => gm.id);
+};
+
+/* POST */
+
+export const POSTnode = (node: Node, gameId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  game.nodes.push(node);
+};
+
+/* PATCH & PUT */
+
+export const PATCHaddPlayerToGame = (playerId: number, gameId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const player = globalUsers.find((user) => user.id === playerId) as User;
+  game.users.push({
+    userId: player.id,
+    permission: UserPermission.player,
+  });
+  player.games.push(game.id);
+  for (const node of game.nodes) {
+    node.informationLevels.push({
+      userId: playerId,
+      infoLevel: 0,
+    });
+  }
+};
+
+export const PATCHpromoteUserToGameMaster = (userId: number, gameId: number): void => {
+  const game = globalGames.filter((game) => game.id === gameId)[0];
+  const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
+  userPermissionRecord.permission = UserPermission.gameMaster;
+  for (const node of game.nodes) {
+    if (!node.editors.includes(userId)) {
+      node.editors.push(userId);
+    }
+  }
+};
+
+export const PATCHdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
+  const game = globalGames.filter((game) => game.id === gameId)[0];
+  const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
+  userPermissionRecord.permission = UserPermission.player;
+  for (const node of game.nodes) {
+    // NOTE: this may not be ideal in all cases
+    node.editors.filter((id) => id !== userId);
+  }
+};
+
+export const PATCHgameName = (gameId: number, newTitle: string): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  game.title = newTitle;
+};
+
+export const PUTnode = (gameId: number, newNode: Node): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const nodeToReplace = game.nodes.find((node) => node.id === newNode.id) as Node;
+  game.nodes[game.nodes.indexOf(nodeToReplace)] = newNode;
+};
+
+export const PUTsubnode = (gameId: number, nodeId: number, newSubnode: Subnode): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const node = game.nodes.find((node) => node.id === nodeId) as Node;
+  const subnodeToReplace = node.subnodes.find((subnode) => subnode.id === newSubnode.id) as Subnode;
+  node.subnodes[node.subnodes.indexOf(subnodeToReplace)] = newSubnode;
+};
+
+/* DELETE */
+
+export const DELETEplayerFromGame = (playerId: number, gameId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  const player = globalUsers.find((user) => user.id === playerId) as User;
+  game.users.filter((u) => u.userId !== player.id);
+  player.games.filter((g) => g !== game.id);
+  for (const node of game.nodes) {
+    node.informationLevels.filter((i) => i.userId !== playerId);
+  }
+};
+
+export const DELETEnodeFromGame = (gameId: number, nodeId: number): void => {
+  const game = globalGames.find((game) => game.id === gameId) as Game;
+  game.nodes.filter((node) => node.id !== nodeId);
+};
+
+export const DELETEGame = (gameId: number): void => {
+  globalGames = globalGames.filter((game) => game.id !== gameId);
+  for (const user of globalUsers) {
+    user.games = user.games.filter((id) => id !== gameId);
+  }
+};
+
+// USER FUNCTIONS:
+
+/* GET */
+
+export const GETuserById = (id: number): User => {
+  const globalUsersCopy = cloneDeep(globalUsers);
+  return globalUsersCopy.find((user) => user.id === id) as User;
+};
+
+export const GETuserByUsername = (username: string): User => {
+  const globalUsersCopy = cloneDeep(globalUsers);
+  return globalUsersCopy.find((user) => user.username == username) as User;
+};
+
+// This mock-db method will CERTAINLY be changed.
+export const GETloginVerification = (username: string, password: string): boolean => {
+  const globalUsersCopy = cloneDeep(globalUsers);
+  return globalUsersCopy.filter((user) => user.username === username && user.password === password).length == 1;
+};
+
+export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
+  const game = GETgameById(gameId);
+  const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
+  return userPermissionRecord.permission === UserPermission.gameMaster;
+};
+
+export const GETgamesByUserID = (userID: number): Game[] => {
+  const user = GETuserById(userID);
+  return user.games.map((gameId) => GETgameById(gameId));
+};
+
+/* POST */
+
+/* PATCH & PUT */
+
+export const PUTuser = (user: User): void => {
+  const existingUser = globalUsers.find((u) => u.id === user.id) as User;
+  const index = globalUsers.indexOf(existingUser);
+  if (index !== -1) {
+    globalUsers[index] = cloneDeep(user);
+  }
+};
+
+/* DELETE */
+
+/* These functions will be deleted as Redux should make them unnecessary */
+
+// export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
+//   const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
+//   return CloneDeep(subnode.editors.includes(userId));
 // };
 
-// export const GETplayers = (gameId: number): User[] => {
-//   const game = GETgameById(gameId);
-//   return game
-//     ? game.users.filter((user) => user.permission === UserPermission.player).map((u) => GETuserById(u.userId))
-//     : [];
+// export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
+//   const node = globalNodes.filter((node) => node.id === nodeId)[0];
+//   return CloneDeep(node.editors.includes(userId));
 // };
 
-// export const GETgms = (gameId: number): User[] => {
-//   const game = GETgameById(gameId);
-//   return game
-//     ? game.users.filter((user) => user.permission === UserPermission.gameMaster).map((u) => GETuserById(u.userId))
-//     : [];
-// };
-
-// export const GETgmIds = (gameId: number): number[] => {
-//   const gms = GETgms(gameId);
-//   return gms.map((gm) => gm.id);
-// };
-
-// /* POST */
-
-// export const POSTnode = (node: Node, gameId: number): void => {
-//   const game = globalGames.find((game) => game.id === gameId) as Game;
-//   game.nodes.push(node);
-// };
-
-// /* PATCH & PUT */
-
-// export const PATCHaddPlayerToGame = (playerId: number, gameId: number): void => {
-//   const game = globalGames.find((game) => game.id === gameId) as Game;
-//   const player = globalUsers.find((user) => user.id === playerId) as User;
-//   game.users.push({
-//     userId: player.id,
-//     permission: UserPermission.player,
-//   });
-//   player.games.push(game.id);
-//   for (const node of game.nodes) {
-//     node.informationLevels.push({
-//       userId: playerId,
-//       infoLevel: 0,
-//     });
-//   }
-// };
-
-// export const PATCHpromoteUserToGameMaster = (userId: number, gameId: number): void => {
+// export const GETnodesInGame = (gameId: number): Node[] => {
 //   const game = globalGames.filter((game) => game.id === gameId)[0];
-//   const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
-//   userPermissionRecord.permission = UserPermission.gameMaster;
-//   for (const node of game.nodes) {
-//     if (!node.editors.includes(userId)) {
-//       node.editors.push(userId);
+//   return globalNodes.filter((node) => game.nodes.includes(node.id));
+// };
+
+// export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
+//   const allNodes = GETnodesInGame(gameId);
+//   const nodes = allNodes.filter((node) => {
+//     if (node.editors.includes(userId)) {
+//       return true;
+//     } else if (node.informationLevels[userId]) {
+//       return node.informationLevels[userId] > 0;
+//     } else {
+//       return false;
 //     }
-//   }
+//   });
+//   return nodes;
 // };
 
-// export const PATCHdemoteGameMasterToPlayer = (userId: number, gameId: number): void => {
-//   const game = globalGames.filter((game) => game.id === gameId)[0];
-//   const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
-//   userPermissionRecord.permission = UserPermission.player;
-//   for (const node of game.nodes) {
-//     // NOTE: this may not be ideal in all cases
-//     node.editors.filter((id) => id !== userId);
-//   }
+// let NEXT_SUBNODE = globalSubnodes.length;
+// let NEXT_NODE = globalNodes.length;
+
+// export const GETnewSubnodeId = (): number => {
+//   NEXT_SUBNODE += 1;
+//   return NEXT_SUBNODE;
 // };
 
-// export const PATCHgameName = (gameId: number, newTitle: string): void => {
-//   const game = globalGames.find((game) => game.id === gameId) as Game;
-//   game.title = newTitle;
+// export const GETnewNodeId = (): number => {
+//   NEXT_NODE += 1;
+//   return NEXT_NODE;
 // };
 
-// export const PUTnode = (gameId: number, newNode: Node): void => {
-//   const game = globalGames.find((game) => game.id === gameId) as Game;
-//   const nodeToReplace = game.nodes.find((node) => node.id === newNode.id) as Node;
-//   game.nodes[game.nodes.indexOf(nodeToReplace)] = newNode;
-// };
-
-// export const PUTsubnode = (gameId: number, nodeId: number, newSubnode: Subnode): void => {
-//   const game = globalGames.find((game) => game.id === gameId) as Game;
-//   const node = game.nodes.find((node) => node.id === nodeId) as Node;
-//   const subnodeToReplace = node.subnodes.find((subnode) => subnode.id === newSubnode.id) as Subnode;
-//   node.subnodes[node.subnodes.indexOf(subnodeToReplace)] = newSubnode;
-// };
-
-// /* DELETE */
-
-// export const DELETEplayerFromGame = (playerId: number, gameId: number): void => {
-//   const game = globalGames.find((game) => game.id === gameId) as Game;
-//   const player = globalUsers.find((user) => user.id === playerId) as User;
-//   game.users.filter((u) => u.userId !== player.id);
-//   player.games.filter((g) => g !== game.id);
-//   for (const node of game.nodes) {
-//     node.informationLevels.filter((i) => i.userId !== playerId);
-//   }
-// };
-
-// export const DELETEnodeFromGame = (gameId: number, nodeId: number): void => {
-//   const game = globalGames.find((game) => game.id === gameId) as Game;
-//   game.nodes.filter((node) => node.id !== nodeId);
-// };
-
-// export const DELETEGame = (gameId: number): void => {
-//   globalGames = globalGames.filter((game) => game.id !== gameId);
-//   for (const user of globalUsers) {
-//     user.games = user.games.filter((id) => id !== gameId);
-//   }
-// };
-
-// // USER FUNCTIONS:
-
-// /* GET */
-
-// export const GETuserById = (id: number): User => {
-//   const globalUsersCopy = cloneDeep(globalUsers);
-//   return globalUsersCopy.find((user) => user.id === id) as User;
-// };
-
-// export const GETuserByUsername = (username: string): User => {
-//   const globalUsersCopy = cloneDeep(globalUsers);
-//   return globalUsersCopy.find((user) => user.username == username) as User;
-// };
-
-// // This mock-db method will CERTAINLY be changed.
-// export const GETloginVerification = (username: string, password: string): boolean => {
-//   const globalUsersCopy = cloneDeep(globalUsers);
-//   return globalUsersCopy.filter((user) => user.username === username && user.password === password).length == 1;
-// };
-
-// export const GETuserIsGMInGame = (userId: number, gameId: number): boolean => {
-//   const game = GETgameById(gameId);
-//   const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
-//   return userPermissionRecord.permission === UserPermission.gameMaster;
-// };
-
-// export const GETgamesByUserID = (userID: number): Game[] => {
-//   const user = GETuserById(userID);
-//   return user.games.map((gameId) => GETgameById(gameId));
-// };
-
-// /* POST */
-
-// /* PATCH & PUT */
-
-// export const PUTuser = (user: User): void => {
-//   const existingUser = globalUsers.find((u) => u.id === user.id) as User;
-//   const index = globalUsers.indexOf(existingUser);
-//   if (index !== -1) {
-//     globalUsers[index] = cloneDeep(user);
-//   }
-// };
-
-// /* DELETE */
-
-// /* These functions will be deleted as Redux should make them unnecessary */
-
-// // export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
-// //   const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
-// //   return CloneDeep(subnode.editors.includes(userId));
-// // };
-
-// // export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
-// //   const node = globalNodes.filter((node) => node.id === nodeId)[0];
-// //   return CloneDeep(node.editors.includes(userId));
-// // };
-
-// // export const GETnodesInGame = (gameId: number): Node[] => {
-// //   const game = globalGames.filter((game) => game.id === gameId)[0];
-// //   return globalNodes.filter((node) => game.nodes.includes(node.id));
-// // };
-
-// // export const GETnodesInGameVisibleToUser = (gameId: number, userId: number): Node[] => {
-// //   const allNodes = GETnodesInGame(gameId);
-// //   const nodes = allNodes.filter((node) => {
-// //     if (node.editors.includes(userId)) {
-// //       return true;
-// //     } else if (node.informationLevels[userId]) {
-// //       return node.informationLevels[userId] > 0;
-// //     } else {
-// //       return false;
-// //     }
-// //   });
-// //   return nodes;
-// // };
-
-// // let NEXT_SUBNODE = globalSubnodes.length;
-// // let NEXT_NODE = globalNodes.length;
-
-// // export const GETnewSubnodeId = (): number => {
-// //   NEXT_SUBNODE += 1;
-// //   return NEXT_SUBNODE;
-// // };
-
-// // export const GETnewNodeId = (): number => {
-// //   NEXT_NODE += 1;
-// //   return NEXT_NODE;
-// // };
-
-// // export const GETeditorsForNode = (nodeId: number): User[] => {
+// export const GETeditorsForNode = (nodeId: number): User[] => {
 //   const node = globalNodes.filter((node) => node.id === nodeId)[0];
 //   const users = globalUsers.filter((user) => node.editors.includes(user.id));
 //   return CloneDeep(users);
