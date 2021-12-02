@@ -83,22 +83,22 @@ router.put('/game/image/:id', mongoChecker, authenticate, async (req: Request, r
 
 /*****************************Game Child Properties API************************/
 
-// POST: Add game player
+// POST: Add game player - TODO
 router.post('/game/player/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// DELETE: Remove game player
+// DELETE: Remove game player - TODO
 router.delete('/game/player/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// PUT: Change game player nickname
+// PUT: Change game player nickname - TODO
 router.put('/game/player/edit-nickname/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// PUT: Change game player permissions
+// PUT: Change game player permissions - TODO
 router.put('/game/player/edit-permission/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// POST: Add game node
+// POST: Add game node - TODO
 router.post('/game/node/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// DELETE: Remove game node
+// DELETE: Remove game node - TODO
 router.delete('/game/node/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
 export { router as gameRouter };
