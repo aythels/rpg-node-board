@@ -4,16 +4,18 @@ import { GameModel } from '../../db/models';
 
 const router = express.Router();
 
-// POST: Create a game
+/**********************************Game API************************************/
+
+// POST: Create game
 router.post('/game', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  // Create Game
+  // { "title": "title" }
+
+  // TODO: Add the id of this game to the data of the user who created it
 
   console.log('Creating new game');
 
   const game = new GameModel({
-    title: 'untitled',
-    image: null,
-    settings: 'afasf',
+    title: req.body.title,
   });
 
   try {
@@ -26,12 +28,43 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
   }
 });
 
-// GET: Retrive all games
-router.get('/game', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  console.log('Retriving all games');
+// GET: Retrive a game
+router.get('/game/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  // TODO: Ensure that only games with ids stored in user data can be retrived for session user
+
+  console.log('Retriving game');
 
   try {
-    const game = await GameModel.find({});
+    const game = await GameModel.findById(req.params.id);
+    res.send(game);
+  } catch (error) {
+    console.log(error);
+    if (isMongoError(error)) res.status(500).send('Internal server error');
+    else res.status(400).send('Bad request');
+  }
+
+  // Non async await version
+  /*
+  GameModel.findById(req.params.id)
+    .then((game) => {
+      res.send(game);
+    })
+    .catch((error) => {
+      console.log(error);
+      if (isMongoError(error)) res.status(500).send('Internal server error');
+      else res.status(400).send('Bad request');
+    });
+  */
+});
+
+// DELETE: Delete a game
+router.delete('/game/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  // TODO: Ensure that only game with ids in session user data can be deleted
+
+  console.log('Deleting game');
+
+  try {
+    const game = await GameModel.findByIdAndDelete(req.params.id);
     res.send(game);
   } catch (error) {
     console.log(error);
@@ -40,37 +73,32 @@ router.get('/game', mongoChecker, authenticate, async (req: Request, res: Respon
   }
 });
 
-// GET: Retrive a game
-router.get('/game/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  console.log('Retriving game');
+/*****************************Game Properties API******************************/
 
-  try {
-    // some database calls do not result in errors even if document doesn't exist
-    const game = await GameModel.findOne({ _id: req.params.id });
-    if (game) res.send(game);
-    else res.status(400).send('Bad request');
-  } catch (error) {
-    console.log(error);
-    if (isMongoError(error)) res.status(500).send('Internal server error');
-    else res.status(400).send('Bad request');
-  }
-});
+// PUT: Update game title
+router.put('/game/title/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// DELETE: Delete a game
-router.delete('/game/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  console.log('Deleting game');
+// PUT: Update game image
+router.put('/game/image/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-  try {
-    // some database calls do not result in errors even if document doesn't exist
+/*****************************Game Child Properties API************************/
 
-    const game = await GameModel.findOneAndDelete({ _id: req.params.id });
-    if (game) res.send(game);
-    else res.status(400).send('Bad request');
-  } catch (error) {
-    console.log(error);
-    if (isMongoError(error)) res.status(500).send('Internal server error');
-    else res.status(400).send('Bad request');
-  }
-});
+// POST: Add game player
+router.post('/game/player/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+
+// DELETE: Remove game player
+router.delete('/game/player/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+
+// PUT: Change game player nickname
+router.put('/game/player/edit-nickname/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+
+// PUT: Change game player permissions
+router.put('/game/player/edit-permission/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+
+// POST: Add game node
+router.post('/game/node/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+
+// DELETE: Remove game node
+router.delete('/game/node/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
 export { router as gameRouter };

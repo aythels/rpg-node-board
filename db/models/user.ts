@@ -15,7 +15,7 @@ export const UserSchema = new Schema<User>({
     type: String, // Hashed?
     required: true,
   },
-  profilePicture: {
+  profileImage: {
     type: String, // base 64
     required: false,
   },
@@ -25,12 +25,12 @@ export const UserSchema = new Schema<User>({
       required: true,
     },
   ],
-  images: [
+  /*images: [
     {
       type: [String], // base 64
       required: true,
     },
-  ],
+  ],*/
 });
 
 export const UserModel = mongoose.model('User', UserSchema);

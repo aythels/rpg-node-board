@@ -56,7 +56,7 @@ export interface User {
   password: string; // FOR NOW
   email: string; // FOR NOW
   games: number[];
-  profilePicture?: any;
+  profileImage?: any;
   images: any[]; // FOR NOW
 }
 

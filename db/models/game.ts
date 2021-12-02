@@ -17,7 +17,7 @@ export const GameSchema = new Schema<Game>({
   nodes: [NodeSchema],
   users: [
     {
-      user: {
+      userId: {
         type: mongoose.Types.ObjectId,
         required: true,
       },
@@ -31,10 +31,10 @@ export const GameSchema = new Schema<Game>({
       },
     },
   ],
-  settings: {
+  /*settings: {
     type: String, //JSON
     required: true,
-  },
+  },*/
 });
 
 export const GameModel = mongoose.model('Game', GameSchema);
