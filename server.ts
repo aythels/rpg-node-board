@@ -1,5 +1,5 @@
 import path from 'path';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
@@ -48,7 +48,7 @@ app.use(
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 // Fallback route
-app.get('*', (req, res) => {
+app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
 });
 
