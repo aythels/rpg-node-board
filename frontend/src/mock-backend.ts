@@ -469,11 +469,6 @@ export const GETuserIsGMInGame = (userId: number, gameId: Game['_id']): boolean 
   return userPermissionRecord.permission === UserPermission.gameMaster;
 };
 
-export const GETgamesByUserID = (userID: number): Game[] => {
-  const user = GETuserById(userID);
-  return user.games.map((gameId) => GETgameById(gameId));
-};
-
 /* POST */
 
 /* PATCH & PUT */

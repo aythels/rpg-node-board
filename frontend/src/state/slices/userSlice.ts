@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createDraftSafeSelector, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import { GETgamesByUserID, GETuserByUsername } from '../../mock-backend';
 import { Game, User, UserPermission, UserPermissionRecord } from '../../types';
 import { RootState } from '../rootReducer';
 
@@ -43,7 +42,7 @@ export const { addImage } = userSlice.actions;
 export const loginUser = (username: string): any => {
   const loginUserThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${username}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/username/${username}`);
       const user: User = await response.json();
       const games: Game[] = await Promise.all(
         user.games.map(async (gameId) => {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
 
-import { GETgameById, GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
+import { GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
 import { Game, Node, Subnode, User, UserPermission } from '../../types';
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
