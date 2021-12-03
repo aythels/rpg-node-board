@@ -8,6 +8,8 @@ import { userRouter, gameRouter } from './routes';
 // starting the express server
 const app = express();
 
+console.log(`Server running in ${process.env.NODE_ENV} mode`);
+
 // mongoose and mongo connection
 mongoose.set('bufferCommands', false); // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
