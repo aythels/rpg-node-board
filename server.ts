@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
-import { userRouter, gameRouter } from './routes';
+import { userRouter, gameRouter, nodeRouter } from './routes';
 
 // starting the express server
 const app = express();
@@ -29,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Add routes (This must be on top)
 app.use('/api', userRouter);
 app.use('/api', gameRouter);
+app.use('/api', nodeRouter);
 
 /*** Session handling **************************************/
 // express-session for managing user sessions

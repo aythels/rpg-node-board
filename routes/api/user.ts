@@ -22,7 +22,7 @@ router.post('/user', mongoChecker, authenticate, async (req: Request, res: Respo
 
   // TODO: Ensure that username and email are unique and permitted
   // TODO: Encrypt sensitive data
-  console.log('Creating user');
+  console.log('Creating user', req.body);
 
   const user = new UserModel({
     username: req.body.username,

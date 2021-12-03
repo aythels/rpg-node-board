@@ -2,21 +2,29 @@ import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { GameModel, NodeModel, NodeSchema } from '../../db/models';
 import { Node } from '../../frontend/src/types'; // TODO: fix where the types file is
+import { isValidObjectId } from 'mongoose';
+import mongoose from '../../db/mongoose';
+import { ObjectId } from 'mongodb';
 
-const router = express.Router();
+export const router = express.Router();
 
 /**********************************Node API************************************/
 
-// Note: Are we using req.body or req.params? Should be consistent
+router.get('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const gameId = req.params.gameId;
+  const nodeId = req.params.nodeId;
 
-router.get('/game/node', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  const gameId = req.body.gameId;
-  const nodeId = req.body.nodeId;
+  if (!isValidObjectId(gameId) || !isValidObjectId(nodeId)) {
+    res.status(404).send();
+    return;
+  }
+  console.log(gameId, nodeId);
 
   try {
-    const game = await GameModel.findById(gameId);
+    const game = await GameModel.findById(new ObjectId(gameId));
+    console.log(game);
     if (game) {
-      const node = game.nodes.find((node) => node.id === nodeId);
+      const node = game.nodes.find((node) => node._id === nodeId);
       if (node) {
         res.send(node);
       } else {
@@ -32,7 +40,7 @@ router.get('/game/node', mongoChecker, authenticate, async (req: Request, res: R
   }
 });
 
-router.post('/game/node', mongoChecker, authenticate, async (req: Request, res: Response) => {
+router.post('/node', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const gameId = req.body.gameId;
 
   const newNode = new NodeModel({
@@ -55,7 +63,7 @@ router.post('/game/node', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
-router.patch('/game/node', mongoChecker, authenticate, async (req: Request, res: Response) => {
+router.patch('/node', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const gameId = req.body.gameId;
   const nodeId = req.body.nodeId;
 
