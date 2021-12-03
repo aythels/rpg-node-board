@@ -37,7 +37,6 @@ router.get('/game/:id', mongoChecker, authenticate, async (req: Request, res: Re
 
   try {
     const { id } = req.params;
-    // TODO: why is this not working?
     const game = await GameModel.findById(id);
     res.json(game);
   } catch (error) {

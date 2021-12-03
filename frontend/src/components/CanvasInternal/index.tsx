@@ -14,7 +14,7 @@ import CanvasInternalTransform from '../CanvasInternalTransform';
 
 interface Props {
   visibleNodes: Node[];
-  currentGameId: number;
+  currentGameId: string;
   currentUserId: number;
 }
 
@@ -137,7 +137,7 @@ class CanvasInternalBase extends React.Component<Props> {
 const mapStateToProps = (state: RootState): Props => ({
   visibleNodes: selectVisibleNodes(state),
   currentUserId: state.user.userInstance.id,
-  currentGameId: state.game.gameInstance.id,
+  currentGameId: state.game.gameInstance._id,
 });
 
 export default connect(mapStateToProps)(CanvasInternalBase);

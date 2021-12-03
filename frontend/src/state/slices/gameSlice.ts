@@ -98,12 +98,12 @@ export const { gameLoaded, hideUserAlreadyAddedDialog } = gameSlice.actions;
 // Thunks (async calls)
 // should we use createAsyncThunk() here?
 
-export const fetchGame = (gameId: number): any => {
+export const fetchGame = (gameId: Game['_id']): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     console.log('Fetching game');
-    const game = GETgameById(gameId);
-    // TODO: remove timeout
-    setTimeout(() => dispatch(gameLoaded(game)), 1000);
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
+    const game = await response.json();
+    dispatch(gameLoaded(game));
   };
   return fetchGameThunk;
 };
@@ -127,7 +127,7 @@ export const removePlayer = (id: number): any => {
   return removePlayerThunk;
 };
 
-export const updateNode = (gameId: number, node: Node): any => {
+export const updateNode = (gameId: Game['_id'], node: Node): any => {
   const updateNodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     // TODO: make async call
     PUTnode(gameId, node);
@@ -137,7 +137,7 @@ export const updateNode = (gameId: number, node: Node): any => {
 };
 
 // all of these args make me think that this is NOT the way to do this
-export const updateSubnode = (gameId: number, nodeId: number, subnodeId: number, change: Delta): any => {
+export const updateSubnode = (gameId: Game['_id'], nodeId: number, subnodeId: number, change: Delta): any => {
   const updateSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.updateSubnode({ nodeId: nodeId, subnodeId: subnodeId, change: change }));
     // TODO: make async call
@@ -146,7 +146,7 @@ export const updateSubnode = (gameId: number, nodeId: number, subnodeId: number,
   return updateSubnodeThunk;
 };
 
-export const addSubnode = (gameId: number, nodeId: number, subnode: Subnode): any => {
+export const addSubnode = (gameId: Game['_id'], nodeId: number, subnode: Subnode): any => {
   const addSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     // TODO: async call
     // POSTsubnode(gameId, nodeId, ...)

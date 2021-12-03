@@ -32,12 +32,32 @@ const userSlice = createSlice({
 export default userSlice.reducer;
 export const { addImage } = userSlice.actions;
 
+// TODO: temp
+// {
+//   method: 'GET',
+//   headers: { 'Content-type': 'application/json' },
+//   body: JSON.stringify({  }),
+// }
+
 // Thunks
 export const loginUser = (username: string): any => {
   const loginUserThunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    const user = GETuserByUsername(username);
-    const games = GETgamesByUserID(user.id);
-    dispatch(userSlice.actions.loginUser([user, games]));
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${username}`);
+      const user: User = await response.json();
+      const games: Game[] = await Promise.all(
+        user.games.map(async (gameId) => {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
+          const game = await response.json();
+          return game;
+        }),
+      );
+      console.log(games);
+      dispatch(userSlice.actions.loginUser([user, games]));
+    } catch {
+      // TODO: update UI
+      console.log('Log in unsuccessful');
+    }
   };
   return loginUserThunk;
 };

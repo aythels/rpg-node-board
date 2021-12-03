@@ -83,7 +83,7 @@ const NodeView = (): JSX.Element => {
       editors: node.editors,
       content: new Delta(),
     };
-    dispatch(addSubnode(game.id, node.id, newSubnode));
+    dispatch(addSubnode(game._id, node.id, newSubnode));
   };
 
   const renderSubnodes = (): JSX.Element => {

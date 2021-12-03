@@ -20,7 +20,6 @@ const Login = (): JSX.Element => {
       console.info('Login or password is invalid');
       setInvalid(true);
     } else {
-      console.log('starting login');
       await dispatch(loginUser(username));
     }
   };

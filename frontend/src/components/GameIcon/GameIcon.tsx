@@ -27,7 +27,7 @@ export const GameIcon = (props: Props): JSX.Element => {
       }}
       style={{ boxShadow: '0.1rem 0.1rem 0.7rem' }}
     >
-      <CardActionArea onClick={() => dispatch(fetchGame(props.game.id))} component={Link} to="/canvas">
+      <CardActionArea onClick={() => dispatch(fetchGame(props.game._id))} component={Link} to="/canvas">
         <CardMedia component="img" height="100" width="100" src={imgPath} alt="Game Icon" />
         <Typography variant="h5" component="div">
           {props.game.title}

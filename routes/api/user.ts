@@ -54,6 +54,7 @@ router.get('/user/:username', mongoChecker, authenticate, async (req: Request, r
 
     console.log({ username });
     const user = await UserModel.findOne({ username });
+
     res.json(user);
   } catch (error) {
     console.log(error);

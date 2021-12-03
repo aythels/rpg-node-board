@@ -13,7 +13,7 @@ const Footer = (): JSX.Element => {
 
   const [inviteName, setInviteName] = useState('');
   const [showDeleteServerDialog, setShowDeleteServerDialog] = useState(false);
-  const gameId = useSelector((state: RootState) => state.game.gameInstance.id);
+  const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
   const showUserAlreadyAddedDialog = useSelector((state: RootState) => state.game.showUserAlreadyAddedDialog);
 
   const handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {

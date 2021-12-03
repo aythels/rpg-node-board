@@ -28,7 +28,7 @@ const NodeImageForm = (): JSX.Element => {
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    dispatch(updateNode(game.id, tempNode)); // TODO: async
+    dispatch(updateNode(game._id, tempNode)); // TODO: async
     dispatch(setIsEditModalOpen(false));
   };
 

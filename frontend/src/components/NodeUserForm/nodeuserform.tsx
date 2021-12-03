@@ -40,7 +40,7 @@ const NodeUserForm = (): JSX.Element => {
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    dispatch(updateNode(game.id, tempNode)); // TODO: async
+    dispatch(updateNode(game._id, tempNode)); // TODO: async
     dispatch(setIsEditModalOpen(false));
   };
 
@@ -166,7 +166,7 @@ const NodeUserForm = (): JSX.Element => {
                       <p>{editor.username}</p>
                       <button
                         aria-label="Remove user as editor"
-                        disabled={GETuserIsGMInGame(editor.id, game.id)}
+                        disabled={GETuserIsGMInGame(editor.id, game._id)}
                         onClick={() => {
                           removeEditor(editor);
                         }}

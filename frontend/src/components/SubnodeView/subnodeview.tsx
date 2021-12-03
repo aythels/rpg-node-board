@@ -131,7 +131,7 @@ const SubnodeView = (props: Props): JSX.Element => {
   const saveEditorChanges = (): void => {
     if (editor && change.length() > 0) {
       // POSTsubnodeContent(subnode.id, change); // TODO: Use Redux
-      dispatch(updateSubnode(game.id, node.id, props.subnode.id, change));
+      dispatch(updateSubnode(game._id, node.id, props.subnode.id, change));
       setChange(new Delta());
       updateNodeTextLinks();
       // this.setState({ change: new Delta() }, this.updateNodeTextLinks);
