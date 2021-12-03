@@ -1,4 +1,5 @@
 import path from 'path';
+import cors from 'cors';
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -7,6 +8,11 @@ import { userRouter, gameRouter } from './routes';
 
 // starting the express server
 const app = express();
+
+if (process.env.NODE_ENV !== 'production') {
+  // Enable CORS for local React development server to connect to the web server
+  app.use(cors());
+}
 
 console.log(`Server running in ${process.env.NODE_ENV} mode`);
 
