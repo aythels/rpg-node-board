@@ -41,22 +41,27 @@ router.post('/user', mongoChecker, authenticate, async (req: Request, res: Respo
 });
 
 // GET: Retrieve user
-router.get('/user/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
+router.get('/user/:username', mongoChecker, authenticate, async (req: Request, res: Response) => {
   // TODO: Ensure that only the user corresponding to the session can be retrieved
   // TODO: Probably don't send the password and other sensitive information back
-  console.log('Retrieving user');
 
   try {
+    const { username } = req.params;
+    console.log(`Retrieving user ${username}`);
     // WARNING: Similar database functions perform differently
     // GameModel.findById(req.params.id); returns error if nothing is found
     // GameModel.findOne({ _id: req.params.id }) returns nothing if nothing is found
 
-    const user = await UserModel.findById(req.params.id);
-    res.send(user);
+    console.log({ username });
+    const user = await UserModel.findOne({ username });
+    res.json(user);
   } catch (error) {
     console.log(error);
-    if (isMongoError(error)) res.status(500).send('Internal server error');
-    else res.status(400).send('Bad request');
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
   }
 });
 
