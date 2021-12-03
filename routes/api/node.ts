@@ -24,7 +24,7 @@ router.get('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Requ
     const game = await GameModel.findById(new ObjectId(gameId));
     console.log(game);
     if (game) {
-      const node = game.nodes.find((node) => node._id === nodeId);
+      const node = game.nodes.find((node) => '' + node.id === nodeId); // TODO: fix using _id
       if (node) {
         res.send(node);
       } else {

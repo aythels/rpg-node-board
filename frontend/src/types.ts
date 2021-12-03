@@ -4,12 +4,12 @@ import Delta from 'quill-delta';
 /* eslint-disable no-unused-vars */
 
 export interface InfoLevel {
-  userId: string;
+  userId: number;
   infoLevel: number;
 }
 
 export interface Node {
-  _id: string;
+  id: number;
   name: string;
   image?: any;
   thumbnailImage?: any;
@@ -21,7 +21,7 @@ export interface Node {
 }
 
 export interface Subnode {
-  _id: string;
+  id: number;
   name: string;
   informationLevel: number;
   editors: number[];
@@ -42,7 +42,7 @@ export interface UserPermissionRecord {
 }
 
 export interface Game {
-  _id: string;
+  id: number;
   title: string;
   image?: any;
   nodes: Node[];
@@ -51,7 +51,7 @@ export interface Game {
 }
 
 export interface User {
-  _id: string;
+  id: number;
   username: string;
   password: string; // FOR NOW
   email: string; // FOR NOW
