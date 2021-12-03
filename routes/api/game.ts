@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { GameModel } from '../../db/models';
+import { ObjectId } from 'mongodb';
 
 export const router = express.Router();
 
@@ -28,15 +29,17 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
   }
 });
 
-// GET: Retrive a game
+// GET: Retrieve a game
 router.get('/game/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  // TODO: Ensure that only games with ids stored in user data can be retrived for session user
+  // TODO: Ensure that only games with ids stored in user data can be retrieved for session user
 
-  console.log('Retriving game');
+  console.log('Retrieving game');
 
   try {
-    const game = await GameModel.findById(req.params.id);
-    res.send(game);
+    const { id } = req.params;
+    // TODO: why is this not working?
+    const game = await GameModel.findById(id);
+    res.json(game);
   } catch (error) {
     console.log(error);
     if (isMongoError(error)) res.status(500).send('Internal server error');
