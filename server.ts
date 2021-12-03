@@ -3,8 +3,7 @@ import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
-import { userRouter } from './routes/api/user';
-import { gameRouter } from './routes/api/game';
+import { userRouter, gameRouter } from './routes';
 
 // starting the express server
 const app = express();

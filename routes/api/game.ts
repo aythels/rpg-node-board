@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { GameModel } from '../../db/models';
 
-const router = express.Router();
+export const router = express.Router();
 
 /**********************************Game API************************************/
 

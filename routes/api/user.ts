@@ -3,7 +3,7 @@ import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { UserModel } from '../../db/models';
 import { ObjectId } from 'mongodb'; // What is this import used for?
 
-const router = express.Router(); // TODO: could this cause trouble if it gets exported at the top of the file?
+export const router = express.Router();
 
 // Client should not be trusted to handle the storage of game data in user
 
@@ -155,5 +155,3 @@ router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: 
     else res.status(400).send('Bad request');
   }
 });
-
-export { router as userRouter }; // I think its more intuitive to have the export statement in the same file
