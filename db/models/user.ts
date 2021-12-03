@@ -15,7 +15,7 @@ export const UserSchema = new Schema<User>({
     type: String, // Hashed?
     required: true,
   },
-  profileImage: {
+  profilePicture: {
     type: String, // base 64
     required: false,
   },
