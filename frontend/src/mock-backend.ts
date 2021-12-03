@@ -5,22 +5,22 @@ import Delta from 'quill-delta';
 import { Node, Subnode, Game, User, UserPermission, UserPermissionRecord } from './types';
 import cloneDeep from 'lodash.clonedeep';
 
-const theSoaringSkies = {
+const theSoaringSkies: Node = {
   id: 1,
   name: 'The Soaring Skies',
   image: '/images/sky.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: 1, infoLevel: 0 },
-    { userId: 3, infoLevel: 1 },
-    { userId: 4, infoLevel: 1 },
-    { userId: 5, infoLevel: 2 },
+    { userId: '1', infoLevel: 0 },
+    { userId: '3', infoLevel: 1 },
+    { userId: '4', infoLevel: 1 },
+    { userId: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
       id: 1,
       informationLevel: 1,
-      editors: [2],
+      editors: ['2'],
       type: 'description',
       name: 'Description',
       content: new Delta({
@@ -34,7 +34,7 @@ const theSoaringSkies = {
     {
       id: 2,
       informationLevel: 2,
-      editors: [2],
+      editors: ['2'],
       type: 'event',
       name: 'Sky is Falling',
       content: new Delta({ ops: [{ insert: 'The sky is falling!' }] }),
@@ -42,13 +42,13 @@ const theSoaringSkies = {
     {
       id: 3,
       informationLevel: 1,
-      editors: [1, 2, 3, 4, 5],
+      editors: ['1', '2', '3', '4', '5'],
       type: 'notes',
       name: 'Notes',
       content: new Delta({ ops: [{ insert: 'wow sure looks cool!' }] }),
     },
   ],
-  editors: [2, 1],
+  editors: ['2', '1'],
   type: 'location',
 };
 
@@ -58,16 +58,16 @@ const museum = {
   image: '/images/museum.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: 1, infoLevel: 0 },
-    { userId: 3, infoLevel: 1 },
-    { userId: 4, infoLevel: 0 },
-    { userId: 5, infoLevel: 2 },
+    { userId: '1', infoLevel: 0 },
+    { userId: '3', infoLevel: 1 },
+    { userId: '4', infoLevel: 0 },
+    { userId: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
       id: 4,
       informationLevel: 1,
-      editors: [2],
+      editors: ['2'],
       type: 'description',
       name: 'Description',
       content: new Delta({
@@ -79,7 +79,7 @@ const museum = {
       }),
     },
   ],
-  editors: [2],
+  editors: ['2'],
   type: 'location',
 };
 
@@ -89,16 +89,16 @@ const lonelyPath = {
   image: '/images/path.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: 1, infoLevel: 0 },
-    { userId: 3, infoLevel: 1 },
-    { userId: 4, infoLevel: 1 },
-    { userId: 5, infoLevel: 2 },
+    { userId: '1', infoLevel: 0 },
+    { userId: '3', infoLevel: 1 },
+    { userId: '4', infoLevel: 1 },
+    { userId: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
       id: 5,
       informationLevel: 1,
-      editors: [2],
+      editors: ['2'],
       type: 'description',
       name: 'Description',
       content: new Delta({
@@ -110,7 +110,7 @@ const lonelyPath = {
       }),
     },
   ],
-  editors: [2],
+  editors: ['2'],
   type: 'location',
 };
 
@@ -120,16 +120,16 @@ const stGeorge = {
   image: '/images/stgeorge.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: 1, infoLevel: 0 },
-    { userId: 3, infoLevel: 0 },
-    { userId: 4, infoLevel: 1 },
-    { userId: 5, infoLevel: 2 },
+    { userId: '1', infoLevel: 0 },
+    { userId: '3', infoLevel: 0 },
+    { userId: '4', infoLevel: 1 },
+    { userId: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
       id: 6,
       informationLevel: 1,
-      editors: [2],
+      editors: ['2'],
       type: 'description',
       name: 'Description',
       content: new Delta({
@@ -141,13 +141,13 @@ const stGeorge = {
       }),
     },
   ],
-  editors: [2],
+  editors: ['2'],
   type: 'location',
 };
 
 const globalUsers: User[] = [
   {
-    id: 1,
+    _id: '1',
     username: 'user',
     password: 'user',
     email: 'user@user.com',
@@ -156,7 +156,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_1.png',
   },
   {
-    id: 2,
+    _id: '2',
     username: 'admin',
     password: 'admin',
     email: 'admin@admin.com',
@@ -165,7 +165,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_2.png',
   },
   {
-    id: 3,
+    _id: '3',
     username: 'user2',
     password: 'user2',
     email: 'user2@user.com',
@@ -174,7 +174,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_2.png',
   },
   {
-    id: 4,
+    _id: '4',
     username: 'user3',
     password: 'user3',
     email: 'user3@user.com',
@@ -183,7 +183,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_4.png',
   },
   {
-    id: 5,
+    _id: '5',
     username: 'user4',
     password: 'user4',
     email: 'user4@user.com',
@@ -192,7 +192,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_5.png',
   },
   {
-    id: 6,
+    _id: '6',
     username: 'user5',
     password: 'user5',
     email: 'user5@user.com',
@@ -201,7 +201,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_6.png',
   },
   {
-    id: 7,
+    _id: '7',
     username: 'user6',
     password: 'user6',
     email: 'user6@user.com',
@@ -210,7 +210,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_7.png',
   },
   {
-    id: 8,
+    _id: '8',
     username: 'user7',
     password: 'user7',
     email: 'user7@user.com',
@@ -218,7 +218,7 @@ const globalUsers: User[] = [
     images: [],
   },
   {
-    id: 9,
+    _id: '9',
     username: 'user8',
     password: 'user8',
     email: 'user8@user.com',
@@ -226,7 +226,7 @@ const globalUsers: User[] = [
     images: [],
   },
   {
-    id: 10,
+    _id: '10',
     username: 'user8',
     password: 'user8',
     email: 'user8@user.com',
@@ -234,7 +234,7 @@ const globalUsers: User[] = [
     images: [],
   },
   {
-    id: 11,
+    _id: '11',
     username: 'user9',
     password: 'user9',
     email: 'user9@user.com',
@@ -243,7 +243,7 @@ const globalUsers: User[] = [
     profilePicture: '/images/profile_picture_11.png',
   },
   {
-    id: 12,
+    _id: '12',
     username: 'user10',
     password: 'user10',
     email: 'user10@user.com',
@@ -258,51 +258,51 @@ let globalGames: Game[] = [
     nodes: [theSoaringSkies, museum, lonelyPath, stGeorge],
     users: [
       {
-        userId: 1,
+        userId: '1',
         permission: UserPermission.player,
       },
       {
-        userId: 2,
+        userId: '2',
         permission: UserPermission.gameMaster,
       },
       {
-        userId: 3,
+        userId: '3',
         permission: UserPermission.player,
       },
       {
-        userId: 4,
+        userId: '4',
         permission: UserPermission.player,
       },
       {
-        userId: 5,
+        userId: '5',
         permission: UserPermission.player,
       },
       {
-        userId: 6,
+        userId: '6',
         permission: UserPermission.player,
       },
       {
-        userId: 7,
+        userId: '7',
         permission: UserPermission.player,
       },
       {
-        userId: 8,
+        userId: '8',
         permission: UserPermission.player,
       },
       {
-        userId: 9,
+        userId: '9',
         permission: UserPermission.player,
       },
       {
-        userId: 10,
+        userId: '10',
         permission: UserPermission.player,
       },
       {
-        userId: 11,
+        userId: '11',
         permission: UserPermission.player,
       },
       {
-        userId: 12,
+        userId: '12',
         permission: UserPermission.player,
       },
     ],
@@ -314,11 +314,11 @@ let globalGames: Game[] = [
     nodes: [theSoaringSkies, lonelyPath],
     users: [
       {
-        userId: 3,
+        userId: '3',
         permission: UserPermission.gameMaster,
       },
       {
-        userId: 4,
+        userId: '4',
         permission: UserPermission.gameMaster,
       },
     ],
@@ -350,9 +350,9 @@ export const GETgms = (gameId: Game['_id']): User[] => {
     : [];
 };
 
-export const GETgmIds = (gameId: Game['_id']): number[] => {
+export const GETgmIds = (gameId: Game['_id']): User['_id'][] => {
   const gms = GETgms(gameId);
-  return gms.map((gm) => gm.id);
+  return gms.map((gm) => gm._id);
 };
 
 /* POST */
@@ -364,11 +364,11 @@ export const POSTnode = (node: Node, gameId: Game['_id']): void => {
 
 /* PATCH & PUT */
 
-export const PATCHaddPlayerToGame = (playerId: number, gameId: Game['_id']): void => {
+export const PATCHaddPlayerToGame = (playerId: User['_id'], gameId: Game['_id']): void => {
   const game = globalGames.find((game) => game._id === gameId) as Game;
-  const player = globalUsers.find((user) => user.id === playerId) as User;
+  const player = globalUsers.find((user) => user._id === playerId) as User;
   game.users.push({
-    userId: player.id,
+    userId: player._id,
     permission: UserPermission.player,
   });
   player.games.push(game._id);
@@ -380,7 +380,7 @@ export const PATCHaddPlayerToGame = (playerId: number, gameId: Game['_id']): voi
   }
 };
 
-export const PATCHpromoteUserToGameMaster = (userId: number, gameId: Game['_id']): void => {
+export const PATCHpromoteUserToGameMaster = (userId: User['_id'], gameId: Game['_id']): void => {
   const game = globalGames.filter((game) => game._id === gameId)[0];
   const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
   userPermissionRecord.permission = UserPermission.gameMaster;
@@ -391,7 +391,7 @@ export const PATCHpromoteUserToGameMaster = (userId: number, gameId: Game['_id']
   }
 };
 
-export const PATCHdemoteGameMasterToPlayer = (userId: number, gameId: Game['_id']): void => {
+export const PATCHdemoteGameMasterToPlayer = (userId: User['_id'], gameId: Game['_id']): void => {
   const game = globalGames.filter((game) => game._id === gameId)[0];
   const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
   userPermissionRecord.permission = UserPermission.player;
@@ -421,10 +421,10 @@ export const PUTsubnode = (gameId: Game['_id'], nodeId: number, newSubnode: Subn
 
 /* DELETE */
 
-export const DELETEplayerFromGame = (playerId: number, gameId: Game['_id']): void => {
+export const DELETEplayerFromGame = (playerId: User['_id'], gameId: Game['_id']): void => {
   const game = globalGames.find((game) => game._id === gameId) as Game;
-  const player = globalUsers.find((user) => user.id === playerId) as User;
-  game.users.filter((u) => u.userId !== player.id);
+  const player = globalUsers.find((user) => user._id === playerId) as User;
+  game.users.filter((u) => u.userId !== player._id);
   player.games.filter((g) => g !== game._id);
   for (const node of game.nodes) {
     node.informationLevels.filter((i) => i.userId !== playerId);
@@ -447,9 +447,9 @@ export const DELETEGame = (gameId: Game['_id']): void => {
 
 /* GET */
 
-export const GETuserById = (id: number): User => {
+export const GETuserById = (id: User['_id']): User => {
   const globalUsersCopy = cloneDeep(globalUsers);
-  return globalUsersCopy.find((user) => user.id === id) as User;
+  return globalUsersCopy.find((user) => user._id === id) as User;
 };
 
 export const GETuserByUsername = (username: string): User => {
@@ -463,7 +463,7 @@ export const GETloginVerification = (username: string, password: string): boolea
   return globalUsersCopy.filter((user) => user.username === username && user.password === password).length == 1;
 };
 
-export const GETuserIsGMInGame = (userId: number, gameId: Game['_id']): boolean => {
+export const GETuserIsGMInGame = (userId: User['_id'], gameId: Game['_id']): boolean => {
   const game = GETgameById(gameId);
   const userPermissionRecord = game.users.find((u) => u.userId === userId) as UserPermissionRecord;
   return userPermissionRecord.permission === UserPermission.gameMaster;
@@ -474,7 +474,7 @@ export const GETuserIsGMInGame = (userId: number, gameId: Game['_id']): boolean 
 /* PATCH & PUT */
 
 export const PUTuser = (user: User): void => {
-  const existingUser = globalUsers.find((u) => u.id === user.id) as User;
+  const existingUser = globalUsers.find((u) => u._id === user._id) as User;
   const index = globalUsers.indexOf(existingUser);
   if (index !== -1) {
     globalUsers[index] = cloneDeep(user);
@@ -485,12 +485,12 @@ export const PUTuser = (user: User): void => {
 
 /* These functions will be deleted as Redux should make them unnecessary */
 
-// export const GETuserCanEditSubnode = (userId: number, subnodeId: number): boolean => {
+// export const GETuserCanEditSubnode = (userId: User['_id'], subnodeId: number): boolean => {
 //   const subnode = globalSubnodes.filter((subnode) => subnode.id === subnodeId)[0];
 //   return CloneDeep(subnode.editors.includes(userId));
 // };
 
-// export const GETuserCanEditNode = (userId: number, nodeId: number): boolean => {
+// export const GETuserCanEditNode = (userId: User['_id'], nodeId: number): boolean => {
 //   const node = globalNodes.filter((node) => node.id === nodeId)[0];
 //   return CloneDeep(node.editors.includes(userId));
 // };
@@ -500,7 +500,7 @@ export const PUTuser = (user: User): void => {
 //   return globalNodes.filter((node) => game.nodes.includes(node.id));
 // };
 
-// export const GETnodesInGameVisibleToUser = (gameId: Game['_id'], userId: number): Node[] => {
+// export const GETnodesInGameVisibleToUser = (gameId: Game['_id'], userId: User['_id']): Node[] => {
 //   const allNodes = GETnodesInGame(gameId);
 //   const nodes = allNodes.filter((node) => {
 //     if (node.editors.includes(userId)) {

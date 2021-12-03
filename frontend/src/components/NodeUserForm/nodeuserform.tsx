@@ -45,9 +45,9 @@ const NodeUserForm = (): JSX.Element => {
   };
 
   const removeEditor = (editorToRemove: User): void => {
-    tempNode.editors.filter((e) => e !== editorToRemove.id);
+    tempNode.editors.filter((e) => e !== editorToRemove._id);
     const infoLevels = tempNode.informationLevels;
-    const infoLevel = infoLevels.find((i) => i.userId === editorToRemove.id) as InfoLevel;
+    const infoLevel = infoLevels.find((i) => i.userId === editorToRemove._id) as InfoLevel;
     infoLevel.infoLevel = 0;
     setTempNode({
       ...tempNode,
@@ -65,9 +65,9 @@ const NodeUserForm = (): JSX.Element => {
   };
 
   const addEditor = (playerToAdd: User): void => {
-    tempNode.editors.push(playerToAdd.id);
+    tempNode.editors.push(playerToAdd._id);
     const infoLevels = tempNode.informationLevels;
-    const infoLevel = infoLevels.find((i) => i.userId === playerToAdd.id) as InfoLevel;
+    const infoLevel = infoLevels.find((i) => i.userId === playerToAdd._id) as InfoLevel;
     infoLevel.infoLevel = getMaxInfoLevel();
     setTempNode({
       ...tempNode,
@@ -77,7 +77,7 @@ const NodeUserForm = (): JSX.Element => {
 
   const handleInformationLevelChange = (e: SyntheticEvent, player: User): void => {
     const target = e.target as HTMLInputElement;
-    const infoLevel = tempNode.informationLevels.find((i) => i.userId == player.id) as InfoLevel;
+    const infoLevel = tempNode.informationLevels.find((i) => i.userId == player._id) as InfoLevel;
     infoLevel.infoLevel = parseInt(target.value);
     setTempNode({ ...tempNode });
   };
@@ -127,7 +127,7 @@ const NodeUserForm = (): JSX.Element => {
     setAddEditorAnchorEl(null);
   };
 
-  const getInfoLevelValue = (playerId: number): string => {
+  const getInfoLevelValue = (playerId: User['_id']): string => {
     const infoLevel = tempNode.informationLevels.find((i) => i.userId === playerId) as InfoLevel;
     if (infoLevel) {
       return infoLevel.toString();
@@ -136,7 +136,7 @@ const NodeUserForm = (): JSX.Element => {
     }
   };
 
-  const renderVisibleSubnodeNames = (playerId: number): JSX.Element => {
+  const renderVisibleSubnodeNames = (playerId: User['_id']): JSX.Element => {
     const infoLevel = tempNode.informationLevels.find((i) => i.userId === playerId) as InfoLevel;
     const visibleSubnodes = tempNode.subnodes.filter((subnode) => subnode.informationLevel <= infoLevel.infoLevel);
     return (
@@ -166,7 +166,7 @@ const NodeUserForm = (): JSX.Element => {
                       <p>{editor.username}</p>
                       <button
                         aria-label="Remove user as editor"
-                        disabled={GETuserIsGMInGame(editor.id, game._id)}
+                        disabled={GETuserIsGMInGame(editor._id, game._id)}
                         onClick={() => {
                           removeEditor(editor);
                         }}
@@ -238,13 +238,13 @@ const NodeUserForm = (): JSX.Element => {
                             type="number"
                             step="1"
                             min="0"
-                            value={getInfoLevelValue(player.id)}
+                            value={getInfoLevelValue(player._id)}
                             onChange={(event) => {
                               handleInformationLevelChange(event, player);
                             }}
                           ></input>
                         </TableCell>
-                        {renderVisibleSubnodeNames(player.id)}
+                        {renderVisibleSubnodeNames(player._id)}
                       </TableRow>
                     );
                   }

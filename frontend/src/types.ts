@@ -2,7 +2,7 @@ import Delta from 'quill-delta';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 export interface InfoLevel {
-  userId: number;
+  userId: User['_id'];
   infoLevel: number;
 }
 export interface Node {
@@ -13,14 +13,14 @@ export interface Node {
   imageAlt: string;
   subnodes: Subnode[];
   informationLevels: InfoLevel[];
-  editors: number[];
+  editors: User['_id'][];
   type: string;
 }
 export interface Subnode {
   id: number;
   name: string;
   informationLevel: number;
-  editors: number[];
+  editors: User['_id'][];
   type: string;
   content: Delta;
 }
@@ -31,7 +31,7 @@ export enum UserPermission {
   player,
 }
 export interface UserPermissionRecord {
-  userId: number;
+  userId: User['_id'];
   permission: UserPermission;
 }
 export interface Game {
@@ -44,7 +44,7 @@ export interface Game {
   settings: Record<string, unknown>;
 }
 export interface User {
-  id: number;
+  _id: string;
   username: string;
   password: string; // FOR NOW
   email: string; // FOR NOW

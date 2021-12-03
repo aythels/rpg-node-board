@@ -5,7 +5,7 @@ import Sidebar from '../LeftSidebar';
 import { NodeManager } from './NodeManager';
 import { DELETEnodeFromGame, GETgmIds, GETuserIsGMInGame, POSTnode } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
-import { Node } from '../../types';
+import { Game, Node, User } from '../../types';
 import { Alert, AlertTitle } from '@mui/material';
 import { selectVisibleNodes } from '../../state/slices/gameSlice';
 import { connect } from 'react-redux';
@@ -14,8 +14,8 @@ import CanvasInternalTransform from '../CanvasInternalTransform';
 
 interface Props {
   visibleNodes: Node[];
-  currentGameId: string;
-  currentUserId: number;
+  currentGameId: Game['_id'];
+  currentUserId: User['_id'];
 }
 
 // Note: before you refactor to a functional component make sure you know what you
@@ -136,7 +136,7 @@ class CanvasInternalBase extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState): Props => ({
   visibleNodes: selectVisibleNodes(state),
-  currentUserId: state.user.userInstance.id,
+  currentUserId: state.user.userInstance._id,
   currentGameId: state.game.gameInstance._id,
 });
 

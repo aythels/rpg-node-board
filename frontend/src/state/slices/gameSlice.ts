@@ -42,18 +42,18 @@ const gameSlice = createSlice({
     addPlayer: (state: GameState, action: PayloadAction<User>) => {
       const user = action.payload;
       if (user) {
-        if (state.gameInstance.users.find((u) => u.userId === user.id)) {
+        if (state.gameInstance.users.find((u) => u.userId === user._id)) {
           state.showUserAlreadyAddedDialog = true;
         } else {
           // TODO: add normalization
           state.gameInstance.users.push({
-            userId: user.id,
+            userId: user._id,
             permission: UserPermission.player,
           });
         }
       }
     },
-    removePlayer: (state: GameState, action: PayloadAction<number>) => {
+    removePlayer: (state: GameState, action: PayloadAction<User['_id']>) => {
       const idToRemove = action.payload;
       state.gameInstance.users = state.gameInstance.users.filter((user) => user.userId !== idToRemove);
     },
@@ -83,7 +83,7 @@ const gameSlice = createSlice({
     setGameTitle: (state: GameState, action: PayloadAction<string>) => {
       state.gameInstance.title = action.payload;
     },
-    updatePlayerPermission: (state: GameState, action: PayloadAction<[number, UserPermission]>) => {
+    updatePlayerPermission: (state: GameState, action: PayloadAction<[User['_id'], UserPermission]>) => {
       const [userId, newPermission] = action.payload;
       const user = state.gameInstance.users.find((user) => user.userId === userId);
       if (user) {
@@ -102,7 +102,8 @@ export const fetchGame = (gameId: Game['_id']): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     console.log('Fetching game');
     const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
-    const game = await response.json();
+    const game: Game = await response.json();
+
     dispatch(gameLoaded(game));
   };
   return fetchGameThunk;
@@ -118,7 +119,7 @@ export const addPlayer = (name: string): any => {
   return addPlayerThunk;
 };
 
-export const removePlayer = (id: number): any => {
+export const removePlayer = (id: User['_id']): any => {
   const removePlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.removePlayer(id));
     // TODO: make async call
@@ -164,7 +165,7 @@ export const setGameTitle = (newTitle: string): any => {
   return setGameTitleThunk;
 };
 
-export const updatePlayerPermission = (payload: [number, UserPermission]): any => {
+export const updatePlayerPermission = (payload: [User['_id'], UserPermission]): any => {
   const updatePlayerPermissionThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.updatePlayerPermission(payload));
     // TODO: make async call to:
@@ -187,7 +188,7 @@ export const selectVisibleNodes: any = createDraftSafeSelector(
   (state: RootState): User => state.user.userInstance,
   (game: Game, user: User): Node[] => {
     return game.nodes.filter((node) => {
-      const match = node.informationLevels.find((i) => i.userId === user.id);
+      const match = node.informationLevels.find((i) => i.userId === user._id);
       return match && match.infoLevel > 0;
     });
   },
@@ -202,20 +203,22 @@ export const selectActiveNode: any = createDraftSafeSelector(
   },
 );
 
-export const selectPlayers: any = createDraftSafeSelector(
-  (state: RootState): Game => state.game.gameInstance,
-  (game: Game): User[] => {
-    // TODO: either async or store users in game state
-    return game.users.filter((i) => i.permission === UserPermission.player).map((record) => GETuserById(record.userId));
-  },
-);
+// TODO: remove as unused - if need arises, async calls must go in a reducer and be added to game state
+// export const selectPlayers: any = createDraftSafeSelector(
+//   (state: RootState): Game => state.game.gameInstance,
+//   (game: Game): User[] => {
+//     // TODO: either async or store users in game state
+//     return game.users.filter((i) => i.permission === UserPermission.player).map((record) => GETuserById(record.userId));
+//   },
+// );
 
 export const selectGameMasters: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
-  (game: Game): User[] => {
+  (game: Game): User['_id'][] => {
     // TODO: either async or store users in game state
-    return game.users
+    const gameMasterIds = game.users
       .filter((i) => i.permission === UserPermission.gameMaster)
-      .map((record) => GETuserById(record.userId));
+      .map((record) => record.userId);
+    return gameMasterIds;
   },
 );

@@ -64,7 +64,7 @@ const SubnodeView = (props: Props): JSX.Element => {
   }, []);
 
   const loadEditor = (): void => {
-    const readOnly = !props.subnode.editors.includes(user.id);
+    const readOnly = !props.subnode.editors.includes(user._id);
     const toolbar = readOnly ? false : standardEditorToolbar;
 
     const editor = new Quill('#editor-' + props.subnode.id, {

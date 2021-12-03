@@ -37,7 +37,7 @@ const NodeView = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const renderMenu = (): JSX.Element | null => {
-    if (node.editors.includes(user.id)) {
+    if (node.editors.includes(user._id)) {
       return (
         <ButtonGroup>
           <Tooltip title="Node Info">
@@ -90,8 +90,8 @@ const NodeView = (): JSX.Element => {
     return (
       <div className="subnodes">
         {node.subnodes.map((subnode: Subnode) => {
-          const infoLevel = node.informationLevels.find((i) => i.userId === user.id) as InfoLevel;
-          if (subnode.informationLevel >= infoLevel.infoLevel || node.editors.includes(user.id)) {
+          const infoLevel = node.informationLevels.find((i) => i.userId === user._id) as InfoLevel;
+          if (subnode.informationLevel >= infoLevel.infoLevel || node.editors.includes(user._id)) {
             return <SubnodeView subnode={subnode} key={uid(subnode)} />;
           }
         })}
@@ -114,7 +114,7 @@ const NodeView = (): JSX.Element => {
       {isUsersModalOpen ? <NodeUserForm /> : null}
       {isImageModalOpen ? <NodeImageForm /> : null}
       {renderSubnodes()}
-      {node.editors.includes(user.id) ? (
+      {node.editors.includes(user._id) ? (
         <div className="new-subnode-wrapper">
           <h2>Add new subnode</h2>
           <form

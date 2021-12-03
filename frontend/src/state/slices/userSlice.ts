@@ -64,8 +64,8 @@ export const loginUser = (username: string): any => {
 // Selectors
 export const selectIsGameMaster: any = createDraftSafeSelector(
   (state: RootState): UserPermissionRecord[] => state.game.gameInstance.users,
-  (state: RootState): number => state.user.userInstance.id,
-  (records: UserPermissionRecord[], userId: number): boolean => {
+  (state: RootState): User['_id'] => state.user.userInstance._id,
+  (records: UserPermissionRecord[], userId: User['_id']): boolean => {
     const userRecord = records.find((record) => record.userId === userId);
     if (userRecord) {
       return userRecord.permission === UserPermission.gameMaster;

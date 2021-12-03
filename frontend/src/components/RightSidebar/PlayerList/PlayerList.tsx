@@ -13,9 +13,9 @@ interface Props {
 }
 
 const PlayerList = (props: Props): JSX.Element => {
-  const [playerToRemove, setPlayerToRemove] = useState<number | undefined>(undefined);
-  const [playerToDemote, setPlayerToDemote] = useState<number | undefined>(undefined);
-  const [playerToPromote, setPlayerToPromote] = useState<number | undefined>(undefined);
+  const [playerToRemove, setPlayerToRemove] = useState<User['_id'] | undefined>(undefined);
+  const [playerToDemote, setPlayerToDemote] = useState<User['_id'] | undefined>(undefined);
+  const [playerToPromote, setPlayerToPromote] = useState<User['_id'] | undefined>(undefined);
   const [showDemoteLastGmModal, setShowDemoteLastGmModal] = useState(false);
 
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const PlayerList = (props: Props): JSX.Element => {
     }
   };
 
-  const handlePlayerDemoteRequested = (id: number): void => {
+  const handlePlayerDemoteRequested = (id: User['_id']): void => {
     const isLastGameMaster = gameMasters.length === 1;
     if (isLastGameMaster) {
       setShowDemoteLastGmModal(true);
@@ -57,10 +57,10 @@ const PlayerList = (props: Props): JSX.Element => {
   const prioritizeGameMasters = (gameMasters: User[], allUsers: User[]): User[] => {
     const A_BEFORE_B = -1;
     const B_BEFORE_A = 1;
-    const gameMasterIds = new Set(gameMasters.map((gm) => gm.id));
+    const gameMasterIds = new Set(gameMasters.map((gm) => gm._id));
     return [...allUsers].sort((a: User, b: User) => {
-      const isGameMasterA = gameMasterIds.has(a.id);
-      const isGameMasterB = gameMasterIds.has(b.id);
+      const isGameMasterA = gameMasterIds.has(a._id);
+      const isGameMasterB = gameMasterIds.has(b._id);
       if (isGameMasterA === isGameMasterB) {
         return a.username < b.username ? A_BEFORE_B : B_BEFORE_A;
       } else if (isGameMasterA && !isGameMasterB) {
@@ -78,18 +78,18 @@ const PlayerList = (props: Props): JSX.Element => {
   return (
     <div className="canvas-sidebar-player-list">
       {sortedUsers.map((user: User) => {
-        const isCurrentPlayer = user.id === currentUser.id;
-        const isGameMaster = gameMasters.some((gm: User) => gm.id === user.id);
+        const isCurrentPlayer = user._id === currentUser._id;
+        const isGameMaster = gameMasters.some((gm: User) => gm._id === user._id);
         return (
           <PlayerCard
-            key={user.id}
+            key={user._id}
             user={user}
             exposeSettings={props.exposeSettings}
             promotable={!isGameMaster}
             removable={!isGameMaster && !isCurrentPlayer}
-            onDemotePlayerClicked={() => handlePlayerDemoteRequested(user.id)}
-            onPromotePlayerClicked={() => setPlayerToPromote(user.id)}
-            onRemovePlayerClicked={() => setPlayerToRemove(user.id)}
+            onDemotePlayerClicked={() => handlePlayerDemoteRequested(user._id)}
+            onPromotePlayerClicked={() => setPlayerToPromote(user._id)}
+            onRemovePlayerClicked={() => setPlayerToRemove(user._id)}
           />
         );
       })}
