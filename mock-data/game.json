@@ -1,21 +1,22 @@
 [
   {
-    "_id": 100,
+    "_id": "61a9dccdd7c3cec99261a408",
+    "oldId": 100,
     "nodes": [
       {
         "_id": 201,
         "name": "The Soaring Skies",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 1 },
-          { "user": 4, "infoLevel": 1 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": 301,
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
@@ -29,7 +30,7 @@
           {
             "_id": 302,
             "informationLevel": 2,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "event",
             "name": "Sky is Falling",
             "content": { "ops": [{ "insert": "The sky is falling!" }] }
@@ -37,29 +38,35 @@
           {
             "_id": 303,
             "informationLevel": 1,
-            "editors": [1, 2, 3, 4, 5],
+            "editors": [
+              "61a9da74d7c3cec99261a3fc",
+              "61a9da75d7c3cec99261a3fd",
+              "61a9db2ad7c3cec99261a3fe",
+              "61a9db30d7c3cec99261a3ff",
+              "61a9db37d7c3cec99261a400"
+            ],
             "type": "notes",
             "name": "Notes",
             "content": { "ops": [{ "insert": "wow sure looks cool!" }] }
           }
         ],
-        "editors": [2, 1],
+        "editors": ["61a9da75d7c3cec99261a3fd", "61a9da74d7c3cec99261a3fc"],
         "type": "location"
       },
       {
         "_id": 202,
         "name": "Museum",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 1 },
-          { "user": 4, "infoLevel": 0 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 0 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": 304,
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
@@ -71,23 +78,23 @@
             }
           }
         ],
-        "editors": [2],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       },
       {
         "_id": 203,
         "name": "Lonely Path",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 1 },
-          { "user": 4, "infoLevel": 1 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": 305,
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
@@ -99,23 +106,23 @@
             }
           }
         ],
-        "editors": [2],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       },
       {
         "_id": 204,
         "name": "St. George",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 0 },
-          { "user": 4, "infoLevel": 1 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 0 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": 306,
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
@@ -127,58 +134,58 @@
             }
           }
         ],
-        "editors": [2],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       }
     ],
     "users": [
       {
-        "user": 1,
+        "user": "61a9da74d7c3cec99261a3fc",
         "permission": 1,
         "nickname": "test nickname"
       },
       {
-        "user": 2,
+        "user": "61a9da75d7c3cec99261a3fd",
         "permission": 0
       },
       {
-        "user": 3,
+        "user": "61a9db2ad7c3cec99261a3fe",
         "permission": 1
       },
       {
-        "user": 4,
+        "user": "61a9db30d7c3cec99261a3ff",
         "permission": 1
       },
       {
-        "user": 5,
+        "user": "61a9db37d7c3cec99261a400",
         "permission": 1
       },
       {
-        "user": 6,
+        "user": "61a9db3dd7c3cec99261a401",
         "permission": 1
       },
       {
-        "user": 7,
+        "user": "61a9db41d7c3cec99261a402",
         "permission": 1
       },
       {
-        "user": 8,
+        "user": "61a9db48d7c3cec99261a403",
         "permission": 1
       },
       {
-        "user": 9,
+        "user": "61a9db4ed7c3cec99261a404",
         "permission": 1
       },
       {
-        "user": 10,
+        "user": "61a9da74d7c3cec99261a3fc",
         "permission": 1
       },
       {
-        "user": 11,
+        "user": "61a9da74d7c3cec99261a3fc",
         "permission": 1
       },
       {
-        "user": 12,
+        "user": "61a9da74d7c3cec99261a3fc",
         "permission": 1
       }
     ],
@@ -186,15 +193,16 @@
     "settings": {}
   },
   {
-    "_id": 101,
+    "_id": "61a9dcf5d7c3cec99261a409",
+    "oldId": 101,
     "nodes": [],
     "users": [
       {
-        "user": 3,
+        "user": "61a9db2ad7c3cec99261a3fe",
         "permission": 0
       },
       {
-        "user": 4,
+        "user": "61a9db30d7c3cec99261a3ff",
         "permission": 0
       }
     ],
