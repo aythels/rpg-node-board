@@ -2,8 +2,8 @@
 2. In another terminal, run
 
    ```
-   mongoimport --db=RpgAPI --type=json --jsonArray --collection=user --file=mock-data/user.json
-   mongoimport --db=RpgAPI --type=json --jsonArray --collection=game --file=mock-data/game.json
+   mongoimport --db=RpgAPI --type=json --jsonArray --collection=users --file=mock-data/user.json
+   mongoimport --db=RpgAPI --type=json --jsonArray --collection=games --file=mock-data/game.json
    ```
 
    NOTE: Theres a typo where the imported data is created under the improper collection name
