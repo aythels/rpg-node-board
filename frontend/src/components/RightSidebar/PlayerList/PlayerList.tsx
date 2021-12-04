@@ -2,7 +2,7 @@ import './playerList.css';
 import PlayerCard from '../PlayerCard/PlayerCard';
 import { useState, useEffect, useCallback } from 'react';
 import Dialog from '../../Dialog/Dialog';
-import { User, UserPermission } from '../../../types';
+import { Game, User, UserPermission } from '../../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   removePlayer,
@@ -28,6 +28,7 @@ const PlayerList = (props: Props): JSX.Element => {
   const gameMasterIds: User['_id'][] = useSelector((state: RootState) => selectGameMasterIds(state));
   const userIds: User['_id'][] = useSelector((state: RootState) => selectUserIds(state));
   const currentUser: User = useSelector((state: RootState) => state.user.userInstance);
+  const currentGameId: Game['_id'] = useSelector((state: RootState) => state.game.gameInstance._id);
 
   const sortUsers = useCallback((gameMasterIds: User['_id'][], allUsers: User[]): User[] => {
     const A_FIRST = -1;
@@ -78,7 +79,7 @@ const PlayerList = (props: Props): JSX.Element => {
 
   const handlePlayerRemove = (): void => {
     if (playerToRemove) {
-      dispatch(removePlayer(playerToRemove));
+      dispatch(removePlayer(playerToRemove, currentGameId));
       setPlayerToRemove(undefined);
     }
   };

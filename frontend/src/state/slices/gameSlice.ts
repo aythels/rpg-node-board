@@ -123,41 +123,29 @@ export const addPlayer = (username: User['username'], gameId: Game['_id']): any 
           break;
       }
     } catch {
-      console.log(`Could not add user ${username} to game`);
+      console.error(`Could not add user ${username} to game`);
     }
   };
   return addPlayerThunk;
 };
 
-// TODO: HELP Filip
-export const removePlayer = (id: User['_id']): any => {
+// TODO: test
+export const removePlayer = (playerId: User['_id'], gameId: Game['_id']): any => {
   const removePlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    dispatch(gameSlice.actions.removePlayer(id));
-
-    // try {
-    //   const response = await fetch(`${process.env.REACT_APP_API_URL}/game/user`, {
-    //     method: 'POST',
-    //     headers: { 'Content-type': 'application/json' },
-    //     body: JSON.stringify({ gameId, username }),
-    //   });
-    //   switch (response.status) {
-    //     case 200:
-    //       const record: UserPermissionRecord = await response.json();
-    //       dispatch(gameSlice.actions.addPlayer(record));
-    //       break;
-    //     case 404:
-    //       dispatch(gameSlice.actions.updateDialogStatus(['userNotFound', true]));
-    //       break;
-    //     case 422:
-    //       dispatch(gameSlice.actions.updateDialogStatus(['userAlreadyAdded', true]));
-    //       break;
-    //   }
-    // } catch {
-    //   console.log(`Could not add user ${username} to game`);
-    // }
-
-    // TODO: make async call
-    // POSTremovePlayerFromGame(...);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${playerId}`, {
+        method: 'DELETE',
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.removePlayer(playerId));
+          break;
+        default:
+          console.error('Something went wrong.');
+      }
+    } catch {
+      console.error(`Could not remove player ${playerId} from the game.`);
+    }
   };
   return removePlayerThunk;
 };
