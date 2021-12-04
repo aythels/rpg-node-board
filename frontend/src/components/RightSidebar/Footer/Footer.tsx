@@ -5,7 +5,7 @@ import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../../Dialog/Dialog';
 import { DELETEGame } from '../../../mock-backend';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPlayer, setShowUserAlreadyAddedDialog } from '../../../state/slices/gameSlice';
+import { addPlayer, updateDialogStatus } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
 
 const Footer = (): JSX.Element => {
@@ -14,7 +14,7 @@ const Footer = (): JSX.Element => {
   const [inviteName, setInviteName] = useState('');
   const [showDeleteServerDialog, setShowDeleteServerDialog] = useState(false);
   const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
-  const showUserAlreadyAddedDialog = useSelector((state: RootState) => state.game.showUserAlreadyAddedDialog);
+  const showUserAlreadyAddedDialog = useSelector((state: RootState) => state.game.dialogStatus.userAlreadyAdded);
 
   const handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
     setInviteName(event.target.value);
@@ -80,7 +80,7 @@ const Footer = (): JSX.Element => {
         description="You cannot add the same player twice."
         header="This player is already in the game!"
         open={showUserAlreadyAddedDialog}
-        onClose={() => dispatch(setShowUserAlreadyAddedDialog(false))}
+        onClose={() => dispatch(updateDialogStatus(['userAlreadyAdded', false]))}
       />
     </div>
   );

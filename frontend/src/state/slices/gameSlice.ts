@@ -12,15 +12,21 @@ export enum GameLoadingStatus {
   Loading,
   Idle,
 }
+
+export type GameDialog = 'userAlreadyAdded' | 'userNotFound';
 interface GameState {
   gameInstance: Game;
   status: GameLoadingStatus;
-  showUserAlreadyAddedDialog: boolean;
+  dialogStatus: { [key in GameDialog]: boolean };
 }
+
 const initialState: GameState = {
   gameInstance: {} as Game, // TODO: get rid of this hack by treating the "undefined" case, too
   status: GameLoadingStatus.Loading,
-  showUserAlreadyAddedDialog: false,
+  dialogStatus: {
+    userAlreadyAdded: false,
+    userNotFound: false,
+  },
 };
 
 interface SubnodeUpdate {
@@ -46,8 +52,9 @@ const gameSlice = createSlice({
       const idToRemove = action.payload;
       state.gameInstance.users = state.gameInstance.users.filter((user) => user.userId !== idToRemove);
     },
-    setShowUserAlreadyAddedDialog: (state: GameState, action: PayloadAction<boolean>) => {
-      state.showUserAlreadyAddedDialog = action.payload;
+    updateDialogStatus: (state: GameState, action: PayloadAction<[GameDialog, boolean]>) => {
+      const [dialog, status] = action.payload;
+      state.dialogStatus[dialog] = status;
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
       state.gameInstance = action.payload;
@@ -82,7 +89,7 @@ const gameSlice = createSlice({
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, setShowUserAlreadyAddedDialog } = gameSlice.actions;
+export const { gameLoaded, updateDialogStatus } = gameSlice.actions;
 
 // Thunks (async calls)
 // should we use createAsyncThunk() here?
@@ -101,24 +108,21 @@ export const fetchGame = (gameId: Game['_id']): any => {
 export const addPlayer = (username: User['username'], gameId: Game['_id']): any => {
   const addPlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
-      // TODO: check if already added here
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/user`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ gameId, username }),
       });
-      // TODO: handle status? try adding repeatedly
-      console.log(response.status);
       switch (response.status) {
         case 200:
           const record: UserPermissionRecord = await response.json();
           dispatch(gameSlice.actions.addPlayer(record));
           break;
         case 404:
-          // TODO:
+          dispatch(gameSlice.actions.updateDialogStatus(['userNotFound', true]));
           break;
         case 422:
-          dispatch(gameSlice.actions.setShowUserAlreadyAddedDialog(true));
+          dispatch(gameSlice.actions.updateDialogStatus(['userAlreadyAdded', true]));
           break;
       }
     } catch {
