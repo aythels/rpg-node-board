@@ -139,52 +139,40 @@
     ],
     "users": [
       {
-        "user": { "$oid": "61a9da74d7c3cec99261a3fc" },
+        "userId": { "$oid": "61a9da74d7c3cec99261a3fc" },
         "permission": 1,
         "nickname": "test nickname"
       },
       {
-        "user": { "$oid": "61a9da75d7c3cec99261a3fd" },
+        "userId": { "$oid": "61a9da75d7c3cec99261a3fd" },
         "permission": 0
       },
       {
-        "user": { "$oid": "61a9db2ad7c3cec99261a3fe" },
+        "userId": { "$oid": "61a9db2ad7c3cec99261a3fe" },
         "permission": 1
       },
       {
-        "user": { "$oid": "61a9db30d7c3cec99261a3ff" },
+        "userId": { "$oid": "61a9db30d7c3cec99261a3ff" },
         "permission": 1
       },
       {
-        "user": { "$oid": "61a9db37d7c3cec99261a400" },
+        "userId": { "$oid": "61a9db37d7c3cec99261a400" },
         "permission": 1
       },
       {
-        "user": { "$oid": "61a9db3dd7c3cec99261a401" },
+        "userId": { "$oid": "61a9db3dd7c3cec99261a401" },
         "permission": 1
       },
       {
-        "user": { "$oid": "61a9db41d7c3cec99261a402" },
+        "userId": { "$oid": "61a9db41d7c3cec99261a402" },
         "permission": 1
       },
       {
-        "user": { "$oid": "61a9db48d7c3cec99261a403" },
+        "userId": { "$oid": "61a9db48d7c3cec99261a403" },
         "permission": 1
       },
       {
-        "user": { "$oid": "61a9db4ed7c3cec99261a404" },
-        "permission": 1
-      },
-      {
-        "user": { "$oid": "61a9da74d7c3cec99261a405" },
-        "permission": 1
-      },
-      {
-        "user": { "$oid": "61a9da74d7c3cec99261a406" },
-        "permission": 1
-      },
-      {
-        "user": { "$oid": "61a9da74d7c3cec99261a407" },
+        "userId": { "$oid": "61a9db4ed7c3cec99261a404" },
         "permission": 1
       }
     ],
@@ -196,11 +184,11 @@
     "nodes": [],
     "users": [
       {
-        "user": { "$oid": "61a9db2ad7c3cec99261a3fe" },
+        "userId": { "$oid": "61a9db2ad7c3cec99261a3fe" },
         "permission": 0
       },
       {
-        "user": { "$oid": "61a9db30d7c3cec99261a3ff" },
+        "userId": { "$oid": "61a9db30d7c3cec99261a3ff" },
         "permission": 0
       }
     ],
