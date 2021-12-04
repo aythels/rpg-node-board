@@ -31,13 +31,6 @@ const userSlice = createSlice({
 export default userSlice.reducer;
 export const { addImage } = userSlice.actions;
 
-// TODO: temp
-// {
-//   method: 'GET',
-//   headers: { 'Content-type': 'application/json' },
-//   body: JSON.stringify({  }),
-// }
-
 // Thunks
 export const loginUser = (username: string): any => {
   const loginUserThunk = async (dispatch: Dispatch<any>): Promise<void> => {
@@ -51,11 +44,9 @@ export const loginUser = (username: string): any => {
           return game;
         }),
       );
-      console.log(games);
       dispatch(userSlice.actions.loginUser([user, games]));
     } catch {
-      // TODO: update UI
-      console.log('Log in unsuccessful');
+      console.error('Log in unsuccessful');
     }
   };
   return loginUserThunk;
