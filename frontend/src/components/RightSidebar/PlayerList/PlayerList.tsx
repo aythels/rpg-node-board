@@ -1,6 +1,6 @@
 import './playerList.css';
 import PlayerCard from '../PlayerCard/PlayerCard';
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Dialog from '../../Dialog/Dialog';
 import { User, UserPermission } from '../../../types';
 import { useDispatch, useSelector } from 'react-redux';

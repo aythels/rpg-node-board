@@ -91,9 +91,6 @@ const gameSlice = createSlice({
 export default gameSlice.reducer;
 export const { gameLoaded, updateDialogStatus } = gameSlice.actions;
 
-// Thunks (async calls)
-// should we use createAsyncThunk() here?
-
 export const fetchGame = (gameId: Game['_id']): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     console.log('Fetching game');
@@ -126,7 +123,6 @@ export const addPlayer = (username: User['username'], gameId: Game['_id']): any 
           break;
       }
     } catch {
-      // TODO: update UI
       console.log(`Could not add user ${username} to game`);
     }
   };
@@ -136,6 +132,29 @@ export const addPlayer = (username: User['username'], gameId: Game['_id']): any 
 export const removePlayer = (id: User['_id']): any => {
   const removePlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.removePlayer(id));
+
+    // try {
+    //   const response = await fetch(`${process.env.REACT_APP_API_URL}/game/user`, {
+    //     method: 'POST',
+    //     headers: { 'Content-type': 'application/json' },
+    //     body: JSON.stringify({ gameId, username }),
+    //   });
+    //   switch (response.status) {
+    //     case 200:
+    //       const record: UserPermissionRecord = await response.json();
+    //       dispatch(gameSlice.actions.addPlayer(record));
+    //       break;
+    //     case 404:
+    //       dispatch(gameSlice.actions.updateDialogStatus(['userNotFound', true]));
+    //       break;
+    //     case 422:
+    //       dispatch(gameSlice.actions.updateDialogStatus(['userAlreadyAdded', true]));
+    //       break;
+    //   }
+    // } catch {
+    //   console.log(`Could not add user ${username} to game`);
+    // }
+
     // TODO: make async call
     // POSTremovePlayerFromGame(...);
   };

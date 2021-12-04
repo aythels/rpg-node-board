@@ -41,7 +41,7 @@ export interface Game {
   image?: any;
   nodes: Node[];
   users: UserPermissionRecord[];
-  settings: Record<string, unknown>;
+  settings: { [key: string]: unknown };
 }
 export interface User {
   _id: string;

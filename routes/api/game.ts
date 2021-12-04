@@ -1,32 +1,40 @@
 import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { GameModel, UserModel } from '../../db/models';
-import { ObjectId } from 'mongodb';
 import { UserPermission } from '../../frontend/src/types';
 
 export const router = express.Router();
 
-/**********************************Game API************************************/
-
 // POST: Create game
 router.post('/game', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  // { "title": "title" }
-
-  // TODO: Add the id of this game to the data of the user who created it
-
   console.log('Creating new game');
 
+  const { userId, title } = req.body;
   const game = new GameModel({
-    title: req.body.title,
+    title,
+    nodes: [],
+    users: [],
+    settings: {},
+    // imgpath:
+    // image:
   });
 
   try {
     const result = await game.save();
+    await UserModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        $push: { games: result._id },
+      },
+    );
     res.send(result);
   } catch (error) {
     console.log(error);
-    if (isMongoError(error)) res.status(500).send('Internal server error');
-    else res.status(400).send('Bad request');
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
   }
 });
 
@@ -42,8 +50,11 @@ router.get('/game/:id', mongoChecker, authenticate, async (req: Request, res: Re
     res.json(game);
   } catch (error) {
     console.log(error);
-    if (isMongoError(error)) res.status(500).send('Internal server error');
-    else res.status(400).send('Bad request');
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
   }
 
   // Non async await version
@@ -71,8 +82,11 @@ router.delete('/game/:id', mongoChecker, authenticate, async (req: Request, res:
     res.send(game);
   } catch (error) {
     console.log(error);
-    if (isMongoError(error)) res.status(500).send('Internal server error');
-    else res.status(400).send('Bad request');
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
   }
 });
 
@@ -118,6 +132,7 @@ router.post('/game/user', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
+// TODO: fix these routes
 // PUT: Update game title
 router.put('/game/title/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
@@ -125,7 +140,12 @@ router.put('/game/title/:id', mongoChecker, authenticate, async (req: Request, r
 router.put('/game/image/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
 // DELETE: Remove game player - TODO
-router.delete('/game/player/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+router.delete('/game/player/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  // TODO:
+  // - delete player from game
+  // - delete game from player
+  // - delete player from each of the game's node's informationLevels
+});
 
 // PUT: Change game player nickname - TODO
 router.put('/game/player/edit-nickname/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
@@ -138,5 +158,3 @@ router.post('/game/node/:id', mongoChecker, authenticate, async (req: Request, r
 
 // DELETE: Remove game node - TODO
 router.delete('/game/node/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
-
-export { router as gameRouter };
