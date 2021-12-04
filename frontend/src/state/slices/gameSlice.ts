@@ -129,6 +129,7 @@ export const addPlayer = (username: User['username'], gameId: Game['_id']): any 
   return addPlayerThunk;
 };
 
+// TODO: HELP Filip
 export const removePlayer = (id: User['_id']): any => {
   const removePlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.removePlayer(id));
@@ -161,6 +162,7 @@ export const removePlayer = (id: User['_id']): any => {
   return removePlayerThunk;
 };
 
+// TODO: HELP Filip
 export const updateNode = (gameId: Game['_id'], node: Node): any => {
   const updateNodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     // TODO: make async call
@@ -170,6 +172,7 @@ export const updateNode = (gameId: Game['_id'], node: Node): any => {
   return updateNodeThunk;
 };
 
+// TODO: HELP Filip
 // all of these args make me think that this is NOT the way to do this
 export const updateSubnode = (gameId: Game['_id'], nodeId: number, subnodeId: number, change: Delta): any => {
   const updateSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
@@ -180,6 +183,7 @@ export const updateSubnode = (gameId: Game['_id'], nodeId: number, subnodeId: nu
   return updateSubnodeThunk;
 };
 
+// TODO: HELP Filip
 export const addSubnode = (gameId: Game['_id'], nodeId: number, subnode: Subnode): any => {
   const addSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     // TODO: async call
@@ -189,6 +193,7 @@ export const addSubnode = (gameId: Game['_id'], nodeId: number, subnode: Subnode
   return addSubnodeThunk;
 };
 
+// TODO: HELP Filip
 export const setGameTitle = (newTitle: string): any => {
   const setGameTitleThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.setGameTitle(newTitle));
@@ -198,6 +203,7 @@ export const setGameTitle = (newTitle: string): any => {
   return setGameTitleThunk;
 };
 
+// TODO: HELP Filip
 export const updatePlayerPermission = (payload: [User['_id'], UserPermission]): any => {
   const updatePlayerPermissionThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.updatePlayerPermission(payload));

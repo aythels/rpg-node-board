@@ -94,8 +94,28 @@ router.delete('/game/:id', mongoChecker, authenticate, async (req: Request, res:
   }
 });
 
+// PATCH: Update any of the properties of Game
+router.patch('/game/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  console.log('Updating game');
+
+  const { id } = req.params;
+  const updates = req.body; // TODO: perform some validation?
+  try {
+    const game = await GameModel.findByIdAndUpdate(id, updates, { new: true });
+    res.send(game);
+  } catch (error) {
+    console.log(error);
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
+  }
+});
+
+// ----------------------------------- USER-RELATED ENDPOINTS -----------------------------------
 // POST: Add player to game
-router.post('/game/user', mongoChecker, authenticate, async (req: Request, res: Response) => {
+router.post('/game/:id/user', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const { gameId, username } = req.body;
 
   try {
@@ -136,29 +156,24 @@ router.post('/game/user', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
-// TODO: fix these routes
-// PUT: Update game title
-router.put('/game/title/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
-
-// PUT: Update game image
-router.put('/game/image/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
-
-// DELETE: Remove game player - TODO
-router.delete('/game/player/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
+// TODO: HELP Filip [make sure to consult corresponding mock methods in mock-backend]
+// DELETE: Remove player from the game
+router.delete('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   // TODO:
   // - delete player from game
   // - delete game from player
   // - delete player from each of the game's node's informationLevels
 });
 
-// PUT: Change game player nickname - TODO
-router.put('/game/player/edit-nickname/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// ----------------------------------- NODE-RELATED ENDPOINTS -----------------------------------
+// TODO: HELP Filip
+// POST: Add node to game
+router.post('/game/:id/node', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// PUT: Change game player permissions - TODO
-router.put('/game/player/edit-permission/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// TODO: HELP Filip
+// PATCH: Update any of the properties of Node
+router.patch('/game/:gameId/user/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// POST: Add game node - TODO
-router.post('/game/node/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
-
-// DELETE: Remove game node - TODO
-router.delete('/game/node/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// TODO: HELP Filip
+// DELETE: Remove node from game
+router.delete('/game/:gameId/node/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {});

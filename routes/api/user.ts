@@ -75,6 +75,7 @@ router.delete('/user/:id', mongoChecker, authenticate, async (req: Request, res:
   // TODO: Ensure that only the user corresponding to the session can be deleted
   console.log('Deleting user');
 
+  // TODO: delete user from the lists of users in their games
   try {
     const user = await UserModel.findByIdAndDelete(req.params.id);
     res.send(user);
@@ -88,14 +89,14 @@ router.delete('/user/:id', mongoChecker, authenticate, async (req: Request, res:
   }
 });
 
-// PATCH: Partial update all user properties at once
+// PATCH: Update any of the properties of User
 router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
   // TODO: Ensure that only the user corresponding to the session can be retrieved
   // TODO: Ensure that new username and email are unique and permitted
   // TODO: Ensure image is of the proper size
   console.log('Updating user');
 
-  const updates = req.body; // TODO: perform some validation
+  const updates = req.body; // TODO: perform some validation?
   try {
     const user = await UserModel.findByIdAndUpdate(req.params.id, updates, { new: true });
     res.send(user);
@@ -108,3 +109,11 @@ router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: 
     }
   }
 });
+
+// TODO: HELP Filip
+// POST: Add game (ID) to user from user's list of games
+router.post('/user/game', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+
+// TODO: HELP Filip
+// DELETE: Remove game (ID) from user's list of games
+router.delete('/user/game', mongoChecker, authenticate, async (req: Request, res: Response) => {});
