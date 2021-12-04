@@ -46,13 +46,11 @@ const PlayerList = (props: Props): JSX.Element => {
     });
   }, []);
 
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = useCallback(async (userIds: User['_id'][]) => {
     const results: PromiseSettledResult<User>[] = await Promise.allSettled(
       userIds.map(async (userId) => {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`);
-        console.log(response);
         const user = await response.json();
-        console.log(user);
         return user;
       }),
     );
@@ -67,13 +65,16 @@ const PlayerList = (props: Props): JSX.Element => {
       }
     }
 
-    const sortedUsers = sortUsers(gameMasterIds, newUsers);
-    setUsers(sortedUsers);
+    setUsers(sortUsers(gameMasterIds, newUsers));
   }, []);
 
   useEffect(() => {
-    fetchUsers();
-  }, [userIds, gameMasterIds]);
+    fetchUsers(userIds);
+  }, [userIds]);
+
+  useEffect(() => {
+    setUsers(sortUsers(gameMasterIds, users));
+  }, [gameMasterIds]);
 
   const handlePlayerRemove = (): void => {
     if (playerToRemove) {

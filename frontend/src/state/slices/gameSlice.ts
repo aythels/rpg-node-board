@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
 
-import { GETuserByUsername, PUTnode } from '../../mock-backend';
-import { Game, Node, Subnode, User, UserPermission } from '../../types';
+import { PUTnode } from '../../mock-backend';
+import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from '../../types';
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
@@ -39,26 +39,15 @@ const gameSlice = createSlice({
   name: 'game',
   initialState: initialState,
   reducers: {
-    addPlayer: (state: GameState, action: PayloadAction<User>) => {
-      const user = action.payload;
-      if (user) {
-        if (state.gameInstance.users.find((u) => u.userId === user._id)) {
-          state.showUserAlreadyAddedDialog = true;
-        } else {
-          // TODO: add normalization
-          state.gameInstance.users.push({
-            userId: user._id,
-            permission: UserPermission.player,
-          });
-        }
-      }
+    addPlayer: (state: GameState, action: PayloadAction<UserPermissionRecord>) => {
+      state.gameInstance.users.push(action.payload);
     },
     removePlayer: (state: GameState, action: PayloadAction<User['_id']>) => {
       const idToRemove = action.payload;
       state.gameInstance.users = state.gameInstance.users.filter((user) => user.userId !== idToRemove);
     },
-    hideUserAlreadyAddedDialog: (state: GameState) => {
-      state.showUserAlreadyAddedDialog = false;
+    setShowUserAlreadyAddedDialog: (state: GameState, action: PayloadAction<boolean>) => {
+      state.showUserAlreadyAddedDialog = action.payload;
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
       state.gameInstance = action.payload;
@@ -93,7 +82,7 @@ const gameSlice = createSlice({
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, hideUserAlreadyAddedDialog } = gameSlice.actions;
+export const { gameLoaded, setShowUserAlreadyAddedDialog } = gameSlice.actions;
 
 // Thunks (async calls)
 // should we use createAsyncThunk() here?
@@ -109,12 +98,33 @@ export const fetchGame = (gameId: Game['_id']): any => {
   return fetchGameThunk;
 };
 
-export const addPlayer = (name: string): any => {
+export const addPlayer = (username: User['username'], gameId: Game['_id']): any => {
   const addPlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    const user = GETuserByUsername(name); // TODO: make async
-    dispatch(gameSlice.actions.addPlayer(user));
-    // TODO: make async call
-    // POSTaddPlayerToGame();
+    try {
+      // TODO: check if already added here
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/user`, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ gameId, username }),
+      });
+      // TODO: handle status? try adding repeatedly
+      console.log(response.status);
+      switch (response.status) {
+        case 200:
+          const record: UserPermissionRecord = await response.json();
+          dispatch(gameSlice.actions.addPlayer(record));
+          break;
+        case 404:
+          // TODO:
+          break;
+        case 422:
+          dispatch(gameSlice.actions.setShowUserAlreadyAddedDialog(true));
+          break;
+      }
+    } catch {
+      // TODO: update UI
+      console.log(`Could not add user ${username} to game`);
+    }
   };
   return addPlayerThunk;
 };

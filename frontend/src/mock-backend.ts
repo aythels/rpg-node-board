@@ -452,11 +452,6 @@ export const GETuserById = (id: User['_id']): User => {
   return globalUsersCopy.find((user) => user._id === id) as User;
 };
 
-export const GETuserByUsername = (username: string): User => {
-  const globalUsersCopy = cloneDeep(globalUsers);
-  return globalUsersCopy.find((user) => user.username == username) as User;
-};
-
 // This mock-db method will CERTAINLY be changed.
 export const GETloginVerification = (username: string, password: string): boolean => {
   const globalUsersCopy = cloneDeep(globalUsers);
