@@ -94,10 +94,21 @@ export const { gameLoaded, updateDialogStatus } = gameSlice.actions;
 export const fetchGame = (gameId: Game['_id']): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     console.log('Fetching game');
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
-    const game: Game = await response.json();
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
+      const game: Game = await response.json();
 
-    dispatch(gameLoaded(game));
+      switch (response.status) {
+        case 200:
+          dispatch(gameLoaded(game));
+          break;
+        default:
+          // TODO: handle in UI
+          console.error(`Could not fetch game ${gameId}`);
+      }
+    } catch {
+      console.error(`Could not fetch game ${gameId}`);
+    }
   };
   return fetchGameThunk;
 };
@@ -141,7 +152,7 @@ export const removePlayer = (playerId: User['_id'], gameId: Game['_id']): any =>
           dispatch(gameSlice.actions.removePlayer(playerId));
           break;
         default:
-          console.error('Something went wrong.');
+          console.error(`Could not remove player ${playerId} from the game.`);
       }
     } catch {
       console.error(`Could not remove player ${playerId} from the game.`);
