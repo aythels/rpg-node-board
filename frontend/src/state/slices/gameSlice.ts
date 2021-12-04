@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'redux';
 
-import { GETuserById, GETuserByUsername, PUTnode } from '../../mock-backend';
+import { GETuserByUsername, PUTnode } from '../../mock-backend';
 import { Game, Node, Subnode, User, UserPermission } from '../../types';
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
@@ -175,14 +175,6 @@ export const updatePlayerPermission = (payload: [User['_id'], UserPermission]): 
   return updatePlayerPermissionThunk;
 };
 
-// Selectors
-export const selectUsers: any = createDraftSafeSelector(
-  (state: RootState): Game => state.game.gameInstance,
-  (game: Game): User[] => {
-    return Object.keys(game).length === 0 ? [] : game.users.map((record) => GETuserById(record.userId));
-  },
-);
-
 export const selectVisibleNodes: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
   (state: RootState): User => state.user.userInstance,
@@ -203,16 +195,12 @@ export const selectActiveNode: any = createDraftSafeSelector(
   },
 );
 
-// TODO: remove as unused - if need arises, async calls must go in a reducer and be added to game state
-// export const selectPlayers: any = createDraftSafeSelector(
-//   (state: RootState): Game => state.game.gameInstance,
-//   (game: Game): User[] => {
-//     // TODO: either async or store users in game state
-//     return game.users.filter((i) => i.permission === UserPermission.player).map((record) => GETuserById(record.userId));
-//   },
-// );
+export const selectUserIds: any = createDraftSafeSelector(
+  (state: RootState): Game => state.game.gameInstance,
+  (game: Game) => game.users.map(({ userId }) => userId),
+);
 
-export const selectGameMasters: any = createDraftSafeSelector(
+export const selectGameMasterIds: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
   (game: Game): User['_id'][] => {
     // TODO: either async or store users in game state
