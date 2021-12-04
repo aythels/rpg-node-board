@@ -13,8 +13,14 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
   const game = new GameModel({
     title,
     nodes: [],
-    users: [],
+    users: [
+      {
+        userId,
+        permission: UserPermission.gameMaster,
+      },
+    ],
     settings: {},
+    // TODO: use stock images
     // imgpath:
     // image:
   });
@@ -47,7 +53,7 @@ router.get('/game/:id', mongoChecker, authenticate, async (req: Request, res: Re
   try {
     const { id } = req.params;
     const game = await GameModel.findById(id);
-    res.json(game);
+    res.send(game);
   } catch (error) {
     console.log(error);
     if (isMongoError(error)) {
@@ -56,19 +62,6 @@ router.get('/game/:id', mongoChecker, authenticate, async (req: Request, res: Re
       res.status(400).send('Bad request');
     }
   }
-
-  // Non async await version
-  /*
-  GameModel.findById(req.params.id)
-    .then((game) => {
-      res.send(game);
-    })
-    .catch((error) => {
-      console.log(error);
-      if (isMongoError(error)) res.status(500).send('Internal server error');
-      else res.status(400).send('Bad request');
-    });
-  */
 });
 
 // DELETE: Delete a game
@@ -78,7 +71,18 @@ router.delete('/game/:id', mongoChecker, authenticate, async (req: Request, res:
   console.log('Deleting game');
 
   try {
-    const game = await GameModel.findByIdAndDelete(req.params.id);
+    const gameId = req.params.id;
+    const game = await GameModel.findByIdAndDelete(gameId);
+    if (game) {
+      // Remove the game ID from every user's list of games
+      await Promise.allSettled(
+        game.users.map(async (user) => {
+          return await UserModel.findByIdAndUpdate(user.userId, {
+            $pull: { games: gameId },
+          });
+        }),
+      );
+    }
     res.send(game);
   } catch (error) {
     console.log(error);
