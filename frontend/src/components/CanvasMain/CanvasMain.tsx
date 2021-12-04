@@ -31,7 +31,8 @@ const CanvasMain = (): JSX.Element => {
     </Grid>
   ) : (
     <>
-      <CanvasInternal />
+      {/* TODO: put back  */}
+      {/* <CanvasInternal /> */}
       <RightSidebar />
       <Dialog
         description="Please try again."
