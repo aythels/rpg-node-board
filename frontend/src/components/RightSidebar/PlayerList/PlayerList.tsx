@@ -47,14 +47,27 @@ const PlayerList = (props: Props): JSX.Element => {
   }, []);
 
   const fetchUsers = useCallback(async () => {
-    const remoteUsers: User[] = await Promise.all(
+    const results: PromiseSettledResult<User>[] = await Promise.allSettled(
       userIds.map(async (userId) => {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`);
+        console.log(response);
         const user = await response.json();
+        console.log(user);
         return user;
       }),
     );
-    const sortedUsers = sortUsers(gameMasterIds, remoteUsers);
+
+    const newUsers = [];
+    for (const result of results) {
+      if (result.status === 'fulfilled') {
+        newUsers.push(result.value);
+      } else {
+        console.error('Could not fetch user');
+        console.error(result.reason);
+      }
+    }
+
+    const sortedUsers = sortUsers(gameMasterIds, newUsers);
     setUsers(sortedUsers);
   }, []);
 
