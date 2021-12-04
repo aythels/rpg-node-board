@@ -197,7 +197,7 @@ export const selectActiveNode: any = createDraftSafeSelector(
 
 export const selectUserIds: any = createDraftSafeSelector(
   (state: RootState): Game => state.game.gameInstance,
-  (game: Game) => game.users.map(({ userId }) => userId),
+  (game: Game) => game.users.map((record) => record.userId),
 );
 
 export const selectGameMasterIds: any = createDraftSafeSelector(
