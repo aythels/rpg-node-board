@@ -5,6 +5,8 @@ import { UserPermission } from '../../frontend/src/types';
 
 export const router = express.Router();
 
+// TODO: Use ACID transactions for multistep routes (might just wait to switch to SQL db to do this)
+
 // POST: Create game
 router.post('/game', mongoChecker, authenticate, async (req: Request, res: Response) => {
   console.log('Creating new game');
@@ -115,13 +117,19 @@ router.patch('/game/:id', mongoChecker, authenticate, async (req: Request, res: 
 
 // ----------------------------------- USER-RELATED ENDPOINTS -----------------------------------
 // POST: Add player to game
-router.post('/game/:id/user', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  const { gameId, username } = req.body;
+router.post('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const { gameId, userId } = req.params;
 
   try {
-    const user = await UserModel.findOne({ username });
+    const user = await UserModel.findById(userId);
     if (!user) {
       res.status(404).send('User does not exist in the database.');
+      return;
+    }
+
+    const game = await GameModel.findById(gameId);
+    if (!game) {
+      res.status(404).send('Game not found');
       return;
     }
 
@@ -136,6 +144,7 @@ router.post('/game/:id/user', mongoChecker, authenticate, async (req: Request, r
       return;
     }
 
+    // Add user to game.users
     const userPermissionRecord = {
       userId: user._id,
       permission: UserPermission.player,
@@ -145,6 +154,20 @@ router.post('/game/:id/user', mongoChecker, authenticate, async (req: Request, r
       { $push: { users: userPermissionRecord } },
       { returnNewDocument: true },
     );
+
+    // Add gameId to user.games
+    user.games.push(gameId);
+
+    // Add user to each of game's nodes
+    const infoLevel = {
+      userId: user._id,
+      infoLevel: 0,
+    };
+
+    for (const node of game.nodes) {
+      node.informationLevels.push(infoLevel);
+    }
+
     res.send(userPermissionRecord);
   } catch (error) {
     console.log(error);
@@ -175,8 +198,10 @@ router.delete('/game/:gameId/user/:userId', mongoChecker, authenticate, async (r
     }
     // - delete player from game
     game.users = game.users.filter((user) => user.userId !== userId);
+
     // - delete game from player
     user.games = user.games.filter((game) => game !== gameId);
+
     // - delete player from each of the game's nodes
     for (const node of game.nodes) {
       node.editors = node.editors.filter((user) => user !== userId);

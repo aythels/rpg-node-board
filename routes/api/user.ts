@@ -110,10 +110,10 @@ router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
-// TODO: HELP Filip
+// Note: (this is accomplished via 'POST /game/:id/user')
 // POST: Add game (ID) to user from user's list of games
-router.post('/user/game', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// router.post('/user/game/:gameId', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// TODO: HELP Filip
+// Note: (this is accomplished via 'DELETE /api/game/')
 // DELETE: Remove game (ID) from user's list of games
-router.delete('/user/game', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// router.delete('/user/game', mongoChecker, authenticate, async (req: Request, res: Response) => {});
