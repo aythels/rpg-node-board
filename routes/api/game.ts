@@ -179,6 +179,66 @@ router.post('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req
   }
 });
 
+// Update a player's permissions in a game (demote to player or promote to GM)
+// takes: req.body: { permission: UserPermission }
+router.patch('/game/:gameId/user/:userid', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const { gameId, userId } = req.params;
+  const newPermission = req.body.permission;
+
+  //TODO: validate body?
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      res.status(404).send('User does not exist in the database.');
+      return;
+    }
+
+    const game = await GameModel.findById(gameId);
+    if (!game) {
+      res.status(404).send('Game not found');
+      return;
+    }
+    const gamePermission = game.users.find((u) => u.userId === userId);
+    if (!gamePermission) {
+      res.status(404).send('User not in game');
+      return;
+    }
+    if (gamePermission.permission === newPermission) {
+      res.status(400).send('User already holds that permission');
+      return;
+    }
+
+    // Adjust global permission
+    gamePermission.permission = newPermission;
+
+    // Update permissions for all nodes and subnodes
+    for (const node of game.nodes) {
+      if (newPermission === UserPermission.gameMaster && !node.editors.includes(userId)) {
+        node.editors.push(userId);
+      } else if (newPermission === UserPermission.player && node.editors.includes(userId)) {
+        node.editors = node.editors.filter((e) => e !== userId);
+      }
+      for (const subnode of node.subnodes) {
+        if (newPermission === UserPermission.gameMaster && !subnode.editors.includes(userId)) {
+          subnode.editors.push(userId);
+        } else if (newPermission === UserPermission.player && subnode.editors.includes(userId)) {
+          subnode.editors = subnode.editors.filter((e) => e !== userId);
+        }
+      }
+    }
+    await game.save();
+    res.send(gamePermission);
+  } catch (error) {
+    console.log(error);
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
+  }
+});
+
 // DELETE: Remove player from the game
 router.delete('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const gameId = req.params.gameId;
