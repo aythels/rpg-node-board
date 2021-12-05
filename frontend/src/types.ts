@@ -6,10 +6,10 @@ export interface InfoLevel {
   infoLevel: number;
 }
 export interface Node {
-  id: number; // TODO: replace once we start working with Mongo _id's
+  _id: string;
   name: string;
-  image: any;
-  thumbnailImage?: any; // TODO: make required
+  image?: any;
+  thumbnailImage?: any;
   imageAlt: string;
   subnodes: Subnode[];
   informationLevels: InfoLevel[];
@@ -17,7 +17,7 @@ export interface Node {
   type: string;
 }
 export interface Subnode {
-  id: number;
+  _id: String;
   name: string;
   informationLevel: number;
   editors: User['_id'][];

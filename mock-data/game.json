@@ -6,22 +6,22 @@
         "_id": { "$oid": "61a9dcf5d7c3cec99261a40a" },
         "name": "The Soaring Skies",
         "informationLevels": [
-          { "user": { "$oid": "61a9da74d7c3cec99261a3fc" }, "infoLevel": 0 },
-          { "user": { "$oid": "61a9db2ad7c3cec99261a3fe" }, "infoLevel": 1 },
-          { "user": { "$oid": "61a9db30d7c3cec99261a3ff" }, "infoLevel": 1 },
-          { "user": { "$oid": "61a9db37d7c3cec99261a400" }, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": { "$oid": "61a9dcf5d7c3cec99261a40e" },
             "informationLevel": 1,
-            "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "A vast sky. The " },
-                { "attributes": { "nodelink": { "$oid": "61a9dcf5d7c3cec99261a40c" } }, "insert": "Lonely Path" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40c" }, "insert": "Lonely Path" },
                 { "insert": " can be found here.\n" }
               ]
             }
@@ -29,7 +29,7 @@
           {
             "_id": { "$oid": "61a9dcf5d7c3cec99261a40f" },
             "informationLevel": 2,
-            "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "event",
             "name": "Sky is Falling",
             "content": { "ops": [{ "insert": "The sky is falling!" }] }
@@ -38,141 +38,141 @@
             "_id": { "$oid": "61a9dcf5d7c3cec99261a410" },
             "informationLevel": 1,
             "editors": [
-              { "$oid": "61a9da74d7c3cec99261a3fc" },
-              { "$oid": "61a9da75d7c3cec99261a3fd" },
-              { "$oid": "61a9db2ad7c3cec99261a3fe" },
-              { "$oid": "61a9db30d7c3cec99261a3ff" },
-              { "$oid": "61a9db37d7c3cec99261a400" }
+              "61a9da74d7c3cec99261a3fc",
+              "61a9da75d7c3cec99261a3fd",
+              "61a9db2ad7c3cec99261a3fe",
+              "61a9db30d7c3cec99261a3ff",
+              "61a9db37d7c3cec99261a400"
             ],
             "type": "notes",
             "name": "Notes",
             "content": { "ops": [{ "insert": "wow sure looks cool!" }] }
           }
         ],
-        "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }, { "$oid": "61a9da74d7c3cec99261a3fc" }],
+        "editors": ["61a9da75d7c3cec99261a3fd", "61a9da74d7c3cec99261a3fc"],
         "type": "location"
       },
       {
         "_id": { "$oid": "61a9dcf5d7c3cec99261a40b" },
         "name": "Museum",
         "informationLevels": [
-          { "user": { "$oid": "61a9da74d7c3cec99261a3fc" }, "infoLevel": 0 },
-          { "user": { "$oid": "61a9db2ad7c3cec99261a3fe" }, "infoLevel": 1 },
-          { "user": { "$oid": "61a9db30d7c3cec99261a3ff" }, "infoLevel": 0 },
-          { "user": { "$oid": "61a9db37d7c3cec99261a400" }, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 0 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": { "$oid": "61a9dcf5d7c3cec99261a411" },
             "informationLevel": 1,
-            "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "A place of great knowledge. Near by " },
-                { "attributes": { "nodelink": { "$oid": "61a9dcf5d7c3cec99261a40d" } }, "insert": "St. George" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40d" }, "insert": "St. George" },
                 { "insert": ".\n" }
               ]
             }
           }
         ],
-        "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       },
       {
         "_id": { "$oid": "61a9dcf5d7c3cec99261a40c" },
         "name": "Lonely Path",
         "informationLevels": [
-          { "user": { "$oid": "61a9da74d7c3cec99261a3fc" }, "infoLevel": 0 },
-          { "user": { "$oid": "61a9db2ad7c3cec99261a3fe" }, "infoLevel": 1 },
-          { "user": { "$oid": "61a9db30d7c3cec99261a3ff" }, "infoLevel": 1 },
-          { "user": { "$oid": "61a9db37d7c3cec99261a400" }, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": { "$oid": "61a9dcf5d7c3cec99261a412" },
             "informationLevel": 1,
-            "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "Somewhere to walk underneath " },
-                { "attributes": { "nodelink": { "$oid": "61a9dcf5d7c3cec99261a40a" } }, "insert": "The Soaring Skies" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40a" }, "insert": "The Soaring Skies" },
                 { "insert": "." }
               ]
             }
           }
         ],
-        "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       },
       {
         "_id": { "$oid": "61a9dcf5d7c3cec99261a40d" },
         "name": "St. George",
         "informationLevels": [
-          { "user": { "$oid": "61a9da74d7c3cec99261a3fc" }, "infoLevel": 0 },
-          { "user": { "$oid": "61a9db2ad7c3cec99261a3fe" }, "infoLevel": 0 },
-          { "user": { "$oid": "61a9db30d7c3cec99261a3ff" }, "infoLevel": 1 },
-          { "user": { "$oid": "61a9db37d7c3cec99261a400" }, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 0 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
             "_id": { "$oid": "61a9dcf5d7c3cec99261a413" },
             "informationLevel": 1,
-            "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "The center of UofT. Near " },
-                { "attributes": { "nodelink": { "$oid": "61a9dcf5d7c3cec99261a40b" } }, "insert": "Museum" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40b" }, "insert": "Museum" },
                 { "insert": "." }
               ]
             }
           }
         ],
-        "editors": [{ "$oid": "61a9da75d7c3cec99261a3fd" }],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       }
     ],
     "users": [
       {
-        "userId": { "$oid": "61a9da74d7c3cec99261a3fc" },
+        "userId": "61a9da74d7c3cec99261a3fc",
         "permission": 1,
         "nickname": "test nickname"
       },
       {
-        "userId": { "$oid": "61a9da75d7c3cec99261a3fd" },
+        "userId": "61a9da75d7c3cec99261a3fd",
         "permission": 0
       },
       {
-        "userId": { "$oid": "61a9db2ad7c3cec99261a3fe" },
+        "userId": "61a9db2ad7c3cec99261a3fe",
         "permission": 1
       },
       {
-        "userId": { "$oid": "61a9db30d7c3cec99261a3ff" },
+        "userId": "61a9db30d7c3cec99261a3ff",
         "permission": 1
       },
       {
-        "userId": { "$oid": "61a9db37d7c3cec99261a400" },
+        "userId": "61a9db37d7c3cec99261a400",
         "permission": 1
       },
       {
-        "userId": { "$oid": "61a9db3dd7c3cec99261a401" },
+        "userId": "61a9db3dd7c3cec99261a401",
         "permission": 1
       },
       {
-        "userId": { "$oid": "61a9db41d7c3cec99261a402" },
+        "userId": "61a9db41d7c3cec99261a402",
         "permission": 1
       },
       {
-        "userId": { "$oid": "61a9db48d7c3cec99261a403" },
+        "userId": "61a9db48d7c3cec99261a403",
         "permission": 1
       },
       {
-        "userId": { "$oid": "61a9db4ed7c3cec99261a404" },
+        "userId": "61a9db4ed7c3cec99261a404",
         "permission": 1
       }
     ],
@@ -184,11 +184,11 @@
     "nodes": [],
     "users": [
       {
-        "userId": { "$oid": "61a9db2ad7c3cec99261a3fe" },
+        "userId": "61a9db2ad7c3cec99261a3fe",
         "permission": 0
       },
       {
-        "userId": { "$oid": "61a9db30d7c3cec99261a3ff" },
+        "userId": "61a9db30d7c3cec99261a3ff",
         "permission": 0
       }
     ],
