@@ -6,7 +6,7 @@ import { isValidObjectId } from 'mongoose';
 export const router = express.Router();
 
 /**********************************Node API************************************/
-
+// GET a node within a game
 router.get('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const gameId = req.params.gameId;
   const nodeId = req.params.nodeId;
@@ -35,6 +35,7 @@ router.get('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Requ
   }
 });
 
+// POST: add a node to a game
 router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const gameId = req.params.gameId;
 
@@ -64,6 +65,7 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
   }
 });
 
+// PATCH: update a node within a game
 router.patch('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const gameId = req.params.gameId;
   const nodeId = req.params.nodeId;
@@ -88,6 +90,37 @@ router.patch('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Re
         if (req.body.informationLevels) node.informationLevels = req.body.informationLevels;
         if (req.body.editors) node.editors = req.body.editors;
         if (req.body.types) node.type = req.body.type;
+        await game.save();
+        res.send(node);
+      } else {
+        res.status(404).send('Node not found');
+      }
+    } else {
+      res.status(404).send('Game not found');
+    }
+  } catch (error) {
+    console.log(error);
+    if (isMongoError(error)) res.status(500).send('Internal server error');
+    else res.status(400).send('Bad request');
+  }
+});
+
+// DELETE: remove a node from a game
+router.delete('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const gameId = req.params.gameId;
+  const nodeId = req.params.nodeId;
+
+  if (!isValidObjectId(gameId) || !isValidObjectId(nodeId)) {
+    res.status(404).send();
+    return;
+  }
+
+  try {
+    const game = await GameModel.findById(gameId);
+    if (game) {
+      const node = game.nodes.find((node) => '' + node._id === nodeId);
+      if (node) {
+        game.nodes = game.nodes.filter((n) => n !== node);
         await game.save();
         res.send(node);
       } else {

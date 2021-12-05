@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface NodeviewState {
-  activeNode: number;
+  activeNode: string;
   isEditModalOpen: boolean;
   isUsersModalOpen: boolean;
   isImageModalOpen: boolean;
 }
 
 const initialState: NodeviewState = {
-  activeNode: -1,
+  activeNode: '',
   isEditModalOpen: false,
   isUsersModalOpen: false,
   isImageModalOpen: false,
@@ -27,7 +27,7 @@ const nodeviewSlice = createSlice({
     setIsImageModalOpen: (state: NodeviewState, action: PayloadAction<boolean>) => {
       state.isImageModalOpen = action.payload;
     },
-    setActiveNode: (state: NodeviewState, action: PayloadAction<number>) => {
+    setActiveNode: (state: NodeviewState, action: PayloadAction<string>) => {
       state.activeNode = action.payload;
     },
   },

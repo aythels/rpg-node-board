@@ -6,7 +6,7 @@ import { Node, Subnode, Game, User, UserPermission, UserPermissionRecord } from 
 import cloneDeep from 'lodash.clonedeep';
 
 const theSoaringSkies: Node = {
-  id: 1,
+  _id: 'node1',
   name: 'The Soaring Skies',
   image: '/images/sky.jpg',
   imageAlt: '',
@@ -18,7 +18,7 @@ const theSoaringSkies: Node = {
   ],
   subnodes: [
     {
-      id: 1,
+      _id: 'subnode1',
       informationLevel: 1,
       editors: ['2'],
       type: 'description',
@@ -32,7 +32,7 @@ const theSoaringSkies: Node = {
       }),
     },
     {
-      id: 2,
+      _id: 'subnode2',
       informationLevel: 2,
       editors: ['2'],
       type: 'event',
@@ -40,7 +40,7 @@ const theSoaringSkies: Node = {
       content: new Delta({ ops: [{ insert: 'The sky is falling!' }] }),
     },
     {
-      id: 3,
+      _id: 'subnode3',
       informationLevel: 1,
       editors: ['1', '2', '3', '4', '5'],
       type: 'notes',
@@ -53,7 +53,7 @@ const theSoaringSkies: Node = {
 };
 
 const museum = {
-  id: 2,
+  _id: 'node2',
   name: 'Museum',
   image: '/images/museum.jpg',
   imageAlt: '',
@@ -65,7 +65,7 @@ const museum = {
   ],
   subnodes: [
     {
-      id: 4,
+      _id: 'subnode4',
       informationLevel: 1,
       editors: ['2'],
       type: 'description',
@@ -84,7 +84,7 @@ const museum = {
 };
 
 const lonelyPath = {
-  id: 3,
+  _id: 'node3',
   name: 'Lonely Path',
   image: '/images/path.jpg',
   imageAlt: '',
@@ -96,7 +96,7 @@ const lonelyPath = {
   ],
   subnodes: [
     {
-      id: 5,
+      _id: 'subnode5',
       informationLevel: 1,
       editors: ['2'],
       type: 'description',
@@ -115,7 +115,7 @@ const lonelyPath = {
 };
 
 const stGeorge = {
-  id: 4,
+  _id: 'node4',
   name: 'St. George',
   image: '/images/stgeorge.jpg',
   imageAlt: '',
@@ -127,7 +127,7 @@ const stGeorge = {
   ],
   subnodes: [
     {
-      id: 6,
+      _id: 'subnode6',
       informationLevel: 1,
       editors: ['2'],
       type: 'description',
@@ -408,14 +408,14 @@ export const PATCHgameName = (gameId: Game['_id'], newTitle: string): void => {
 
 export const PUTnode = (gameId: Game['_id'], newNode: Node): void => {
   const game = globalGames.find((game) => game._id === gameId) as Game;
-  const nodeToReplace = game.nodes.find((node) => node.id === newNode.id) as Node;
+  const nodeToReplace = game.nodes.find((node) => node._id === newNode._id) as Node;
   game.nodes[game.nodes.indexOf(nodeToReplace)] = newNode;
 };
 
-export const PUTsubnode = (gameId: Game['_id'], nodeId: number, newSubnode: Subnode): void => {
+export const PUTsubnode = (gameId: Game['_id'], nodeId: string, newSubnode: Subnode): void => {
   const game = globalGames.find((game) => game._id === gameId) as Game;
-  const node = game.nodes.find((node) => node.id === nodeId) as Node;
-  const subnodeToReplace = node.subnodes.find((subnode) => subnode.id === newSubnode.id) as Subnode;
+  const node = game.nodes.find((node) => node._id === nodeId) as Node;
+  const subnodeToReplace = node.subnodes.find((subnode) => subnode._id === newSubnode._id) as Subnode;
   node.subnodes[node.subnodes.indexOf(subnodeToReplace)] = newSubnode;
 };
 
@@ -431,9 +431,9 @@ export const DELETEplayerFromGame = (playerId: User['_id'], gameId: Game['_id'])
   }
 };
 
-export const DELETEnodeFromGame = (gameId: Game['_id'], nodeId: number): void => {
+export const DELETEnodeFromGame = (gameId: Game['_id'], nodeId: string): void => {
   const game = globalGames.find((game) => game._id === gameId) as Game;
-  game.nodes.filter((node) => node.id !== nodeId);
+  game.nodes.filter((node) => node._id !== nodeId);
 };
 
 export const DELETEGame = (gameId: Game['_id']): void => {

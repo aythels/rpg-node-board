@@ -17,7 +17,7 @@ export interface Node {
   type: string;
 }
 export interface Subnode {
-  _id: String;
+  _id: string;
   name: string;
   informationLevel: number;
   editors: User['_id'][];

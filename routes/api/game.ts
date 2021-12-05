@@ -156,24 +156,55 @@ router.post('/game/:id/user', mongoChecker, authenticate, async (req: Request, r
   }
 });
 
-// TODO: HELP Filip [make sure to consult corresponding mock methods in mock-backend]
 // DELETE: Remove player from the game
 router.delete('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  // TODO:
-  // - delete player from game
-  // - delete game from player
-  // - delete player from each of the game's node's informationLevels
+  const gameId = req.params.gameId;
+  const userId = req.params.userId;
+
+  try {
+    const game = await GameModel.findById(gameId);
+    if (!game) {
+      res.status(404).send('Game not found');
+      return;
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    // - delete player from game
+    game.users = game.users.filter((user) => user.userId !== userId);
+    // - delete game from player
+    user.games = user.games.filter((game) => game !== gameId);
+    // - delete player from each of the game's nodes
+    for (const node of game.nodes) {
+      node.editors = node.editors.filter((user) => user !== userId);
+      node.informationLevels = node.informationLevels.filter((i) => i.userId !== userId);
+      // - delete player from each of the node's subnodes
+      for (const subnode of node.subnodes) {
+        subnode.editors = subnode.editors.filter((user) => user !== userId);
+      }
+    }
+    await game.save();
+    res.send(game);
+  } catch (error) {
+    console.log(error);
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
+  }
 });
 
 // ----------------------------------- NODE-RELATED ENDPOINTS -----------------------------------
-// TODO: HELP Filip
-// POST: Add node to game
-router.post('/game/:id/node', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// TODO: HELP Filip
-// PATCH: Update any of the properties of Node
-router.patch('/game/:gameId/user/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// POST: Add node to game (NOTE: this route is handled by node router)
+// router.post('/game/:id/node', mongoChecker, authenticate, async (req: Request, res: Response) => {});
 
-// TODO: HELP Filip
-// DELETE: Remove node from game
-router.delete('/game/:gameId/node/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// PATCH: Update any of the properties of Node (NOTE: this route is handled by node router)
+// router.patch('/game/:gameId/user/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+
+// DELETE: Remove node from game (NOTE: this route is handled by node router)
+// router.delete('/game/:gameId/node/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {});

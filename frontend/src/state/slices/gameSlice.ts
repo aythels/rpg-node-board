@@ -30,13 +30,13 @@ const initialState: GameState = {
 };
 
 interface SubnodeUpdate {
-  nodeId: number;
-  subnodeId: number;
+  nodeId: string;
+  subnodeId: string;
   change: Delta;
 }
 
 interface SubnodeCreation {
-  nodeId: number;
+  nodeId: string;
   subnode: Subnode;
 }
 
@@ -61,19 +61,19 @@ const gameSlice = createSlice({
       state.status = GameLoadingStatus.Idle;
     },
     updateNode: (state: GameState, action: PayloadAction<Node>) => {
-      const index = state.gameInstance.nodes.findIndex((node) => node.id === action.payload.id);
+      const index = state.gameInstance.nodes.findIndex((node) => node._id === action.payload._id);
       state.gameInstance.nodes[index] = action.payload;
     },
     updateSubnode: (state: GameState, action: PayloadAction<SubnodeUpdate>) => {
-      const nodeToUpdate = state.gameInstance.nodes.find((node) => node.id === action.payload.nodeId) as Node;
+      const nodeToUpdate = state.gameInstance.nodes.find((node) => node._id === action.payload.nodeId) as Node;
       const subnodeToUpdate = nodeToUpdate.subnodes.find(
-        (subnode) => subnode.id === action.payload.subnodeId,
+        (subnode) => subnode._id === action.payload.subnodeId,
       ) as Subnode;
       subnodeToUpdate.content.compose(action.payload.change);
       // Does doing this update state? ^
     },
     addSubnode: (state: GameState, action: PayloadAction<SubnodeCreation>) => {
-      const nodeToUpdate = state.gameInstance.nodes.find((node) => node.id === action.payload.nodeId) as Node;
+      const nodeToUpdate = state.gameInstance.nodes.find((node) => node._id === action.payload.nodeId) as Node;
       nodeToUpdate.subnodes.push(action.payload.subnode);
     },
     setGameTitle: (state: GameState, action: PayloadAction<string>) => {
@@ -173,7 +173,12 @@ export const updateNode = (gameId: Game['_id'], node: Node): any => {
 
 // TODO: HELP Filip
 // all of these args make me think that this is NOT the way to do this
-export const updateSubnode = (gameId: Game['_id'], nodeId: number, subnodeId: number, change: Delta): any => {
+export const updateSubnode = (
+  gameId: Game['_id'],
+  nodeId: Node['_id'],
+  subnodeId: Subnode['_id'],
+  change: Delta,
+): any => {
   const updateSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     dispatch(gameSlice.actions.updateSubnode({ nodeId: nodeId, subnodeId: subnodeId, change: change }));
     // TODO: make async call
@@ -183,7 +188,7 @@ export const updateSubnode = (gameId: Game['_id'], nodeId: number, subnodeId: nu
 };
 
 // TODO: HELP Filip
-export const addSubnode = (gameId: Game['_id'], nodeId: number, subnode: Subnode): any => {
+export const addSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Subnode): any => {
   const addSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     // TODO: async call
     // POSTsubnode(gameId, nodeId, ...)
@@ -226,10 +231,10 @@ export const selectVisibleNodes: any = createDraftSafeSelector(
 
 export const selectActiveNode: any = createDraftSafeSelector(
   (state: RootState): Node[] => state.game.gameInstance.nodes,
-  (state: RootState): number => state.nodeview.activeNode, // this seems bad to do
-  (nodes: Node[], activeNodeId: number): Node => {
+  (state: RootState): string => state.nodeview.activeNode, // this seems bad to do
+  (nodes: Node[], activeNodeId: string): Node => {
     console.log(nodes);
-    return nodes.find((node) => node.id === activeNodeId) as Node;
+    return nodes.find((node) => node._id === activeNodeId) as Node;
   },
 );
 
