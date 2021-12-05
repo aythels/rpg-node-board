@@ -18,7 +18,7 @@ export const GameSchema = new Schema<Game>({
   users: [
     {
       userId: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true,
       },
       permission: {

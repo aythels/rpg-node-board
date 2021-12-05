@@ -1,10 +1,7 @@
 import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
-import { GameModel, NodeModel, NodeSchema } from '../../db/models';
-import { Node } from '../../frontend/src/types'; // TODO: fix where the types file is
+import { GameModel, NodeModel } from '../../db/models';
 import { isValidObjectId } from 'mongoose';
-import mongoose from '../../db/mongoose';
-import { ObjectId } from 'mongodb';
 
 export const router = express.Router();
 
@@ -18,11 +15,9 @@ router.get('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Requ
     res.status(404).send();
     return;
   }
-  console.log(gameId, nodeId);
 
   try {
     const game = await GameModel.findById(gameId);
-    console.log(game);
     if (game) {
       const node = game.nodes.find((node) => '' + node._id === nodeId);
       if (node) {
@@ -43,6 +38,11 @@ router.get('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Requ
 router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const gameId = req.params.gameId;
 
+  if (!isValidObjectId(gameId)) {
+    res.status(404).send();
+    return;
+  }
+
   try {
     const newNode = new NodeModel({
       name: req.body.name,
@@ -52,10 +52,10 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
       type: req.body.type,
     });
 
-    if (req.body.thumbnailImage) newNode.thumbnailImage = req.body.thumbnailImage;
-    if (req.body.image) newNode.image = req.body.image;
+    if (req.body.thumbnailImage) newNode.thumbnailImage = req.body.thumbnailImage; // TODO: Test
+    if (req.body.image) newNode.image = req.body.image; // TODO: Test
 
-    const result = await GameModel.updateOne({ _id: gameId }, { $push: { nodes: newNode } });
+    const result = await GameModel.findOneAndUpdate({ _id: gameId }, { $push: { nodes: newNode } });
     res.send(result);
   } catch (error) {
     console.log(error);
@@ -64,27 +64,38 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
   }
 });
 
-router.patch('/node', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  const gameId = req.body.gameId;
-  const nodeId = req.body.nodeId;
+router.patch('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const gameId = req.params.gameId;
+  const nodeId = req.params.nodeId;
 
-  const updatedData: Partial<Node> = {};
+  if (!isValidObjectId(gameId) || !isValidObjectId(nodeId)) {
+    res.status(404).send();
+    return;
+  }
 
-  // Construct the changes to apply during PATCH
-  if (req.body.name) updatedData.name = req.body.name;
-  if (req.body.image) updatedData.image = req.body.image;
-  if (req.body.thumbnailImage) updatedData.thumbnailImage = req.body.thumbnailImage;
-  if (req.body.informationLevels) updatedData.informationLevels = req.body.informationLevels;
-  if (req.body.editors) updatedData.editors = req.body.editors;
-  if (req.body.type) updatedData.type = req.body.type;
+  //TODO: Validate req.body?
 
   try {
-    const patchedNode = await GameModel.updateOne(
-      { _id: gameId, 'nodes._id': nodeId },
-      { $set: updatedData },
-      { new: true },
-    );
-    res.send(patchedNode);
+    const game = await GameModel.findById(gameId);
+    if (game) {
+      const node = game.nodes.find((node) => '' + node._id === nodeId);
+      if (node) {
+        // TODO: decouple from schema
+        if (req.body.name) node.name = req.body.name;
+        if (req.body.image) node.image = req.body.image;
+        if (req.body.thumbnailImage) node.thumbnailImage = req.body.thumbnailImage;
+        if (req.body.subnodes) node.subnodes = req.body.subnodes;
+        if (req.body.informationLevels) node.informationLevels = req.body.informationLevels;
+        if (req.body.editors) node.editors = req.body.editors;
+        if (req.body.types) node.type = req.body.type;
+        await game.save();
+        res.send(node);
+      } else {
+        res.status(404).send('Node not found');
+      }
+    } else {
+      res.status(404).send('Game not found');
+    }
   } catch (error) {
     console.log(error);
     if (isMongoError(error)) res.status(500).send('Internal server error');

@@ -20,7 +20,7 @@ export const NodeSchema = new Schema<Node>({
   informationLevels: [
     {
       user: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true,
       },
       infoLevel: {
@@ -29,7 +29,7 @@ export const NodeSchema = new Schema<Node>({
       },
     },
   ],
-  editors: [mongoose.Types.ObjectId],
+  editors: [String],
   type: {
     type: String,
     required: true,

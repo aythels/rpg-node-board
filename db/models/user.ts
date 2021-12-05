@@ -21,7 +21,7 @@ export const UserSchema = new Schema<User>({
   },
   games: [
     {
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: true,
     },
   ],

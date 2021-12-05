@@ -5,7 +5,7 @@
     "username": "user",
     "password": "user",
     "email": "user@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -14,7 +14,7 @@
     "username": "admin",
     "password": "admin",
     "email": "admin@admin.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -23,7 +23,7 @@
     "username": "user2",
     "password": "user2",
     "email": "user2@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }, { "$oid": "61a9dcf5d7c3cec99261a409" }],
+    "games": ["61a9dccdd7c3cec99261a408", "61a9dcf5d7c3cec99261a409"],
     "images": []
   },
   {
@@ -32,7 +32,7 @@
     "username": "user3",
     "password": "user3",
     "email": "user3@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }, { "$oid": "61a9dcf5d7c3cec99261a409" }],
+    "games": ["61a9dccdd7c3cec99261a408", "61a9dcf5d7c3cec99261a409"],
     "images": []
   },
   {
@@ -41,7 +41,7 @@
     "username": "user4",
     "password": "user4",
     "email": "user4@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -50,7 +50,7 @@
     "username": "user5",
     "password": "user5",
     "email": "user5@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -59,7 +59,7 @@
     "username": "user6",
     "password": "user6",
     "email": "user6@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -68,7 +68,7 @@
     "username": "user7",
     "password": "user7",
     "email": "user7@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -77,7 +77,7 @@
     "username": "user8",
     "password": "user8",
     "email": "user8@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -86,7 +86,7 @@
     "username": "user8",
     "password": "user8",
     "email": "user8@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -95,7 +95,7 @@
     "username": "user9",
     "password": "user9",
     "email": "user9@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   },
   {
@@ -104,7 +104,7 @@
     "username": "user10",
     "password": "user10",
     "email": "user10@user.com",
-    "games": [{ "$oid": "61a9dccdd7c3cec99261a408" }],
+    "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
   }
 ]

@@ -11,13 +11,14 @@ export const SubnodeSchema = new Schema<Subnode>({
     type: Number,
     required: true,
   },
-  editors: [mongoose.Types.ObjectId],
+  editors: [String],
   type: {
     type: String,
     required: true,
   },
   content: {
-    type: mongoose.Schema.Types.String, //JSON / Delta
+    type: mongoose.Schema.Types.Mixed, //JSON / Delta
+    required: true,
   },
 });
 
