@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { InfoLevel, Node, User, UserPermission } from '../../types';
 import {
   Button,
@@ -17,7 +17,7 @@ import './nodeuserform.css';
 import { uid } from 'react-uid';
 import { RootState } from '../../state/rootReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
+import { selectActiveNode, selectUserIds, updateNode } from '../../state/slices/gameSlice';
 import cloneDeep from 'lodash.clonedeep';
 import { setIsUsersModalOpen } from '../../state/slices/nodeviewSlice';
 
@@ -29,6 +29,7 @@ const NodeUserForm = (): JSX.Element => {
   const [addEditorAnchorEl, setAddEditorAnchorEl] = useState(null as EventTarget | null);
   const [tempNode, setTempNode] = useState(cloneDeep(node) as Node);
   const [users, setUsers] = useState<User[]>([]);
+  const userIds: User['_id'][] = useSelector((state: RootState) => selectUserIds(state));
 
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;
@@ -147,6 +148,32 @@ const NodeUserForm = (): JSX.Element => {
     );
   };
 
+  const fetchUsers = useCallback(async (userIds: User['_id'][]) => {
+    const results: PromiseSettledResult<User>[] = await Promise.allSettled(
+      userIds.map(async (userId) => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`);
+        const user = await response.json();
+        return user;
+      }),
+    );
+
+    const newUsers = [];
+    for (const result of results) {
+      if (result.status === 'fulfilled') {
+        newUsers.push(result.value);
+      } else {
+        console.error('Could not fetch user');
+        console.error(result.reason);
+      }
+    }
+
+    setUsers(newUsers);
+  }, []);
+
+  useEffect(() => {
+    fetchUsers(userIds);
+  }, []);
+
   // TODO: Make table responsive for mobile
 
   return (
@@ -156,18 +183,18 @@ const NodeUserForm = (): JSX.Element => {
           <div className="modal__body__section">
             <h4>Editors</h4>
             <div className="users-box">
-              {game.users.map((user) => {
-                if (tempNode.editors.includes(user.userId)) {
-                  // const editor = GETuserById(entry.userId);
-                  // TODO: Fetch users to get usernames (like in PlayerList)
+              {users.map((user) => {
+                if (tempNode.editors.includes(user._id)) {
                   return (
-                    <div className="users-box__user" key={uid(user.userId)}>
-                      <p>{user.userId}</p>
+                    <div className="users-box__user" key={uid(user._id)}>
+                      <p>{user.username}</p>
                       <button
                         aria-label="Remove user as editor"
-                        disabled={user.permission === UserPermission.gameMaster}
+                        disabled={
+                          game.users.find((u) => u.userId === user._id)?.permission === UserPermission.gameMaster
+                        }
                         onClick={() => {
-                          removeEditor(user.userId);
+                          removeEditor(user._id);
                         }}
                       >
                         <Close />
@@ -192,19 +219,17 @@ const NodeUserForm = (): JSX.Element => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
-                {game.users.map((user) => {
-                  if (!tempNode.editors.includes(user.userId)) {
-                    // const player = GETuserById(entry.userId);
-                    // TODO: Fetch users to get usernames (like in PlayerList)
+                {users.map((user) => {
+                  if (!tempNode.editors.includes(user._id)) {
                     return (
                       <MenuItem key={uid(user)}>
                         <div className="users-box__user">
                           <button
                             onClick={() => {
-                              addEditor(user.userId);
+                              addEditor(user._id);
                             }}
                           >
-                            <p>{user.userId}</p>
+                            <p>{user.username}</p>
                           </button>
                         </div>
                       </MenuItem>
@@ -225,26 +250,25 @@ const NodeUserForm = (): JSX.Element => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {game.users.map((user) => {
-                  if (!tempNode.editors.includes(user.userId)) {
-                    // const player = GETuserById(entry.userId);
+                {users.map((user) => {
+                  if (!tempNode.editors.includes(user._id)) {
                     return (
                       <TableRow key={uid(user)}>
                         <TableCell align="left" component="th" scope="row">
-                          {user.userId}
+                          {user.username}
                         </TableCell>
                         <TableCell align="right">
                           <input
                             type="number"
                             step="1"
                             min="0"
-                            value={getInfoLevelValue(user.userId)}
+                            value={getInfoLevelValue(user._id)}
                             onChange={(event) => {
-                              handleInformationLevelChange(event, user.userId);
+                              handleInformationLevelChange(event, user._id);
                             }}
                           ></input>
                         </TableCell>
-                        {renderVisibleSubnodeNames(user.userId)}
+                        {renderVisibleSubnodeNames(user._id)}
                       </TableRow>
                     );
                   }
