@@ -160,7 +160,7 @@ router.post('/game/:gameId/user/:username', mongoChecker, authenticate, async (r
 
     // Add user to each of game's nodes
     const infoLevel = {
-      userId: user._id,
+      user: user._id,
       infoLevel: 0,
     };
 
@@ -265,7 +265,7 @@ router.delete('/game/:gameId/user/:userId', mongoChecker, authenticate, async (r
     // - delete player from each of the game's nodes
     for (const node of game.nodes) {
       node.editors = node.editors.filter((user) => user !== userId);
-      node.informationLevels = node.informationLevels.filter((i) => i.userId !== userId);
+      node.informationLevels = node.informationLevels.filter((i) => i.user !== userId);
       // - delete player from each of the node's subnodes
       for (const subnode of node.subnodes) {
         subnode.editors = subnode.editors.filter((user) => user !== userId);

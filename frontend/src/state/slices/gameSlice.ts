@@ -102,6 +102,13 @@ export const fetchGame = (gameId: Game['_id']): any => {
   return fetchGameThunk;
 };
 
+export const deleteGame = (gameId: Game['_id']): any => {
+  const thunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    // TODO
+  };
+  return thunk;
+};
+
 export const addPlayer = (user: string, gameId: Game['_id']): any => {
   const addPlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
@@ -326,7 +333,7 @@ export const selectVisibleNodes: any = createDraftSafeSelector(
   (state: RootState): User => state.user.userInstance,
   (game: Game, user: User): Node[] => {
     return game.nodes.filter((node) => {
-      const match = node.informationLevels.find((i) => i.userId === user._id);
+      const match = node.informationLevels.find((i) => i.user === user._id);
       return match && match.infoLevel > 0;
     });
   },

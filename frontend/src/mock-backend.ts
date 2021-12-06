@@ -11,10 +11,10 @@ const theSoaringSkies: Node = {
   image: '/images/sky.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: '1', infoLevel: 0 },
-    { userId: '3', infoLevel: 1 },
-    { userId: '4', infoLevel: 1 },
-    { userId: '5', infoLevel: 2 },
+    { user: '1', infoLevel: 0 },
+    { user: '3', infoLevel: 1 },
+    { user: '4', infoLevel: 1 },
+    { user: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
@@ -60,10 +60,10 @@ const museum = {
   image: '/images/museum.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: '1', infoLevel: 0 },
-    { userId: '3', infoLevel: 1 },
-    { userId: '4', infoLevel: 0 },
-    { userId: '5', infoLevel: 2 },
+    { user: '1', infoLevel: 0 },
+    { user: '3', infoLevel: 1 },
+    { user: '4', infoLevel: 0 },
+    { user: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
@@ -93,10 +93,10 @@ const lonelyPath = {
   image: '/images/path.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: '1', infoLevel: 0 },
-    { userId: '3', infoLevel: 1 },
-    { userId: '4', infoLevel: 1 },
-    { userId: '5', infoLevel: 2 },
+    { user: '1', infoLevel: 0 },
+    { user: '3', infoLevel: 1 },
+    { user: '4', infoLevel: 1 },
+    { user: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
@@ -126,10 +126,10 @@ const stGeorge = {
   image: '/images/stgeorge.jpg',
   imageAlt: '',
   informationLevels: [
-    { userId: '1', infoLevel: 0 },
-    { userId: '3', infoLevel: 0 },
-    { userId: '4', infoLevel: 1 },
-    { userId: '5', infoLevel: 2 },
+    { user: '1', infoLevel: 0 },
+    { user: '3', infoLevel: 0 },
+    { user: '4', infoLevel: 1 },
+    { user: '5', infoLevel: 2 },
   ],
   subnodes: [
     {
@@ -378,7 +378,7 @@ export const PATCHaddPlayerToGame = (playerId: User['_id'], gameId: Game['_id'])
   player.games.push(game._id);
   for (const node of game.nodes) {
     node.informationLevels.push({
-      userId: playerId,
+      user: playerId,
       infoLevel: 0,
     });
   }
@@ -431,7 +431,7 @@ export const DELETEplayerFromGame = (playerId: User['_id'], gameId: Game['_id'])
   game.users.filter((u) => u.userId !== player._id);
   player.games.filter((g) => g !== game._id);
   for (const node of game.nodes) {
-    node.informationLevels.filter((i) => i.userId !== playerId);
+    node.informationLevels.filter((i) => i.user !== playerId);
   }
 };
 

@@ -62,7 +62,7 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
 
     for (const user of game.users) {
       const infoLevel = {
-        userId: user.userId,
+        user: user.userId,
         infoLevel: 0,
       };
       newNode.informationLevels.push(infoLevel);

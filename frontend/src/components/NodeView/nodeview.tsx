@@ -89,8 +89,8 @@ const NodeView = (): JSX.Element => {
     return (
       <div className="subnodes">
         {node.subnodes.map((subnode: Subnode) => {
-          const infoLevel = node.informationLevels.find((i) => i.userId === user._id) as InfoLevel;
-          if (subnode.informationLevel >= infoLevel.infoLevel || node.editors.includes(user._id)) {
+          const infoLevel = node.informationLevels.find((i) => i.user === user._id) as InfoLevel;
+          if (node.editors.includes(user._id) || subnode.informationLevel >= infoLevel.infoLevel) {
             return <SubnodeView subnode={subnode} key={uid(subnode)} />;
           }
         })}

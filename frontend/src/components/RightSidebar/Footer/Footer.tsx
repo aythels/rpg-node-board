@@ -3,9 +3,8 @@ import { Button, TextField, IconButton, Tooltip } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../../Dialog/Dialog';
-import { DELETEGame } from '../../../mock-backend';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPlayer, updateDialogStatus } from '../../../state/slices/gameSlice';
+import { addPlayer, deleteGame, updateDialogStatus } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
 
 const Footer = (): JSX.Element => {
@@ -70,7 +69,7 @@ const Footer = (): JSX.Element => {
         header="Delete server?"
         open={showDeleteServerDialog}
         onAgree={() => {
-          DELETEGame(gameId);
+          dispatch(deleteGame(gameId));
         }}
         onAgreeRedirectTo="/games"
         onClose={() => setShowDeleteServerDialog(false)}

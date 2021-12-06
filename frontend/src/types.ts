@@ -3,7 +3,7 @@ import Delta from 'quill-delta';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 export interface InfoLevel {
-  userId: User['_id'];
+  user: User['_id'];
   infoLevel: number;
 }
 export interface Node {

@@ -1,5 +1,5 @@
 import { SyntheticEvent, useState } from 'react';
-import { InfoLevel, Node, User } from '../../types';
+import { InfoLevel, Node, User, UserPermission } from '../../types';
 import {
   Button,
   IconButton,
@@ -19,7 +19,6 @@ import { RootState } from '../../state/rootReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
 import cloneDeep from 'lodash.clonedeep';
-import { GETuserById, GETuserIsGMInGame } from '../../mock-backend';
 import { setIsUsersModalOpen } from '../../state/slices/nodeviewSlice';
 
 const NodeUserForm = (): JSX.Element => {
@@ -29,6 +28,7 @@ const NodeUserForm = (): JSX.Element => {
 
   const [addEditorAnchorEl, setAddEditorAnchorEl] = useState(null as EventTarget | null);
   const [tempNode, setTempNode] = useState(cloneDeep(node) as Node);
+  const [users, setUsers] = useState<User[]>([]);
 
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;
@@ -43,11 +43,10 @@ const NodeUserForm = (): JSX.Element => {
     dispatch(setIsUsersModalOpen(false));
   };
 
-  const removeEditor = (editorToRemove: User): void => {
-    // console.log(editorToRemove);
-    tempNode.editors = tempNode.editors.filter((e) => e !== editorToRemove._id);
+  const removeEditor = (editorToRemove: User['_id']): void => {
+    tempNode.editors = tempNode.editors.filter((e) => e !== editorToRemove);
     const infoLevels = tempNode.informationLevels;
-    const infoLevel = infoLevels.find((i) => i.userId === editorToRemove._id) as InfoLevel;
+    const infoLevel = infoLevels.find((i) => i.user === editorToRemove) as InfoLevel;
     infoLevel.infoLevel = 0;
     setTempNode({
       ...tempNode,
@@ -62,10 +61,10 @@ const NodeUserForm = (): JSX.Element => {
     return max;
   };
 
-  const addEditor = (playerToAdd: User): void => {
-    tempNode.editors.push(playerToAdd._id);
+  const addEditor = (playerToAdd: User['_id']): void => {
+    tempNode.editors.push(playerToAdd);
     const infoLevels = tempNode.informationLevels;
-    const infoLevel = infoLevels.find((i) => i.userId === playerToAdd._id) as InfoLevel;
+    const infoLevel = infoLevels.find((i) => i.user === playerToAdd) as InfoLevel;
     infoLevel.infoLevel = getMaxInfoLevel();
     setTempNode({
       ...tempNode,
@@ -73,16 +72,16 @@ const NodeUserForm = (): JSX.Element => {
     });
   };
 
-  const handleInformationLevelChange = (e: SyntheticEvent, player: User): void => {
+  const handleInformationLevelChange = (e: SyntheticEvent, player: User['_id']): void => {
     const target = e.target as HTMLInputElement;
-    const infoLevel = tempNode.informationLevels.find((i) => i.userId == player._id) as InfoLevel;
+    const infoLevel = tempNode.informationLevels.find((i) => i.user == player) as InfoLevel;
     infoLevel.infoLevel = parseInt(target.value);
     setTempNode({ ...tempNode });
   };
 
   const informationLevelHideAll = (): void => {
     for (const infoLevel of tempNode.informationLevels) {
-      if (!tempNode.editors.includes(infoLevel.userId)) {
+      if (!tempNode.editors.includes(infoLevel.user)) {
         infoLevel.infoLevel = 0;
       }
     }
@@ -91,7 +90,7 @@ const NodeUserForm = (): JSX.Element => {
 
   const informationLevelAllPlusOne = (): void => {
     for (const infoLevel of tempNode.informationLevels) {
-      if (!tempNode.editors.includes(infoLevel.userId)) {
+      if (!tempNode.editors.includes(infoLevel.user)) {
         infoLevel.infoLevel++;
       }
     }
@@ -100,7 +99,7 @@ const NodeUserForm = (): JSX.Element => {
 
   const informationLevelAllMinusOne = (): void => {
     for (const infoLevel of tempNode.informationLevels) {
-      if (!tempNode.editors.includes(infoLevel.userId)) {
+      if (!tempNode.editors.includes(infoLevel.user)) {
         infoLevel.infoLevel--;
       }
     }
@@ -109,7 +108,7 @@ const NodeUserForm = (): JSX.Element => {
 
   const informationLevelRevealAll = (): void => {
     for (const infoLevel of tempNode.informationLevels) {
-      if (!tempNode.editors.includes(infoLevel.userId)) {
+      if (!tempNode.editors.includes(infoLevel.user)) {
         infoLevel.infoLevel = getMaxInfoLevel();
       }
     }
@@ -126,7 +125,7 @@ const NodeUserForm = (): JSX.Element => {
   };
 
   const getInfoLevelValue = (playerId: User['_id']): string => {
-    const infoLevel = tempNode.informationLevels.find((i) => i.userId === playerId) as InfoLevel;
+    const infoLevel = tempNode.informationLevels.find((i) => i.user === playerId) as InfoLevel;
     if (infoLevel) {
       return infoLevel.infoLevel.toString();
     } else {
@@ -135,8 +134,7 @@ const NodeUserForm = (): JSX.Element => {
   };
 
   const renderVisibleSubnodeNames = (playerId: User['_id']): JSX.Element => {
-    const infoLevel = tempNode.informationLevels.find((i) => i.userId === playerId) as InfoLevel;
-    console.log(playerId, infoLevel);
+    const infoLevel = tempNode.informationLevels.find((i) => i.user === playerId) as InfoLevel;
     const visibleSubnodes = tempNode.editors.includes(playerId)
       ? tempNode.subnodes
       : tempNode.subnodes.filter((subnode) => subnode.informationLevel <= infoLevel.infoLevel);
@@ -158,18 +156,18 @@ const NodeUserForm = (): JSX.Element => {
           <div className="modal__body__section">
             <h4>Editors</h4>
             <div className="users-box">
-              {game.users.map((entry) => {
-                // TODO: Use user style from sidebar
-                if (tempNode.editors.includes(entry.userId)) {
-                  const editor = GETuserById(entry.userId); // TODO: use Redux for this
+              {game.users.map((user) => {
+                if (tempNode.editors.includes(user.userId)) {
+                  // const editor = GETuserById(entry.userId);
+                  // TODO: Fetch users to get usernames (like in PlayerList)
                   return (
-                    <div className="users-box__user" key={uid(editor)}>
-                      <p>{editor.username}</p>
+                    <div className="users-box__user" key={uid(user.userId)}>
+                      <p>{user.userId}</p>
                       <button
                         aria-label="Remove user as editor"
-                        disabled={GETuserIsGMInGame(editor._id, game._id)}
+                        disabled={user.permission === UserPermission.gameMaster}
                         onClick={() => {
-                          removeEditor(editor);
+                          removeEditor(user.userId);
                         }}
                       >
                         <Close />
@@ -194,18 +192,19 @@ const NodeUserForm = (): JSX.Element => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
-                {game.users.map((entry) => {
-                  if (!tempNode.editors.includes(entry.userId)) {
-                    const player = GETuserById(entry.userId); // TODO: use Redux for this
+                {game.users.map((user) => {
+                  if (!tempNode.editors.includes(user.userId)) {
+                    // const player = GETuserById(entry.userId);
+                    // TODO: Fetch users to get usernames (like in PlayerList)
                     return (
-                      <MenuItem key={uid(player)}>
+                      <MenuItem key={uid(user)}>
                         <div className="users-box__user">
                           <button
                             onClick={() => {
-                              addEditor(player);
+                              addEditor(user.userId);
                             }}
                           >
-                            <p>{player.username}</p>
+                            <p>{user.userId}</p>
                           </button>
                         </div>
                       </MenuItem>
@@ -226,26 +225,26 @@ const NodeUserForm = (): JSX.Element => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {game.users.map((entry) => {
-                  if (!tempNode.editors.includes(entry.userId)) {
-                    const player = GETuserById(entry.userId); // TODO: Redux
+                {game.users.map((user) => {
+                  if (!tempNode.editors.includes(user.userId)) {
+                    // const player = GETuserById(entry.userId);
                     return (
-                      <TableRow key={uid(player)}>
+                      <TableRow key={uid(user)}>
                         <TableCell align="left" component="th" scope="row">
-                          {player.username}
+                          {user.userId}
                         </TableCell>
                         <TableCell align="right">
                           <input
                             type="number"
                             step="1"
                             min="0"
-                            value={getInfoLevelValue(player._id)}
+                            value={getInfoLevelValue(user.userId)}
                             onChange={(event) => {
-                              handleInformationLevelChange(event, player);
+                              handleInformationLevelChange(event, user.userId);
                             }}
                           ></input>
                         </TableCell>
-                        {renderVisibleSubnodeNames(player._id)}
+                        {renderVisibleSubnodeNames(user.userId)}
                       </TableRow>
                     );
                   }
