@@ -86,14 +86,14 @@ const PlayerList = (props: Props): JSX.Element => {
 
   const handlePlayerPromote = (): void => {
     if (playerToPromote) {
-      dispatch(updatePlayerPermission([playerToPromote, UserPermission.gameMaster]));
+      dispatch(updatePlayerPermission([playerToPromote, UserPermission.gameMaster, currentGameId]));
       setPlayerToPromote(undefined);
     }
   };
 
   const handlePlayerDemote = (): void => {
     if (playerToDemote) {
-      dispatch(updatePlayerPermission([playerToDemote, UserPermission.player]));
+      dispatch(updatePlayerPermission([playerToDemote, UserPermission.player, currentGameId]));
       setPlayerToDemote(undefined);
     }
   };

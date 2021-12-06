@@ -9,7 +9,7 @@ import Dialog from '../../Dialog/Dialog';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../state/rootReducer';
 import { Node } from '../../../types';
-import { createNode } from '../../../state/slices/gameSlice';
+import { addDefaultNode } from '../../../state/slices/gameSlice';
 import { store } from '../../../state/';
 import { setIsEditPermissionsModalOpen } from '../../../state/slices/nodeviewSlice';
 
@@ -19,7 +19,7 @@ const Sidebar = (props: Props): JSX.Element => {
   const [isOpen, setIsOpen] = React.useState(true);
   const [leaveGameDialogue, setLeaveGameDialogue] = React.useState(false);
   const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
-  const gameId = useSelector((state: RootState) => state.game.gameInstance.id);
+  const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
   const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
 
   const sortNodes = (allNodes: Node[]): Node[] => {
@@ -36,7 +36,7 @@ const Sidebar = (props: Props): JSX.Element => {
         </div>
         <div className="node-list">
           {sortNodes(allNodes).map((node: Node) => (
-            <NodeCard key={node.id} node={node} />
+            <NodeCard key={node._id} node={node} />
           ))}
         </div>
       </Drawer>
@@ -67,7 +67,7 @@ const Sidebar = (props: Props): JSX.Element => {
           <IconButton
             aria-label="Add a new node"
             onClick={() => {
-              if (isAdmin) store.dispatch(createNode(gameId));
+              if (isAdmin) store.dispatch(addDefaultNode(gameId));
               else store.dispatch(setIsEditPermissionsModalOpen(true));
             }}
           >

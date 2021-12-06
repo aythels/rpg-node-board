@@ -1,5 +1,6 @@
 import Delta from 'quill-delta';
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 export interface InfoLevel {
   userId: User['_id'];

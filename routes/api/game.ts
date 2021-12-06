@@ -117,11 +117,11 @@ router.patch('/game/:id', mongoChecker, authenticate, async (req: Request, res: 
 
 // ----------------------------------- USER-RELATED ENDPOINTS -----------------------------------
 // POST: Add player to game
-router.post('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  const { gameId, userId } = req.params;
+router.post('/game/:gameId/user/:username', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const { gameId, username } = req.params;
 
   try {
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findOne({ username });
     if (!user) {
       res.status(404).send('User does not exist in the database.');
       return;

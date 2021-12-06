@@ -64,7 +64,7 @@ router.post('/subnode/:gameId/:nodeId', mongoChecker, authenticate, async (req: 
       { _id: gameId, 'nodes._id': nodeId },
       { $push: { 'nodes.$.subnodes': newSubnode } },
     );
-    res.send(result);
+    res.send(newSubnode);
   } catch (error) {
     console.log(error);
     if (isMongoError(error)) res.status(500).send('Internal server error');

@@ -4,7 +4,7 @@ import { Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
-import CanvasInternal from '../CanvasInternal';
+import CanvasInternalBase from '../CanvasInternal/CanvasInternalBase';
 import { GameLoadingStatus, updateDialogStatus } from '../../state/slices/gameSlice';
 import { RootState } from '../../state/rootReducer';
 
@@ -31,8 +31,7 @@ const CanvasMain = (): JSX.Element => {
     </Grid>
   ) : (
     <>
-      {/* TODO: put back  */}
-      {/* <CanvasInternal /> */}
+      <CanvasInternalBase />
       <RightSidebar />
       <Dialog
         description="Please try again."

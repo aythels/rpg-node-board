@@ -46,6 +46,12 @@ const gameSlice = createSlice({
       state.gameInstance = action.payload;
       state.status = GameLoadingStatus.Idle;
     },
+    addNode: (state: GameState, action: PayloadAction<Node>) => {
+      state.gameInstance.nodes.push(action.payload);
+    },
+    deleteNode: (state: GameState, action: PayloadAction<string>) => {
+      state.gameInstance.nodes = state.gameInstance.nodes.filter((node) => node._id !== action.payload);
+    },
     updateNode: (state: GameState, action: PayloadAction<Node>) => {
       const index = state.gameInstance.nodes.findIndex((node) => node._id === action.payload._id);
       state.gameInstance.nodes[index] = action.payload;
@@ -96,10 +102,10 @@ export const fetchGame = (gameId: Game['_id']): any => {
   return fetchGameThunk;
 };
 
-export const addPlayer = (user: User, gameId: Game['_id']): any => {
+export const addPlayer = (user: string, gameId: Game['_id']): any => {
   const addPlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${user._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${user}`, {
         method: 'POST',
       });
       switch (response.status) {
@@ -115,7 +121,7 @@ export const addPlayer = (user: User, gameId: Game['_id']): any => {
           break;
       }
     } catch {
-      console.error(`Could not add user ${user.username} to game`);
+      console.error(`Could not add user ${user} to game`);
     }
   };
   return addPlayerThunk;
@@ -143,6 +149,49 @@ export const removePlayer = (playerId: User['_id'], gameId: Game['_id']): any =>
   return removePlayerThunk;
 };
 
+export const addDefaultNode = (gameId: Game['_id']): any => {
+  const addNodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}`, {
+        method: 'POST',
+      });
+      const node: Node = await response.json();
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.addNode(node));
+          break;
+        default:
+          console.log('Could not add node', response);
+          break;
+      }
+    } catch (e) {
+      console.log(e, 'Could not add node');
+    }
+  };
+  return addNodeThunk;
+};
+
+export const deleteNode = (gameId: Game['_id'], nodeId: Node['_id']): any => {
+  const deleteNodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}/${nodeId}`, {
+        method: 'DELETE',
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.deleteNode(nodeId));
+          break;
+        default:
+          console.log('Could not delete node', response);
+          break;
+      }
+    } catch (e) {
+      console.log(e, 'Could not delete node');
+    }
+  };
+  return deleteNodeThunk;
+};
+
 export const updateNode = (gameId: Game['_id'], node: Node): any => {
   const updateNodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
@@ -164,7 +213,6 @@ export const updateNode = (gameId: Game['_id'], node: Node): any => {
     } catch (e) {
       console.log(e, 'Could not update node');
     }
-    dispatch(gameSlice.actions.updateNode(node));
   };
   return updateNodeThunk;
 };
@@ -195,7 +243,7 @@ export const updateSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode:
   return updateSubnodeThunk;
 };
 
-export const addSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Subnode): any => {
+export const addSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Partial<Subnode>): any => {
   const addSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/subnode/${gameId}/${nodeId}`, {
@@ -205,9 +253,10 @@ export const addSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Su
           'Content-Type': 'application/json',
         },
       });
+      const newSubnode: Subnode = await response.json();
       switch (response.status) {
         case 200:
-          dispatch(gameSlice.actions.addSubnode([nodeId, subnode]));
+          dispatch(gameSlice.actions.addSubnode([nodeId, newSubnode]));
           break;
         default:
           console.log('Could not add subnode', response);

@@ -6,10 +6,10 @@ import CanvasMain from './components/CanvasMain/CanvasMain';
 import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 
 /* REMOVE BEFORE COMMIT */
-import { fetchGame } from './state/slices/gameSlice';
-import { store } from './state';
-import { loginUser } from './state/slices/userSlice';
-import { processUserGameData } from './state/slices/nodeviewSlice';
+// import { fetchGame } from './state/slices/gameSlice';
+// import { store } from './state';
+// import { loginUser } from './state/slices/userSlice';
+// import { processUserGameData } from './state/slices/nodeviewSlice';
 
 // store.dispatch(loginUser('admin'));
 // store.dispatch(fetchGame(1));

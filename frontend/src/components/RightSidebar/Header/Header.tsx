@@ -20,6 +20,7 @@ const Header = (props: Props): JSX.Element => {
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState(useSelector((state: RootState) => state.game.gameInstance.title));
   const [prevTitle, setPrevTitle] = useState('');
+  const game = useSelector((state: RootState) => state.game.gameInstance);
 
   // Handlers related to game title
   const handleTitleChanged = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -33,7 +34,7 @@ const Header = (props: Props): JSX.Element => {
 
   const handleSubmitTitle = (): void => {
     setEditingTitle(false);
-    dispatch(setGameTitle(title));
+    dispatch(setGameTitle(game._id, title));
   };
 
   const handleCancelEdit = (): void => {

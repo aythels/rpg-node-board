@@ -56,7 +56,7 @@ const NodeView = (): JSX.Element => {
             </Button>
           </Tooltip>
           <Tooltip title="Close">
-            <Button onClick={() => dispatch(setActiveNode(-1))}>
+            <Button onClick={() => dispatch(setActiveNode(''))}>
               <Close />
             </Button>
           </Tooltip>
@@ -65,7 +65,7 @@ const NodeView = (): JSX.Element => {
     } else {
       return (
         <ButtonGroup>
-          <Button onClick={() => dispatch(setActiveNode(-1))}>
+          <Button onClick={() => dispatch(setActiveNode(''))}>
             <Close />
           </Button>
         </ButtonGroup>
@@ -76,14 +76,13 @@ const NodeView = (): JSX.Element => {
   const addNewSubnode = (e: FormEvent): void => {
     e.preventDefault();
     const newSubnode = {
-      id: Math.ceil(Math.random() * 1000), //TODO: handle ID creation in database? !IMPORTANT
       name: newSubnodeName,
       type: newSubnodeType,
       informationLevel: parseInt(newSubnodeInfoLevel),
       editors: node.editors,
       content: new Delta(),
     };
-    dispatch(addSubnode(game._id, node.id, newSubnode));
+    dispatch(addSubnode(game._id, node._id, newSubnode));
   };
 
   const renderSubnodes = (): JSX.Element => {

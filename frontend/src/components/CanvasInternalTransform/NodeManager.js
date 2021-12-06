@@ -3,8 +3,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { uid } from 'react-uid';
 import { store } from '../../state/';
-import { activateNode, updateNodePos } from '../../state/slices/gameSlice';
-import { setCanvasPos, setCanvasScale } from '../../state/slices/nodeviewSlice';
 
 export const NodeManager = function () {
   const xBound = 2000;
@@ -61,7 +59,7 @@ export const NodeManager = function () {
   /* UTILITY */
   const setActiveNode = (node) => {
     activeNode = node;
-    if (node) store.dispatch(activateNode(node));
+    if (node) store.dispatch(setActiveNode(node));
   };
 
   /* BUTTONS */

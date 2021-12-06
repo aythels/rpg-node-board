@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit';
-import { GETuserIsGMInGame } from '../../mock-backend';
 
 interface NodeviewState {
   activeNode: string;

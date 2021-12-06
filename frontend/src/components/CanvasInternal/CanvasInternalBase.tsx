@@ -1,10 +1,9 @@
 import './canvasinternalbase.css';
-import React from 'react';
 import Sidebar from '../LeftSidebar/Sidebar/Sidebar';
 import NodeView from '../NodeView/nodeview';
 import { Alert, AlertTitle } from '@mui/material';
 import { RootState } from '../../state/rootReducer';
-import CanvasInternalTransform from '../CanvasInternalTransform';
+import CanvasInternalTransform from '../CanvasInternalTransform/CanvasInternalTransform';
 import { useSelector } from 'react-redux';
 import { store } from '../../state/';
 import { setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
