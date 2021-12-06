@@ -24,7 +24,7 @@ const GameRow = (): JSX.Element => {
         }}
       >
         {games.map((game: Game) => (
-          <GameIcon key={game.id} game={game} />
+          <GameIcon key={game._id} game={game} />
         ))}
       </Box>
     </div>

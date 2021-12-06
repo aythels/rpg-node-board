@@ -1,74 +1,66 @@
 import Delta from 'quill-delta';
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
-
 export interface InfoLevel {
-  userId: number;
+  user: User['_id'];
   infoLevel: number;
 }
-
 export interface Node {
-  id: number;
+  _id: string;
   name: string;
   image?: any;
   thumbnailImage?: any;
   imageAlt: string;
   subnodes: Subnode[];
   informationLevels: InfoLevel[];
-  editors: number[];
+  editors: User['_id'][];
   type: string;
   x: number;
   y: number;
 }
-
 export interface Subnode {
-  id: number;
+  _id: string;
   name: string;
   informationLevel: number;
-  editors: number[];
+  editors: User['_id'][];
   type: string;
   content: Delta;
 }
-
 export enum UserPermission {
   // TODO: make types uppercase
   // owner,
   gameMaster,
   player,
 }
-
 export interface UserPermissionRecord {
-  userId: number;
+  userId: User['_id'];
   permission: UserPermission;
 }
-
 export interface Game {
-  id: number;
+  _id: string;
   title: string;
+  imgpath?: string; //TODO: actually handle images
   image?: any;
   nodes: Node[];
   users: UserPermissionRecord[];
-  settings: Record<string, unknown>;
+  settings: { [key: string]: unknown };
 }
-
 export interface User {
-  id: number;
+  _id: string;
   username: string;
   password: string; // FOR NOW
   email: string; // FOR NOW
-  games: number[];
+  games: Game['_id'][];
   profilePicture?: any;
   images: any[]; // FOR NOW
 }
-
 export enum DefaultNodeTypes {
   location,
   organization,
   item,
   person,
 }
-
 export enum DefaultSubnodeTypes {
   description,
   notes,

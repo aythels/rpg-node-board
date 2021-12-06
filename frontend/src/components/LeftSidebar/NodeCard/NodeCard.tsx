@@ -1,5 +1,4 @@
 import './nodeCard.css';
-import { PureComponent } from 'react';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import { CenterFocusStrong, Delete, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
@@ -23,12 +22,13 @@ const NodeCard = (props: Props): JSX.Element => {
   console.log('this is updating too much');
 
   const invisibleNodes = useSelector((state: RootState) => state.nodeview.invisibleNodes);
+  const game = useSelector((state: RootState) => state.game.gameInstance);
   const node = props.node;
-  const visible = !invisibleNodes.some((id) => id === node.id);
+  const visible = !invisibleNodes.some((id) => id === node._id);
   const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
 
   return (
-    <div className="node-card" onDoubleClick={() => store.dispatch(setActiveNode(node.id))}>
+    <div className="node-card" onDoubleClick={() => store.dispatch(setActiveNode(node._id))}>
       <Typography className="title" variant="body1" component="div" noWrap={true}>
         {node.name}
       </Typography>
@@ -37,8 +37,8 @@ const NodeCard = (props: Props): JSX.Element => {
           style={{ marginLeft: 'auto' }}
           aria-label={`Make node ${visible ? 'invisible' : 'visible'}`}
           onClick={() => {
-            if (visible) store.dispatch(addInvisibleNode(node.id));
-            else store.dispatch(removeInvisibleNode(node.id));
+            if (visible) store.dispatch(addInvisibleNode(node._id));
+            else store.dispatch(removeInvisibleNode(node._id));
           }}
         >
           {visible ? <Visibility /> : <VisibilityOff />}
@@ -54,7 +54,7 @@ const NodeCard = (props: Props): JSX.Element => {
           color="error"
           aria-label="Delete node"
           onClick={() => {
-            if (isAdmin) store.dispatch(deleteNode(node));
+            if (isAdmin) store.dispatch(deleteNode(game._id, node._id));
             else store.dispatch(setIsEditPermissionsModalOpen(true));
           }}
         >

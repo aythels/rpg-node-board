@@ -80,10 +80,10 @@ const SubnodeView = (props: Props): JSX.Element => {
   // }, [change]);
 
   const loadEditor = (): void => {
-    const readOnly = !props.subnode.editors.includes(user.id);
+    const readOnly = !props.subnode.editors.includes(user._id);
     const toolbar = readOnly ? false : standardEditorToolbar;
 
-    const editor = new Quill('#editor-' + props.subnode.id, {
+    const editor = new Quill('#editor-' + props.subnode._id, {
       modules: {
         toolbar: toolbar,
       },
@@ -126,7 +126,7 @@ const SubnodeView = (props: Props): JSX.Element => {
       for (const nodeLink of nodeLinks) {
         nodeLink.addEventListener('click', () => {
           const linkId = nodeLink.getAttribute('linkid');
-          if (linkId) dispatch(setActiveNode(parseInt(linkId)));
+          if (linkId) dispatch(setActiveNode(linkId));
         });
       }
     }
@@ -137,8 +137,9 @@ const SubnodeView = (props: Props): JSX.Element => {
 
   const saveEditorChanges = (): void => {
     if (editor) {
-      // POSTsubnodeContent(subnode.id, change); // TODO: Use Redux
-      dispatch(updateSubnode(game.id, node.id, props.subnode.id, editor.getContents()));
+      const updatedSubnode = props.subnode;
+      updatedSubnode.content = editor.getContents();
+      dispatch(updateSubnode(game._id, node._id, updatedSubnode));
       // setChange(new Delta());
       updateNodeTextLinks();
       // this.setState({ change: new Delta() }, this.updateNodeTextLinks);
@@ -148,7 +149,7 @@ const SubnodeView = (props: Props): JSX.Element => {
   return (
     <div className="subnodeview">
       <h2>{props.subnode.name}</h2>
-      <div id={'editor-' + props.subnode.id} />
+      <div id={'editor-' + props.subnode._id} />
       <Button onClick={saveEditorChanges}>
         <Save />
       </Button>

@@ -1,10 +1,9 @@
-import './styles.css';
-import React from 'react';
+import './canvasinternalbase.css';
 import Sidebar from '../LeftSidebar/Sidebar/Sidebar';
 import NodeView from '../NodeView/nodeview';
 import { Alert, AlertTitle } from '@mui/material';
 import { RootState } from '../../state/rootReducer';
-import CanvasInternalTransform from '../CanvasInternalTransform';
+import CanvasInternalTransform from '../CanvasInternalTransform/CanvasInternalTransform';
 import { useSelector } from 'react-redux';
 import { store } from '../../state/';
 import { setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
@@ -17,7 +16,7 @@ const CanvasInternalBase = (): JSX.Element => {
     <div>
       <CanvasInternalTransform />
       <Sidebar />
-      {activeNode !== -1 ? (
+      {activeNode !== '' ? (
         <div className="nodeview-container">
           <NodeView />
         </div>

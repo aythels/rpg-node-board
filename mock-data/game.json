@@ -1,184 +1,162 @@
 [
   {
-    "_id": 100,
+    "_id": { "$oid": "61a9dccdd7c3cec99261a408" },
     "nodes": [
       {
-        "_id": 201,
+        "_id": { "$oid": "61a9dcf5d7c3cec99261a40a" },
         "name": "The Soaring Skies",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 1 },
-          { "user": 4, "infoLevel": 1 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
-            "_id": 301,
+            "_id": { "$oid": "61a9dcf5d7c3cec99261a40e" },
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "A vast sky. The " },
-                { "attributes": { "nodelink": 203 }, "insert": "Lonely Path" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40c" }, "insert": "Lonely Path" },
                 { "insert": " can be found here.\n" }
               ]
             }
           },
           {
-            "_id": 302,
+            "_id": { "$oid": "61a9dcf5d7c3cec99261a40f" },
             "informationLevel": 2,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "event",
             "name": "Sky is Falling",
             "content": { "ops": [{ "insert": "The sky is falling!" }] }
           },
           {
-            "_id": 303,
+            "_id": { "$oid": "61a9dcf5d7c3cec99261a410" },
             "informationLevel": 1,
-            "editors": [1, 2, 3, 4, 5],
+            "editors": [
+              "61a9da74d7c3cec99261a3fc",
+              "61a9da75d7c3cec99261a3fd",
+              "61a9db2ad7c3cec99261a3fe",
+              "61a9db30d7c3cec99261a3ff",
+              "61a9db37d7c3cec99261a400"
+            ],
             "type": "notes",
             "name": "Notes",
             "content": { "ops": [{ "insert": "wow sure looks cool!" }] }
           }
         ],
-        "editors": [2, 1],
+        "editors": ["61a9da75d7c3cec99261a3fd", "61a9da74d7c3cec99261a3fc"],
         "type": "location"
       },
       {
-        "_id": 202,
+        "_id": { "$oid": "61a9dcf5d7c3cec99261a40b" },
         "name": "Museum",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 1 },
-          { "user": 4, "infoLevel": 0 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 0 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
-            "_id": 304,
+            "_id": { "$oid": "61a9dcf5d7c3cec99261a411" },
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "A place of great knowledge. Near by " },
-                { "attributes": { "nodelink": 204 }, "insert": "St. George" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40d" }, "insert": "St. George" },
                 { "insert": ".\n" }
               ]
             }
           }
         ],
-        "editors": [2],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       },
       {
-        "_id": 203,
+        "_id": { "$oid": "61a9dcf5d7c3cec99261a40c" },
         "name": "Lonely Path",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 1 },
-          { "user": 4, "infoLevel": 1 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 1 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
-            "_id": 305,
+            "_id": { "$oid": "61a9dcf5d7c3cec99261a412" },
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "Somewhere to walk underneath " },
-                { "attributes": { "nodelink": 201 }, "insert": "The Soaring Skies" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40a" }, "insert": "The Soaring Skies" },
                 { "insert": "." }
               ]
             }
           }
         ],
-        "editors": [2],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       },
       {
-        "_id": 204,
+        "_id": { "$oid": "61a9dcf5d7c3cec99261a40d" },
         "name": "St. George",
         "informationLevels": [
-          { "user": 1, "infoLevel": 0 },
-          { "user": 3, "infoLevel": 0 },
-          { "user": 4, "infoLevel": 1 },
-          { "user": 5, "infoLevel": 2 }
+          { "user": "61a9da74d7c3cec99261a3fc", "infoLevel": 0 },
+          { "user": "61a9db2ad7c3cec99261a3fe", "infoLevel": 0 },
+          { "user": "61a9db30d7c3cec99261a3ff", "infoLevel": 1 },
+          { "user": "61a9db37d7c3cec99261a400", "infoLevel": 2 }
         ],
         "subnodes": [
           {
-            "_id": 306,
+            "_id": { "$oid": "61a9dcf5d7c3cec99261a413" },
             "informationLevel": 1,
-            "editors": [2],
+            "editors": ["61a9da75d7c3cec99261a3fd"],
             "type": "description",
             "name": "Description",
             "content": {
               "ops": [
                 { "insert": "The center of UofT. Near " },
-                { "attributes": { "nodelink": 202 }, "insert": "Museum" },
+                { "attributes": { "nodelink": "61a9dcf5d7c3cec99261a40b" }, "insert": "Museum" },
                 { "insert": "." }
               ]
             }
           }
         ],
-        "editors": [2],
+        "editors": ["61a9da75d7c3cec99261a3fd"],
         "type": "location"
       }
     ],
     "users": [
       {
-        "user": 1,
+        "userId": "61a9da74d7c3cec99261a3fc",
         "permission": 1,
         "nickname": "test nickname"
       },
       {
-        "user": 2,
+        "userId": "61a9da75d7c3cec99261a3fd",
         "permission": 0
       },
       {
-        "user": 3,
+        "userId": "61a9db2ad7c3cec99261a3fe",
         "permission": 1
       },
       {
-        "user": 4,
+        "userId": "61a9db30d7c3cec99261a3ff",
         "permission": 1
       },
       {
-        "user": 5,
-        "permission": 1
-      },
-      {
-        "user": 6,
-        "permission": 1
-      },
-      {
-        "user": 7,
-        "permission": 1
-      },
-      {
-        "user": 8,
-        "permission": 1
-      },
-      {
-        "user": 9,
-        "permission": 1
-      },
-      {
-        "user": 10,
-        "permission": 1
-      },
-      {
-        "user": 11,
-        "permission": 1
-      },
-      {
-        "user": 12,
+        "userId": "61a9db37d7c3cec99261a400",
         "permission": 1
       }
     ],
@@ -186,15 +164,15 @@
     "settings": {}
   },
   {
-    "_id": 101,
+    "_id": { "$oid": "61a9dcf5d7c3cec99261a409" },
     "nodes": [],
     "users": [
       {
-        "user": 3,
+        "userId": "61a9db2ad7c3cec99261a3fe",
         "permission": 0
       },
       {
-        "user": 4,
+        "userId": "61a9db30d7c3cec99261a3ff",
         "permission": 0
       }
     ],

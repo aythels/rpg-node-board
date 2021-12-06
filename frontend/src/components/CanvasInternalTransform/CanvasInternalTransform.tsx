@@ -1,13 +1,9 @@
-import './styles.css';
-import React from 'react';
-import CanvasInternalNode from '../CanvasInternalNode';
+import './canvasInternalTransform.css';
+import CanvasInternalNode from '../CanvasInternalNode/CanvasInternalNode';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
 import { Node } from '../../types';
 import { NodeManager } from './NodeManager';
-import { updateNode, updateNodePos } from '../../state/slices/gameSlice';
-import { store } from '../../state/';
-import { deleteNode } from '../../state/slices/gameSlice';
 
 const nodeManager = new NodeManager();
 
@@ -44,8 +40,8 @@ const CanvasInternalTransform = (): JSX.Element => {
           />
 
           {[...allNodes].reverse().map((node: Node) => {
-            const visible = !invisibleNodes.some((id) => id === node.id);
-            if (visible) return <CanvasInternalNode key={node.id} node={node} nodeWidth={width} nodeHeight={height} />;
+            const visible = !invisibleNodes.some((id) => id === node._id);
+            if (visible) return <CanvasInternalNode key={node._id} node={node} nodeWidth={width} nodeHeight={height} />;
           })}
         </div>
       </div>

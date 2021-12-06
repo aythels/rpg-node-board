@@ -1,9 +1,8 @@
-import './styles.css';
-import React from 'react';
+import './canvasInternalNode.css';
 import { Node } from '../../types';
 import { Delete, Launch } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
-import { store } from '../../state/';
+import { store } from '../../state';
 import { setActiveNode, setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
 import { deleteNode } from '../../state/slices/gameSlice';
 import { RootState } from '../../state/rootReducer';
@@ -17,13 +16,14 @@ interface Props {
 
 const CanvasInternalNode = (props: Props): JSX.Element => {
   const { node, nodeWidth, nodeHeight } = props;
+  const game = useSelector((state: RootState) => state.game.gameInstance);
   const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
 
   return (
     <div
       className="node"
-      node-id={node.id}
-      onDoubleClick={() => store.dispatch(setActiveNode(node.id))}
+      node-id={node._id}
+      onDoubleClick={() => store.dispatch(setActiveNode(node._id))}
       style={{
         left: `${node.x}px`,
         top: `${node.y}px`,
@@ -33,7 +33,7 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
       }}
     >
       <div className="node__header">
-        <div className="node-text-div" node-id={node.id}>
+        <div className="node-text-div" node-id={node._id}>
           {node.name}
         </div>
       </div>
@@ -42,7 +42,7 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
           <button
             className="node-button"
             onClick={() => {
-              if (isAdmin) store.dispatch(deleteNode(node));
+              if (isAdmin) store.dispatch(deleteNode(game._id, node._id));
               else store.dispatch(setIsEditPermissionsModalOpen(true));
             }}
           >
@@ -50,7 +50,7 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
           </button>
         </Tooltip>
         <Tooltip title="View node">
-          <button className="node-button" onClick={() => store.dispatch(setActiveNode(node.id))}>
+          <button className="node-button" onClick={() => store.dispatch(setActiveNode(node._id))}>
             <Launch />
           </button>
         </Tooltip>

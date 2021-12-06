@@ -2,7 +2,6 @@ import mongoose from '../mongoose';
 import { Schema } from 'mongoose';
 import { Node } from '../../frontend/src/types'; // TODO: fix where the types file is
 import { SubnodeSchema } from './subnode';
-import { Binary } from 'bson';
 
 export const NodeSchema = new Schema<Node>({
   name: {
@@ -10,18 +9,18 @@ export const NodeSchema = new Schema<Node>({
     required: true,
   },
   image: {
-    type: Binary,
+    type: String, // base 64
     required: false,
   },
   thumbnailImage: {
-    type: Binary,
+    type: String, // base 64
     required: false,
   },
   subnodes: [SubnodeSchema],
   informationLevels: [
     {
       user: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true,
       },
       infoLevel: {
@@ -30,7 +29,7 @@ export const NodeSchema = new Schema<Node>({
       },
     },
   ],
-  editors: [mongoose.Types.ObjectId],
+  editors: [String],
   type: {
     type: String,
     required: true,

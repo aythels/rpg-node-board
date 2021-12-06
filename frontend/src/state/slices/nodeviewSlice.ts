@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit';
-import { GETuserIsGMInGame } from '../../mock-backend';
 
 interface NodeviewState {
-  activeNode: number;
-  invisibleNodes: number[];
+  activeNode: string;
+  invisibleNodes: string[];
   canvasX: number;
   canvasY: number;
   canvasScale: number;
@@ -17,7 +16,7 @@ interface NodeviewState {
 }
 
 const initialState: NodeviewState = {
-  activeNode: -1,
+  activeNode: '',
   invisibleNodes: [],
   canvasX: 0,
   canvasY: 0,
@@ -33,14 +32,14 @@ const nodeviewSlice = createSlice({
   name: 'nodeview',
   initialState: initialState,
   reducers: {
-    setActiveNode: (state: NodeviewState, action: PayloadAction<number>) => {
+    setActiveNode: (state: NodeviewState, action: PayloadAction<string>) => {
       state.activeNode = action.payload;
     },
-    addInvisibleNode: (state: NodeviewState, action: PayloadAction<number>) => {
+    addInvisibleNode: (state: NodeviewState, action: PayloadAction<string>) => {
       const index = state.invisibleNodes.indexOf(action.payload);
       if (index == -1) state.invisibleNodes.push(action.payload);
     },
-    removeInvisibleNode: (state: NodeviewState, action: PayloadAction<number>) => {
+    removeInvisibleNode: (state: NodeviewState, action: PayloadAction<string>) => {
       const index = state.invisibleNodes.indexOf(action.payload);
       if (index > -1) state.invisibleNodes.splice(index, 1);
     },
@@ -85,7 +84,8 @@ export const {
 
 export const processUserGameData = (userId: number, gameId: number): any => {
   const thunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    dispatch(nodeviewSlice.actions.setIsUserGameAdmin(GETuserIsGMInGame(userId, gameId)));
+    // TODO
+    // dispatch(nodeviewSlice.actions.setIsUserGameAdmin(GETuserIsGMInGame(userId, gameId)));
   };
 
   return thunk;

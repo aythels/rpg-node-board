@@ -11,8 +11,9 @@ const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/RpgAPI';
 
 mongoose.connect(mongoURI, {
   // These options were included in the example code but cause Typescript errors:
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true,
+  // @ts-ignore
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
   // useCreateIndex: true,
 });
 

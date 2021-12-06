@@ -37,7 +37,7 @@ const NodeView = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const renderMenu = (): JSX.Element | null => {
-    if (node.editors.includes(user.id)) {
+    if (node.editors.includes(user._id)) {
       return (
         <ButtonGroup>
           <Tooltip title="Node Info">
@@ -56,7 +56,7 @@ const NodeView = (): JSX.Element => {
             </Button>
           </Tooltip>
           <Tooltip title="Close">
-            <Button onClick={() => dispatch(setActiveNode(-1))}>
+            <Button onClick={() => dispatch(setActiveNode(''))}>
               <Close />
             </Button>
           </Tooltip>
@@ -65,7 +65,7 @@ const NodeView = (): JSX.Element => {
     } else {
       return (
         <ButtonGroup>
-          <Button onClick={() => dispatch(setActiveNode(-1))}>
+          <Button onClick={() => dispatch(setActiveNode(''))}>
             <Close />
           </Button>
         </ButtonGroup>
@@ -76,22 +76,21 @@ const NodeView = (): JSX.Element => {
   const addNewSubnode = (e: FormEvent): void => {
     e.preventDefault();
     const newSubnode = {
-      id: Math.ceil(Math.random() * 1000), //TODO: handle ID creation in database? !IMPORTANT
       name: newSubnodeName,
       type: newSubnodeType,
       informationLevel: parseInt(newSubnodeInfoLevel),
       editors: node.editors,
       content: new Delta(),
     };
-    dispatch(addSubnode(game.id, node.id, newSubnode));
+    dispatch(addSubnode(game._id, node._id, newSubnode));
   };
 
   const renderSubnodes = (): JSX.Element => {
     return (
       <div className="subnodes">
         {node.subnodes.map((subnode: Subnode) => {
-          const infoLevel = node.informationLevels.find((i) => i.userId === user.id) as InfoLevel;
-          if (subnode.informationLevel >= infoLevel.infoLevel || node.editors.includes(user.id)) {
+          const infoLevel = node.informationLevels.find((i) => i.user === user._id) as InfoLevel;
+          if (node.editors.includes(user._id) || subnode.informationLevel >= infoLevel.infoLevel) {
             return <SubnodeView subnode={subnode} key={uid(subnode)} />;
           }
         })}
@@ -114,7 +113,7 @@ const NodeView = (): JSX.Element => {
       {isUsersModalOpen ? <NodeUserForm /> : null}
       {isImageModalOpen ? <NodeImageForm /> : null}
       {renderSubnodes()}
-      {node.editors.includes(user.id) ? (
+      {node.editors.includes(user._id) ? (
         <div className="new-subnode-wrapper">
           <h2>Add new subnode</h2>
           <form

@@ -1,7 +1,6 @@
 import './login.css';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { GETloginVerification } from '../../mock-backend';
 import { loginUser, selectIsLoggedIn } from '../../state/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -16,13 +15,13 @@ const Login = (): JSX.Element => {
   const loggedIn = useSelector((state: RootState) => selectIsLoggedIn(state));
 
   const checkPassword = async (): Promise<void> => {
-    if (!GETloginVerification(username, password)) {
-      console.info('Login or password is invalid');
-      setInvalid(true);
-    } else {
-      console.log('starting login');
-      await dispatch(loginUser(username));
-    }
+    // TODO
+    // if (!GETloginVerification(username, password)) {
+    //   console.info('Login or password is invalid');
+    //   setInvalid(true);
+    // } else {
+    await dispatch(loginUser(username));
+    // }
   };
 
   return loggedIn ? (

@@ -3,9 +3,8 @@ import { Button, TextField, IconButton, Tooltip } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { Delete, PersonAdd } from '@mui/icons-material';
 import Dialog from '../../Dialog/Dialog';
-import { DELETEGame } from '../../../mock-backend';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPlayer, hideUserAlreadyAddedDialog } from '../../../state/slices/gameSlice';
+import { addPlayer, deleteGame, updateDialogStatus } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
 
 const Footer = (): JSX.Element => {
@@ -13,8 +12,8 @@ const Footer = (): JSX.Element => {
 
   const [inviteName, setInviteName] = useState('');
   const [showDeleteServerDialog, setShowDeleteServerDialog] = useState(false);
-  const gameId = useSelector((state: RootState) => state.game.gameInstance.id);
-  const showUserAlreadyAddedDialog = useSelector((state: RootState) => state.game.showUserAlreadyAddedDialog);
+  const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
+  const showUserAlreadyAddedDialog = useSelector((state: RootState) => state.game.dialogStatus.userAlreadyAdded);
 
   const handleInviteNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
     setInviteName(event.target.value);
@@ -38,7 +37,7 @@ const Footer = (): JSX.Element => {
           onKeyPress={(event) => {
             if (event.key === 'Enter') {
               event.preventDefault();
-              dispatch(addPlayer(inviteName));
+              dispatch(addPlayer(inviteName, gameId));
             }
           }}
         />
@@ -47,7 +46,7 @@ const Footer = (): JSX.Element => {
             aria-label="Invite player to the game"
             component="span"
             disabled={!inviteName}
-            onClick={() => dispatch(addPlayer(inviteName))}
+            onClick={() => dispatch(addPlayer(inviteName, gameId))}
           >
             <PersonAdd />
           </IconButton>
@@ -70,7 +69,7 @@ const Footer = (): JSX.Element => {
         header="Delete server?"
         open={showDeleteServerDialog}
         onAgree={() => {
-          DELETEGame(gameId);
+          dispatch(deleteGame(gameId));
         }}
         onAgreeRedirectTo="/games"
         onClose={() => setShowDeleteServerDialog(false)}
@@ -80,7 +79,7 @@ const Footer = (): JSX.Element => {
         description="You cannot add the same player twice."
         header="This player is already in the game!"
         open={showUserAlreadyAddedDialog}
-        onClose={() => dispatch(hideUserAlreadyAddedDialog())}
+        onClose={() => dispatch(updateDialogStatus(['userAlreadyAdded', false]))}
       />
     </div>
   );

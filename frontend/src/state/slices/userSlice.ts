@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createDraftSafeSelector, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import { GETgamesByUserID, GETuserByUsername } from '../../mock-backend';
 import { Game, User, UserPermission, UserPermissionRecord } from '../../types';
 import { RootState } from '../rootReducer';
 
@@ -35,9 +34,20 @@ export const { addImage } = userSlice.actions;
 // Thunks
 export const loginUser = (username: string): any => {
   const loginUserThunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    const user = GETuserByUsername(username);
-    const games = GETgamesByUserID(user.id);
-    dispatch(userSlice.actions.loginUser([user, games]));
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/username/${username}`);
+      const user: User = await response.json();
+      const games: Game[] = await Promise.all(
+        user.games.map(async (gameId) => {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
+          const game = await response.json();
+          return game;
+        }),
+      );
+      dispatch(userSlice.actions.loginUser([user, games]));
+    } catch {
+      console.error('Log in unsuccessful');
+    }
   };
   return loginUserThunk;
 };
@@ -45,8 +55,8 @@ export const loginUser = (username: string): any => {
 // Selectors
 export const selectIsGameMaster: any = createDraftSafeSelector(
   (state: RootState): UserPermissionRecord[] => state.game.gameInstance.users,
-  (state: RootState): number => state.user.userInstance.id,
-  (records: UserPermissionRecord[], userId: number): boolean => {
+  (state: RootState): User['_id'] => state.user.userInstance._id,
+  (records: UserPermissionRecord[], userId: User['_id']): boolean => {
     const userRecord = records.find((record) => record.userId === userId);
     if (userRecord) {
       return userRecord.permission === UserPermission.gameMaster;

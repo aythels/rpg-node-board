@@ -1,17 +1,17 @@
 import './canvasMain.css';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Grid, Typography } from '@mui/material';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '../Dialog/Dialog';
 import RightSidebar from '../RightSidebar';
-import CanvasInternal from '../CanvasInternal';
-import { GameLoadingStatus } from '../../state/slices/gameSlice';
+import CanvasInternalBase from '../CanvasInternal/CanvasInternalBase';
+import { GameLoadingStatus, updateDialogStatus } from '../../state/slices/gameSlice';
 import { RootState } from '../../state/rootReducer';
 
 const CanvasMain = (): JSX.Element => {
-  const [showUserNotFoundModal, setShowUserNotFoundModal] = useState(false);
+  const showUserNotFoundDialog = useSelector((state: RootState) => state.game.dialogStatus.userNotFound);
   const loadingStatus = useSelector((state: RootState) => state.game.status);
+  const dispatch = useDispatch();
 
   return loadingStatus === GameLoadingStatus.Loading ? (
     <Grid
@@ -31,13 +31,13 @@ const CanvasMain = (): JSX.Element => {
     </Grid>
   ) : (
     <>
-      <CanvasInternal />
+      <CanvasInternalBase />
       <RightSidebar />
       <Dialog
         description="Please try again."
         header="The player could not be found!"
-        open={showUserNotFoundModal}
-        onClose={() => setShowUserNotFoundModal(false)}
+        open={showUserNotFoundDialog}
+        onClose={() => dispatch(updateDialogStatus(['userNotFound', false]))}
       />
     </>
   );
