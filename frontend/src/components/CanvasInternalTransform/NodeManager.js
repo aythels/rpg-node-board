@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { uid } from 'react-uid';
 import { store } from '../../state/';
+import { setCanvasPos } from '../../state/slices/nodeviewSlice';
 
 export const NodeManager = function () {
   const xBound = 2000;
