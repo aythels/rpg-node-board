@@ -11,8 +11,8 @@ import { store } from './state';
 import { loginUser } from './state/slices/userSlice';
 // store.dispatch(loginUser('admin'));
 // store.dispatch(fetchGame('61a9dccdd7c3cec99261a408'));
-store.dispatch(loginUser('user2'));
-store.dispatch(fetchGame('61a9dcf5d7c3cec99261a409'));
+// store.dispatch(loginUser('user2'));
+// store.dispatch(fetchGame('61a9dcf5d7c3cec99261a409'));
 
 function App(): JSX.Element {
   const customTheme = createTheme({

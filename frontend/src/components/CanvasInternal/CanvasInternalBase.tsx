@@ -1,9 +1,8 @@
-import './styles.css';
+import './canvasinternalbase.css';
 import React from 'react';
 import Sidebar from '../LeftSidebar';
 // import CanvasInternalNode from '../CanvasInternalNode';
 import { NodeManager } from './NodeManager';
-import { DELETEnodeFromGame, GETgmIds, GETuserIsGMInGame, POSTnode } from '../../mock-backend';
 import NodeView from '../NodeView/nodeview';
 import { Game, Node, User } from '../../types';
 import { Alert, AlertTitle } from '@mui/material';
@@ -18,19 +17,16 @@ interface Props {
   currentUserId: User['_id'];
 }
 
-// Note: before you refactor to a functional component make sure you know what you
-// are doing - the setState({}) trick won't work on a functional component
-class CanvasInternalBase extends React.Component<Props> {
-  nodeManager = new NodeManager();
+const CanvasInternalBase = (props: Props): JSX.Element => {
+  const nodeManager = new NodeManager();
   activeNode = -1;
   activeAlert = false;
 
   constructor(props: Props) {
     super(props);
-    // TODO: Refactor
-    // for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
-    //   this.nodeManager.createNode(node.id, node);
-    // }
+    for (const node of GETnodesInGameVisibleToUser(props.currentGameId, props.currentUserId)) {
+      this.nodeManager.createNode(node.id, node);
+    }
   }
 
   getActiveNodeFromNodeManager = (): Node => {
@@ -72,7 +68,7 @@ class CanvasInternalBase extends React.Component<Props> {
     }
     const id = Math.ceil(Math.random() * 1000); //TODO: handle ID creation in database? !IMPORTANT
     const newNode = {
-      id: id,
+      _id: id,
       name: 'Default' + id,
       image: '/images/default.jpg',
       imageAlt: 'Default',
