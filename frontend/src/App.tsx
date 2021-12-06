@@ -5,14 +5,16 @@ import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain/CanvasMain';
 import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 
-// TODO: absolutely remove this!!!
+/* REMOVE BEFORE COMMIT */
 import { fetchGame } from './state/slices/gameSlice';
 import { store } from './state';
 import { loginUser } from './state/slices/userSlice';
+import { processUserGameData } from './state/slices/nodeviewSlice';
+
 // store.dispatch(loginUser('admin'));
-// store.dispatch(fetchGame('61a9dccdd7c3cec99261a408'));
-// store.dispatch(loginUser('user2'));
-// store.dispatch(fetchGame('61a9dcf5d7c3cec99261a409'));
+// store.dispatch(fetchGame(1));
+// store.dispatch(processUserGameData(store.getState().user.userInstance.id, 1));
+/* REMOVE BEFORE COMMIT */
 
 function App(): JSX.Element {
   const customTheme = createTheme({

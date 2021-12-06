@@ -15,6 +15,8 @@ export interface Node {
   informationLevels: InfoLevel[];
   editors: User['_id'][];
   type: string;
+  x: number;
+  y: number;
 }
 export interface Subnode {
   _id: string;

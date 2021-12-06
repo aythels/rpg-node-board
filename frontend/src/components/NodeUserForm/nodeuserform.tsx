@@ -20,39 +20,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
 import cloneDeep from 'lodash.clonedeep';
 import { GETuserById, GETuserIsGMInGame } from '../../mock-backend';
-import { setIsEditModalOpen, setIsUsersModalOpen } from '../../state/slices/nodeviewSlice';
+import { setIsUsersModalOpen } from '../../state/slices/nodeviewSlice';
 
 const NodeUserForm = (): JSX.Element => {
-  // const user = useSelector((state: RootState) => state.user.userInstance);
+  const game = useSelector((state: RootState) => state.game.gameInstance);
+  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
   const dispatch = useDispatch();
 
   const [addEditorAnchorEl, setAddEditorAnchorEl] = useState(null as EventTarget | null);
-  const game = useSelector((state: RootState) => state.game.gameInstance);
-  const node: Node = useSelector((state: RootState) => selectActiveNode(state));
   const [tempNode, setTempNode] = useState(cloneDeep(node) as Node);
 
   const handleModalClick = (e: SyntheticEvent): void => {
     const target = e.target as HTMLElement;
     if (target.className == 'modal') {
-      dispatch(setIsEditModalOpen(false));
+      dispatch(setIsUsersModalOpen(false));
     }
   };
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    dispatch(updateNode(game._id, tempNode)); // TODO: async
-    dispatch(setIsEditModalOpen(false));
+    dispatch(updateNode(game._id, tempNode)); // TODO: async?
+    dispatch(setIsUsersModalOpen(false));
   };
 
   const removeEditor = (editorToRemove: User): void => {
-    tempNode.editors.filter((e) => e !== editorToRemove._id);
+    // console.log(editorToRemove);
+    tempNode.editors = tempNode.editors.filter((e) => e !== editorToRemove._id);
     const infoLevels = tempNode.informationLevels;
     const infoLevel = infoLevels.find((i) => i.userId === editorToRemove._id) as InfoLevel;
     infoLevel.infoLevel = 0;
     setTempNode({
       ...tempNode,
-      // informationLevels: infoLevels,
-      // editors: editors,
     });
   };
 
@@ -130,7 +128,7 @@ const NodeUserForm = (): JSX.Element => {
   const getInfoLevelValue = (playerId: User['_id']): string => {
     const infoLevel = tempNode.informationLevels.find((i) => i.userId === playerId) as InfoLevel;
     if (infoLevel) {
-      return infoLevel.toString();
+      return infoLevel.infoLevel.toString();
     } else {
       return '0';
     }
@@ -138,7 +136,10 @@ const NodeUserForm = (): JSX.Element => {
 
   const renderVisibleSubnodeNames = (playerId: User['_id']): JSX.Element => {
     const infoLevel = tempNode.informationLevels.find((i) => i.userId === playerId) as InfoLevel;
-    const visibleSubnodes = tempNode.subnodes.filter((subnode) => subnode.informationLevel <= infoLevel.infoLevel);
+    console.log(playerId, infoLevel);
+    const visibleSubnodes = tempNode.editors.includes(playerId)
+      ? tempNode.subnodes
+      : tempNode.subnodes.filter((subnode) => subnode.informationLevel <= infoLevel.infoLevel);
     return (
       <TableCell align="right">
         {visibleSubnodes.map((subnode) => {
@@ -227,7 +228,7 @@ const NodeUserForm = (): JSX.Element => {
               <TableBody>
                 {game.users.map((entry) => {
                   if (!tempNode.editors.includes(entry.userId)) {
-                    const player = GETuserById(entry.userId);
+                    const player = GETuserById(entry.userId); // TODO: Redux
                     return (
                       <TableRow key={uid(player)}>
                         <TableCell align="left" component="th" scope="row">
