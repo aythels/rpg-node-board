@@ -52,12 +52,10 @@ export const GameIcon = (props: Props): JSX.Element => {
         <Delete />
       </IconButton>
       <CardActionArea onClick={() => dispatch(fetchGame(props.game._id))} component={Link} to="/canvas">
-        <div style={{ position: 'absolute', top: '0px', right: '0px' }}>
-          <CardMedia component="img" height="100" width="100" image={image} alt="Game Icon" />
-          <Typography variant="h5" component="div">
-            {props.game.title}
-          </Typography>
-        </div>
+        <CardMedia component="img" height="100" width="100" image={image} alt="Game Icon" />
+        <Typography variant="h5" component="div">
+          {props.game.title}
+        </Typography>
       </CardActionArea>
       <Dialog
         description="This will remove you from this game."

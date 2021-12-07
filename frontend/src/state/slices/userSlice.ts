@@ -25,12 +25,23 @@ const userSlice = createSlice({
     addImage: (state: UserState, action: PayloadAction<NonNullable<Node['image']>>) => {
       state.userInstance.images.push(action.payload);
     },
-    updateGameListImage: (state: UserState, action: PayloadAction<[Game['_id'], Game['image']]>) => {
+    userGameListUpdateImage: (state: UserState, action: PayloadAction<[Game['_id'], Game['image']]>) => {
       const [gameId, image] = action.payload;
       const game = state.games.find((game) => game._id === gameId);
       if (game) {
         game.image = image;
       }
+    },
+    userGameListUpdateTitle: (state: UserState, action: PayloadAction<[Game['_id'], Game['title']]>) => {
+      const [gameId, title] = action.payload;
+      const game = state.games.find((game) => game._id === gameId);
+      if (game) {
+        game.title = title;
+      }
+    },
+    userGameListDeleteGame: (state: UserState, action: PayloadAction<Game['_id']>) => {
+      const gameId = action.payload;
+      state.games = state.games.filter((game) => game._id !== gameId);
     },
     updateUserData: (state: UserState, action: PayloadAction<UserDataUpdates>) => {
       // Note: We have to do it this way because interface and types are not actual JS objects;
@@ -57,7 +68,7 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { updateGameListImage } = userSlice.actions;
+export const { userGameListUpdateImage, userGameListUpdateTitle, userGameListDeleteGame } = userSlice.actions;
 
 // Thunks
 export const addImage = (image: NonNullable<Node['image']>): any => {

@@ -4,7 +4,7 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
-import { updateGameListImage } from './userSlice';
+import { userGameListDeleteGame, userGameListUpdateImage, userGameListUpdateTitle } from './userSlice';
 
 export enum GameLoadingStatus {
   Loading,
@@ -66,7 +66,7 @@ const gameSlice = createSlice({
       const nodeToUpdate = state.gameInstance.nodes.find((node) => node._id === action.payload[0]) as Node;
       nodeToUpdate.subnodes.push(action.payload[1]);
     },
-    setGameTitle: (state: GameState, action: PayloadAction<string>) => {
+    updateGameTitle: (state: GameState, action: PayloadAction<string>) => {
       state.gameInstance.title = action.payload;
     },
     updatePlayerPermission: (state: GameState, action: PayloadAction<[User['_id'], UserPermission, Game['_id']]>) => {
@@ -119,6 +119,7 @@ export const deleteGame = (): any => {
       switch (response.status) {
         case 200:
           dispatch(gameSlice.actions.deleteGame());
+          dispatch(userGameListDeleteGame(gameId));
           break;
         default:
           console.log('Could not delete node', response);
@@ -171,7 +172,7 @@ export const updateGameImage = (image: string): any => {
       switch (response.status) {
         case 200:
           dispatch(gameSlice.actions.updateGameImage(image));
-          dispatch(updateGameListImage([gameId, image]));
+          dispatch(userGameListUpdateImage([gameId, image]));
           break;
         default:
           console.error('Could not update game image.');
@@ -326,8 +327,8 @@ export const addSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Pa
   return addSubnodeThunk;
 };
 
-export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
-  const setGameTitleThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+export const updateGameTitle = (gameId: Game['_id'], newTitle: string): any => {
+  const updateGameTitleThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
         method: 'PATCH',
@@ -340,7 +341,8 @@ export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
       });
       switch (response.status) {
         case 200:
-          dispatch(gameSlice.actions.setGameTitle(newTitle));
+          dispatch(gameSlice.actions.updateGameTitle(newTitle));
+          dispatch(userGameListUpdateTitle([gameId, newTitle]));
           break;
         default:
           console.log('Could not set game title', response);
@@ -350,7 +352,7 @@ export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
       console.log(e, 'Could not update game title');
     }
   };
-  return setGameTitleThunk;
+  return updateGameTitleThunk;
 };
 
 export const updatePlayerPermission = (payload: [User['_id'], UserPermission, Game['_id']]): any => {

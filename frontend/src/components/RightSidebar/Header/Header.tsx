@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/styles';
 import { Done, ChevronLeft, Settings } from '@mui/icons-material';
 import { IconButton, TextField, Theme, Tooltip, Typography, CardMedia, CardActionArea } from '@mui/material';
-import { setGameTitle } from '../../../state/slices/gameSlice';
+import { updateGameTitle } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
 import { updateGameImage } from '../../../state/slices/gameSlice';
 interface Props {
@@ -35,7 +35,7 @@ const Header = (props: Props): JSX.Element => {
 
   const handleSubmitTitle = useCallback((): void => {
     setEditingTitle(false);
-    dispatch(setGameTitle(game._id, title));
+    dispatch(updateGameTitle(game._id, title));
   }, [game._id, title]);
 
   const handleCancelEdit = useCallback((): void => {
