@@ -4,13 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "postinstall": "npm run tsc",
+    "postinstall": "tsc",
     "dev": "export NODE_ENV=development || set NODE_ENV=development && npx ts-node-dev --exit-child server",
     "start": "node -r esm dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "heroku-postbuild": "cd frontend && npm install --only=dev && npm install && npm run build",
-    "tsc": "tsc"
+    "heroku-postbuild": "cd frontend && npm install --only=dev && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +26,7 @@
     "mongodb": "^4.2.0",
     "mongoose": "^6.0.13",
     "nodemon": "^2.0.15",
+    "typescript": "^4.5.2",
     "validator": "^13.7.0"
   },
   "devDependencies": {
