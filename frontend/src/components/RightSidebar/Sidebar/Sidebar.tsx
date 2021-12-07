@@ -45,7 +45,7 @@ const RightSidebar = (): JSX.Element => {
           onSettingsToggleClicked={toggleSettingsOpen}
         />
         <PlayerList settingsOpen={isGameMaster && settingsOpen} />
-        {settingsOpen && <Footer />}
+        {isGameMaster && settingsOpen && <Footer />}
       </Drawer>
     </div>
   );
