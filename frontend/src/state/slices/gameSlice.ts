@@ -79,6 +79,9 @@ const gameSlice = createSlice({
     updateGameImage: (state: GameState, action: PayloadAction<Game['image']>) => {
       state.gameInstance.image = action.payload;
     },
+    deleteGame: (state: GameState, action: PayloadAction<void>) => {
+      state.gameInstance = {} as Game;
+    },
   },
 });
 export default gameSlice.reducer;
@@ -106,11 +109,26 @@ export const fetchGame = (gameId: Game['_id']): any => {
   return fetchGameThunk;
 };
 
-export const deleteGame = (gameId: Game['_id']): any => {
-  const thunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    // TODO
+export const deleteGame = (): any => {
+  const deleteGameThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    try {
+      const gameId = getState().game.gameInstance._id;
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
+        method: 'DELETE',
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.deleteGame());
+          break;
+        default:
+          console.log('Could not delete node', response);
+          break;
+      }
+    } catch (e) {
+      console.log(e, 'Could not delete node');
+    }
   };
-  return thunk;
+  return deleteGameThunk;
 };
 
 export const addPlayer = (user: string, gameId: Game['_id']): any => {
