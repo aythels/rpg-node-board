@@ -54,13 +54,7 @@ router.post('/subnode/:gameId/:nodeId', mongoChecker, authenticate, async (req: 
 
   try {
     const { name, informationLevel, editors, type, content } = req.body;
-    const newSubnode: Omit<Subnode, '_id'> = {
-      name,
-      informationLevel,
-      editors,
-      type,
-      content, // TODO: make sure it is a Delta
-    };
+    const newSubnode: Omit<Subnode, '_id'> = { name, informationLevel, editors, type, content };
     const subnode: Subnode = new SubnodeModel(newSubnode);
 
     await GameModel.findOneAndUpdate({ _id: gameId, 'nodes._id': nodeId }, { $push: { 'nodes.$.subnodes': subnode } });

@@ -34,6 +34,7 @@ export const NodeSchema = new Schema<Node>({
     type: String,
     required: true,
   },
+  // TODO: add x,y?
 });
 
 export const NodeModel = mongoose.model('Node', NodeSchema);
