@@ -99,7 +99,7 @@ const NodeView = (): JSX.Element => {
   };
 
   return (
-    <div className="nodeview">
+    <div className="nodeview scroll-up">
       <div className="node-header">
         <div className="node-topline">
           <p>
