@@ -34,6 +34,14 @@ export const NodeSchema = new Schema<Node>({
     type: String,
     required: true,
   },
+  x: {
+    type: Number,
+    required: true,
+  },
+  y: {
+    type: Number,
+    required: true,
+  },
 });
 
 export const NodeModel = mongoose.model('Node', NodeSchema);
