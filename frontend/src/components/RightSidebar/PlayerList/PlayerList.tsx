@@ -13,7 +13,7 @@ import {
 import { RootState } from '../../../state/rootReducer';
 
 interface Props {
-  exposeSettings: boolean;
+  settingsOpen: boolean;
 }
 
 const PlayerList = (props: Props): JSX.Element => {
@@ -116,7 +116,7 @@ const PlayerList = (props: Props): JSX.Element => {
           <PlayerCard
             key={user._id}
             user={user}
-            exposeSettings={props.exposeSettings}
+            settingsOpen={props.settingsOpen}
             promotable={!isGameMaster}
             removable={!isGameMaster && !isCurrentPlayer}
             onDemotePlayerClicked={() => handlePlayerDemoteRequested(user._id)}

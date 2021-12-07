@@ -6,15 +6,16 @@ import { Link } from 'react-router-dom';
 import { Game } from '../../types';
 import { fetchGame } from '../../state/slices/gameSlice';
 import { useDispatch } from 'react-redux';
+import { useMemo } from 'react';
 
 interface Props {
   game: Game;
 }
 
+const FALLBACK_IMAGE = '/images/fallbacks/game_icon.jpeg';
 export const GameIcon = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
-
-  const imgPath = '/images/' + props.game.imgpath; // TODO: use server URL
+  const image = useMemo(() => props.game.image || FALLBACK_IMAGE, [props.game.image]);
 
   return (
     <Card
@@ -27,8 +28,9 @@ export const GameIcon = (props: Props): JSX.Element => {
       }}
       style={{ boxShadow: '0.1rem 0.1rem 0.7rem' }}
     >
+      {/* TODO: remove fetchGame and just use props value instead? */}
       <CardActionArea onClick={() => dispatch(fetchGame(props.game._id))} component={Link} to="/canvas">
-        <CardMedia component="img" height="100" width="100" src={imgPath} alt="Game Icon" />
+        <CardMedia component="img" height="100" width="100" image={image} alt="Game Icon" />
         <Typography variant="h5" component="div">
           {props.game.title}
         </Typography>
