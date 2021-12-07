@@ -107,7 +107,7 @@ const Header = (props: Props): JSX.Element => {
           </Tooltip>
         )}
         <div className="title">
-          {props.exposeSettings ? (
+          {isGameMaster && props.exposeSettings ? (
             editingTitle ? (
               <TextField
                 fullWidth
