@@ -76,7 +76,7 @@ const gameSlice = createSlice({
         user.permission = newPermission;
       }
     },
-    updateGameImage: (state: GameState, action: PayloadAction<string>) => {
+    updateGameImage: (state: GameState, action: PayloadAction<Game['image']>) => {
       state.gameInstance.image = action.payload;
     },
   },
@@ -142,9 +142,10 @@ export const updateGameImage = (image: string): any => {
   const updateGameImageThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
     const gameId = getState().game.gameInstance._id;
     try {
+      const update: Partial<Game> = { image };
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
         method: 'PATCH',
-        body: JSON.stringify({ image }),
+        body: JSON.stringify(update),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -155,11 +156,11 @@ export const updateGameImage = (image: string): any => {
           dispatch(updateGameListImage([gameId, image]));
           break;
         default:
-          console.error(`Could not update game image.`);
+          console.error('Could not update game image.');
           break;
       }
     } catch {
-      console.error(`Could not update game image.`);
+      console.error('Could not update game image.');
     }
   };
   return updateGameImageThunk;

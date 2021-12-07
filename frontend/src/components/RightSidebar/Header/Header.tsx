@@ -61,7 +61,7 @@ const Header = (props: Props): JSX.Element => {
     [handleSubmitTitle, handleCancelEdit],
   );
 
-  const handleFileUpload = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files?.[0];
     if (file) {
       const fileReader = new FileReader();
@@ -87,7 +87,7 @@ const Header = (props: Props): JSX.Element => {
         type="file"
         accept="image/png, image/jpeg"
         hidden
-        onChange={handleFileUpload}
+        onChange={handleImageUpload}
         aria-label="change game image"
       />
       <div className="canvas-sidebar-header" style={{ backgroundColor: theme.palette.primary.light }}>

@@ -1,12 +1,15 @@
 import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button, Grid, IconButton, TextField, Tooltip } from '@mui/material';
+import { Avatar, Button, Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useRef, useCallback, ChangeEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
+import { updateProfilePicture } from '../../state/slices/userSlice';
 
 const SettingsMenu = (): JSX.Element => {
+  const dispatch = useDispatch();
+
   const user = useSelector((state: RootState) => state.user.userInstance);
 
   // TODO: bind this to Redux
@@ -25,8 +28,35 @@ const SettingsMenu = (): JSX.Element => {
     );
   };
 
+  const handleImageUpload = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target?.files?.[0];
+    if (file) {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        if (fileReader.result) {
+          // Note: We know fileReader.result will be a string because we loaded it using readAsDataURL
+          dispatch(updateProfilePicture(fileReader.result as unknown as string));
+        } else {
+          console.log('Something went wrong.');
+        }
+      };
+      fileReader.onerror = console.error;
+    }
+  }, []);
+
+  const imageInput = useRef<HTMLInputElement>(null);
+
   return (
     <div className="padded_div">
+      <input
+        ref={imageInput}
+        type="file"
+        accept="image/png, image/jpeg"
+        hidden
+        onChange={handleImageUpload}
+        aria-label="change profile picture"
+      />
       <Grid
         item
         style={{
@@ -54,7 +84,27 @@ const SettingsMenu = (): JSX.Element => {
         style={{ minHeight: '100vh' }}
       >
         <Grid item>
-          <Typography variant="h4">Edit user information </Typography>
+          <Typography
+            variant="h3"
+            style={{
+              fontStyle: 'italic',
+              textAlign: 'center',
+              width: '100%',
+            }}
+          >
+            <Grid container columnSpacing={2} direction="row" justifyContent="center" alignItems="center">
+              <Grid item>
+                <div style={{ cursor: 'pointer' }} onClick={() => imageInput?.current?.click()}>
+                  <Avatar color="primary" alt={user.username} src={user.profilePicture}>
+                    {user.username.charAt(0).toUpperCase()}
+                  </Avatar>
+                </div>
+              </Grid>
+              <Grid item>
+                <b>{user.username}</b>
+              </Grid>
+            </Grid>
+          </Typography>
         </Grid>
         <Grid item>
           <TextField

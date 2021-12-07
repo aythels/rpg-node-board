@@ -25,12 +25,15 @@ const userSlice = createSlice({
     addImage: (state: UserState, action: PayloadAction<string>) => {
       state.userInstance.images.push(action.payload);
     },
-    updateGameListImage: (state: UserState, action: PayloadAction<[Game['_id'], string]>) => {
+    updateGameListImage: (state: UserState, action: PayloadAction<[Game['_id'], Game['image']]>) => {
       const [gameId, image] = action.payload;
       const game = state.games.find((game) => game._id === gameId);
       if (game) {
         game.image = image;
       }
+    },
+    updateProfilePicture: (state: UserState, action: PayloadAction<User['profilePicture']>) => {
+      state.userInstance.profilePicture = action.payload;
     },
   },
 });
@@ -57,6 +60,33 @@ export const loginUser = (username: string): any => {
     }
   };
   return loginUserThunk;
+};
+
+export const updateProfilePicture = (image: string): any => {
+  const updateProfilePictureThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const userId = getState().user.userInstance._id;
+    try {
+      const update: Partial<User> = { profilePicture: image };
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(update),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(userSlice.actions.updateProfilePicture(image));
+          break;
+        default:
+          console.error('Could not update game image.');
+          break;
+      }
+    } catch {
+      console.error('Could not update game image.');
+    }
+  };
+  return updateProfilePictureThunk;
 };
 
 // Selectors
