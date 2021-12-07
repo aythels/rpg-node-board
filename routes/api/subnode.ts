@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { GameModel, NodeModel, SubnodeModel } from '../../db/models';
 import { isValidObjectId } from 'mongoose';
+import { Subnode } from '../../frontend/src/types';
 
 export const router = express.Router();
 
@@ -52,7 +53,7 @@ router.post('/subnode/:gameId/:nodeId', mongoChecker, authenticate, async (req: 
   }
 
   try {
-    const newSubnode = new SubnodeModel({
+    const newSubnode: Subnode = new SubnodeModel({
       name: req.body.name,
       informationLevel: req.body.informationLevel,
       editors: req.body.editors,

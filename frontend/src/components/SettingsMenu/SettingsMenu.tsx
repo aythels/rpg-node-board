@@ -83,9 +83,11 @@ const SettingsMenu = (): JSX.Element => {
   const invalidEmail = useMemo(() => {
     return !Boolean(editedUserData.email?.match(EMAIL_REGEX));
   }, [editedUserData.email]);
+
   const invalidPassword = useMemo(() => {
     return Boolean(editedUserData.password && editedUserData.password.length < MIN_PASSWORD_LENGTH);
   }, [editedUserData.password]);
+
   const passwordsDoNotMatch = useMemo(() => {
     return Boolean(
       (editedUserData.password || editedUserData.secondPassword) &&

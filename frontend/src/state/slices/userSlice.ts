@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createDraftSafeSelector, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import { Game, User, UserPermission, UserPermissionRecord } from '../../types';
+import { Game, Node, User, UserPermission, UserPermissionRecord } from '../../types';
 import { RootState } from '../rootReducer';
 
 interface UserState {
@@ -22,7 +22,7 @@ const userSlice = createSlice({
       state.userInstance = user;
       state.games = games;
     },
-    addImage: (state: UserState, action: PayloadAction<string>) => {
+    addImage: (state: UserState, action: PayloadAction<NonNullable<Node['image']>>) => {
       state.userInstance.images.push(action.payload);
     },
     updateGameListImage: (state: UserState, action: PayloadAction<[Game['_id'], Game['image']]>) => {
@@ -53,9 +53,36 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { addImage, updateGameListImage } = userSlice.actions;
+export const { updateGameListImage } = userSlice.actions;
 
 // Thunks
+export const addImage = (image: NonNullable<Node['image']>): any => {
+  const addImageThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const userId = getState().user.userInstance._id;
+    try {
+      // TODO: define a new request for this
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}/images`, {
+        method: 'PATCH',
+        body: JSON.stringify({ image }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(userSlice.actions.addImage(image));
+          break;
+        default:
+          console.error("Could not add image to the user's collection of images.");
+          break;
+      }
+    } catch {
+      console.error("Could not add image to the user's collection of images.");
+    }
+  };
+  return addImageThunk;
+};
+
 export const loginUser = (username: string): any => {
   const loginUserThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {

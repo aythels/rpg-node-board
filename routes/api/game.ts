@@ -23,7 +23,6 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
     ],
     settings: {},
     // TODO: use stock images
-    // imgpath:
     // image:
   });
 
@@ -84,8 +83,10 @@ router.delete('/game/:id', mongoChecker, authenticate, async (req: Request, res:
           });
         }),
       );
+      res.send(game);
+    } else {
+      res.status(404).send('Game not found');
     }
-    res.send(game);
   } catch (error) {
     console.log(error);
     if (isMongoError(error)) {
