@@ -10,7 +10,7 @@ import { Alert, AlertTitle } from '@mui/material';
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-const MIN_PASS_LENGTH = 6;
+const MIN_PASSWORD_LENGTH = 6;
 const SettingsMenu = (): JSX.Element => {
   const dispatch = useDispatch();
 
@@ -33,11 +33,15 @@ const SettingsMenu = (): JSX.Element => {
       setError('Username must not be empty');
       return;
     }
-    if (!validEmail) {
+    if (invalidEmail) {
       setError('Email invalid');
       return;
     }
-    if (editedUserData.password !== editedUserData.secondPassword) {
+    if (invalidPassword) {
+      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+      return;
+    }
+    if (passwordsDoNotMatch) {
       setError('Passwords must match');
       return;
     }
@@ -74,9 +78,20 @@ const SettingsMenu = (): JSX.Element => {
   }, []);
 
   const imageInput = useRef<HTMLInputElement>(null);
-  const validEmail = useMemo(() => {
-    return Boolean(editedUserData.email?.match(EMAIL_REGEX));
+
+  // Input validation flags
+  const invalidEmail = useMemo(() => {
+    return !Boolean(editedUserData.email?.match(EMAIL_REGEX));
   }, [editedUserData.email]);
+  const invalidPassword = useMemo(() => {
+    return Boolean(editedUserData.password && editedUserData.password.length < MIN_PASSWORD_LENGTH);
+  }, [editedUserData.password]);
+  const passwordsDoNotMatch = useMemo(() => {
+    return Boolean(
+      (editedUserData.password || editedUserData.secondPassword) &&
+        editedUserData.password !== editedUserData.secondPassword,
+    );
+  }, [editedUserData.password, editedUserData.secondPassword]);
 
   return (
     <div className="padded_div">
@@ -145,8 +160,8 @@ const SettingsMenu = (): JSX.Element => {
           <TextField
             label="Email"
             defaultValue={user.email}
-            error={!validEmail}
-            helperText={(!validEmail && 'Email invalid') || (editedUserData.email !== user.email && 'Modified')}
+            error={invalidEmail}
+            helperText={(invalidEmail && 'Email invalid') || (editedUserData.email !== user.email && 'Modified')}
             onChange={(event) => setEditedUserData({ ...editedUserData, email: event.target.value })}
           />
         </Grid>
@@ -166,16 +181,9 @@ const SettingsMenu = (): JSX.Element => {
           <TextField
             label="New Password"
             type="password"
-            error={Boolean(
-              editedUserData.password &&
-                0 < editedUserData.password.length &&
-                editedUserData.password.length < MIN_PASS_LENGTH,
-            )}
+            error={invalidPassword}
             helperText={
-              (editedUserData.password &&
-                0 < editedUserData.password.length &&
-                editedUserData.password.length < MIN_PASS_LENGTH &&
-                `Enter at least ${MIN_PASS_LENGTH} characters`) ||
+              (invalidPassword && `Enter at least ${MIN_PASSWORD_LENGTH} characters`) ||
               (editedUserData.password && editedUserData.password !== user.password && 'Modified')
             }
             onChange={(event) => setEditedUserData({ ...editedUserData, password: event.target.value })}
@@ -184,14 +192,9 @@ const SettingsMenu = (): JSX.Element => {
         <Grid item>
           <TextField
             label="Confirm Password"
-            // defaultValue={user.username}
-            error={Boolean(editedUserData.password && editedUserData.password !== editedUserData.secondPassword)}
+            error={passwordsDoNotMatch}
             type="password"
-            helperText={
-              editedUserData.password &&
-              editedUserData.password !== editedUserData.secondPassword &&
-              'Passwords do not match'
-            }
+            helperText={passwordsDoNotMatch && 'Passwords do not match'}
             onChange={(event) => setEditedUserData({ ...editedUserData, secondPassword: event.target.value })}
           />
         </Grid>
