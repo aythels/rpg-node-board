@@ -5,6 +5,8 @@ const ClientSocket = function (this: any) {
 
   console.log('opening client socket');
 
+  //console.log(`${process.env.REACT_APP_API_URL}/partyroom`);
+
   const socketProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   const socketUrl = socketProtocol + '//' + window.location.hostname + ':5000/partyroom'; // whatever path you declared in socketserver.ts
   const socket = new WebSocket(socketUrl); // this uses the native WebSocket class and not a library

@@ -19,11 +19,7 @@ interface Props {
 }
 
 const NodeCard = (props: Props): JSX.Element => {
-  //const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
-  console.log('this is updating too much');
-
   const dispatch = useDispatch();
-
   const invisibleNodes = useSelector((state: RootState) => state.nodeview.invisibleNodes);
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const node = props.node;
