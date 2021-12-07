@@ -88,13 +88,23 @@ export const loginUser = (username: string): any => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/user/username/${username}`);
       const user: User = await response.json();
-      const games: Game[] = await Promise.all(
+      const results: PromiseSettledResult<Game>[] = await Promise.allSettled(
         user.games.map(async (gameId) => {
           const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
           const game = await response.json();
           return game;
         }),
       );
+
+      const games: Game[] = [];
+      for (const result of results) {
+        if (result.status === 'fulfilled') {
+          games.push(result.value);
+        } else {
+          console.error('Could not fetch game');
+          console.error(result.reason);
+        }
+      }
       dispatch(userSlice.actions.loginUser([user, games]));
     } catch {
       console.error('Log in unsuccessful');
