@@ -4,8 +4,6 @@ import WebSocket, { WebSocketServer } from 'ws';
 const SocketServer = function (this: any, httpServer: any, route: any) {
   console.log('starting socket server');
 
-  const port = process.env.PORT || 5000;
-
   const server = new WebSocketServer({ server: httpServer, path: route });
 
   server.on('connection', (ws: any) => {
