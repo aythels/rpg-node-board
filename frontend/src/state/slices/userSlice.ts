@@ -25,11 +25,18 @@ const userSlice = createSlice({
     addImage: (state: UserState, action: PayloadAction<string>) => {
       state.userInstance.images.push(action.payload);
     },
+    updateGameListImage: (state: UserState, action: PayloadAction<[Game['_id'], string]>) => {
+      const [gameId, image] = action.payload;
+      const game = state.games.find((game) => game._id === gameId);
+      if (game) {
+        game.image = image;
+      }
+    },
   },
 });
 
 export default userSlice.reducer;
-export const { addImage } = userSlice.actions;
+export const { addImage, updateGameListImage } = userSlice.actions;
 
 // Thunks
 export const loginUser = (username: string): any => {

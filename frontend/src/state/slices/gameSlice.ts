@@ -4,6 +4,7 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
+import { updateGameListImage } from './userSlice';
 
 export enum GameLoadingStatus {
   Loading,
@@ -151,6 +152,7 @@ export const updateGameImage = (image: string): any => {
       switch (response.status) {
         case 200:
           dispatch(gameSlice.actions.updateGameImage(image));
+          dispatch(updateGameListImage([gameId, image]));
           break;
         default:
           console.error(`Could not update game image.`);

@@ -41,7 +41,7 @@ export interface Game {
   _id: string;
   title: string;
   imgpath?: string; //TODO: actually handle images
-  image?: any;
+  image?: string;
   nodes: Node[];
   users: UserPermissionRecord[];
   settings: { [key: string]: unknown };
