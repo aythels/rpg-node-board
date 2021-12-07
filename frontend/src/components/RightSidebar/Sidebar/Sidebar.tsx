@@ -8,7 +8,7 @@ import PlayerList from '../PlayerList/PlayerList';
 import { useCallback, useState } from 'react';
 import { selectIsGameMaster } from '../../../state/slices/userSlice';
 import { RootState } from '../../../state/rootReducer';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const RightSidebar = (): JSX.Element => {
   const theme = useTheme<Theme>();

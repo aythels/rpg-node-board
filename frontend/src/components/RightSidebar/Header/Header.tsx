@@ -1,9 +1,9 @@
 import './header.css';
-import { useCallback, useState, useRef, ChangeEvent, KeyboardEvent, MutableRefObject, useMemo } from 'react';
+import { useCallback, useState, useRef, ChangeEvent, KeyboardEvent, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/styles';
 import { Done, ChevronLeft, Settings } from '@mui/icons-material';
-import { IconButton, TextField, Theme, Tooltip, Typography, CardMedia, CardActionArea, Input } from '@mui/material';
+import { IconButton, TextField, Theme, Tooltip, Typography, CardMedia, CardActionArea } from '@mui/material';
 import { setGameTitle } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
 import { updateGameImage } from '../../../state/slices/gameSlice';
