@@ -49,6 +49,10 @@ const userSlice = createSlice({
         state.userInstance.profilePicture = profilePicture;
       }
     },
+    removeUserFromGame: (state: UserState, action: PayloadAction<Game['_id']>) => {
+      const gameId = action.payload;
+      state.games = state.games.filter((game) => game._id !== gameId);
+    },
   },
 });
 
@@ -111,6 +115,28 @@ export const loginUser = (username: string): any => {
     }
   };
   return loginUserThunk;
+};
+
+export const removeUserFromGame = (gameId: Game['_id']) => {
+  const removeUserFromGameThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    try {
+      const userId = getState().user.userInstance._id;
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${userId}`, {
+        method: 'DELETE',
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(userSlice.actions.removeUserFromGame(gameId));
+          break;
+        default:
+          console.error('Could not remove user from game.');
+          break;
+      }
+    } catch {
+      console.error('Could not remove user from game.');
+    }
+  };
+  return removeUserFromGameThunk;
 };
 
 export type UserDataUpdates = {
