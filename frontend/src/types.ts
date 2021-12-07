@@ -23,7 +23,7 @@ export interface Subnode {
   informationLevel: number;
   editors: User['_id'][];
   type: string;
-  content: Delta | string; // string for JSON
+  content: Delta;
 }
 export enum UserPermission {
   // owner,
