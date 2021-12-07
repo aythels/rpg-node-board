@@ -1,7 +1,5 @@
 import Delta from 'quill-delta';
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-unused-vars */
+
 export interface InfoLevel {
   user: User['_id'];
   infoLevel: number;
@@ -9,7 +7,7 @@ export interface InfoLevel {
 export interface Node {
   _id: string;
   name: string;
-  image?: any;
+  image?: string;
   thumbnailImage?: any;
   imageAlt: string;
   subnodes: Subnode[];
@@ -28,7 +26,6 @@ export interface Subnode {
   content: Delta;
 }
 export enum UserPermission {
-  // TODO: make types uppercase
   // owner,
   gameMaster,
   player,
@@ -40,7 +37,6 @@ export interface UserPermissionRecord {
 export interface Game {
   _id: string;
   title: string;
-  imgpath?: string; //TODO: actually handle images
   image?: string;
   nodes: Node[];
   users: UserPermissionRecord[];
@@ -53,7 +49,7 @@ export interface User {
   email: string; // FOR NOW
   games: Game['_id'][];
   profilePicture?: string;
-  images: any[]; // FOR NOW
+  images: string[]; // FOR NOW
 }
 export enum DefaultNodeTypes {
   location,
