@@ -1,4 +1,3 @@
-import { ConstructionOutlined } from '@mui/icons-material';
 import { Node } from '../types';
 
 interface CanvasNode {
@@ -68,7 +67,27 @@ const NodeManager = function (this: any) {
 
   //----------------------------------------------------------------------Events
 
-  this.onPress = (e: React.MouseEvent<HTMLInputElement>) => {
+  this.deleteNode = (_id: string) => {
+    const node = allNodes.find((node) => node._id === _id);
+    if (node) allNodes.splice(allNodes.indexOf(node), 1);
+
+    this.update();
+  };
+
+  this.addNode = (node: Node) => {
+    allNodes.unshift({
+      _id: node._id,
+      node: node,
+      width: nodeWidth,
+      height: nodeHeight,
+      x: node.x,
+      y: node.y,
+    });
+
+    this.update();
+  };
+
+  this.onPress = (e: MouseEvent) => {
     isMouseDown = true;
     startX = e.clientX;
     startY = e.clientY;
@@ -78,7 +97,7 @@ const NodeManager = function (this: any) {
     this.update();
   };
 
-  this.onMove = (e: React.MouseEvent<HTMLInputElement>) => {
+  this.onMove = (e: MouseEvent) => {
     const cNode = allNodes.find((node) => node._id == (e.target as HTMLDivElement).getAttribute('node-id'));
     if (cNode) hoverNode = cNode;
     else hoverNode = null;
@@ -97,7 +116,7 @@ const NodeManager = function (this: any) {
     this.update();
   };
 
-  this.onRelease = (e: React.MouseEvent<HTMLInputElement>) => {
+  this.onRelease = (e: MouseEvent) => {
     isMouseDown = false;
 
     setActiveNode(null);
@@ -110,6 +129,19 @@ const NodeManager = function (this: any) {
     else if (e.deltaY > 0) setScale(scale - tolerance, e.clientX, e.clientY);
 
     this.update();
+  };
+
+  this.centerNode = (_id: string) => {
+    const node = allNodes.find((node) => node._id === _id);
+    if (node) {
+      const deltaX = finalX - node.x;
+      const deltaY = finalY - node.y;
+
+      animate(finalX, finalY, deltaX, deltaY, (x: number, y: number) => {
+        setAllPos(x, y);
+        this.update();
+      });
+    }
   };
 
   this.centerCanvas = () => {
@@ -166,6 +198,8 @@ const NodeManager = function (this: any) {
   };
 
   const setAllPos = (x: number, y: number) => {
+    // TODO Add restrictions here
+
     const deltaX = finalX - x;
     const deltaY = finalY - y;
 

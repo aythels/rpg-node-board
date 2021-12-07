@@ -19,7 +19,11 @@ interface Props {
 const CanvasInternalNode = (props: Props): JSX.Element => {
   const { node, nodeX, nodeY, nodeWidth, nodeHeight } = props;
   const game = useSelector((state: RootState) => state.game.gameInstance);
-  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
+  const isAdmin = useSelector((state: RootState) => {
+    const allusers = state.game.gameInstance.users;
+    const thisUser = state.user.userInstance;
+    return allusers.some((user) => user.permission === 0 && thisUser._id === user.userId);
+  });
 
   return (
     <div

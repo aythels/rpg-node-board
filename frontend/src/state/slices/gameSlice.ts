@@ -167,6 +167,7 @@ export const addDefaultNode = (gameId: Game['_id']): any => {
       const node: Node = await response.json();
       switch (response.status) {
         case 200:
+          nodeManager.addNode(node);
           dispatch(gameSlice.actions.addNode(node));
           break;
         default:
@@ -188,6 +189,7 @@ export const deleteNode = (gameId: Game['_id'], nodeId: Node['_id']): any => {
       });
       switch (response.status) {
         case 200:
+          nodeManager.deleteNode(nodeId);
           dispatch(gameSlice.actions.deleteNode(nodeId));
           break;
         default:

@@ -12,6 +12,7 @@ import {
   setIsEditPermissionsModalOpen,
 } from '../../../state/slices/nodeviewSlice';
 import { deleteNode } from '../../../state/slices/gameSlice';
+import nodeManager from '../../../state/nodeManager';
 
 interface Props {
   node: Node;
@@ -25,7 +26,11 @@ const NodeCard = (props: Props): JSX.Element => {
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const node = props.node;
   const visible = !invisibleNodes.some((id) => id === node._id);
-  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
+  const isAdmin = useSelector((state: RootState) => {
+    const allusers = state.game.gameInstance.users;
+    const thisUser = state.user.userInstance;
+    return allusers.some((user) => user.permission === 0 && thisUser._id === user.userId);
+  });
 
   return (
     <div className="node-card" onDoubleClick={() => store.dispatch(setActiveNode(node._id))}>
@@ -39,13 +44,14 @@ const NodeCard = (props: Props): JSX.Element => {
           onClick={() => {
             if (visible) store.dispatch(addInvisibleNode(node._id));
             else store.dispatch(removeInvisibleNode(node._id));
+            nodeManager.update();
           }}
         >
           {visible ? <Visibility /> : <VisibilityOff />}
         </IconButton>
       </Tooltip>
       <Tooltip arrow title="Navigate to node">
-        <IconButton aria-label="Navigate to node" onClick={() => console.log('center node, fix this part')}>
+        <IconButton aria-label="Navigate to node" onClick={() => nodeManager.centerNode(node._id)}>
           <CenterFocusStrong />
         </IconButton>
       </Tooltip>

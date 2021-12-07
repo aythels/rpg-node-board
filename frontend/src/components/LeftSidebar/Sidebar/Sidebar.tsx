@@ -21,7 +21,11 @@ const Sidebar = (props: Props): JSX.Element => {
   const [leaveGameDialogue, setLeaveGameDialogue] = React.useState(false);
   const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
   const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
-  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
+  const isAdmin = useSelector((state: RootState) => {
+    const allusers = state.game.gameInstance.users;
+    const thisUser = state.user.userInstance;
+    return allusers.some((user) => user.permission === 0 && thisUser._id === user.userId);
+  });
 
   const sortNodes = (allNodes: Node[]): Node[] => {
     return [...allNodes].sort((a, b) => a.name.localeCompare(b.name));
@@ -47,18 +51,6 @@ const Sidebar = (props: Props): JSX.Element => {
           left: isOpen ? '20%' : '0%',
         }}
       >
-        <Tooltip className="first-button" title="Leave game" placement="right">
-          <IconButton aria-label="Lave game" onClick={() => setLeaveGameDialogue(true)}>
-            <ExitToApp />
-          </IconButton>
-        </Tooltip>
-      </div>
-      <div
-        className="bottom-toolbar"
-        style={{
-          left: isOpen ? '20%' : '0%',
-        }}
-      >
         <Tooltip title="Center node view" placement="right">
           <IconButton aria-label="Center node view" onClick={() => nodeManager.centerCanvas()}>
             <CenterFocusStrong />
@@ -75,6 +67,18 @@ const Sidebar = (props: Props): JSX.Element => {
             <Add />
           </IconButton>
         </Tooltip>
+        {/*<Tooltip className="first-button" title="Leave game" placement="right">
+          <IconButton aria-label="Lave game" onClick={() => setLeaveGameDialogue(true)}>
+            <ExitToApp />
+          </IconButton>
+      </Tooltip>*/}
+      </div>
+      <div
+        className="bottom-toolbar"
+        style={{
+          left: isOpen ? '20%' : '0%',
+        }}
+      >
         <IconButton aria-label={`${isOpen ? 'Close' : 'Open'} the sidebar`} onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <ChevronLeft /> : <ChevronRight />}
         </IconButton>
