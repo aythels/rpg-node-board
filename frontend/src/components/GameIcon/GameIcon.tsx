@@ -15,7 +15,7 @@ interface Props {
 const FALLBACK_IMAGE = '/images/fallbacks/game_icon.jpeg';
 export const GameIcon = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
-  const image = useMemo(() => props.game.imgpath || FALLBACK_IMAGE, [props.game.imgpath]);
+  const image = useMemo(() => props.game.image || FALLBACK_IMAGE, [props.game.image]);
 
   return (
     <Card

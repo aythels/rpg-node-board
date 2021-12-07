@@ -12,7 +12,7 @@ import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 // import { processUserGameData } from './state/slices/nodeviewSlice';
 
 // store.dispatch(loginUser('admin'));
-// store.dispatch(fetchGame(1));
+// store.dispatch(fetchGame('61a9dccdd7c3cec99261a408'));
 // store.dispatch(processUserGameData(store.getState().user.userInstance.id, 1));
 /* REMOVE BEFORE COMMIT */
 

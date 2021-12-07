@@ -75,6 +75,9 @@ const gameSlice = createSlice({
         user.permission = newPermission;
       }
     },
+    updateGameImage: (state: GameState, action: PayloadAction<string>) => {
+      state.gameInstance.image = action.payload;
+    },
   },
 });
 export default gameSlice.reducer;
@@ -132,6 +135,32 @@ export const addPlayer = (user: string, gameId: Game['_id']): any => {
     }
   };
   return addPlayerThunk;
+};
+
+export const updateGameImage = (image: string): any => {
+  const updateGameImageThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const gameId = getState().game.gameInstance._id;
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ image }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.updateGameImage(image));
+          break;
+        default:
+          console.error(`Could not update game image.`);
+          break;
+      }
+    } catch {
+      console.error(`Could not update game image.`);
+    }
+  };
+  return updateGameImageThunk;
 };
 
 // TODO: test
