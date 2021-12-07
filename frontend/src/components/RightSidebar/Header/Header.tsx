@@ -1,5 +1,5 @@
 import './header.css';
-import { useCallback, useState, useRef, ChangeEvent, KeyboardEvent, MutableRefObject } from 'react';
+import { useCallback, useState, useRef, ChangeEvent, KeyboardEvent, MutableRefObject, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/styles';
 import { Done, Edit, ChevronLeft, Settings, Image } from '@mui/icons-material';
@@ -13,6 +13,7 @@ interface Props {
   onSettingsToggleClicked: () => void;
 }
 
+const FALLBACK_IMAGE = '/images/fallbacks/game_icon.jpeg';
 const Header = (props: Props): JSX.Element => {
   const theme = useTheme<Theme>();
   const dispatch = useDispatch();
@@ -79,6 +80,8 @@ const Header = (props: Props): JSX.Element => {
   }, []);
 
   const imageInput = useRef<HTMLInputElement>(null);
+
+  const image = useMemo(() => game.image || FALLBACK_IMAGE, [game.image]);
 
   return (
     <div>
@@ -148,7 +151,7 @@ const Header = (props: Props): JSX.Element => {
               <Tooltip arrow title="Change game image">
                 <CardActionArea onClick={() => imageInput?.current?.click()}>
                   <CardMedia
-                    image={game.image}
+                    image={image}
                     style={{ height: '3rem', width: '3rem', borderRadius: '5px' }}
                     component="img"
                     alt="Game Title"
@@ -158,7 +161,7 @@ const Header = (props: Props): JSX.Element => {
             )
           ) : (
             <CardMedia
-              image={game.image}
+              image={image}
               style={{ height: '3rem', width: '3rem', borderRadius: '5px' }}
               component="img"
               alt="Game Title"
