@@ -181,7 +181,7 @@ router.post('/game/:gameId/user/:username', mongoChecker, authenticate, async (r
 
 // Update a player's permissions in a game (demote to player or promote to GM)
 // takes: req.body: { permission: UserPermission }
-router.patch('/game/:gameId/user/:userid', mongoChecker, authenticate, async (req: Request, res: Response) => {
+router.patch('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const { gameId, userId } = req.params;
   const newPermission = req.body.permission;
 

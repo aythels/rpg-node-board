@@ -338,7 +338,7 @@ export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
 export const updatePlayerPermission = (payload: [User['_id'], UserPermission, Game['_id']]): any => {
   const updatePlayerPermissionThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${payload[2]}/user/${payload[0]}}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${payload[2]}/user/${payload[0]}`, {
         method: 'PATCH',
         body: JSON.stringify({ permission: payload[1] }),
         headers: {
