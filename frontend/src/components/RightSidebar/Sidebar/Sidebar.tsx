@@ -5,7 +5,7 @@ import { Drawer, IconButton, Theme } from '@mui/material';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import PlayerList from '../PlayerList/PlayerList';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const RightSidebar = (): JSX.Element => {
   const theme = useTheme<Theme>();
@@ -13,13 +13,13 @@ const RightSidebar = (): JSX.Element => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  const toggleSidebarOpen = (): void => {
+  const toggleSidebarOpen = useCallback(() => {
     setSidebarOpen((prevSidebarOpen: boolean) => !prevSidebarOpen);
-  };
+  }, []);
 
-  const toggleSettingsOpen = (): void => {
+  const toggleSettingsOpen = useCallback(() => {
     setSettingsOpen((prevSettingsOpen: boolean) => !prevSettingsOpen);
-  };
+  }, []);
 
   return (
     <div className="canvas-sidebar" style={{ backgroundColor: theme.palette.primary.light }}>
