@@ -25,10 +25,9 @@
   width: 7000px;
   height: 7000px;
   background-color: white;
-  background-image: linear-gradient(#d2d3e1 4.4px, transparent 4.4px),
-    linear-gradient(90deg, #d2d3e1 4.4px, transparent 4.4px), linear-gradient(#d2d3e1 2.2px, transparent 2.2px),
-    linear-gradient(90deg, #d2d3e1 2.2px, #ffffff 2.2px);
-  background-size: 110px 110px, 110px 110px, 22px 22px, 22px 22px;
-  background-position: -4.4px -4.4px, -4.4px -4.4px, -2.2px -2.2px, -2.2px -2.2px;
-  opacity: 0.5;
+  background-image: linear-gradient(#d2d3e1 4px, transparent 4px), linear-gradient(90deg, #d2d3e1 4px, transparent 4px),
+    linear-gradient(#d2d3e1 2px, transparent 2px), linear-gradient(90deg, #d2d3e1 2px, #ffffff 2px);
+  background-size: 100px 100px, 100px 100px, 25px 25px, 25px 25px;
+  background-position: -2px -2px;
+  opacity: 0.6;
 }

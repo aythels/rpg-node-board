@@ -50,7 +50,9 @@
           }
         ],
         "editors": ["61a9da75d7c3cec99261a3fd", "61a9da74d7c3cec99261a3fc"],
-        "type": "location"
+        "type": "location",
+        "x": 0,
+        "y": 0
       },
       {
         "_id": { "$oid": "61a9dcf5d7c3cec99261a40b" },
@@ -78,7 +80,9 @@
           }
         ],
         "editors": ["61a9da75d7c3cec99261a3fd"],
-        "type": "location"
+        "type": "location",
+        "x": 0,
+        "y": 0
       },
       {
         "_id": { "$oid": "61a9dcf5d7c3cec99261a40c" },
@@ -106,7 +110,9 @@
           }
         ],
         "editors": ["61a9da75d7c3cec99261a3fd"],
-        "type": "location"
+        "type": "location",
+        "x": 0,
+        "y": 0
       },
       {
         "_id": { "$oid": "61a9dcf5d7c3cec99261a40d" },
@@ -134,7 +140,9 @@
           }
         ],
         "editors": ["61a9da75d7c3cec99261a3fd"],
-        "type": "location"
+        "type": "location",
+        "x": 0,
+        "y": 0
       }
     ],
     "users": [

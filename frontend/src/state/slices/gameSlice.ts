@@ -4,6 +4,7 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
+import nodeManager from '../nodeManager';
 import { updateGameListImage } from './userSlice';
 
 export enum GameLoadingStatus {
@@ -44,6 +45,7 @@ const gameSlice = createSlice({
       state.dialogStatus[dialog] = status;
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
+      nodeManager.appendData(action.payload.nodes);
       state.gameInstance = action.payload;
       state.status = GameLoadingStatus.Idle;
     },
@@ -197,6 +199,7 @@ export const addDefaultNode = (gameId: Game['_id']): any => {
       const node: Node = await response.json();
       switch (response.status) {
         case 200:
+          nodeManager.addNode(node);
           dispatch(gameSlice.actions.addNode(node));
           break;
         default:
@@ -218,6 +221,7 @@ export const deleteNode = (gameId: Game['_id'], nodeId: Node['_id']): any => {
       });
       switch (response.status) {
         case 200:
+          nodeManager.deleteNode(nodeId);
           dispatch(gameSlice.actions.deleteNode(nodeId));
           break;
         default:
