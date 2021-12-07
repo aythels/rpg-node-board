@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import { userRouter, gameRouter, nodeRouter, subnodeRouter } from './routes';
+import SocketServer from './routes/socketServer';
 
 // starting the express server
 const app = express();
@@ -71,6 +72,8 @@ app.use((err: any, req: any, res: any, next: any) => {
 
 // Express server listening...
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+const httpServer = app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
+
+const socketServer = new (SocketServer as any)(httpServer, '/partyroom');
