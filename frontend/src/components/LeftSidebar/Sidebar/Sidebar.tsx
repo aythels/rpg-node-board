@@ -1,30 +1,32 @@
 import './sidebar.css';
-import React from 'react';
+import { useState, useMemo } from 'react';
 import NodeCard from '../NodeCard/NodeCard';
 import { Drawer, IconButton, Tooltip, Typography } from '@mui/material';
 import { ExitToApp, Add, CenterFocusStrong, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { withTheme } from '@emotion/react';
 import { MuiTheme } from '../../../theme';
 import Dialog from '../../Dialog/Dialog';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../state/rootReducer';
 import { Node } from '../../../types';
 import { addDefaultNode } from '../../../state/slices/gameSlice';
-import { store } from '../../../state/';
 import { setIsEditPermissionsModalOpen } from '../../../state/slices/nodeviewSlice';
+import { selectIsGameMaster } from '../../../state/slices/userSlice';
 
 type Props = MuiTheme;
 
 const Sidebar = (props: Props): JSX.Element => {
-  const [isOpen, setIsOpen] = React.useState(true);
-  const [leaveGameDialogue, setLeaveGameDialogue] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [leaveGameDialogue, setLeaveGameDialogue] = useState(false);
+
+  const dispatch = useDispatch();
   const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
   const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
-  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
+  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
-  const sortNodes = (allNodes: Node[]): Node[] => {
+  const sortedNodes = useMemo(() => {
     return [...allNodes].sort((a, b) => a.name.localeCompare(b.name));
-  };
+  }, [allNodes]);
 
   return (
     <div className="left-sidebar">
@@ -35,7 +37,7 @@ const Sidebar = (props: Props): JSX.Element => {
           </Typography>
         </div>
         <div className="node-list">
-          {sortNodes(allNodes).map((node: Node) => (
+          {sortedNodes.map((node: Node) => (
             <NodeCard key={node._id} node={node} />
           ))}
         </div>
@@ -67,8 +69,11 @@ const Sidebar = (props: Props): JSX.Element => {
           <IconButton
             aria-label="Add a new node"
             onClick={() => {
-              if (isAdmin) store.dispatch(addDefaultNode(gameId));
-              else store.dispatch(setIsEditPermissionsModalOpen(true));
+              if (isGameMaster) {
+                dispatch(addDefaultNode(gameId));
+              } else {
+                dispatch(setIsEditPermissionsModalOpen(true));
+              }
             }}
           >
             <Add />

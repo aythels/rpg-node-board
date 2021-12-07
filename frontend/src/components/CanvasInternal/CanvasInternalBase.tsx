@@ -14,7 +14,7 @@ const CanvasInternalBase = (): JSX.Element => {
 
   return (
     <div>
-      <CanvasInternalTransform />
+      {/* <CanvasInternalTransform /> */}
       <Sidebar />
       {activeNode !== '' ? (
         <div className="nodeview-container">

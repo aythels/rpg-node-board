@@ -27,7 +27,6 @@ const NodeCard = (props: Props): JSX.Element => {
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const node = props.node;
   const visible = !invisibleNodes.some((id) => id === node._id);
-  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
   return (
@@ -68,7 +67,7 @@ const NodeCard = (props: Props): JSX.Element => {
             color="error"
             aria-label="Delete node"
             onClick={() => {
-              if (isAdmin) {
+              if (isGameMaster) {
                 dispatch(deleteNode(game._id, node._id));
               } else {
                 dispatch(setIsEditPermissionsModalOpen(true));
