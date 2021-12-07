@@ -27,8 +27,8 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
       node-id={node._id}
       onDoubleClick={() => store.dispatch(setActiveNode(node._id))}
       style={{
-        left: `${nodeX}px`,
-        top: `${nodeY}px`,
+        left: `${nodeX - nodeWidth / 2}px`,
+        top: `${nodeY - nodeHeight / 2}px`,
         width: `${nodeWidth}px`,
         height: `${nodeHeight}px`,
         backgroundImage: `url(${node.image})`,

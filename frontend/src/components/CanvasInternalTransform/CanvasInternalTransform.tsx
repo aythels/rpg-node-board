@@ -18,6 +18,7 @@ const CanvasInternalTransform = (): JSX.Element => {
       onPointerMove={nodeManager.onMove}
       onPointerUp={nodeManager.onRelease}
       onPointerLeave={nodeManager.onRelease}
+      onWheel={nodeManager.onWheel}
     >
       <div className="centerOffSet-container">
         <div className="scale-container" style={{ transform: `scale(${canvasData.scale})` }}>

@@ -25,7 +25,7 @@ const NodeManager = function (this: any) {
   let startY = 0;
   let finalX = 0;
   let finalY = 0;
-  const scale = 1;
+  let scale = 1;
 
   const componentToUpdate: any[] = [];
 
@@ -36,7 +36,7 @@ const NodeManager = function (this: any) {
       allNodes: allNodes,
       finalX: finalX,
       finalY: finalY,
-      scale: 1,
+      scale: scale,
     };
   };
 
@@ -58,8 +58,8 @@ const NodeManager = function (this: any) {
         node: node,
         width: nodeWidth,
         height: nodeHeight,
-        x: 100,
-        y: 100,
+        x: node.x,
+        y: node.y,
       });
     });
 
@@ -103,6 +103,15 @@ const NodeManager = function (this: any) {
     setActiveNode(null);
   };
 
+  this.onWheel = (e: WheelEvent) => {
+    const tolerance = 0.1;
+
+    if (e.deltaY < 0) setScale(scale + tolerance, e.clientX, e.clientY);
+    else if (e.deltaY > 0) setScale(scale - tolerance, e.clientX, e.clientY);
+
+    this.update();
+  };
+
   //---------------------------------------------------------------------Utility
 
   const setActiveNode = (node: CanvasNode | null) => {
@@ -137,6 +146,16 @@ const NodeManager = function (this: any) {
     finalY += yDelta;
 
     for (const node of allNodes) addNodePos(xDelta, yDelta, node);
+  };
+
+  const setScale = (newScale: number, mouseX: number, mouseY: number) => {
+    const offSetOld = 1 / scale - 1;
+    addAllPos(-offSetOld * (mouseX - window.innerWidth / 2), -offSetOld * (mouseY - window.innerHeight / 2));
+
+    if (newScale > 0.5 && newScale < 2) scale = newScale;
+
+    const offSetNew = 1 / scale - 1;
+    addAllPos(offSetNew * (mouseX - window.innerWidth / 2), offSetNew * (mouseY - window.innerHeight / 2));
   };
 };
 
