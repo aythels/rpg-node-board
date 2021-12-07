@@ -47,11 +47,15 @@ const NodeManager = function (this: any) {
     componentToUpdate.push(callback);
   };
 
+  this.removeComponentToUpdate = (callback: any) => {
+    const index = componentToUpdate.indexOf(callback);
+    if (index !== -1) componentToUpdate.splice(index, 1);
+  };
+
   this.appendData = (data: any) => {
     allNodes = [];
 
     data.forEach((node: Node) => {
-      console.log(node.x);
       allNodes.push({
         _id: node._id,
         node: node,
@@ -224,7 +228,6 @@ function animate(x1: number, y1: number, x2: number, y2: number, callback: any) 
 
   const tick = () => {
     if (Math.abs(x1 - x2) + Math.abs(y1 - y2) < tols) {
-      console.log('animation finished');
       callback(x2, y2);
       return;
     }

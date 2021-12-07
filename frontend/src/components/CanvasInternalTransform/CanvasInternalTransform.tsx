@@ -56,9 +56,19 @@ const CanvasInternalTransform = (): JSX.Element => {
 import { store } from '../../state';
 
 export default class CanvasInternalTransform extends React.Component {
-  constructor(props: any) {
-    super(props);
-    nodeManager.addComponentToUpdate(() => this.setState({}));
+  updateCanvas = () => {
+    this.setState({});
+  };
+
+  componentDidMount() {
+    // Why is this not working properly?
+    //setTimeout(() => {
+    nodeManager.addComponentToUpdate(this.updateCanvas);
+    //}, 3000);
+  }
+
+  componentWillUnmount() {
+    nodeManager.removeComponentToUpdate(this.updateCanvas);
   }
 
   render(): JSX.Element {
