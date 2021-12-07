@@ -2,28 +2,50 @@
 
 ## General Information
 
+This application is intended to facilitate the frictionless creation and sharing of **lore**. Once logged in, a user can access and create *games*. A *game* represents an isolated, fully-featured instance of the application wherein users known as *game masters* can be considered equivalent to admins, as they have the ability to perform all of the requisite admin functionalities within said *game*.
+
 ### Login Info:
 - Username: **admin**, password: **admin**
 - Username: **user**, password: **user**
-- *Note:* There are other users that exist in the data to demonstrate some of the functionality of the views, but they should not be accessed.
 
-### Note on Hardcoded Values
-Our phase 1 project does not utilize any external data source. Rather, we created the `mock-backend.ts` file, which includes all of the hardcoded JS values that are used throughout the frontend. Any line in the code that calls a function exported from `mock-backend.ts` will, in later phases, send an equivalent request to the actual backend. Therefore, function calls such as `GETnodesInGame()` and `GETuserCanEditNode()` should be treated as equivalent to having a comment above them saying "// code below requires server call". 
+## How to use the application
 
-### Note on routing/state
-We are still undecided on how to store state (i.e. giving them via  react-router) or by using a solution like redux. Once we begin integrating a live database, we will compare the solutions and go from there. Because of this, we only have a rudimentary global state propogation currently, and the state of some pages may not appear to be as a direct result of others.
+One can log in using the above credentials **or** create a new account.
 
-### Admin Functionalities
-After logging in as 'admin', click on a game card (*Note: the "CLICK" game is the one that is actually set up with data -- the other games should not be clicked*). This will bring you to the main view of the app (canvas). From here, you can click on the gear button at the top of the righthand sidebar to enable user editing (the ability to add/remove users, promote a player to a game master, change the game name, and delete the game). 
+Once logged in, one can:
+- Click on an existing *game*'s card **or** create a new *game*
+- Edit one's account settings (and delete one's account) by clicking on the cog icon
 
-You can drag the nodes around on the canvas. *(Note: all of them will load in the same position.)*
+Once on the *canvas*, one can:
+- \*Create *nodes* representing lore items (people, places, items, etc.) by clicking on the '+' button
+- Move nodes around the canvas by dragging them
+- View existing nodes' content (represented in the form of subnodes) by opening up their nodeview (e.g. by double-clicking on them on the canvas)
+- View a list of users in the game on the right sidebar
+- View a list of nodes in the game on the left sidebar
+- \*Enable editing of the players within the game as well as the name of the game by clicking on the 'cog' icon at the top of the right sidebar
+- \*Change the name of the game by typing in the text-entry box containing the game's current name at the top of the right sidebar
+- \*Change the permissions of users within the game by clicking on the 'person' icon next to their name. A filled-in icon indicates that the user is a *game master* while an outlined icon indicates that the user is a player (a regular user)
+- \*Delete a user from the game by clicking the red 'remove person' icon to the right of their name
+- \*Invite a new user to the game by typing their username into the text entry field at the bottom of the right sidebar
 
-You can double-click on any of the square nodes in the canvas to bring up their associated NodeView. Inside the node, you can edit any subnode which you have permission to edit by typing in the Quill WYSIWYG editor (as admin you can edit all subnodes, as a user you can only edit the Notes subnodes as well as any other subnodes that an admin has explicitly given you permission to edit). If you type the name of another node in the current game, it will automatically be formatted as a clickable block of text that will open up the appropriate node. Subnodes autosave their content once every second. You can add new subnodes using the tools at the bottom of the NodeView. You can edit the node's meta-information, permissions, and image using the menu modals that open when you click the buttons on the top-right of the NodeView. *(Note: Adding a new image works in theory, but as all images are accessed as paths to the app's `public/images/` folder, inserting new images from the user's machine is not supported and this functionality should not be treated as part of the current build.)*
+Once in a *nodeview*, one can:
+- View the content (subnodes) of that node (e.g. a description of a location, a description of an event that took place at that location, a secret about that location, etc.) 
+- \*\*Edit the content of existing subnodes by typing in the Quill WYSIWYG editor
+- \*\*Create new subnodes using the tools at the bottom of the view
+- \*\*Edit the node's metadata by opening the 'edit menu' (clicking on the 'pen' icon in the top-right)
+- \*\*Change which other users can view the node, view specific subnodes within the node, and edit the node by opening the 'users menu' (clicking on the 'people' icon) \[see: **Explanation of Permissions** section\]
+- \*\*Edit the node's image (what appears on the *canvas* and at the top of the *nodeview*) by opening the 'image menu' (clicking on the 'image' icon)
 
-You can add new nodes by clicking on the plus button at the bottom-left of the page. *(Note: The system currently assumes that users will have only 1 node with a particular name. Having nodes with duplicate names does not introduce any errors, however only one of them will be able to be linked to through text.)*
+\* = *Game master* (admin) functionality
+\*\* = *Game master* (admin) functionality which can be extended to other users by a *game master* (admin)
 
-### User Functionalities
-After logging in as 'user', the process is similar to that of an admin with a few noticable differences. First, the user expectedly does not have access to the button that enables user editing. Furthermore, only nodes that the user has been given permission to view appear on the canvas, and the user is not permitted to create new nodes. The user can still drag nodes around and open up their respective NodeView, which will open with only the subnodes that the user has permission to view, and no menu buttons. The user can still type in the Quill editor to update nodes that they have been given permission to edit, and the user can still click on text links to open up new NodeViews.
+### Explanation of Permissions
+
+TODO
+
+## Overview of Routes
+
+TODO
 
 ## Frontend
 
@@ -49,7 +71,7 @@ Before you install a new package, always make sure you are in the directory `fro
 
 ## Backend
 
-TBA
+TODO
 
 ## Third-Party Libraries
 
