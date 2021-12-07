@@ -68,9 +68,6 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
       newNode.informationLevels.push(infoLevel);
     }
 
-    // if (req.body.thumbnailImage) newNode.thumbnailImage = req.body.thumbnailImage; // TODO: Test
-    // if (req.body.image) newNode.image = req.body.image; // TODO: Test
-
     const result = await GameModel.findOneAndUpdate({ _id: gameId }, { $push: { nodes: newNode } });
     res.send(newNode);
   } catch (error) {
