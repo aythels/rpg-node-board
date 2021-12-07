@@ -23,13 +23,17 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "install": "^0.13.0",
     "mongodb": "^4.2.0",
     "mongoose": "^6.0.13",
     "nodemon": "^2.0.15",
-    "validator": "^13.7.0"
+    "npm": "^8.2.0",
+    "validator": "^13.7.0",
+    "ws": "^8.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
+    "@types/ws": "^8.2.2",
     "prettier": "^2.5.0"
   }
 }

@@ -2,7 +2,6 @@ import './canvasInternalNode.css';
 import { Node } from '../../types';
 import { Delete, Launch } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
-import { store } from '../../state';
 import { setActiveNode, setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
 import { deleteNode } from '../../state/slices/gameSlice';
 import { RootState } from '../../state/rootReducer';
@@ -11,14 +10,16 @@ import { selectIsGameMaster } from '../../state/slices/userSlice';
 
 interface Props {
   node: Node;
+  nodeX: number;
+  nodeY: number;
   nodeWidth: number;
   nodeHeight: number;
 }
 
 const CanvasInternalNode = (props: Props): JSX.Element => {
-  const dispatch = useDispatch();
-  const { node, nodeWidth, nodeHeight } = props;
+  const { node, nodeX, nodeY, nodeWidth, nodeHeight } = props;
   const game = useSelector((state: RootState) => state.game.gameInstance);
+  const dispatch = useDispatch();
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
   return (
@@ -27,8 +28,8 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
       node-id={node._id}
       onDoubleClick={() => dispatch(setActiveNode(node._id))}
       style={{
-        left: `${node.x}px`,
-        top: `${node.y}px`,
+        left: `${nodeX - nodeWidth / 2}px`,
+        top: `${nodeY - nodeHeight / 2}px`,
         width: `${nodeWidth}px`,
         height: `${nodeHeight}px`,
         backgroundImage: `url(${node.image})`,
