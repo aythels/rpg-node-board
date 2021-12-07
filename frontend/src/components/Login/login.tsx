@@ -16,12 +16,31 @@ const Login = (): JSX.Element => {
 
   const checkPassword = async (): Promise<void> => {
     // TODO
-    // if (!GETloginVerification(username, password)) {
-    //   console.info('Login or password is invalid');
-    //   setInvalid(true);
-    // } else {
-    await dispatch(loginUser(username));
-    // }
+    const request = new Request(`${process.env.REACT_APP_API_URL}/user/login`, {
+      method: 'post',
+      body: JSON.stringify({ username: username, password: password }), //username and password go here
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    fetch(request)
+      .then(async (res) => {
+        // console.log(res.session.user);
+        if (res.status === 401) {
+          console.log('Login or password is invalid');
+          setInvalid(true);
+        } else if (res.status === 200) {
+          console.log('Login successful');
+
+          await dispatch(loginUser(username));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return loggedIn ? (

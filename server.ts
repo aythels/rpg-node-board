@@ -3,16 +3,49 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import session from 'express-session';
+const session = require("express-session");
+const MongoStore = require('connect-mongo') // to store session information on the database in production
+
 import { userRouter, gameRouter, nodeRouter, subnodeRouter } from './routes';
+
+
 
 // starting the express server
 const app = express();
 
 if (process.env.NODE_ENV !== 'production') {
   // Enable CORS for local React development server to connect to the web server
-  app.use(cors());
+  const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionSuccessStatus: 200,
+  }
+  app.use(cors(corsOptions));
+} else {
+  // const corsOptions = {
+  //   origin: 'https://rpg-nodes.herokuapp.com/', //if all else fails....
+  //   credentials: true,
+  //   optionSuccessStatus: 200,
+  // }
+  // app.use(cors(corsOptions));
+  // app.use(cors()); 
+
 }
+
+const env = process.env.NODE_ENV // read the environment variable (will be 'production' in production mode)
+
+const USE_TEST_USER = env !== 'production' && process.env.TEST_USER_ON // option to turn on the test user.
+const TEST_USER_ID = '5fb8b011b864666580b4efe3' // the id of our test user (you will have to replace it with a test user that you made). can also put this into a separate configutation file
+const TEST_USER_EMAIL = 'test@user.com'
+
+if (USE_TEST_USER) {
+  console.log("test usre mode is on")
+} else {
+  console.log("not")
+}
+
+// console.log(proscess.env)
+
 
 console.log(`Server running in ${process.env.NODE_ENV} mode`);
 
@@ -25,12 +58,6 @@ mongoose.set('bufferCommands', false); // don't buffer db requests if the db ser
 // body-parser: middleware for parsing HTTP JSON body into a usable object
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Add routes (This must be on top)
-app.use('/api', userRouter);
-app.use('/api', gameRouter);
-app.use('/api', nodeRouter);
-app.use('/api', subnodeRouter);
 
 /*** Session handling **************************************/
 // express-session for managing user sessions
@@ -49,9 +76,23 @@ app.use(
 
     // Session saving options
     saveUninitialized: false, // don't save the initial session if the session object is unmodified (for example, we didn't log in).
-    resave: false, // don't resave an session that hasn't been modified.
+    resave: true, // don't resave an session that hasn't been modified.
+    // store: env === 'production' ? MongoStore.create({
+    //   mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/RpgAPI'
+    // }) : null
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/RpgAPI'
+    })
   }),
 );
+
+
+// Add routes
+app.use('/api', userRouter);
+app.use('/api', gameRouter);
+app.use('/api', nodeRouter);
+app.use('/api', subnodeRouter);
+
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'frontend/build')));

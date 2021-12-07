@@ -1,13 +1,35 @@
 import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button, Grid, IconButton, TextField, Tooltip } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
 
 const SettingsMenu = (): JSX.Element => {
   const user = useSelector((state: RootState) => state.user.userInstance);
+  const history = useHistory(); //temp fix.
+
+  const logout = async (): Promise<void> => {
+    // TODO
+    const request = new Request(`${process.env.REACT_APP_API_URL}/user/logout`, {
+      method: 'get',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    fetch(request)
+      .then(async (res) => {
+        console.log('should be logged out');
+        history.push('/'); //temp fix.
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   // TODO: bind this to Redux
   const [editedUserData, setEditedUserData] = useState({
@@ -100,6 +122,11 @@ const SettingsMenu = (): JSX.Element => {
         <Grid item>
           <Button variant="contained" disabled={same()} color="primary">
             Submit Changes
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" color="warning" onClick={logout}>
+            Log Out
           </Button>
         </Grid>
       </Grid>

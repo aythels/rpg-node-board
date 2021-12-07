@@ -1,2 +1,2 @@
-export { mockAuthenticate as authenticate, mockSessionChecker as sessionChecker } from './mockAuthenatication';
+export { authenticate as authenticate, mockSessionChecker as sessionChecker } from './authentication';
 export * from './mongoHelpers';
