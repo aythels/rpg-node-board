@@ -25,12 +25,12 @@ export const UserSchema = new Schema<User>({
       required: true,
     },
   ],
-  /*images: [
+  images: [
     {
       type: [String], // base 64
       required: true,
     },
-  ],*/
+  ],
 });
 
 export const UserModel = mongoose.model('user', UserSchema);
