@@ -31,10 +31,10 @@ export const GameSchema = new Schema<Game>({
       },
     },
   ],
-  /*settings: {
+  settings: {
     type: String, //JSON
     required: true,
-  },*/
+  },
 });
 
 export const GameModel = mongoose.model('Game', GameSchema);
