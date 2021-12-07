@@ -4,7 +4,7 @@
 
 This application is intended to facilitate the frictionless creation and sharing of **lore**, such as that created for tabletop roleplaying games (TTRPGs). Once logged in, a user can access and create *games*. A *game* represents an isolated, fully-featured instance of the application wherein users known as *game masters* can be considered equivalent to admins, as they have the ability to perform all of the requisite admin functionalities within said *game*.
 
-Deployed Application: https://rpg-nodes.herokuapp.com/
+Deployed Application: https://rpg-nodes.herokuapp.com/ (NOT WORKING AS OF 12/07 UP DUE TO AWS OUTAGE)
 
 ### Login Info:
 - Username: **admin**, password: **admin**
@@ -44,58 +44,62 @@ Once in a *nodeview*, one can:
 
 ### Explanation of Permissions
 
-TODO
+In addition to the separation of functionality based on the user's permssion within a game, either Player or Game Master (admin), our app includes Node-specific and Subnode-specific permissions:
+- Each node has a list of `editors` who have permission to modify said node. By default this list includes all of the Game Masters, but Players can also be added to the list (by an editor).
+- Each node also has a list of `informationLevels` which map players to numbers, the numbers denote the level of access or 'familiarity' that particular player has with that node. A player with an `infoLevel` of 0 is unable to see the node at all. 
+- Each subnode within a node has an `informationLevel` property that denotes the minimal `infoLevel` a player must have with that subnode's containing node in order to see that subnode. Editors of the node can see every subnode.
+- Each subnode also has a list of `editors` which functions the same as the list of `editors` for a node, just for that specific subnode. Editors of a node *may or may not* be editors of any particular subnode within that node.
 
 ## Overview of Routes
 
 *All listed routes are preceded with "/api".*
 
 "/game"
-- POST: Creates a new game. Expects the ID of the user creating the game (userId) and the title of the game (title) in the request body. Returns the newly-created game.
+- POST: Creates a new game. Expects the ID of the user creating the game (`userId`) and the title of the game (`title`) in the request body. Returns the newly-created game.
 
 "/game/:id"
-- GET: Retrieves the game with ID = req.params.id.
-- DELETE: Deletes the game with ID = req.params.id. Returns the deleted game.
-- PATCH: Updates the game with ID = req.params.id. Expects the properties to be updated and their values in the request body (note: this route should NOT be used to update any subdocuments within the game, i.e. nodes or users). Returns the updated game.
+- GET: Retrieves the game with ID = `req.params.id`.
+- DELETE: Deletes the game with ID = `req.params.id`. Returns the deleted game.
+- PATCH: Updates the game with ID = `req.params.id`. Expects the properties to be updated and their values in the request body (note: this route should NOT be used to update any subdocuments within the game, i.e. nodes or users). Returns the updated game.
 
 "/game/:gameId/user/:username"
-- POST: Adds user with username = req.params.username to the game with ID = req.params.gameId. Returns the newly-created UserPermissionRecord for the given user within the given game.
+- POST: Adds user with username = `req.params.username` to the game with ID = `req.params.gameId`. Returns the newly-created UserPermissionRecord for the given user within the given game.
 
 "/game/:gameId/user/:userId"
-- PATCH: Changes the permission of the user with ID = req.params.userId in the game with ID = req.params.gameId. Expects the new permission level of the user as req.body.permission (0 = Game Master, 1 = Player). Returns the updated UserPermissionRecord. *Note: Demoting a game master to a player will remove them as an editor from every node in the game. Promoting a player to a game master will add them as an editor to every node in the game.*
-- DELETE: Removes the user with ID = req.params.userId from the game with ID = req.params.gameId. Returns the updated game.
+- PATCH: Changes the permission of the user with ID = `req.params.userId` in the game with ID = `req.params.gameId`. Expects the new permission level of the user as `req.body.permission` (0 = Game Master, 1 = Player). Returns the updated UserPermissionRecord. *Note: Demoting a game master to a player will remove them as an editor from every node in the game. Promoting a player to a game master will add them as an editor to every node in the game.*
+- DELETE: Removes the user with ID = `req.params.userId` from the game with ID = `req.params.gameId`. Returns the updated game.
 
 "/node/:gameId"
-- POST: Adds a (default) node to the game with ID = req.params.gameId. Returns the newly-created node.
+- POST: Adds a (default) node to the game with ID = `req.params.gameId`. Returns the newly-created node.
 
 "/node/:gameId/:nodeId"
-- GET: Retrieves the node with ID = req.params.nodeId from the game with ID = req.params.gameId.
-- PATCH: Updates the node with ID = req.params.nodeId within the game with ID = req.params.gameId. Expects the properties to be updated and their values in the request body (note: this route should NOT be used to update any subdocuments within the node, i.e. subnodes). Returns the updated node.
-- DELETE: Removes the node with ID = req.params.nodeId from the game with ID = req.params.gameId. Returns the deleted node.
+- GET: Retrieves the node with ID = `req.params.nodeId` from the game with ID = `req.params.gameId`.
+- PATCH: Updates the node with ID = `req.params.nodeId` within the game with ID = `req.params.gameId`. Expects the properties to be updated and their values in the request body (note: this route should NOT be used to update any subdocuments within the node, i.e. subnodes). Returns the updated node.
+- DELETE: Removes the node with ID = `req.params.nodeId` from the game with ID = `req.params.gameId`. Returns the deleted node.
 
 "/subnode/:gameId/:nodeId"
-- POST: Adds a new subnode to the node with ID = req.params.nodeId. Expects the request body to include (name, informationLevel, editors, type). Returns the newly-created subnode.
+- POST: Adds a new subnode to the node with ID = `req.params.nodeId`. Expects the request body to include (name, informationLevel, editors, type). Returns the newly-created subnode.
 
 "/subnode/:gameId/:nodeId/:subnodeId"
-- GET: Retrieves the subnode with ID = req.params.subnodeId within the node with ID = req.params.nodeId within the game with ID = req.params.gameId.
-- PATCH: Updates the subnode with ID = req.params.subnodeId within the node with ID = req.params.nodeId. Expects the properties to be updated and their values in the request body. Returns the updated subnode.
-- DELETE: Removes the subnode with ID = req.params.subnodeId from the node with ID = req.params.nodeId. Returns the deleted subnode.
+- GET: Retrieves the subnode with ID = `req.params.subnodeId` within the node with ID = `req.params.nodeId` within the game with ID = `req.params.gameId`.
+- PATCH: Updates the subnode with ID = `req.params.subnodeId` within the node with ID = `req.params.nodeId`. Expects the properties to be updated and their values in the request body. Returns the updated subnode.
+- DELETE: Removes the subnode with ID = `req.params.subnodeId` from the node with ID = `req.params.nodeId`. Returns the deleted subnode.
 
 "/user"
-- POST: Creates a new user. Expects req.body to contain (username, password, email). Returns the newly-created user.
+- POST: Creates a new user. Expects `req.body` to contain (`username`, `password`, `email`). Returns the newly-created user.
 
 "/user/:id"
-- GET: Retrieves the user with ID = req.params.id.
-- DELETE: Deletes the user with ID = req.params.id. *Note: this does not remove the user from any games. This may cause bugs.* Returns the deleted user.
-- PATCH: Updates the user with ID = req.params.id. Expects the properties to be updated and their values in the request body (note: this route shoudl not be used to update the user's images). Returns the updated user.
+- GET: Retrieves the user with ID = `req.params.id`.
+- DELETE: Deletes the user with ID = `req.params.id`. *Note: this does not remove the user from any games. This may cause bugs.* Returns the deleted user.
+- PATCH: Updates the user with ID = `req.params.id`. Expects the properties to be updated and their values in the request body (note: this route should not be used to update the user's images). Returns the updated user.
 
 "/user/:id/images"
-- PATCH: Updates the list of images associated with the user with ID = req.params.id. Returns the updated user.
+- PATCH: Updates the list of images associated with the user with ID = `req.params.id`. Returns the updated user.
 
 "/user/username/:username"
-- GET: Retrieves the user with username = req.params.username.
+- GET: Retrieves the user with username = `req.params.username`.
 
-## Frontend
+## Frontend Setup
 
 1. Make sure you're in the directory `frontend`:
 
@@ -117,9 +121,38 @@ npm start
 
 Before you install a new package, always make sure you are in the directory `frontend`.
 
-## Backend
+## Local Backend Setup
 
-TODO
+1. Ensure that all dependencies have been installed in the root directory and in `frontend`.
+
+```
+npm ci && cd frontend && npm ci
+```
+
+2. In the root directory, start MongoDB 
+
+```
+mongod --dbpath mongo-data
+```
+
+3. In another terminal in the root directory, run
+
+```
+mongoimport --db=RpgAPI --type=json --jsonArray --collection=users --file=mock-data/user.json
+mongoimport --db=RpgAPI --type=json --jsonArray --collection=games --file=mock-data/game.json
+```
+
+4. Create a build of the app to be served
+
+```
+cd frontend && npm run build
+```
+
+5. In the root directory, start the server
+
+```
+npm run dev
+```
 
 ## Third-Party Libraries
 
