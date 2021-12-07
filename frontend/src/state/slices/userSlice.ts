@@ -32,8 +32,22 @@ const userSlice = createSlice({
         game.image = image;
       }
     },
-    updateProfilePicture: (state: UserState, action: PayloadAction<User['profilePicture']>) => {
-      state.userInstance.profilePicture = action.payload;
+    updateUserData: (state: UserState, action: PayloadAction<UserDataUpdates>) => {
+      // Note: We have to do it this way because interface and types are not actual JS objects;
+      // Record<...> is a JS object, but it does not enforce attribute types as elegantly as types or interfaces
+      const { email, username, password, profilePicture } = action.payload;
+      if (email) {
+        state.userInstance.email = email;
+      }
+      if (username) {
+        state.userInstance.username = username;
+      }
+      if (password) {
+        state.userInstance.password = password;
+      }
+      if (profilePicture) {
+        state.userInstance.profilePicture = profilePicture;
+      }
     },
   },
 });
@@ -62,31 +76,36 @@ export const loginUser = (username: string): any => {
   return loginUserThunk;
 };
 
-export const updateProfilePicture = (image: string): any => {
-  const updateProfilePictureThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+export type UserDataUpdates = {
+  email?: User['email'];
+  username?: User['username'];
+  password?: User['password'];
+  profilePicture?: User['profilePicture'];
+};
+export const updateUserData = (updates: UserDataUpdates): any => {
+  const updateUserDataThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
     const userId = getState().user.userInstance._id;
     try {
-      const update: Partial<User> = { profilePicture: image };
       const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
         method: 'PATCH',
-        body: JSON.stringify(update),
+        body: JSON.stringify(updates),
         headers: {
           'Content-Type': 'application/json',
         },
       });
       switch (response.status) {
         case 200:
-          dispatch(userSlice.actions.updateProfilePicture(image));
+          dispatch(userSlice.actions.updateUserData(updates));
           break;
         default:
-          console.error('Could not update game image.');
+          console.error('Could not update profile picture.');
           break;
       }
     } catch {
-      console.error('Could not update game image.');
+      console.error('Could not update profile picture.');
     }
   };
-  return updateProfilePictureThunk;
+  return updateUserDataThunk;
 };
 
 // Selectors

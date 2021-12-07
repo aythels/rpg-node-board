@@ -52,7 +52,7 @@ export interface User {
   password: string; // FOR NOW
   email: string; // FOR NOW
   games: Game['_id'][];
-  profilePicture?: any;
+  profilePicture?: string;
   images: any[]; // FOR NOW
 }
 export enum DefaultNodeTypes {
