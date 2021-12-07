@@ -12,7 +12,6 @@ interface NodeviewState {
   isEditPermissionsModalOpen: boolean;
   isUsersModalOpen: boolean;
   isImageModalOpen: boolean;
-  isUserGameAdmin: boolean;
 }
 
 const initialState: NodeviewState = {
@@ -25,7 +24,6 @@ const initialState: NodeviewState = {
   isEditPermissionsModalOpen: false,
   isUsersModalOpen: false,
   isImageModalOpen: false,
-  isUserGameAdmin: false,
 };
 
 const nodeviewSlice = createSlice({
@@ -63,9 +61,6 @@ const nodeviewSlice = createSlice({
     setIsImageModalOpen: (state: NodeviewState, action: PayloadAction<boolean>) => {
       state.isImageModalOpen = action.payload;
     },
-    setIsUserGameAdmin: (state: NodeviewState, action: PayloadAction<boolean>) => {
-      state.isUserGameAdmin = action.payload;
-    },
   },
 });
 
@@ -84,7 +79,7 @@ export const {
 
 export const processUserGameData = (userId: number, gameId: number): any => {
   const thunk = async (dispatch: Dispatch<any>): Promise<void> => {
-    // TODO
+    // IMPORTANT: Please use selectIsGameMaster from userSlice
     // dispatch(nodeviewSlice.actions.setIsUserGameAdmin(GETuserIsGMInGame(userId, gameId)));
   };
 

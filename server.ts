@@ -23,7 +23,7 @@ mongoose.set('bufferCommands', false); // don't buffer db requests if the db ser
 // mongoose.set('useFindAndModify', false); // for some deprecation issues
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '2mb' })); // Note: Temporary solution so that images can be passed to backend
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Add routes (This must be on top)

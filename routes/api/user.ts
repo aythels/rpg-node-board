@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { UserModel } from '../../db/models';
+import { User } from '../../frontend/src/types';
 
 export const router = express.Router();
 
@@ -19,7 +20,8 @@ router.post('/user', mongoChecker, authenticate, async (req: Request, res: Respo
     }
 
     console.log('Creating user', req.body);
-    const user = new UserModel({ username, password, email });
+    const newUser: Omit<User, '_id'> = { username, password, email, games: [], images: [] };
+    const user = new UserModel(newUser);
     const result = await user.save();
     res.send(result);
   } catch (error) {
@@ -110,10 +112,31 @@ router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
-// Note: (this is accomplished via 'POST /game/:id/user')
-// POST: Add game (ID) to user from user's list of games
-// router.post('/user/game/:gameId', mongoChecker, authenticate, async (req: Request, res: Response) => {});
-
-// Note: (this is accomplished via 'DELETE /api/game/')
-// DELETE: Remove game (ID) from user's list of games
-// router.delete('/user/game', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// PATCH: Update the user's list of images
+router.patch('/user/:id/images', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { image } = req.body;
+  try {
+    const user = await UserModel.findById(id);
+    if (user) {
+      // TODO: figure out why this isn't working
+      // if (user.images) {
+      //   user.images.push(image.substr(40));
+      // } else {
+      //   user.images = [image.substr(40)];
+      // }
+      // user.markModified('images');
+      await user.save();
+      res.send(user);
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (error) {
+    console.log(error);
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
+  }
+});

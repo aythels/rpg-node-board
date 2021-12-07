@@ -4,6 +4,7 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
+import { updateGameListImage } from './userSlice';
 
 export enum GameLoadingStatus {
   Loading,
@@ -75,6 +76,9 @@ const gameSlice = createSlice({
         user.permission = newPermission;
       }
     },
+    updateGameImage: (state: GameState, action: PayloadAction<Game['image']>) => {
+      state.gameInstance.image = action.payload;
+    },
   },
 });
 export default gameSlice.reducer;
@@ -132,6 +136,34 @@ export const addPlayer = (user: string, gameId: Game['_id']): any => {
     }
   };
   return addPlayerThunk;
+};
+
+export const updateGameImage = (image: string): any => {
+  const updateGameImageThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const gameId = getState().game.gameInstance._id;
+    try {
+      const update: Partial<Game> = { image };
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(update),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.updateGameImage(image));
+          dispatch(updateGameListImage([gameId, image]));
+          break;
+        default:
+          console.error('Could not update game image.');
+          break;
+      }
+    } catch {
+      console.error('Could not update game image.');
+    }
+  };
+  return updateGameImageThunk;
 };
 
 // TODO: test
@@ -306,7 +338,7 @@ export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
 export const updatePlayerPermission = (payload: [User['_id'], UserPermission, Game['_id']]): any => {
   const updatePlayerPermissionThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${payload[2]}/user/${payload[0]}}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${payload[2]}/user/${payload[0]}`, {
         method: 'PATCH',
         body: JSON.stringify({ permission: payload[1] }),
         headers: {

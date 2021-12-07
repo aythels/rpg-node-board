@@ -6,7 +6,8 @@ import { store } from '../../state';
 import { setActiveNode, setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
 import { deleteNode } from '../../state/slices/gameSlice';
 import { RootState } from '../../state/rootReducer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsGameMaster } from '../../state/slices/userSlice';
 
 interface Props {
   node: Node;
@@ -15,15 +16,16 @@ interface Props {
 }
 
 const CanvasInternalNode = (props: Props): JSX.Element => {
+  const dispatch = useDispatch();
   const { node, nodeWidth, nodeHeight } = props;
   const game = useSelector((state: RootState) => state.game.gameInstance);
-  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
+  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
   return (
     <div
       className="node"
       node-id={node._id}
-      onDoubleClick={() => store.dispatch(setActiveNode(node._id))}
+      onDoubleClick={() => dispatch(setActiveNode(node._id))}
       style={{
         left: `${node.x}px`,
         top: `${node.y}px`,
@@ -42,15 +44,18 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
           <button
             className="node-button"
             onClick={() => {
-              if (isAdmin) store.dispatch(deleteNode(game._id, node._id));
-              else store.dispatch(setIsEditPermissionsModalOpen(true));
+              if (isGameMaster) {
+                dispatch(deleteNode(game._id, node._id));
+              } else {
+                dispatch(setIsEditPermissionsModalOpen(true));
+              }
             }}
           >
             <Delete />
           </button>
         </Tooltip>
         <Tooltip title="View node">
-          <button className="node-button" onClick={() => store.dispatch(setActiveNode(node._id))}>
+          <button className="node-button" onClick={() => dispatch(setActiveNode(node._id))}>
             <Launch />
           </button>
         </Tooltip>
