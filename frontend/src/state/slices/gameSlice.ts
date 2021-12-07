@@ -4,6 +4,7 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
+import nodeManager from '../nodeManager';
 
 export enum GameLoadingStatus {
   Loading,
@@ -43,6 +44,7 @@ const gameSlice = createSlice({
       state.dialogStatus[dialog] = status;
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
+      nodeManager.appendData(action.payload.nodes);
       state.gameInstance = action.payload;
       state.status = GameLoadingStatus.Idle;
     },

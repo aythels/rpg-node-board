@@ -10,12 +10,14 @@ import { useSelector } from 'react-redux';
 
 interface Props {
   node: Node;
+  nodeX: number;
+  nodeY: number;
   nodeWidth: number;
   nodeHeight: number;
 }
 
 const CanvasInternalNode = (props: Props): JSX.Element => {
-  const { node, nodeWidth, nodeHeight } = props;
+  const { node, nodeX, nodeY, nodeWidth, nodeHeight } = props;
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
 
@@ -25,8 +27,8 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
       node-id={node._id}
       onDoubleClick={() => store.dispatch(setActiveNode(node._id))}
       style={{
-        left: `${node.x}px`,
-        top: `${node.y}px`,
+        left: `${nodeX}px`,
+        top: `${nodeY}px`,
         width: `${nodeWidth}px`,
         height: `${nodeHeight}px`,
         backgroundImage: `url(${node.image})`,
