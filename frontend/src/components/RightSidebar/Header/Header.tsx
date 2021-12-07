@@ -2,14 +2,14 @@ import './header.css';
 import { useCallback, useState, useRef, ChangeEvent, KeyboardEvent, MutableRefObject, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/styles';
-import { Done, Edit, ChevronLeft, Settings, Image } from '@mui/icons-material';
+import { Done, ChevronLeft, Settings } from '@mui/icons-material';
 import { IconButton, TextField, Theme, Tooltip, Typography, CardMedia, CardActionArea, Input } from '@mui/material';
 import { setGameTitle } from '../../../state/slices/gameSlice';
 import { RootState } from '../../../state/rootReducer';
-import { selectIsGameMaster } from '../../../state/slices/userSlice';
 import { updateGameImage } from '../../../state/slices/gameSlice';
 interface Props {
   exposeSettings: boolean;
+  settingsOpen: boolean;
   onSettingsToggleClicked: () => void;
 }
 
@@ -18,7 +18,6 @@ const Header = (props: Props): JSX.Element => {
   const theme = useTheme<Theme>();
   const dispatch = useDispatch();
 
-  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState(useSelector((state: RootState) => state.game.gameInstance.title));
   const [prevTitle, setPrevTitle] = useState('');
@@ -94,20 +93,20 @@ const Header = (props: Props): JSX.Element => {
         aria-label="change game image"
       />
       <div className="canvas-sidebar-header" style={{ backgroundColor: theme.palette.primary.light }}>
-        {isGameMaster && !editingTitle && (
-          <Tooltip arrow title={props.exposeSettings ? 'Close game settings' : 'Open game settings'}>
+        {props.exposeSettings && !editingTitle && (
+          <Tooltip arrow title={props.settingsOpen ? 'Close game settings' : 'Open game settings'}>
             <IconButton
               aria-label="Close game settings"
               component="span"
               className="temp"
               onClick={props.onSettingsToggleClicked}
             >
-              {props.exposeSettings ? <ChevronLeft /> : <Settings />}
+              {props.settingsOpen ? <ChevronLeft /> : <Settings />}
             </IconButton>
           </Tooltip>
         )}
         <div className="title">
-          {isGameMaster && props.exposeSettings ? (
+          {props.settingsOpen ? (
             editingTitle ? (
               <TextField
                 fullWidth
@@ -135,7 +134,7 @@ const Header = (props: Props): JSX.Element => {
           )}
         </div>
         <div className="button">
-          {props.exposeSettings ? (
+          {props.settingsOpen ? (
             editingTitle ? (
               <Tooltip arrow title="Submit new title">
                 <IconButton
