@@ -4,6 +4,8 @@
 
 This application is intended to facilitate the frictionless creation and sharing of **lore**. Once logged in, a user can access and create *games*. A *game* represents an isolated, fully-featured instance of the application wherein users known as *game masters* can be considered equivalent to admins, as they have the ability to perform all of the requisite admin functionalities within said *game*.
 
+Deployed Application: https://rpg-nodes.herokuapp.com/
+
 ### Login Info:
 - Username: **admin**, password: **admin**
 - Username: **user**, password: **user**
