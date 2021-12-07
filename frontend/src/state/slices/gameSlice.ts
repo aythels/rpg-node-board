@@ -334,7 +334,7 @@ export const selectVisibleNodes: any = createDraftSafeSelector(
   (game: Game, user: User): Node[] => {
     return game.nodes.filter((node) => {
       const match = node.informationLevels.find((i) => i.user === user._id);
-      return match && match.infoLevel > 0;
+      return (match && match.infoLevel > 0) || node.editors.includes(user._id);
     });
   },
 );

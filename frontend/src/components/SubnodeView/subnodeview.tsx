@@ -10,6 +10,7 @@ import { selectActiveNode, selectVisibleNodes, updateSubnode } from '../../state
 import { setActiveNode } from '../../state/slices/nodeviewSlice';
 import { Button } from '@mui/material';
 import { Save } from '@mui/icons-material';
+import { cloneDeep } from 'lodash';
 
 //const autosaveFrequency = 1 * 1000;
 
@@ -40,7 +41,7 @@ interface TextLink {
   location: number;
   length: number;
   name: string;
-  id: number;
+  id: string;
 }
 
 interface Props {
@@ -55,6 +56,7 @@ const SubnodeView = (props: Props): JSX.Element => {
   const [editor, setEditor] = useState(null as Quill | null);
   const [isEditorLoaded, setIsEditorLoaded] = useState(false);
   const [change, setChange] = useState(new Delta());
+  const [localSubnode, setLocalSubnode] = useState(cloneDeep(props.subnode)); // TODO: Use this
   // const [autoSaver, setAutoSaver] = useState(null as NodeJS.Timeout | null);
   const dispatch = useDispatch();
 
@@ -113,7 +115,7 @@ const SubnodeView = (props: Props): JSX.Element => {
         names.push(node.name);
         let nextNameInstance = currentText.indexOf(node.name, 0);
         while (nextNameInstance != -1) {
-          links.push({ location: nextNameInstance, length: node.name.length, name: node.name, id: node.id });
+          links.push({ location: nextNameInstance, length: node.name.length, name: node.name, id: node._id });
           nextNameInstance = currentText.indexOf(node.name, nextNameInstance + 1);
         }
       }
@@ -137,8 +139,9 @@ const SubnodeView = (props: Props): JSX.Element => {
 
   const saveEditorChanges = (): void => {
     if (editor) {
-      const updatedSubnode = props.subnode;
+      const updatedSubnode = cloneDeep(props.subnode);
       updatedSubnode.content = editor.getContents();
+      // TODO: write specific update contents routes + dispatch
       dispatch(updateSubnode(game._id, node._id, updatedSubnode));
       // setChange(new Delta());
       updateNodeTextLinks();
