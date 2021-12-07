@@ -31,7 +31,7 @@ const NodeCard = (props: Props): JSX.Element => {
 
   return (
     <div className="node-card" onDoubleClick={() => dispatch(setActiveNode(node._id))}>
-      <Typography className="title" variant="body1" component="div" noWrap={true}>
+      <Typography style={{ cursor: 'pointer' }} className="title" variant="body1" component="div" noWrap={true}>
         {node.name}
       </Typography>
       {isGameMaster && (
