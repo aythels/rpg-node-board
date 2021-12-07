@@ -343,7 +343,6 @@ export const selectActiveNode: any = createDraftSafeSelector(
   (state: RootState): Node[] => state.game.gameInstance.nodes,
   (state: RootState): string => state.nodeview.activeNode, // this seems bad to do
   (nodes: Node[], activeNodeId: string): Node => {
-    console.log(nodes);
     return nodes.find((node) => node._id === activeNodeId) as Node;
   },
 );

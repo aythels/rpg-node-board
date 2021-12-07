@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
 import { selectActiveNode, selectVisibleNodes, updateSubnode } from '../../state/slices/gameSlice';
 import { setActiveNode } from '../../state/slices/nodeviewSlice';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { Save } from '@mui/icons-material';
 import { cloneDeep } from 'lodash';
 
@@ -151,11 +151,15 @@ const SubnodeView = (props: Props): JSX.Element => {
 
   return (
     <div className="subnodeview">
-      <h2>{props.subnode.name}</h2>
+      <div className="subnode-title">
+        <h2>{props.subnode.name}</h2>
+        <Tooltip title="Save Changes">
+          <Button onClick={saveEditorChanges}>
+            <Save />
+          </Button>
+        </Tooltip>
+      </div>
       <div id={'editor-' + props.subnode._id} />
-      <Button onClick={saveEditorChanges}>
-        <Save />
-      </Button>
     </div>
   );
 };
