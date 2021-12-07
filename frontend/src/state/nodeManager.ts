@@ -112,6 +112,13 @@ const NodeManager = function (this: any) {
     this.update();
   };
 
+  this.centerCanvas = () => {
+    animate(finalX, finalY, 0, 0, (x: number, y: number) => {
+      setAllPos(x, y);
+      this.update();
+    });
+  };
+
   //---------------------------------------------------------------------Utility
 
   const setActiveNode = (node: CanvasNode | null) => {
@@ -157,7 +164,44 @@ const NodeManager = function (this: any) {
     const offSetNew = 1 / scale - 1;
     addAllPos(offSetNew * (mouseX - window.innerWidth / 2), offSetNew * (mouseY - window.innerHeight / 2));
   };
+
+  const setAllPos = (x: number, y: number) => {
+    const deltaX = finalX - x;
+    const deltaY = finalY - y;
+
+    for (const node of allNodes) {
+      node.x -= deltaX;
+      node.y -= deltaY;
+    }
+
+    finalX = x;
+    finalY = y;
+  };
 };
+
+function lerp(start: number, end: number, amt: number) {
+  // https://codepen.io/ma77os/pen/KGIEh
+  return (1 - amt) * start + amt * end;
+}
+
+function animate(x1: number, y1: number, x2: number, y2: number, callback: any) {
+  const sens = 0.1;
+  const tols = 3;
+
+  const tick = () => {
+    if (Math.abs(x1 - x2) + Math.abs(y1 - y2) < tols) {
+      console.log('animation finished');
+      callback(x2, y2);
+      return;
+    }
+    x1 = lerp(x1, x2, sens);
+    y1 = lerp(y1, y2, sens);
+    callback(x1, y1);
+    window.requestAnimationFrame(tick);
+  };
+
+  window.requestAnimationFrame(tick);
+}
 
 const nodeManager = new (NodeManager as any)();
 

@@ -12,6 +12,7 @@ import { Node } from '../../../types';
 import { addDefaultNode } from '../../../state/slices/gameSlice';
 import { store } from '../../../state/';
 import { setIsEditPermissionsModalOpen } from '../../../state/slices/nodeviewSlice';
+import nodeManager from '../../../state/nodeManager';
 
 type Props = MuiTheme;
 
@@ -59,7 +60,7 @@ const Sidebar = (props: Props): JSX.Element => {
         }}
       >
         <Tooltip title="Center node view" placement="right">
-          <IconButton aria-label="Center node view" onClick={() => console.log('center clicked, fix this part')}>
+          <IconButton aria-label="Center node view" onClick={() => nodeManager.centerCanvas()}>
             <CenterFocusStrong />
           </IconButton>
         </Tooltip>
