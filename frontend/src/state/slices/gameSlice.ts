@@ -366,7 +366,7 @@ export const selectVisibleNodes: any = createDraftSafeSelector(
   (game: Game, user: User): Node[] => {
     return game.nodes.filter((node) => {
       const match = node.informationLevels.find((i) => i.user === user._id);
-      return match && match.infoLevel > 0;
+      return (match && match.infoLevel > 0) || node.editors.includes(user._id);
     });
   },
 );
@@ -375,7 +375,6 @@ export const selectActiveNode: any = createDraftSafeSelector(
   (state: RootState): Node[] => state.game.gameInstance.nodes,
   (state: RootState): string => state.nodeview.activeNode, // this seems bad to do
   (nodes: Node[], activeNodeId: string): Node => {
-    console.log(nodes);
     return nodes.find((node) => node._id === activeNodeId) as Node;
   },
 );
