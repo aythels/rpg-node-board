@@ -272,6 +272,7 @@ router.delete('/game/:gameId/user/:userId', mongoChecker, authenticate, async (r
       }
     }
     await game.save();
+    await user.save();
     res.send(game);
   } catch (error) {
     console.log(error);
