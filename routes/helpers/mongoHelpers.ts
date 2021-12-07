@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 // Checks if mongoose connection was established.
 export const mongoChecker = (req: Request, res: Response, next: NextFunction): void => {
-  if (mongoose.connection.readyState != 1) {
+  if (mongoose.connection.readyState !== 1) {
     console.log('Issue with mongoose connection');
     res.status(500).send('Internal server error');
     return;

@@ -4,6 +4,8 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
+import nodeManager from '../nodeManager';
+import { updateGameListImage } from './userSlice';
 
 export enum GameLoadingStatus {
   Loading,
@@ -43,6 +45,7 @@ const gameSlice = createSlice({
       state.dialogStatus[dialog] = status;
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
+      nodeManager.appendData(action.payload.nodes);
       state.gameInstance = action.payload;
       state.status = GameLoadingStatus.Idle;
     },
@@ -74,6 +77,9 @@ const gameSlice = createSlice({
       if (user) {
         user.permission = newPermission;
       }
+    },
+    updateGameImage: (state: GameState, action: PayloadAction<Game['image']>) => {
+      state.gameInstance.image = action.payload;
     },
   },
 });
@@ -134,6 +140,34 @@ export const addPlayer = (user: string, gameId: Game['_id']): any => {
   return addPlayerThunk;
 };
 
+export const updateGameImage = (image: string): any => {
+  const updateGameImageThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const gameId = getState().game.gameInstance._id;
+    try {
+      const update: Partial<Game> = { image };
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(update),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.updateGameImage(image));
+          dispatch(updateGameListImage([gameId, image]));
+          break;
+        default:
+          console.error('Could not update game image.');
+          break;
+      }
+    } catch {
+      console.error('Could not update game image.');
+    }
+  };
+  return updateGameImageThunk;
+};
+
 // TODO: test
 export const removePlayer = (playerId: User['_id'], gameId: Game['_id']): any => {
   const removePlayerThunk = async (dispatch: Dispatch<any>): Promise<void> => {
@@ -165,6 +199,7 @@ export const addDefaultNode = (gameId: Game['_id']): any => {
       const node: Node = await response.json();
       switch (response.status) {
         case 200:
+          nodeManager.addNode(node);
           dispatch(gameSlice.actions.addNode(node));
           break;
         default:
@@ -186,6 +221,7 @@ export const deleteNode = (gameId: Game['_id'], nodeId: Node['_id']): any => {
       });
       switch (response.status) {
         case 200:
+          nodeManager.deleteNode(nodeId);
           dispatch(gameSlice.actions.deleteNode(nodeId));
           break;
         default:
@@ -306,7 +342,7 @@ export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
 export const updatePlayerPermission = (payload: [User['_id'], UserPermission, Game['_id']]): any => {
   const updatePlayerPermissionThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${payload[2]}/user/${payload[0]}}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${payload[2]}/user/${payload[0]}`, {
         method: 'PATCH',
         body: JSON.stringify({ permission: payload[1] }),
         headers: {
@@ -334,7 +370,7 @@ export const selectVisibleNodes: any = createDraftSafeSelector(
   (game: Game, user: User): Node[] => {
     return game.nodes.filter((node) => {
       const match = node.informationLevels.find((i) => i.user === user._id);
-      return match && match.infoLevel > 0;
+      return (match && match.infoLevel > 0) || node.editors.includes(user._id);
     });
   },
 );
@@ -343,7 +379,6 @@ export const selectActiveNode: any = createDraftSafeSelector(
   (state: RootState): Node[] => state.game.gameInstance.nodes,
   (state: RootState): string => state.nodeview.activeNode, // this seems bad to do
   (nodes: Node[], activeNodeId: string): Node => {
-    console.log(nodes);
     return nodes.find((node) => node._id === activeNodeId) as Node;
   },
 );

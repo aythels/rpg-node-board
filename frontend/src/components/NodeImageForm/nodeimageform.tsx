@@ -1,9 +1,8 @@
 import { DeleteForever, SaveRounded } from '@mui/icons-material';
 import { Button, Tooltip } from '@mui/material';
 import cloneDeep from 'lodash.clonedeep';
-import { SyntheticEvent, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { uid } from 'react-uid';
 import { RootState } from '../../state/rootReducer';
 import { selectActiveNode, updateNode } from '../../state/slices/gameSlice';
 import { setIsImageModalOpen } from '../../state/slices/nodeviewSlice';
@@ -32,16 +31,23 @@ const NodeImageForm = (): JSX.Element => {
     dispatch(setIsImageModalOpen(false));
   };
 
-  const handleNewImageUpload = (e: SyntheticEvent): void => {
-    // TODO: This will need extensive changes in phase 2
-    const target = e.target as HTMLInputElement;
-    const path = '/images/' + extractFakeImagePath(target.value);
-    dispatch(addImage(path));
-  };
-
-  const extractFakeImagePath = (path: string): string => {
-    return path.slice(path.lastIndexOf('\\') + 1);
-  };
+  const handleImageUpload = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target?.files?.[0];
+    if (file) {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        if (fileReader.result) {
+          // Note: We know fileReader.result will be a string because we loaded it using readAsDataURL
+          const image = fileReader.result as unknown as string;
+          dispatch(addImage(image));
+        } else {
+          console.log('Something went wrong.');
+        }
+      };
+      fileReader.onerror = console.error;
+    }
+  }, []);
 
   const changeImage = (image: string): void => {
     setTempNode({ ...tempNode, image: image });
@@ -60,9 +66,9 @@ const NodeImageForm = (): JSX.Element => {
           <div className="modal__body__section">
             <h4>Your Images</h4>
             <div className="image-collection">
-              {user.images.map((image) => {
+              {user.images.map((image, idx) => {
                 return (
-                  <div className="image-collection__image" key={uid(image)}>
+                  <div className="image-collection__image" key={idx}>
                     <img
                       src={image}
                       onClick={() => {
@@ -90,7 +96,12 @@ const NodeImageForm = (): JSX.Element => {
           <div className="modal__body__section">
             <h4>Upload New Image</h4>
             <div className="upload-new-image">
-              <input type="file" onChange={handleNewImageUpload} />
+              <input
+                type="file"
+                accept="image/png, image/jpeg"
+                onChange={handleImageUpload}
+                aria-label="add own image"
+              />
             </div>
           </div>
         </div>

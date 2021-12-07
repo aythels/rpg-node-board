@@ -58,6 +58,8 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
       informationLevels: [],
       editors: game.users.filter((u) => u.permission === UserPermission.gameMaster).map((u) => u.userId),
       type: 'default',
+      x: 0,
+      y: 0,
     });
 
     for (const user of game.users) {
@@ -67,9 +69,6 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
       };
       newNode.informationLevels.push(infoLevel);
     }
-
-    // if (req.body.thumbnailImage) newNode.thumbnailImage = req.body.thumbnailImage; // TODO: Test
-    // if (req.body.image) newNode.image = req.body.image; // TODO: Test
 
     const result = await GameModel.findOneAndUpdate({ _id: gameId }, { $push: { nodes: newNode } });
     res.send(newNode);
@@ -105,6 +104,8 @@ router.patch('/node/:gameId/:nodeId', mongoChecker, authenticate, async (req: Re
         if (req.body.informationLevels) node.informationLevels = req.body.informationLevels;
         if (req.body.editors) node.editors = req.body.editors;
         if (req.body.types) node.type = req.body.type;
+        if (req.body.x) node.x = req.body.x;
+        if (req.body.y) node.y = req.body.y;
         await game.save();
         res.send(node);
       } else {

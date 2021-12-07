@@ -4,6 +4,7 @@ import UserDashboard from './components/UserDashboard/UserDashboard';
 import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain/CanvasMain';
 import SettingsMenu from './components/SettingsMenu/SettingsMenu';
+import ClientSocket from './state/clientSocket';
 
 /* REMOVE BEFORE COMMIT */
 // import { fetchGame } from './state/slices/gameSlice';
@@ -12,9 +13,11 @@ import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 // import { processUserGameData } from './state/slices/nodeviewSlice';
 
 // store.dispatch(loginUser('admin'));
-// store.dispatch(fetchGame(1));
+// store.dispatch(fetchGame('61a9dccdd7c3cec99261a408'));
 // store.dispatch(processUserGameData(store.getState().user.userInstance.id, 1));
 /* REMOVE BEFORE COMMIT */
+
+const clientSocket = new (ClientSocket as any)();
 
 function App(): JSX.Element {
   const customTheme = createTheme({

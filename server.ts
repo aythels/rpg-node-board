@@ -7,6 +7,7 @@ const session = require("express-session");
 const MongoStore = require('connect-mongo') // to store session information on the database in production
 
 import { userRouter, gameRouter, nodeRouter, subnodeRouter } from './routes';
+import SocketServer from './routes/socketServer';
 
 
 
@@ -56,7 +57,7 @@ mongoose.set('bufferCommands', false); // don't buffer db requests if the db ser
 // mongoose.set('useFindAndModify', false); // for some deprecation issues
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '2mb' })); // Note: Temporary solution so that images can be passed to backend
 app.use(bodyParser.urlencoded({ extended: true }));
 
 /*** Session handling **************************************/
@@ -112,6 +113,8 @@ app.use((err: any, req: any, res: any, next: any) => {
 
 // Express server listening...
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+const httpServer = app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });
+
+const socketServer = new (SocketServer as any)(httpServer, '/partyroom');

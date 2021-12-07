@@ -1,25 +1,33 @@
 import './sidebar.css';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { ChevronLeft, ChevronRight, ExitToApp } from '@mui/icons-material';
 import { useTheme } from '@mui/styles';
 import { Drawer, IconButton, Theme } from '@mui/material';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import PlayerList from '../PlayerList/PlayerList';
-import { useState } from 'react';
+import { Tooltip } from '@mui/material';
+import Dialog from '../../Dialog/Dialog';
+import React from 'react';
+import { useCallback, useState } from 'react';
+import { selectIsGameMaster } from '../../../state/slices/userSlice';
+import { RootState } from '../../../state/rootReducer';
+import { useSelector } from 'react-redux';
 
 const RightSidebar = (): JSX.Element => {
   const theme = useTheme<Theme>();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [leaveGameDialogue, setLeaveGameDialogue] = React.useState(false);
+  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
-  const toggleSidebarOpen = (): void => {
+  const toggleSidebarOpen = useCallback(() => {
     setSidebarOpen((prevSidebarOpen: boolean) => !prevSidebarOpen);
-  };
+  }, []);
 
-  const toggleSettingsOpen = (): void => {
+  const toggleSettingsOpen = useCallback(() => {
     setSettingsOpen((prevSettingsOpen: boolean) => !prevSettingsOpen);
-  };
+  }, []);
 
   return (
     <div className="canvas-sidebar" style={{ backgroundColor: theme.palette.primary.light }}>
@@ -35,10 +43,35 @@ const RightSidebar = (): JSX.Element => {
         {sidebarOpen ? <ChevronRight /> : <ChevronLeft />}
       </IconButton>
       <Drawer anchor="right" className="container" open={sidebarOpen} variant="persistent">
-        <Header exposeSettings={settingsOpen} onSettingsToggleClicked={toggleSettingsOpen} />
-        <PlayerList exposeSettings={settingsOpen} />
-        {settingsOpen && <Footer />}
+        <Header
+          exposeSettings={isGameMaster}
+          settingsOpen={isGameMaster && settingsOpen}
+          onSettingsToggleClicked={toggleSettingsOpen}
+        />
+        <PlayerList settingsOpen={isGameMaster && settingsOpen} />
+        {isGameMaster && settingsOpen && <Footer />}
       </Drawer>
+      <div
+        className="top-toolbar"
+        style={{
+          right: sidebarOpen ? '20%' : '0%',
+        }}
+      >
+        <Tooltip className="first-button" title="Leave game" placement="left">
+          <IconButton aria-label="Lave game" onClick={() => setLeaveGameDialogue(true)}>
+            <ExitToApp />
+          </IconButton>
+        </Tooltip>
+      </div>
+      <Dialog
+        header="Are you sure you wish to leave the game?"
+        description="Doing so will redirect you to game overview."
+        open={leaveGameDialogue}
+        onClose={() => setLeaveGameDialogue(false)}
+        onAgree={() => setLeaveGameDialogue(false)}
+        onAgreeRedirectTo="/games"
+        onDisagree={() => setLeaveGameDialogue(false)}
+      />
     </div>
   );
 };

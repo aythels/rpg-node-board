@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { UserModel } from '../../db/models';
+import { User } from '../../frontend/src/types';
 
 export const router = express.Router();
 
@@ -19,7 +20,8 @@ router.post('/user', mongoChecker, async (req: Request, res: Response) => {
     }
 
     console.log('Creating user', req.body);
-    const user = new UserModel({ username, password, email });
+    const newUser: Omit<User, '_id'> = { username, password, email, games: [], images: [] };
+    const user = new UserModel(newUser);
     const result = await user.save();
     res.send(result);
   } catch (error) {
@@ -29,42 +31,6 @@ router.post('/user', mongoChecker, async (req: Request, res: Response) => {
     } else {
       res.status(400).send('Bad request');
     }
-  }
-});
-
-//POST: VERIFY LOGIN INFORMATION 
-
-router.post('/user/test', mongoChecker, async (req: Request, res: Response) => {
-  try {
-    // console.log('Attempting to log in user with credentials: ', req.body);
-    console.log('attempting to set session')
-    // console.log(req.session)
-    console.log("SESSION ID:")
-    console.log(req.sessionID)
-    //   UserModel.compareUsernamePassword(username, password)
-    //     .then(user => {
-    //       console.log("login success!")
-    //       // Add the user's id to the session.
-    //       // We can check later if this exists to ensure we are logged in.
-    //       console.log(user._id);
-    //       req.session.user = user._id;
-    //       console.log(req.session.user);
-    //       req.session.save();
-    //       // req.session.email = user.email; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
-    //       res.send({ currentUser: user._id });
-    //     })
-    //     .catch(error => {
-    //       res.status(401).send("Invalid username/password")
-    //     });
-    // } catch (error) {
-    //   console.log(error);
-    //   if (isMongoError(error)) {
-    //     res.status(500).send('Internal server error');
-    //   } else {
-    //     res.status(400).send('Bad request');
-    //   }
-  } catch (error) {
-    console.timeLog
   }
 });
 
@@ -207,12 +173,31 @@ router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
-
-
-// Note: (this is accomplished via 'POST /game/:id/user')
-// POST: Add game (ID) to user from user's list of games
-// router.post('/user/game/:gameId', mongoChecker, authenticate, async (req: Request, res: Response) => {});
-
-// Note: (this is accomplished via 'DELETE /api/game/')
-// DELETE: Remove game (ID) from user's list of games
-// router.delete('/user/game', mongoChecker, authenticate, async (req: Request, res: Response) => {});
+// PATCH: Update the user's list of images
+router.patch('/user/:id/images', mongoChecker, authenticate, async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { image } = req.body;
+  try {
+    const user = await UserModel.findById(id);
+    if (user) {
+      // TODO: figure out why this isn't working
+      // if (user.images) {
+      //   user.images.push(image.substr(40));
+      // } else {
+      //   user.images = [image.substr(40)];
+      // }
+      // user.markModified('images');
+      await user.save();
+      res.send(user);
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (error) {
+    console.log(error);
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
+  }
+});

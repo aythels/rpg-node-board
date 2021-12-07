@@ -2,31 +2,34 @@ import './canvasInternalNode.css';
 import { Node } from '../../types';
 import { Delete, Launch } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
-import { store } from '../../state';
 import { setActiveNode, setIsEditPermissionsModalOpen } from '../../state/slices/nodeviewSlice';
 import { deleteNode } from '../../state/slices/gameSlice';
 import { RootState } from '../../state/rootReducer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsGameMaster } from '../../state/slices/userSlice';
 
 interface Props {
   node: Node;
+  nodeX: number;
+  nodeY: number;
   nodeWidth: number;
   nodeHeight: number;
 }
 
 const CanvasInternalNode = (props: Props): JSX.Element => {
-  const { node, nodeWidth, nodeHeight } = props;
+  const { node, nodeX, nodeY, nodeWidth, nodeHeight } = props;
   const game = useSelector((state: RootState) => state.game.gameInstance);
-  const isAdmin = useSelector((state: RootState) => state.nodeview.isUserGameAdmin);
+  const dispatch = useDispatch();
+  const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
   return (
     <div
       className="node"
       node-id={node._id}
-      onDoubleClick={() => store.dispatch(setActiveNode(node._id))}
+      onDoubleClick={() => dispatch(setActiveNode(node._id))}
       style={{
-        left: `${node.x}px`,
-        top: `${node.y}px`,
+        left: `${nodeX - nodeWidth / 2}px`,
+        top: `${nodeY - nodeHeight / 2}px`,
         width: `${nodeWidth}px`,
         height: `${nodeHeight}px`,
         backgroundImage: `url(${node.image})`,
@@ -42,15 +45,18 @@ const CanvasInternalNode = (props: Props): JSX.Element => {
           <button
             className="node-button"
             onClick={() => {
-              if (isAdmin) store.dispatch(deleteNode(game._id, node._id));
-              else store.dispatch(setIsEditPermissionsModalOpen(true));
+              if (isGameMaster) {
+                dispatch(deleteNode(game._id, node._id));
+              } else {
+                dispatch(setIsEditPermissionsModalOpen(true));
+              }
             }}
           >
             <Delete />
           </button>
         </Tooltip>
         <Tooltip title="View node">
-          <button className="node-button" onClick={() => store.dispatch(setActiveNode(node._id))}>
+          <button className="node-button" onClick={() => dispatch(setActiveNode(node._id))}>
             <Launch />
           </button>
         </Tooltip>

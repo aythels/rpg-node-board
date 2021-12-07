@@ -23,7 +23,6 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
     ],
     settings: {},
     // TODO: use stock images
-    // imgpath:
     // image:
   });
 
@@ -84,8 +83,10 @@ router.delete('/game/:id', mongoChecker, authenticate, async (req: Request, res:
           });
         }),
       );
+      res.send(game);
+    } else {
+      res.status(404).send('Game not found');
     }
-    res.send(game);
   } catch (error) {
     console.log(error);
     if (isMongoError(error)) {
@@ -181,7 +182,7 @@ router.post('/game/:gameId/user/:username', mongoChecker, authenticate, async (r
 
 // Update a player's permissions in a game (demote to player or promote to GM)
 // takes: req.body: { permission: UserPermission }
-router.patch('/game/:gameId/user/:userid', mongoChecker, authenticate, async (req: Request, res: Response) => {
+router.patch('/game/:gameId/user/:userId', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const { gameId, userId } = req.params;
   const newPermission = req.body.permission;
 
@@ -272,6 +273,7 @@ router.delete('/game/:gameId/user/:userId', mongoChecker, authenticate, async (r
       }
     }
     await game.save();
+    await user.save();
     res.send(game);
   } catch (error) {
     console.log(error);

@@ -5,6 +5,13 @@
   margin: 0.5rem;
 }
 
+.canvas-sidebar .top-toolbar {
+  position: absolute;
+  transition: all 0.15s ease-out;
+  top: 0;
+  margin: 0.5rem;
+}
+
 .canvas-sidebar .container {
   overflow: hidden;
   display: flex;
