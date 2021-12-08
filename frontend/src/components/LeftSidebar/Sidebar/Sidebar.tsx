@@ -49,8 +49,8 @@ const Sidebar = (props: Props): JSX.Element => {
           left: isOpen ? '20%' : '0%',
         }}
       >
-        <Tooltip title="Center node view" placement="right">
-          <IconButton aria-label="Center node view" onClick={() => nodeManager.centerCanvas()}>
+        <Tooltip title="Center the canvas" placement="right">
+          <IconButton aria-label="Center the canvas" onClick={() => nodeManager.centerCanvas()}>
             <CenterFocusStrong />
           </IconButton>
         </Tooltip>
@@ -85,7 +85,7 @@ const Sidebar = (props: Props): JSX.Element => {
         </IconButton>
       </div>
       <Dialog
-        header="Are you sure you wish to leave the game?"
+        header="Are you sure you wish to exit the game?"
         description="Doing so will redirect you to game overview."
         open={leaveGameDialogue}
         onClose={() => setLeaveGameDialogue(false)}

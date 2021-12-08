@@ -10,6 +10,13 @@ import { addImage } from '../../state/slices/userSlice';
 import { Node } from '../../types';
 import './nodeimageform.css';
 
+const STOCK_NODE_IMAGES = [
+  '/images/stock/default.jpg',
+  '/images/stock/museum.jpg',
+  '/images/stock/path.jpg',
+  '/images/stock/sky.jpg',
+  '/images/stock/stgeorge.jpg',
+];
 const NodeImageForm = (): JSX.Element => {
   const dispatch = useDispatch();
 
@@ -66,31 +73,17 @@ const NodeImageForm = (): JSX.Element => {
           <div className="modal__body__section">
             <h4>Your Images</h4>
             <div className="image-collection">
-              {user.images.map((image, idx) => {
-                return (
-                  <div className="image-collection__image" key={idx}>
-                    <img
-                      src={image}
-                      onClick={() => {
-                        changeImage(image);
-                      }}
-                    ></img>
-                  </div>
-                );
-              })}
+              {user.images.map((image, idx) => (
+                <img className="image-collection__image" key={idx} src={image} onClick={() => changeImage(image)} />
+              ))}
             </div>
           </div>
           <div className="modal__body__section">
             <h4>Stock Images</h4>
             <div className="image-collection">
-              <div className="image-collection__image">
-                <img
-                  src="/images/default.jpg"
-                  onClick={() => {
-                    changeImage('/images/default.jpg');
-                  }}
-                ></img>
-              </div>
+              {STOCK_NODE_IMAGES.map((path, idx) => (
+                <img className="image-collection__image" key={idx} src={path} onClick={() => changeImage(path)} />
+              ))}
             </div>
           </div>
           <div className="modal__body__section">

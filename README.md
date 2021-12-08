@@ -16,7 +16,7 @@ One can log in using the above credentials **or** create a new account.
 
 Once logged in, one can:
 - Click on an existing *game*'s card **or** create a new *game*
-- Edit one's account settings (and delete one's account) by clicking on the cog icon
+- Edit one's account settings (such as changing one's password) by clicking on the cog icon
 
 Once on the *canvas*, one can:
 - \*Create *nodes* representing lore items (people, places, items, etc.) by clicking on the '+' button
@@ -87,6 +87,12 @@ In addition to the separation of functionality based on the user's permssion wit
 
 "/user"
 - POST: Creates a new user. Expects `req.body` to contain (`username`, `password`, `email`). Returns the newly-created user.
+
+"/user/login"
+- POST: Logs in a user and creates a session. Returns the user's ID.
+
+"/user/logout"
+- GET: Destroys the current session.
 
 "/user/:id"
 - GET: Retrieves the user with ID = `req.params.id`.
@@ -164,6 +170,15 @@ npm run dev
 
 [Parchment, Quill, Quill-Delta](https://quilljs.com/)
 - Used for the WYSIWYG editor, as well as text content deltas and formatting
+
+[Redux](https://react-redux.js.org/), [Redux Toolkit](https://redux-toolkit.js.org/)
+- Used to manage global state
+
+[Redux Thunk](https://www.npmjs.com/package/redux-thunk)
+- Used to make API requests from reducers. Also used to perform other side-effects, such as dispatching an action to another reducer.
+
+[Redux DevTools Extension](https://www.npmjs.com/package/redux-devtools-extension)
+- Used to debug Redux state during development.
 
 React, React-DOM, React-Router-DOM, React-Scripts
 - Framework

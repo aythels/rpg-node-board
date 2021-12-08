@@ -7,19 +7,20 @@ import Header from '../Header/Header';
 import PlayerList from '../PlayerList/PlayerList';
 import { Tooltip } from '@mui/material';
 import Dialog from '../../Dialog/Dialog';
-import React from 'react';
 import { useCallback, useState } from 'react';
 import { selectIsGameMaster } from '../../../state/slices/userSlice';
 import { RootState } from '../../../state/rootReducer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearGame } from '../../../state/slices/gameSlice';
 
 const RightSidebar = (): JSX.Element => {
   const theme = useTheme<Theme>();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [leaveGameDialogue, setLeaveGameDialogue] = React.useState(false);
+  const [leaveGameDialogue, setLeaveGameDialogue] = useState(false);
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
+  const dispatch = useDispatch();
 
   const toggleSidebarOpen = useCallback(() => {
     setSidebarOpen((prevSidebarOpen: boolean) => !prevSidebarOpen);
@@ -64,11 +65,13 @@ const RightSidebar = (): JSX.Element => {
         </Tooltip>
       </div>
       <Dialog
-        header="Are you sure you wish to leave the game?"
+        header="Are you sure you wish to exit the game?"
         description="Doing so will redirect you to game overview."
         open={leaveGameDialogue}
         onClose={() => setLeaveGameDialogue(false)}
-        onAgree={() => setLeaveGameDialogue(false)}
+        onAgree={() => {
+          setLeaveGameDialogue(false);
+        }}
         onAgreeRedirectTo="/games"
         onDisagree={() => setLeaveGameDialogue(false)}
       />

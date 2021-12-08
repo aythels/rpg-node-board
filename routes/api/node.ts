@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { GameModel, NodeModel } from '../../db/models';
 import { isValidObjectId } from 'mongoose';
-import { UserPermission } from '../../frontend/src/types';
+import { Node, UserPermission } from '../../frontend/src/types';
 
 export const router = express.Router();
 
@@ -41,7 +41,7 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
   const gameId = req.params.gameId;
 
   if (!isValidObjectId(gameId)) {
-    res.status(404).send();
+    res.status(404).send('Invalid id');
     return;
   }
 
@@ -51,31 +51,38 @@ router.post('/node/:gameId', mongoChecker, authenticate, async (req: Request, re
       res.status(404).send('Cannot find game');
       return;
     }
-
-    const newNode = new NodeModel({
+    const { thumbnailImage, image } = req.body;
+    const newNode: Omit<Node, '_id'> = {
       name: 'Default',
+      type: 'default',
+      editors: game.users.filter((u) => u.permission === UserPermission.gameMaster).map((u) => u.userId),
+      thumbnailImage,
+      image,
+      imageAlt: '',
       subnodes: [],
       informationLevels: [],
-      editors: game.users.filter((u) => u.permission === UserPermission.gameMaster).map((u) => u.userId),
-      type: 'default',
       x: 0,
       y: 0,
-    });
+    };
+    const node = new NodeModel(newNode);
 
     for (const user of game.users) {
       const infoLevel = {
         user: user.userId,
         infoLevel: 0,
       };
-      newNode.informationLevels.push(infoLevel);
+      node.informationLevels.push(infoLevel);
     }
 
-    const result = await GameModel.findOneAndUpdate({ _id: gameId }, { $push: { nodes: newNode } });
-    res.send(newNode);
+    await GameModel.findOneAndUpdate({ _id: gameId }, { $push: { nodes: node } });
+    res.send(node);
   } catch (error) {
     console.log(error);
-    if (isMongoError(error)) res.status(500).send('Internal server error');
-    else res.status(400).send('Bad request');
+    if (isMongoError(error)) {
+      res.status(500).send('Internal server error');
+    } else {
+      res.status(400).send('Bad request');
+    }
   }
 });
 
