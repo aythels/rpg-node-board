@@ -80,13 +80,13 @@ const gameSlice = createSlice({
     updateGameImage: (state: GameState, action: PayloadAction<Game['image']>) => {
       state.gameInstance.image = action.payload;
     },
-    deleteGame: (state: GameState, action: PayloadAction<void>) => {
-      state.gameInstance = {} as Game;
+    clearGame: (state: GameState) => {
+      state.gameInstance = initialState.gameInstance;
     },
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, updateDialogStatus } = gameSlice.actions;
+export const { gameLoaded, updateDialogStatus, clearGame } = gameSlice.actions;
 
 export const refreshNodes = (): any => {
   const refreshNodesThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
@@ -129,7 +129,7 @@ export const deleteGame = (): any => {
       });
       switch (response.status) {
         case 200:
-          dispatch(gameSlice.actions.deleteGame());
+          dispatch(gameSlice.actions.clearGame());
           dispatch(userGameListDeleteGame(gameId));
           break;
         default:

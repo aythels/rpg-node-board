@@ -66,6 +66,7 @@ const userSlice = createSlice({
     },
     addGame: (state: UserState, action: PayloadAction<Game>) => {
       state.games.push(action.payload);
+      state.userInstance.games.push(action.payload._id);
     },
   },
 });
