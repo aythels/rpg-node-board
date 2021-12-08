@@ -16,7 +16,7 @@ One can log in using the above credentials **or** create a new account.
 
 Once logged in, one can:
 - Click on an existing *game*'s card **or** create a new *game*
-- Edit one's account settings (and delete one's account) by clicking on the cog icon
+- Edit one's account settings (such as changing one's password) by clicking on the cog icon
 
 Once on the *canvas*, one can:
 - \*Create *nodes* representing lore items (people, places, items, etc.) by clicking on the '+' button
