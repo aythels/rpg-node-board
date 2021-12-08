@@ -25,10 +25,11 @@ const NodeCard = (props: Props): JSX.Element => {
   const node = props.node;
   const visible = !invisibleNodes.some((id) => id === node._id);
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
+  const activeNode = useSelector((state: RootState) => state.nodeview.activeNode);
 
   return (
     <div className="node-card" onDoubleClick={() => dispatch(setActiveNode(node._id))}>
-      <Typography className="title" variant="body1" component="div" noWrap={true}>
+      <Typography style={{ cursor: 'pointer' }} className="title" variant="body1" component="div" noWrap={true}>
         {node.name}
       </Typography>
       {isGameMaster && (
@@ -62,6 +63,9 @@ const NodeCard = (props: Props): JSX.Element => {
             aria-label="Delete node"
             onClick={() => {
               if (isGameMaster) {
+                if (node._id === activeNode) {
+                  dispatch(setActiveNode('')); // Unfocus node as it is about to be removed
+                }
                 dispatch(deleteNode(game._id, node._id));
               } else {
                 dispatch(setIsEditPermissionsModalOpen(true));

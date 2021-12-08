@@ -26,7 +26,7 @@ const Login = (): JSX.Element => {
       },
     });
 
-    fetch(request, { credentials: 'include' })
+    fetch(request)
       .then(async (res) => {
         // console.log(res.session.user);
         if (res.status === 401) {

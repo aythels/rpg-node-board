@@ -7,6 +7,7 @@ interface Props {
   settingsOpen: boolean;
   promotable: boolean;
   removable: boolean;
+  isCurrentPlayer: boolean;
   onRemovePlayerClicked: () => void;
   onPromotePlayerClicked: () => void;
   onDemotePlayerClicked: () => void;
@@ -35,7 +36,7 @@ const PlayerCard = (props: Props): JSX.Element => {
         {user.username.charAt(0).toUpperCase()}
       </Avatar>
       <Typography className="name" variant="body1" component="div" noWrap={true}>
-        {`@${user.username}`}
+        {`@${user.username}${props.isCurrentPlayer ? ' [you]' : ''}`}
       </Typography>
       {settingsOpen && removable && (
         <div className="button">

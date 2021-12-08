@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { isMongoError, mongoChecker, authenticate } from '../helpers';
 import { GameModel, UserModel } from '../../db/models';
-import { UserPermission } from '../../frontend/src/types';
+import { Game, UserPermission } from '../../frontend/src/types';
 
 export const router = express.Router();
 
@@ -12,20 +12,18 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
   console.log('Creating new game');
 
   const { userId, title } = req.body;
-  console.log(req.body);
-  const game = new GameModel({
-    title: title,
-    nodes: [],
+  const newGame: Omit<Game, '_id'> = {
+    title,
     users: [
       {
         userId: userId,
         permission: UserPermission.gameMaster,
       },
     ],
+    nodes: [],
     settings: {},
-    // TODO: use stock images
-    // image:
-  });
+  };
+  const game = new GameModel(newGame);
 
   try {
     const result = await game.save();

@@ -25,19 +25,23 @@ const userSlice = createSlice({
     addImage: (state: UserState, action: PayloadAction<NonNullable<Node['image']>>) => {
       state.userInstance.images.push(action.payload);
     },
-    updateGameListImage: (state: UserState, action: PayloadAction<[Game['_id'], Game['image']]>) => {
+    userGameListUpdateImage: (state: UserState, action: PayloadAction<[Game['_id'], Game['image']]>) => {
       const [gameId, image] = action.payload;
       const game = state.games.find((game) => game._id === gameId);
       if (game) {
         game.image = image;
       }
     },
-    updateGameListTitle: (state: UserState, action: PayloadAction<[Game['_id'], Game['title']]>) => {
+    userGameListUpdateTitle: (state: UserState, action: PayloadAction<[Game['_id'], Game['title']]>) => {
       const [gameId, title] = action.payload;
       const game = state.games.find((game) => game._id === gameId);
       if (game) {
         game.title = title;
       }
+    },
+    userGameListDeleteGame: (state: UserState, action: PayloadAction<Game['_id']>) => {
+      const gameId = action.payload;
+      state.games = state.games.filter((game) => game._id !== gameId);
     },
     updateUserData: (state: UserState, action: PayloadAction<UserDataUpdates>) => {
       // Note: We have to do it this way because interface and types are not actual JS objects;
@@ -56,6 +60,10 @@ const userSlice = createSlice({
         state.userInstance.profilePicture = profilePicture;
       }
     },
+    removeUserFromGame: (state: UserState, action: PayloadAction<Game['_id']>) => {
+      const gameId = action.payload;
+      state.games = state.games.filter((game) => game._id !== gameId);
+    },
     addGame: (state: UserState, action: PayloadAction<Game>) => {
       state.games.push(action.payload);
       state.userInstance.games.push(action.payload._id);
@@ -64,7 +72,7 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { updateGameListImage, updateGameListTitle } = userSlice.actions;
+export const { userGameListUpdateImage, userGameListUpdateTitle, userGameListDeleteGame } = userSlice.actions;
 
 // Thunks
 
@@ -134,20 +142,52 @@ export const loginUser = (username: string): any => {
         credentials: 'include',
       });
       const user: User = await response.json();
-      // TODO only fetch necessary game metadata (image + title), fetch more on game load
-      const games: Game[] = await Promise.all(
+      const results: PromiseSettledResult<Game>[] = await Promise.allSettled(
         user.games.map(async (gameId) => {
           const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, { credentials: 'include' });
           const game = await response.json();
           return game;
         }),
       );
+
+      const games: Game[] = [];
+      for (const result of results) {
+        if (result.status === 'fulfilled') {
+          games.push(result.value);
+        } else {
+          console.error('Could not fetch game');
+          console.error(result.reason);
+        }
+      }
       dispatch(userSlice.actions.loginUser([user, games]));
     } catch {
       console.error('Log in unsuccessful');
     }
   };
   return loginUserThunk;
+};
+
+export const removeUserFromGame = (gameId: Game['_id']) => {
+  const removeUserFromGameThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    try {
+      const userId = getState().user.userInstance._id;
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${userId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(userSlice.actions.removeUserFromGame(gameId));
+          break;
+        default:
+          console.error('Could not remove user from game.');
+          break;
+      }
+    } catch {
+      console.error('Could not remove user from game.');
+    }
+  };
+  return removeUserFromGameThunk;
 };
 
 export type UserDataUpdates = {

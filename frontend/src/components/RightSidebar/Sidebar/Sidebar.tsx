@@ -7,7 +7,6 @@ import Header from '../Header/Header';
 import PlayerList from '../PlayerList/PlayerList';
 import { Tooltip } from '@mui/material';
 import Dialog from '../../Dialog/Dialog';
-import React from 'react';
 import { useCallback, useState } from 'react';
 import { selectIsGameMaster } from '../../../state/slices/userSlice';
 import { RootState } from '../../../state/rootReducer';
@@ -22,7 +21,7 @@ const RightSidebar = (): JSX.Element => {
   const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [leaveGameDialogue, setLeaveGameDialogue] = React.useState(false);
+  const [leaveGameDialogue, setLeaveGameDialogue] = useState(false);
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
   const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
 

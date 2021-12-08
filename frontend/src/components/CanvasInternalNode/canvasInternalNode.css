@@ -1,7 +1,7 @@
 .node {
   user-select: none;
   position: absolute;
-  background-color: yellow;
+  background-color: gray;
   background-size: cover;
   overflow: visible;
   /* border: solid #000; */
