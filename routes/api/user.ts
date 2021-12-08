@@ -55,7 +55,7 @@ router.post('/user/login', mongoChecker, async (req: Request, res: Response) => 
         // // Add the user's id to the session.
         // // We can check later if this exists to ensure we are logged in.
         // console.log(user._id);
-        // req.session.user = user._id;
+        req.session.user = user._id;
         // console.log(req.session.user);
         req.session.save();
         // req.session.email = user.email; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
@@ -131,6 +131,16 @@ router.get('/user/username/:username', mongoChecker, authenticate, async (req: R
   }
 });
 
+router.get("/user/check-session", (req, res) => {
+  console.log("CHECKING SESSION");
+  if (req.session.user) {
+    res.status(200).send();
+  } else {
+    res.status(401).send();
+  }
+});
+
+
 // DELETE: Delete User
 router.delete('/user/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
   // TODO: Ensure that only the user corresponding to the session can be deleted
@@ -173,6 +183,8 @@ router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
+
+
 // PATCH: Update the user's list of images
 router.patch('/user/:id/images', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -201,3 +213,5 @@ router.patch('/user/:id/images', mongoChecker, authenticate, async (req: Request
     }
   }
 });
+
+

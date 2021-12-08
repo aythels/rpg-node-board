@@ -51,4 +51,6 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
 export const mockSessionChecker = (req: Request, res: Response, next: NextFunction): void => {
   console.log("mock session checking success!");
   next(); // Mock user logged in
+
+
 };
