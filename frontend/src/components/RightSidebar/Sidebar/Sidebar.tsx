@@ -64,7 +64,7 @@ const RightSidebar = (): JSX.Element => {
         </Tooltip>
       </div>
       <Dialog
-        header="Are you sure you wish to leave the game?"
+        header="Are you sure you wish to exit the game?"
         description="Doing so will redirect you to game overview."
         open={leaveGameDialogue}
         onClose={() => setLeaveGameDialogue(false)}
