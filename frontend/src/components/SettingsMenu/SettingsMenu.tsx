@@ -28,7 +28,7 @@ const SettingsMenu = (): JSX.Element => {
       },
     });
 
-    fetch(request)
+    fetch(request, { credentials: 'include' })
       .then(async (res) => {
         console.log('should be logged out');
         history.push('/'); //temp fix.
