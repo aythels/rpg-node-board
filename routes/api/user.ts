@@ -112,6 +112,16 @@ router.get('/user/username/:username', mongoChecker, authenticate, async (req: R
   }
 });
 
+router.get("/user/check-session", (req, res) => {
+  console.log("CHECKING SESSION");
+  if (req.session.user) {
+    res.status(200).send();
+  } else {
+    res.status(401).send();
+  }
+});
+
+
 // DELETE: Delete User
 router.delete('/user/:id', mongoChecker, authenticate, async (req: Request, res: Response) => {
   // TODO: Ensure that only the user corresponding to the session can be deleted
@@ -154,6 +164,8 @@ router.patch('/user/:id', mongoChecker, authenticate, async (req: Request, res: 
   }
 });
 
+
+
 // PATCH: Update the user's list of images
 router.patch('/user/:id/images', mongoChecker, authenticate, async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -177,3 +189,5 @@ router.patch('/user/:id/images', mongoChecker, authenticate, async (req: Request
     }
   }
 });
+
+

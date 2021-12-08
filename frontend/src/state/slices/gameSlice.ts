@@ -6,6 +6,7 @@ import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/to
 import { RootState } from '../rootReducer';
 import { userGameListDeleteGame, userGameListUpdateImage, userGameListUpdateTitle } from './userSlice';
 import nodeManager from '../nodeManager';
+import { cloneDeep } from 'lodash';
 
 export enum GameLoadingStatus {
   Loading,
@@ -293,6 +294,54 @@ export const updateNode = (gameId: Game['_id'], node: Node): any => {
     }
   };
   return updateNodeThunk;
+};
+
+export const updateAllNodes = (gameId: Game['_id']): any => {
+  const updateAllNodesThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    console.log(`attempting to save all nodes`);
+
+    // TODO Improve implementation of this function
+
+    const snapshot = nodeManager.getSnapshot();
+    const allCanvasNodes = snapshot.allNodes;
+    const allNodes = getState().game.gameInstance.nodes;
+
+    try {
+      allNodes.forEach(async (node, index) => {
+        if (
+          node.x != allCanvasNodes[index].x - snapshot.finalX ||
+          node.y != allCanvasNodes[index].y - snapshot.finalY
+        ) {
+          const nodeCopy = cloneDeep(node);
+          nodeCopy.x = allCanvasNodes[index].x + snapshot.finalX;
+          nodeCopy.y = allCanvasNodes[index].y + snapshot.finalY;
+
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}/${nodeCopy._id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(nodeCopy),
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          switch (response.status) {
+            case 200:
+              dispatch(gameSlice.actions.updateNode(nodeCopy));
+              break;
+            default:
+              console.log('Could not update node', response);
+              break;
+          }
+        }
+      });
+
+      console.log(`saved`);
+    } catch (e) {
+      console.log(e, 'Could not update node');
+    }
+  };
+  return updateAllNodesThunk;
 };
 
 // TODO: maybe use PUT instead of PATCH for this (nbd)

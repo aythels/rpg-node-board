@@ -1,6 +1,7 @@
 import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import { Avatar, Button, Grid, IconButton, Snackbar, TextField, Tooltip } from '@mui/material';
 import { useState, useRef, useCallback, ChangeEvent, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,8 +16,7 @@ const SettingsMenu = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const user = useSelector((state: RootState) => state.user.userInstance);
-  const history = useHistory(); //temp fix.
-
+  // const history = useHistory(); //temp fix.
   const logout = async (): Promise<void> => {
     // TODO
     const request = new Request(`${process.env.REACT_APP_API_URL}/user/logout`, {
@@ -31,7 +31,6 @@ const SettingsMenu = (): JSX.Element => {
     fetch(request, { credentials: 'include' })
       .then(async (res) => {
         console.log('should be logged out');
-        history.push('/'); //temp fix.
       })
       .catch((error) => {
         console.log(error);
