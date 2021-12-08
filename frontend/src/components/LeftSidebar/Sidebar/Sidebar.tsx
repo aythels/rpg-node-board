@@ -49,8 +49,8 @@ const Sidebar = (props: Props): JSX.Element => {
           left: isOpen ? '20%' : '0%',
         }}
       >
-        <Tooltip title="Center node view" placement="right">
-          <IconButton aria-label="Center node view" onClick={() => nodeManager.centerCanvas()}>
+        <Tooltip title="Center the canvas" placement="right">
+          <IconButton aria-label="Center the canvas" onClick={() => nodeManager.centerCanvas()}>
             <CenterFocusStrong />
           </IconButton>
         </Tooltip>
