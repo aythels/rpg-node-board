@@ -153,11 +153,13 @@ const SubnodeView = (props: Props): JSX.Element => {
     <div className="subnodeview">
       <div className="subnode-title">
         <h2>{props.subnode.name}</h2>
-        <Tooltip title="Save Changes">
-          <Button onClick={saveEditorChanges}>
-            <Save />
-          </Button>
-        </Tooltip>
+        {props.subnode.editors.includes(user._id) ? (
+          <Tooltip title="Save Changes">
+            <Button onClick={saveEditorChanges}>
+              <Save />
+            </Button>
+          </Tooltip>
+        ) : null}
       </div>
       <div id={'editor-' + props.subnode._id} />
     </div>

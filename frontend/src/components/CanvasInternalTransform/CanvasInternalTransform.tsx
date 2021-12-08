@@ -2,7 +2,7 @@ import './canvasInternalTransform.css';
 import CanvasInternalNode from '../CanvasInternalNode/CanvasInternalNode';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
-import { Node } from '../../types';
+import { InfoLevel, Node } from '../../types';
 import nodeManager from '../../state/nodeManager';
 import React, { useState } from 'react';
 
@@ -74,7 +74,8 @@ export default class CanvasInternalTransform extends React.Component {
   render(): JSX.Element {
     const canvasData = nodeManager.getSnapshot();
     const invisibleNodes = store.getState().nodeview.invisibleNodes;
-
+    // HACKY, fix later:
+    const userId = store.getState().user.userInstance._id;
     return (
       <div
         className="transform-wrapper"
@@ -94,20 +95,27 @@ export default class CanvasInternalTransform extends React.Component {
               }}
             />
 
-            {[...canvasData.allNodes].reverse().map((node: any) => {
-              const visible = !invisibleNodes.some((id: any) => id === node._id);
-              if (visible)
-                return (
-                  <CanvasInternalNode
-                    key={node._id}
-                    node={node.node}
-                    nodeX={node.x}
-                    nodeY={node.y}
-                    nodeWidth={node.width}
-                    nodeHeight={node.height}
-                  />
-                );
-            })}
+            {[...canvasData.allNodes]
+              .filter(
+                (canvasNode) =>
+                  canvasNode.node.editors.includes(userId) ||
+                  canvasNode.node.informationLevels.find((i: InfoLevel) => i.user === userId).infoLevel > 0,
+              )
+              .reverse()
+              .map((node: any) => {
+                const visible = !invisibleNodes.some((id: any) => id === node._id);
+                if (visible)
+                  return (
+                    <CanvasInternalNode
+                      key={node._id}
+                      node={node.node}
+                      nodeX={node.x}
+                      nodeY={node.y}
+                      nodeWidth={node.width}
+                      nodeHeight={node.height}
+                    />
+                  );
+              })}
           </div>
         </div>
       </div>
