@@ -134,6 +134,7 @@ export const loginUser = (username: string): any => {
         credentials: 'include',
       });
       const user: User = await response.json();
+      // TODO only fetch necessary game metadata (image + title), fetch more on game load
       const games: Game[] = await Promise.all(
         user.games.map(async (gameId) => {
           const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, { credentials: 'include' });
