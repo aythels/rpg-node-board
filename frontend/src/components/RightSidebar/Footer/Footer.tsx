@@ -66,10 +66,10 @@ const Footer = (): JSX.Element => {
 
       <Dialog
         description="Doing so will immediately end the session and remove the game from the server."
-        header="Delete server?"
+        header="Delete game?"
         open={showDeleteServerDialog}
         onAgree={() => {
-          dispatch(deleteGame(gameId));
+          dispatch(deleteGame());
         }}
         onAgreeRedirectTo="/games"
         onClose={() => setShowDeleteServerDialog(false)}

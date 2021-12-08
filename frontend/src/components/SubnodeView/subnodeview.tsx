@@ -123,6 +123,7 @@ const SubnodeView = (props: Props): JSX.Element => {
         editor.formatText(link.location, link.length, 'nodelink', link.id, 'api');
       }
 
+      // TODO: use React's useRef or some other approach instead of HTML queries
       // Add onclick behaviour
       const nodeLinks = document.getElementsByTagName('nodelink');
       for (const nodeLink of nodeLinks) {
@@ -153,13 +154,13 @@ const SubnodeView = (props: Props): JSX.Element => {
     <div className="subnodeview">
       <div className="subnode-title">
         <h2>{props.subnode.name}</h2>
-        {props.subnode.editors.includes(user._id) ? (
+        {props.subnode.editors.includes(user._id) && (
           <Tooltip title="Save Changes">
             <Button onClick={saveEditorChanges}>
               <Save />
             </Button>
           </Tooltip>
-        ) : null}
+        )}
       </div>
       <div id={'editor-' + props.subnode._id} />
     </div>

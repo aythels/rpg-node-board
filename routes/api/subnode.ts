@@ -53,19 +53,12 @@ router.post('/subnode/:gameId/:nodeId', mongoChecker, authenticate, async (req: 
   }
 
   try {
-    const newSubnode: Subnode = new SubnodeModel({
-      name: req.body.name,
-      informationLevel: req.body.informationLevel,
-      editors: req.body.editors,
-      type: req.body.type,
-      content: JSON.stringify(req.body.content) || '',
-    });
+    const { name, informationLevel, editors, type, content } = req.body;
+    const newSubnode: Omit<Subnode, '_id'> = { name, informationLevel, editors, type, content };
+    const subnode: Subnode = new SubnodeModel(newSubnode);
 
-    const result = await GameModel.findOneAndUpdate(
-      { _id: gameId, 'nodes._id': nodeId },
-      { $push: { 'nodes.$.subnodes': newSubnode } },
-    );
-    res.send(newSubnode);
+    await GameModel.findOneAndUpdate({ _id: gameId, 'nodes._id': nodeId }, { $push: { 'nodes.$.subnodes': subnode } });
+    res.send(subnode);
   } catch (error) {
     console.log(error);
     if (isMongoError(error)) res.status(500).send('Internal server error');

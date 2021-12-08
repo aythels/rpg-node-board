@@ -31,12 +31,12 @@ export const UserSchema = new Schema<User>({
       required: true,
     },
   ],
-  /*images: [
+  images: [
     {
       type: [String], // base 64
       required: true,
     },
-  ],*/
+  ],
 });
 
 //CREDIT TO USER.JS in react-express-authentication example for this course. 

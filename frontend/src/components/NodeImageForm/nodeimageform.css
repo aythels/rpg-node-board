@@ -9,8 +9,9 @@
 
 .custom-modal .image-collection {
   display: flex;
+  flex-direction: row;
   gap: 0.5rem;
-  /* overflow-x: scroll; */
+  overflow-x: scroll;
   flex-wrap: wrap;
 }
 
@@ -26,15 +27,16 @@
 }
 
 .custom-modal .image-collection__image {
-  width: 10rem;
+  height: 100%;
+  max-width: 31%;
 }
 
-.custom-modal .image-collection__image img:hover {
+.custom-modal .image-collection__image:hover {
   cursor: pointer;
   filter: grayscale(50%) brightness(50%);
 }
 
 .custom-modal .image-collection__image img {
-  width: 100%;
+  width: 2rem;
   border-radius: 1rem;
 }

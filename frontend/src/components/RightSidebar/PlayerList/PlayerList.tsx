@@ -118,6 +118,7 @@ const PlayerList = (props: Props): JSX.Element => {
             user={user}
             settingsOpen={props.settingsOpen}
             promotable={!isGameMaster}
+            isCurrentPlayer={isCurrentPlayer}
             removable={!isGameMaster && !isCurrentPlayer}
             onDemotePlayerClicked={() => handlePlayerDemoteRequested(user._id)}
             onPromotePlayerClicked={() => setPlayerToPromote(user._id)}

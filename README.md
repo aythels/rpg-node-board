@@ -171,6 +171,15 @@ npm run dev
 [Parchment, Quill, Quill-Delta](https://quilljs.com/)
 - Used for the WYSIWYG editor, as well as text content deltas and formatting
 
+[Redux](https://react-redux.js.org/), [Redux Toolkit](https://redux-toolkit.js.org/)
+- Used to manage global state
+
+[Redux Thunk](https://www.npmjs.com/package/redux-thunk)
+- Used to make API requests from reducers. Also used to perform other side-effects, such as dispatching an action to another reducer.
+
+[Redux DevTools Extension](https://www.npmjs.com/package/redux-devtools-extension)
+- Used to debug Redux state during development.
+
 React, React-DOM, React-Router-DOM, React-Scripts
 - Framework
 - Used for routing (see `App.tsx`)

@@ -180,13 +180,8 @@ router.patch('/user/:id/images', mongoChecker, authenticate, async (req: Request
   try {
     const user = await UserModel.findById(id);
     if (user) {
-      // TODO: figure out why this isn't working
-      // if (user.images) {
-      //   user.images.push(image.substr(40));
-      // } else {
-      //   user.images = [image.substr(40)];
-      // }
-      // user.markModified('images');
+      user.images.push(image);
+      user.markModified('images');
       await user.save();
       res.send(user);
     } else {
