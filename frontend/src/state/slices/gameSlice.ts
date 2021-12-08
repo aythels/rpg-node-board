@@ -90,6 +90,14 @@ const gameSlice = createSlice({
 export default gameSlice.reducer;
 export const { gameLoaded, updateDialogStatus } = gameSlice.actions;
 
+export const refreshNodes = (): any => {
+  const refreshNodesThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const nodes = getState().game.gameInstance.nodes;
+    nodeManager.appendData(nodes);
+  };
+  return refreshNodesThunk;
+};
+
 export const fetchGame = (gameId: Game['_id']): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     console.log('Fetching game');

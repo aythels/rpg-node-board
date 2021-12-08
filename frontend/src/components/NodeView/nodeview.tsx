@@ -14,13 +14,14 @@ import { Add, Close } from '@mui/icons-material';
 import Delta from 'quill-delta';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state/rootReducer';
-import { addSubnode, selectActiveNode } from '../../state/slices/gameSlice';
+import { addSubnode, refreshNodes, selectActiveNode } from '../../state/slices/gameSlice';
 import {
   setIsEditModalOpen,
   setIsImageModalOpen,
   setIsUsersModalOpen,
   setActiveNode,
 } from '../../state/slices/nodeviewSlice';
+import nodeManager from '../../state/nodeManager';
 
 const NodeView = (): JSX.Element => {
   const game = useSelector((state: RootState) => state.game.gameInstance);
@@ -56,7 +57,12 @@ const NodeView = (): JSX.Element => {
             </Button>
           </Tooltip>
           <Tooltip title="Close">
-            <Button onClick={() => dispatch(setActiveNode(''))}>
+            <Button
+              onClick={() => {
+                dispatch(setActiveNode(''));
+                dispatch(refreshNodes());
+              }}
+            >
               <Close />
             </Button>
           </Tooltip>
