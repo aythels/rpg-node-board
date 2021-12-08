@@ -27,7 +27,8 @@
 }
 
 .custom-modal .image-collection__image {
-  width: 31%;
+  height: 100%;
+  max-width: 31%;
 }
 
 .custom-modal .image-collection__image:hover {

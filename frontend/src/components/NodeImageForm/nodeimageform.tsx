@@ -73,25 +73,16 @@ const NodeImageForm = (): JSX.Element => {
           <div className="modal__body__section">
             <h4>Your Images</h4>
             <div className="image-collection">
-              {user.images.map((image, idx) => {
-                return (
-                  <div className="image-collection__image" key={idx}>
-                    <img
-                      src={image}
-                      onClick={() => {
-                        changeImage(image);
-                      }}
-                    ></img>
-                  </div>
-                );
-              })}
+              {user.images.map((image, idx) => (
+                <img className="image-collection__image" key={idx} src={image} onClick={() => changeImage(image)} />
+              ))}
             </div>
           </div>
           <div className="modal__body__section">
             <h4>Stock Images</h4>
             <div className="image-collection">
               {STOCK_NODE_IMAGES.map((path, idx) => (
-                <img className="image-collection__image" key={idx} src={path} onClick={() => changeImage(path)}></img>
+                <img className="image-collection__image" key={idx} src={path} onClick={() => changeImage(path)} />
               ))}
             </div>
           </div>
