@@ -49,6 +49,9 @@ const userSlice = createSlice({
         state.userInstance.profilePicture = profilePicture;
       }
     },
+    addGame: (state: UserState, action: PayloadAction<Game>) => {
+      state.games.push(action.payload);
+    },
   },
 });
 
@@ -56,6 +59,38 @@ export default userSlice.reducer;
 export const { updateGameListImage } = userSlice.actions;
 
 // Thunks
+
+export const addGame = (title: string): any => {
+  const addGameThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const userId = getState().user.userInstance._id;
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game`, {
+        method: 'POST',
+        body: JSON.stringify({
+          title: title,
+          userId: userId,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      const game: Game = await response.json();
+      switch (response.status) {
+        case 200:
+          dispatch(userSlice.actions.addGame(game));
+          break;
+        default:
+          console.log('Could not add game');
+          break;
+      }
+    } catch (e) {
+      console.log('Could not add game', e);
+    }
+  };
+  return addGameThunk;
+};
+
 export const addImage = (image: NonNullable<Node['image']>): any => {
   const addImageThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
     const userId = getState().user.userInstance._id;
@@ -77,8 +112,8 @@ export const addImage = (image: NonNullable<Node['image']>): any => {
           console.error("Could not add image to the user's collection of images.");
           break;
       }
-    } catch {
-      console.error("Could not add image to the user's collection of images.");
+    } catch (e) {
+      console.error("Could not add image to the user's collection of images.", e);
     }
   };
   return addImageThunk;

@@ -12,12 +12,13 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
   console.log('Creating new game');
 
   const { userId, title } = req.body;
+  console.log(req.body);
   const game = new GameModel({
-    title,
+    title: title,
     nodes: [],
     users: [
       {
-        userId,
+        userId: userId,
         permission: UserPermission.gameMaster,
       },
     ],
