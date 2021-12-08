@@ -11,6 +11,7 @@ import {
   setIsEditPermissionsModalOpen,
 } from '../../../state/slices/nodeviewSlice';
 import { deleteNode } from '../../../state/slices/gameSlice';
+import nodeManager from '../../../state/nodeManager';
 import { selectIsGameMaster } from '../../../state/slices/userSlice';
 
 interface Props {
@@ -18,11 +19,7 @@ interface Props {
 }
 
 const NodeCard = (props: Props): JSX.Element => {
-  //const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
-  console.log('this is updating too much');
-
   const dispatch = useDispatch();
-
   const invisibleNodes = useSelector((state: RootState) => state.nodeview.invisibleNodes);
   const game = useSelector((state: RootState) => state.game.gameInstance);
   const node = props.node;
@@ -46,6 +43,7 @@ const NodeCard = (props: Props): JSX.Element => {
               } else {
                 dispatch(removeInvisibleNode(node._id));
               }
+              nodeManager.update();
             }}
           >
             {visible ? <Visibility /> : <VisibilityOff />}
@@ -53,11 +51,7 @@ const NodeCard = (props: Props): JSX.Element => {
         </Tooltip>
       )}
       <Tooltip arrow title="Navigate to node">
-        <IconButton
-          className="button"
-          aria-label="Navigate to node"
-          onClick={() => console.log('center node, fix this part')}
-        >
+        <IconButton className="button" aria-label="Navigate to node" onClick={() => nodeManager.centerNode(node._id)}>
           <CenterFocusStrong />
         </IconButton>
       </Tooltip>

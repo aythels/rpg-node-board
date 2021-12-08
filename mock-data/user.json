@@ -2,8 +2,8 @@
   {
     "oldId": 1,
     "_id": { "$oid": "61a9da74d7c3cec99261a3fc" },
-    "username": "user",
-    "password": "user",
+    "username": "hashedUser",
+    "password": "$2b$10$kqVp9gWGQLLYSj5PXeDt..9eNRUF6uaoX23tkDLNpCSHqA9Ps1x8y",
     "email": "user@user.com",
     "games": ["61a9dccdd7c3cec99261a408"],
     "images": []
@@ -12,7 +12,7 @@
     "oldId": 2,
     "_id": { "$oid": "61a9da75d7c3cec99261a3fd" },
     "username": "admin",
-    "password": "admin",
+    "password": "$2b$10$fGTQfP.vKthTYcDeP2YTiOZZ/IpIGNQ1IWZSbAH74QlddAy9ZBz1.",
     "email": "admin@admin.com",
     "games": ["61a9dccdd7c3cec99261a408"],
     "images": []

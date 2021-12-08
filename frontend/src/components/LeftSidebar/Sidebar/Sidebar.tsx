@@ -9,8 +9,9 @@ import Dialog from '../../Dialog/Dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../state/rootReducer';
 import { Node } from '../../../types';
-import { addDefaultNode } from '../../../state/slices/gameSlice';
+import { addDefaultNode, selectVisibleNodes } from '../../../state/slices/gameSlice';
 import { setIsEditPermissionsModalOpen } from '../../../state/slices/nodeviewSlice';
+import nodeManager from '../../../state/nodeManager';
 import { selectIsGameMaster } from '../../../state/slices/userSlice';
 
 type Props = MuiTheme;
@@ -20,7 +21,7 @@ const Sidebar = (props: Props): JSX.Element => {
   const [leaveGameDialogue, setLeaveGameDialogue] = useState(false);
 
   const dispatch = useDispatch();
-  const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
+  const allNodes = useSelector((state: RootState) => selectVisibleNodes(state));
   const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
@@ -48,20 +49,8 @@ const Sidebar = (props: Props): JSX.Element => {
           left: isOpen ? '20%' : '0%',
         }}
       >
-        <Tooltip className="first-button" title="Leave game" placement="right">
-          <IconButton aria-label="Lave game" onClick={() => setLeaveGameDialogue(true)}>
-            <ExitToApp />
-          </IconButton>
-        </Tooltip>
-      </div>
-      <div
-        className="bottom-toolbar"
-        style={{
-          left: isOpen ? '20%' : '0%',
-        }}
-      >
         <Tooltip title="Center node view" placement="right">
-          <IconButton aria-label="Center node view" onClick={() => console.log('center clicked, fix this part')}>
+          <IconButton aria-label="Center node view" onClick={() => nodeManager.centerCanvas()}>
             <CenterFocusStrong />
           </IconButton>
         </Tooltip>
@@ -79,6 +68,18 @@ const Sidebar = (props: Props): JSX.Element => {
             <Add />
           </IconButton>
         </Tooltip>
+        {/*<Tooltip className="first-button" title="Leave game" placement="right">
+          <IconButton aria-label="Lave game" onClick={() => setLeaveGameDialogue(true)}>
+            <ExitToApp />
+          </IconButton>
+      </Tooltip>*/}
+      </div>
+      <div
+        className="bottom-toolbar"
+        style={{
+          left: isOpen ? '20%' : '0%',
+        }}
+      >
         <IconButton aria-label={`${isOpen ? 'Close' : 'Open'} the sidebar`} onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <ChevronLeft /> : <ChevronRight />}
         </IconButton>

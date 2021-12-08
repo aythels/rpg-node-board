@@ -5,6 +5,7 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
 import { userGameListDeleteGame, userGameListUpdateImage, userGameListUpdateTitle } from './userSlice';
+import nodeManager from '../nodeManager';
 
 export enum GameLoadingStatus {
   Loading,
@@ -44,6 +45,8 @@ const gameSlice = createSlice({
       state.dialogStatus[dialog] = status;
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
+      // TODO: unhook this from the action
+      nodeManager.appendData(action.payload.nodes);
       state.gameInstance = action.payload;
       state.status = GameLoadingStatus.Idle;
     },
@@ -91,7 +94,7 @@ export const fetchGame = (gameId: Game['_id']): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
     console.log('Fetching game');
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, { credentials: 'include' });
       const game: Game = await response.json();
 
       switch (response.status) {
@@ -100,10 +103,10 @@ export const fetchGame = (gameId: Game['_id']): any => {
           break;
         default:
           // TODO: handle in UI
-          console.error(`Could not fetch game ${gameId}`);
+          console.error(`Could not fetch game ${gameId}`, response);
       }
-    } catch {
-      console.error(`Could not fetch game ${gameId}`);
+    } catch (err) {
+      console.error(`Could not fetch game ${gameId}`, err);
     }
   };
   return fetchGameThunk;
@@ -137,6 +140,7 @@ export const addPlayer = (user: string, gameId: Game['_id']): any => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${user}`, {
         method: 'POST',
+        credentials: 'include',
       });
       switch (response.status) {
         case 200:
@@ -165,6 +169,7 @@ export const updateGameImage = (image: string): any => {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
         method: 'PATCH',
         body: JSON.stringify(update),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -191,6 +196,7 @@ export const removePlayer = (playerId: User['_id'], gameId: Game['_id']): any =>
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${playerId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       switch (response.status) {
         case 200:
@@ -212,10 +218,12 @@ export const addDefaultNode = (gameId: Game['_id']): any => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}`, {
         method: 'POST',
+        credentials: 'include',
       });
       const node: Node = await response.json();
       switch (response.status) {
         case 200:
+          nodeManager.addNode(node);
           dispatch(gameSlice.actions.addNode(node));
           break;
         default:
@@ -234,9 +242,11 @@ export const deleteNode = (gameId: Game['_id'], nodeId: Node['_id']): any => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}/${nodeId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       switch (response.status) {
         case 200:
+          nodeManager.deleteNode(nodeId);
           dispatch(gameSlice.actions.deleteNode(nodeId));
           break;
         default:
@@ -256,6 +266,7 @@ export const updateNode = (gameId: Game['_id'], node: Node): any => {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}/${node._id}`, {
         method: 'PATCH',
         body: JSON.stringify(node),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -282,6 +293,7 @@ export const updateSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode:
       const response = await fetch(`${process.env.REACT_APP_API_URL}/subnode/${gameId}/${nodeId}/${subnode._id}`, {
         method: 'PATCH',
         body: JSON.stringify(subnode),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -307,6 +319,7 @@ export const addSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Pa
       const response = await fetch(`${process.env.REACT_APP_API_URL}/subnode/${gameId}/${nodeId}`, {
         method: 'POST',
         body: JSON.stringify(subnode),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -335,6 +348,7 @@ export const updateGameTitle = (gameId: Game['_id'], newTitle: string): any => {
         body: JSON.stringify({
           title: newTitle,
         }),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -361,6 +375,7 @@ export const updatePlayerPermission = (payload: [User['_id'], UserPermission, Ga
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${payload[2]}/user/${payload[0]}`, {
         method: 'PATCH',
         body: JSON.stringify({ permission: payload[1] }),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

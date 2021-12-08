@@ -3,6 +3,10 @@
   transition: all 0.15s ease-out;
   margin: 0.5rem;
   top: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .left-sidebar .bottom-toolbar {
