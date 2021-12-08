@@ -14,6 +14,7 @@ import { RootState } from '../../../state/rootReducer';
 import { useSelector, useDispatch } from 'react-redux';
 import SaveAsRoundedIcon from '@mui/icons-material/SaveAsRounded';
 import { updateAllNodes } from '../../../state/slices/gameSlice';
+import { clearGame } from '../../../state/slices/gameSlice';
 
 const RightSidebar = (): JSX.Element => {
   const theme = useTheme<Theme>();
@@ -79,11 +80,13 @@ const RightSidebar = (): JSX.Element => {
         </Tooltip>
       </div>
       <Dialog
-        header="Are you sure you wish to leave the game?"
+        header="Are you sure you wish to exit the game?"
         description="Doing so will redirect you to game overview."
         open={leaveGameDialogue}
         onClose={() => setLeaveGameDialogue(false)}
-        onAgree={() => setLeaveGameDialogue(false)}
+        onAgree={() => {
+          setLeaveGameDialogue(false);
+        }}
         onAgreeRedirectTo="/games"
         onDisagree={() => setLeaveGameDialogue(false)}
       />

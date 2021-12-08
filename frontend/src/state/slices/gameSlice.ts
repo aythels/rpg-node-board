@@ -5,7 +5,8 @@ import { Game, Node, Subnode, User, UserPermission, UserPermissionRecord } from 
 import { createSlice, createDraftSafeSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../rootReducer';
 import nodeManager from '../nodeManager';
-import { updateGameListImage } from './userSlice';
+import { updateGameListImage, updateGameListTitle } from './userSlice';
+import { store } from '..';
 
 export enum GameLoadingStatus {
   Loading,
@@ -80,10 +81,13 @@ const gameSlice = createSlice({
     updateGameImage: (state: GameState, action: PayloadAction<Game['image']>) => {
       state.gameInstance.image = action.payload;
     },
+    clearGame: (state: GameState) => {
+      state.gameInstance = initialState.gameInstance;
+    },
   },
 });
 export default gameSlice.reducer;
-export const { gameLoaded, updateDialogStatus } = gameSlice.actions;
+export const { gameLoaded, updateDialogStatus, clearGame } = gameSlice.actions;
 
 export const fetchGame = (gameId: Game['_id']): any => {
   const fetchGameThunk = async (dispatch: Dispatch<any>): Promise<void> => {
@@ -369,7 +373,8 @@ export const addSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Pa
 };
 
 export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
-  const setGameTitleThunk = async (dispatch: Dispatch<any>): Promise<void> => {
+  const setGameTitleThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    const gameId = getState().game.gameInstance._id;
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
         method: 'PATCH',
@@ -384,6 +389,7 @@ export const setGameTitle = (gameId: Game['_id'], newTitle: string): any => {
       switch (response.status) {
         case 200:
           dispatch(gameSlice.actions.setGameTitle(newTitle));
+          dispatch(updateGameListTitle([gameId, newTitle]));
           break;
         default:
           console.log('Could not set game title', response);
