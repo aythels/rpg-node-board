@@ -64,6 +64,7 @@ export const addImage = (image: NonNullable<Node['image']>): any => {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}/images`, {
         method: 'PATCH',
         body: JSON.stringify({ image }),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -92,7 +93,7 @@ export const loginUser = (username: string): any => {
       const user: User = await response.json();
       const games: Game[] = await Promise.all(
         user.games.map(async (gameId) => {
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`);
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, { credentials: 'include' });
           const game = await response.json();
           return game;
         }),
@@ -118,6 +119,7 @@ export const updateUserData = (updates: UserDataUpdates): any => {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
         method: 'PATCH',
         body: JSON.stringify(updates),
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

@@ -9,7 +9,7 @@ import Dialog from '../../Dialog/Dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../state/rootReducer';
 import { Node } from '../../../types';
-import { addDefaultNode } from '../../../state/slices/gameSlice';
+import { addDefaultNode, selectVisibleNodes } from '../../../state/slices/gameSlice';
 import { setIsEditPermissionsModalOpen } from '../../../state/slices/nodeviewSlice';
 import nodeManager from '../../../state/nodeManager';
 import { selectIsGameMaster } from '../../../state/slices/userSlice';
@@ -21,7 +21,7 @@ const Sidebar = (props: Props): JSX.Element => {
   const [leaveGameDialogue, setLeaveGameDialogue] = useState(false);
 
   const dispatch = useDispatch();
-  const allNodes = useSelector((state: RootState) => state.game.gameInstance.nodes);
+  const allNodes = useSelector((state: RootState) => selectVisibleNodes(state));
   const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
 
