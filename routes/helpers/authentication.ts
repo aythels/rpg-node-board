@@ -26,9 +26,9 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
   console.log(req.session.user);
   if (req.session.user) {
     console.log("trying to find by ID");
-    console.log(req.session.user);
+    // console.log(req.session.user);
     UserModel.findById(req.session.user).then((user) => {
-      console.log("trying to find id: ")
+      // console.log("trying to find id: ")
       console.log(user);
       if (!user) {
         console.log("invalid user session ID. Something has gone wrong.")
@@ -38,9 +38,12 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
         next()
       }
     }).catch(() => {
+      console.log("unauthorized")
       res.status(401).send("Unauthorized")
     })
   } else {
+    console.log("unauthorized")
+
     res.status(401).send("Unauthorized")
   }
 };

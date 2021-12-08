@@ -61,13 +61,11 @@ export default class CanvasInternalTransform extends React.Component {
   };
 
   componentDidMount() {
-    // Why is this not working properly?
-    //setTimeout(() => {
     nodeManager.addComponentToUpdate(this.updateCanvas);
-    //}, 3000);
   }
 
   componentWillUnmount() {
+    //nodeManager.kill();
     nodeManager.removeComponentToUpdate(this.updateCanvas);
   }
 

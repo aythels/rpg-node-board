@@ -16,7 +16,7 @@ router.post('/game', mongoChecker, authenticate, async (req: Request, res: Respo
     title,
     users: [
       {
-        userId,
+        userId: userId,
         permission: UserPermission.gameMaster,
       },
     ],

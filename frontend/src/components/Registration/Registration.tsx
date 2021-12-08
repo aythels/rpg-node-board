@@ -1,4 +1,4 @@
-import './login.css';
+import './Registration.css';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { loginUser, selectIsLoggedIn } from '../../state/slices/userSlice';
@@ -6,19 +6,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { RootState } from '../../state/rootReducer';
 
-const Login = (): JSX.Element => {
+const Registration = (): JSX.Element => {
   const dispatch = useDispatch();
-
+  const EMAIL_REGEX =
+    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  const MIN_PASSWORD_LENGTH = 6;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+
   const [invalid, setInvalid] = useState(false);
+  const [done, setDone] = useState(false);
+
   const loggedIn = useSelector((state: RootState) => selectIsLoggedIn(state));
 
-  const checkPassword = async (): Promise<void> => {
+  const registerUser = async (): Promise<void> => {
     // TODO
-    const request = new Request(`${process.env.REACT_APP_API_URL}/user/login`, {
+    const request = new Request(`${process.env.REACT_APP_API_URL}/user`, {
       method: 'post',
-      body: JSON.stringify({ username: username, password: password }), //username and password go here
+      body: JSON.stringify({ username: username, password: password, email: email }), //username, password, email go here
       credentials: 'include',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -26,26 +32,24 @@ const Login = (): JSX.Element => {
       },
     });
 
-    fetch(request, { credentials: 'include' })
+    fetch(request)
       .then(async (res) => {
         // console.log(res.session.user);
-        if (res.status === 401) {
-          console.log('Login or password is invalid');
+        if (res.status != 200) {
+          console.log('Invalid Combination');
           setInvalid(true);
         } else if (res.status === 200) {
-          console.log('Login successful');
-
-          await dispatch(loginUser(username));
+          console.log('Registration successful');
+          setDone(true);
         }
       })
       .catch((error) => {
         console.log(error);
+        setInvalid(true);
       });
   };
 
-  return loggedIn ? (
-    <Redirect push to="/games" />
-  ) : (
+  return (
     <div>
       <div
         className="login-background"
@@ -72,19 +76,31 @@ const Login = (): JSX.Element => {
         style={{ minHeight: '100vh' }}
       >
         <Grid item>
-          <Typography variant="h1">Welcome</Typography>
+          <Typography variant="h1">Register</Typography>
         </Grid>
         <Grid item>
-          <Typography style={{ fontStyle: 'italic' }}>to an unnamed RPG lore web application.</Typography>
+          <Typography style={{ fontStyle: 'italic' }}>Start worldbuilding today!</Typography>
         </Grid>
         <Grid item>
           <TextField
             label="Username"
             style={{ backgroundColor: 'white' }}
             error={invalid}
-            helperText={invalid ? 'Username or Password are invalid' : ''}
+            helperText={invalid ? 'Please pick something different!' : ''}
             onChange={(event) => {
               setUsername(event.target.value);
+              setInvalid(false);
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            label="Email"
+            style={{ backgroundColor: 'white' }}
+            error={invalid}
+            helperText={invalid ? 'Please pick something different!' : ''}
+            onChange={(event) => {
+              setEmail(event.target.value);
               setInvalid(false);
             }}
           />
@@ -95,7 +111,7 @@ const Login = (): JSX.Element => {
             type="password"
             style={{ backgroundColor: 'white' }}
             error={invalid}
-            helperText={invalid ? 'Username or Password are invalid' : ''}
+            helperText={invalid ? 'Please pick something different!' : ''}
             onChange={(event) => {
               setPassword(event.target.value);
               setInvalid(false);
@@ -103,14 +119,13 @@ const Login = (): JSX.Element => {
           />
         </Grid>
         <Grid item>
-          <Button color={invalid ? 'error' : 'primary'} variant="contained" type="submit" onClick={checkPassword}>
-            Log In
+          <Button color={done ? 'success' : 'primary'} variant="contained" type="submit" onClick={registerUser}>
+            {done ? 'Success!' : 'Register'}
           </Button>
         </Grid>
-
         <Grid item>
-          <Button component={Link} to="/register" variant="contained" color="primary">
-            Need an account?
+          <Button component={Link} to="/" variant="contained" color="primary">
+            Back to Login
           </Button>
         </Grid>
       </Grid>
@@ -118,4 +133,4 @@ const Login = (): JSX.Element => {
   );
 };
 
-export default Login;
+export default Registration;
