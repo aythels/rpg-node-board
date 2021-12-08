@@ -32,6 +32,13 @@ const userSlice = createSlice({
         game.image = image;
       }
     },
+    updateGameListTitle: (state: UserState, action: PayloadAction<[Game['_id'], Game['title']]>) => {
+      const [gameId, title] = action.payload;
+      const game = state.games.find((game) => game._id === gameId);
+      if (game) {
+        game.title = title;
+      }
+    },
     updateUserData: (state: UserState, action: PayloadAction<UserDataUpdates>) => {
       // Note: We have to do it this way because interface and types are not actual JS objects;
       // Record<...> is a JS object, but it does not enforce attribute types as elegantly as types or interfaces
@@ -51,12 +58,13 @@ const userSlice = createSlice({
     },
     addGame: (state: UserState, action: PayloadAction<Game>) => {
       state.games.push(action.payload);
+      state.userInstance.games.push(action.payload._id);
     },
   },
 });
 
 export default userSlice.reducer;
-export const { updateGameListImage } = userSlice.actions;
+export const { updateGameListImage, updateGameListTitle } = userSlice.actions;
 
 // Thunks
 
