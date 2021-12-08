@@ -39,24 +39,11 @@ router.post('/user/login', mongoChecker, async (req: Request, res: Response) => 
   try {
     const { username, password } = req.body;
 
-    // console.log('Attempting to log in user with credentials: ', req.body);
-    // console.log(req.session)
-    console.log("IN BEFORE ASYNC")
-    console.log("SESSION ID:")
-    console.log(req.sessionID)
-
     UserModel.compareUsernamePassword(username, password)
       .then(user => {
-        // console.log("login success!")
-        // console.log("IN LOGIN")
-        // console.log("SESSION ID:")
-        // console.log(req.sessionID)
-        // console.log("ID DONE")
         // // Add the user's id to the session.
         // // We can check later if this exists to ensure we are logged in.
-        // console.log(user._id);
         req.session.user = user._id;
-        // console.log(req.session.user);
         req.session.save();
         // req.session.email = user.email; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
         res.send({ currentUser: user._id });
@@ -95,8 +82,6 @@ router.get('/user/:id', mongoChecker, authenticate, async (req: Request, res: Re
   try {
     const { id } = req.params;
     console.log(`Retrieving user ${id}`);
-    console.log("SESSION ID:")
-    console.log(req.sessionID)
     const user = await UserModel.findById(id);
     res.send(user);
   } catch (error) {
@@ -111,10 +96,6 @@ router.get('/user/:id', mongoChecker, authenticate, async (req: Request, res: Re
 
 // GET: Retrieve user by username
 router.get('/user/username/:username', mongoChecker, authenticate, async (req: Request, res: Response) => {
-  console.log("retreiving user by name")
-  console.log("SESSION ID:")
-  console.log(req.sessionID)
-  console.log(req.session.user);
   try {
     const { username } = req.params;
     console.log(`Retrieving user ${username}`);
