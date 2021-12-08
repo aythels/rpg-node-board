@@ -10,17 +10,20 @@ import Dialog from '../../Dialog/Dialog';
 import { useCallback, useState } from 'react';
 import { selectIsGameMaster } from '../../../state/slices/userSlice';
 import { RootState } from '../../../state/rootReducer';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import SaveAsRoundedIcon from '@mui/icons-material/SaveAsRounded';
+import { updateAllNodes } from '../../../state/slices/gameSlice';
 import { clearGame } from '../../../state/slices/gameSlice';
 
 const RightSidebar = (): JSX.Element => {
   const theme = useTheme<Theme>();
 
+  const dispatch = useDispatch();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [leaveGameDialogue, setLeaveGameDialogue] = useState(false);
   const isGameMaster = useSelector((state: RootState) => selectIsGameMaster(state));
-  const dispatch = useDispatch();
+  const gameId = useSelector((state: RootState) => state.game.gameInstance._id);
 
   const toggleSidebarOpen = useCallback(() => {
     setSidebarOpen((prevSidebarOpen: boolean) => !prevSidebarOpen);
@@ -61,6 +64,17 @@ const RightSidebar = (): JSX.Element => {
         <Tooltip className="first-button" title="Exit game" placement="left">
           <IconButton aria-label="exit game" onClick={() => setLeaveGameDialogue(true)}>
             <ExitToApp />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Save game" placement="left">
+          <IconButton
+            aria-label="save game"
+            onClick={() => {
+              console.log('saving');
+              dispatch(updateAllNodes(gameId));
+            }}
+          >
+            <SaveAsRoundedIcon />
           </IconButton>
         </Tooltip>
       </div>

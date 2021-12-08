@@ -10,6 +10,9 @@
   transition: all 0.15s ease-out;
   top: 0;
   margin: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .canvas-sidebar .container {
