@@ -267,6 +267,53 @@ export const updateNode = (gameId: Game['_id'], node: Node): any => {
   return updateNodeThunk;
 };
 
+export const updateAllNodes = (gameId: Game['_id']): any => {
+  const updateAllNodesThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
+    console.log(`attempting to update all nodes`);
+
+    // TODO Improve implementation of this function
+
+    const snapshot = nodeManager.getSnapshot();
+    const allCanvasNodes = snapshot.allNodes;
+    const allNodes = getState().game.gameInstance.nodes;
+
+    const nodesToUpdate: any = [];
+    allNodes.forEach((node, index) => {
+      /*
+      if (node.x !== snapshot[index].x) nodesToUpdate.push(node);
+      if (node.y !== snapshot[index].y) nodesToUpdate.push(node);
+      */
+      console.log(node);
+    });
+
+    console.log(nodesToUpdate);
+
+    /*
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}/${node._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(node),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      switch (response.status) {
+        case 200:
+          dispatch(gameSlice.actions.updateNode(node));
+          break;
+        default:
+          console.log('Could not update node', response);
+          break;
+      }
+    } catch (e) {
+      console.log(e, 'Could not update node');
+    }
+    */
+  };
+  return updateAllNodesThunk;
+};
+
 // TODO: maybe use PUT instead of PATCH for this (nbd)
 export const updateSubnode = (gameId: Game['_id'], nodeId: Node['_id'], subnode: Subnode): any => {
   const updateSubnodeThunk = async (dispatch: Dispatch<any>): Promise<void> => {
