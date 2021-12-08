@@ -57,8 +57,8 @@ const RightSidebar = (): JSX.Element => {
           right: sidebarOpen ? '20%' : '0%',
         }}
       >
-        <Tooltip className="first-button" title="Leave game" placement="left">
-          <IconButton aria-label="Lave game" onClick={() => setLeaveGameDialogue(true)}>
+        <Tooltip className="first-button" title="Exit game" placement="left">
+          <IconButton aria-label="exit game" onClick={() => setLeaveGameDialogue(true)}>
             <ExitToApp />
           </IconButton>
         </Tooltip>
