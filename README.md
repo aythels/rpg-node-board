@@ -88,6 +88,12 @@ In addition to the separation of functionality based on the user's permssion wit
 "/user"
 - POST: Creates a new user. Expects `req.body` to contain (`username`, `password`, `email`). Returns the newly-created user.
 
+"/user/login"
+- POST: Logs in a user and creates a session. Returns the user's ID.
+
+"/user/logout"
+- GET: Destroys the current session.
+
 "/user/:id"
 - GET: Retrieves the user with ID = `req.params.id`.
 - DELETE: Deletes the user with ID = `req.params.id`. *Note: this does not remove the user from any games. This may cause bugs.* Returns the deleted user.
