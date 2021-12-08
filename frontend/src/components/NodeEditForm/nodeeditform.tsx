@@ -27,7 +27,7 @@ const NodeEditForm = (): JSX.Element => {
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
     if (validate()) {
-      dispatch(updateNode(game._id, tempNode)); // TODO: async
+      dispatch(updateNode(game._id, tempNode));
       dispatch(setIsEditModalOpen(false));
     } else {
       console.log('Validation failed.');
