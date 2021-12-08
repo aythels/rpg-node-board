@@ -7,6 +7,7 @@ import { RootState } from '../rootReducer';
 import nodeManager from '../nodeManager';
 import { updateGameListImage, updateGameListTitle } from './userSlice';
 import { store } from '..';
+import { cloneDeep } from 'lodash';
 
 export enum GameLoadingStatus {
   Loading,
@@ -273,7 +274,7 @@ export const updateNode = (gameId: Game['_id'], node: Node): any => {
 
 export const updateAllNodes = (gameId: Game['_id']): any => {
   const updateAllNodesThunk = async (dispatch: Dispatch<any>, getState: () => RootState): Promise<void> => {
-    console.log(`attempting to update all nodes`);
+    console.log(`attempting to save all nodes`);
 
     // TODO Improve implementation of this function
 
@@ -281,39 +282,40 @@ export const updateAllNodes = (gameId: Game['_id']): any => {
     const allCanvasNodes = snapshot.allNodes;
     const allNodes = getState().game.gameInstance.nodes;
 
-    const nodesToUpdate: any = [];
-    allNodes.forEach((node, index) => {
-      /*
-      if (node.x !== snapshot[index].x) nodesToUpdate.push(node);
-      if (node.y !== snapshot[index].y) nodesToUpdate.push(node);
-      */
-      console.log(node);
-    });
-
-    console.log(nodesToUpdate);
-
-    /*
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}/${node._id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(node),
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      allNodes.forEach(async (node, index) => {
+        if (
+          node.x != allCanvasNodes[index].x - snapshot.finalX ||
+          node.y != allCanvasNodes[index].y - snapshot.finalY
+        ) {
+          const nodeCopy = cloneDeep(node);
+          nodeCopy.x = allCanvasNodes[index].x + snapshot.finalX;
+          nodeCopy.y = allCanvasNodes[index].y + snapshot.finalY;
+
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/node/${gameId}/${nodeCopy._id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(nodeCopy),
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          switch (response.status) {
+            case 200:
+              dispatch(gameSlice.actions.updateNode(nodeCopy));
+              break;
+            default:
+              console.log('Could not update node', response);
+              break;
+          }
+        }
       });
-      switch (response.status) {
-        case 200:
-          dispatch(gameSlice.actions.updateNode(node));
-          break;
-        default:
-          console.log('Could not update node', response);
-          break;
-      }
+
+      console.log(`saved`);
     } catch (e) {
       console.log(e, 'Could not update node');
     }
-    */
   };
   return updateAllNodesThunk;
 };
