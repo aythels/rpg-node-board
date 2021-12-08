@@ -45,8 +45,6 @@ const gameSlice = createSlice({
       state.dialogStatus[dialog] = status;
     },
     gameLoaded: (state: GameState, action: PayloadAction<Game>) => {
-      // TODO: unhook this from the action
-      nodeManager.appendData(action.payload.nodes);
       state.gameInstance = action.payload;
       state.status = GameLoadingStatus.Idle;
     },
@@ -97,6 +95,8 @@ export const fetchGame = (gameId: Game['_id']): any => {
       switch (response.status) {
         case 200:
           dispatch(gameLoaded(game));
+          // TODO: unhook this from the action
+          nodeManager.appendData(game.nodes);
           break;
         default:
           // TODO: handle in UI
