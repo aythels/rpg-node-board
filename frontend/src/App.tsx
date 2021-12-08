@@ -5,6 +5,7 @@ import Login from './components/Login/login';
 import CanvasMain from './components/CanvasMain/CanvasMain';
 import SettingsMenu from './components/SettingsMenu/SettingsMenu';
 import ClientSocket from './state/clientSocket';
+import Registration from './components/Registration/Registration';
 
 /* REMOVE BEFORE COMMIT */
 // import { fetchGame } from './state/slices/gameSlice';
@@ -17,7 +18,7 @@ import ClientSocket from './state/clientSocket';
 // store.dispatch(processUserGameData(store.getState().user.userInstance.id, 1));
 /* REMOVE BEFORE COMMIT */
 
-const clientSocket = new (ClientSocket as any)();
+// const clientSocket = new (ClientSocket as any)();
 
 function App(): JSX.Element {
   const customTheme = createTheme({
@@ -55,6 +56,7 @@ function App(): JSX.Element {
           <Route exact path="/games" component={UserDashboard} />
           <Route exact path="/settings" component={SettingsMenu} />
           <Route exact path="/" component={Login} />
+          <Route exact path="/register" component={Registration} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
