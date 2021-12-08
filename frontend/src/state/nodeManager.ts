@@ -26,9 +26,24 @@ const NodeManager = function (this: any) {
   let finalY = 0;
   let scale = 1;
 
-  const componentToUpdate: any[] = [];
+  let componentToUpdate: any[] = [];
 
   //----------------------------------------------------------------------States
+
+  this.kill = () => {
+    allNodes = [];
+    activeNode = null;
+    hoverNode = null;
+
+    isMouseDown = false;
+    startX = 0;
+    startY = 0;
+    finalX = 0;
+    finalY = 0;
+    scale = 1;
+
+    componentToUpdate = [];
+  };
 
   this.getSnapshot = () => {
     return {
