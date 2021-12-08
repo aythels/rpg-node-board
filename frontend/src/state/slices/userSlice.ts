@@ -173,6 +173,7 @@ export const removeUserFromGame = (gameId: Game['_id']) => {
       const userId = getState().user.userInstance._id;
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}/user/${userId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       switch (response.status) {
         case 200:

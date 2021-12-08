@@ -125,6 +125,7 @@ export const deleteGame = (): any => {
     try {
       const gameId = getState().game.gameInstance._id;
       const response = await fetch(`${process.env.REACT_APP_API_URL}/game/${gameId}`, {
+        credentials: 'include',
         method: 'DELETE',
       });
       switch (response.status) {
