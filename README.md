@@ -1,7 +1,3 @@
-# team04
-
-Update: As of 12/08 the deployed application is working. The deployment changes on Heroku remote are not on GitHub. We are **not** submitting late: the previous commit can be used for local grading.
-
 ## General Information
 
 This application is intended to facilitate the frictionless creation and sharing of **lore**, such as that created for tabletop roleplaying games (TTRPGs). Once logged in, a user can access and create *games*. A *game* represents an isolated, fully-featured instance of the application wherein users known as *game masters* can be considered equivalent to admins, as they have the ability to perform all of the requisite admin functionalities within said *game*.
