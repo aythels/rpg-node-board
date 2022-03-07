@@ -8,7 +8,7 @@ Deployed Application: https://rpg-nodes.herokuapp.com/
 - Username: **admin**, password: **admin**
 - Username: **user**, password: **user**
 
-## How to use the application
+## Application Usage
 
 One can log in using the above credentials **or** create a new account.
 
@@ -186,3 +186,10 @@ React UID
 - Used to generate unique mapping keys
 
 Typescript
+
+
+## Collaborators
+* Camran Hansen
+* Elson Liang
+* Filip Balucha
+* Jacob Sahlmueller
